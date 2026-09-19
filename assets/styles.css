@@ -782,6 +782,13 @@ body::before{
   .recog-row .rs{ color:var(--accent); }
 }
 
+/* ---------- guarantee band ---------- */
+.guarantee{ display:grid; grid-template-columns:auto 1fr; gap:34px; align-items:center; }
+.g-icon{ width:92px; height:92px; border-radius:22px; background:rgba(227,27,35,.18); color:#FF5058; display:grid; place-items:center; flex:none; }
+.guarantee h2{ font-size:clamp(28px,4.4vw,50px); margin:14px 0 14px; letter-spacing:-.025em; }
+.guarantee p{ max-width:52ch; margin:0 0 24px; font-size:18px; }
+@media (max-width:680px){ .guarantee{ grid-template-columns:1fr; gap:18px; } .g-icon{ width:72px; height:72px; } }
+
 /* floating contact button */
 .fab{ position:fixed; right:22px; bottom:22px; z-index:80; display:inline-flex; align-items:center; gap:9px; padding:14px 20px; border-radius:999px; background:var(--accent); color:#fff; font-weight:600; font-size:15px; text-decoration:none; box-shadow:0 14px 32px -10px color-mix(in srgb,var(--accent) 60%,transparent), 0 6px 16px rgba(6,7,20,.22); transition:transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s; }
 .fab:hover{ transform:translateY(-3px); box-shadow:0 20px 44px -10px color-mix(in srgb,var(--accent) 70%,transparent); }
