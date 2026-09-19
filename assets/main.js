@@ -27,6 +27,19 @@
     }
   }
 
+  /* 3-column nav: temperature left · logo center · menu right */
+  var navInner = nav && nav.querySelector('.nav-inner');
+  if(navInner && !navInner.querySelector('.nav-left')){
+    var navLinksEl = navInner.querySelector('.nav-links');
+    var navCtaEl = navInner.querySelector('.nav-cta');
+    var navRight = document.createElement('div'); navRight.className = 'nav-right';
+    if(navLinksEl) navRight.appendChild(navLinksEl);
+    if(navCtaEl) navRight.appendChild(navCtaEl);
+    navInner.appendChild(navRight);
+    var navLeft = document.createElement('div'); navLeft.className = 'nav-left';
+    navInner.insertBefore(navLeft, navInner.firstChild);
+  }
+
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* scroll reveals */
@@ -86,7 +99,7 @@
   }
 
   /* live temperature chip in the top corner (Open-Meteo, no API key, EU-hosted) */
-  var navCta = document.querySelector('.nav-cta');
+  var navCta = document.querySelector('.nav-left') || document.querySelector('.nav-cta');
   if(navCta && 'fetch' in window){
     var PLACE = { name: 'Stockholm', lat: 59.3293, lon: 18.0686 };
     var chip = document.createElement('span');
