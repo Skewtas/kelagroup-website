@@ -765,6 +765,21 @@ body::before{
 .hed-tag{ position:absolute; right:0; bottom:34px; z-index:2; background:var(--accent); color:#fff; font-family:ui-monospace,Menlo,monospace; font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; padding:9px 15px; }
 @media (max-width:880px){ .hero-ed{ min-height:88vh; padding:120px 0 56px; } .hed-tag{ bottom:20px; } }
 
+/* ---------- "Känner du igen dig?" recognition rows ---------- */
+.recog{ border-top:1px solid var(--line); }
+.recog-row{ display:grid; grid-template-columns:1fr 46px 1fr; gap:20px; align-items:center; padding:24px 4px; border-bottom:1px solid var(--line); transition:background .25s; }
+.recog-row:hover{ background:var(--paper-2); }
+.recog-row .rp{ color:var(--muted); font-size:clamp(16px,2vw,21px); text-align:right; line-height:1.3; }
+.recog-row .ra{ justify-self:center; color:var(--accent); display:inline-flex; }
+.recog-row .rs{ color:var(--text); font-weight:650; font-size:clamp(17px,2.2vw,23px); letter-spacing:-.01em; line-height:1.25; }
+.recog-row .rs b{ color:var(--accent); font-weight:650; }
+@media (max-width:680px){
+  .recog-row{ grid-template-columns:1fr; gap:6px; padding:20px 4px; }
+  .recog-row .rp{ text-align:left; }
+  .recog-row .ra{ display:none; }
+  .recog-row .rs{ color:var(--accent); }
+}
+
 /* floating contact button */
 .fab{ position:fixed; right:22px; bottom:22px; z-index:80; display:inline-flex; align-items:center; gap:9px; padding:14px 20px; border-radius:999px; background:var(--accent); color:#fff; font-weight:600; font-size:15px; text-decoration:none; box-shadow:0 14px 32px -10px color-mix(in srgb,var(--accent) 60%,transparent), 0 6px 16px rgba(6,7,20,.22); transition:transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s; }
 .fab:hover{ transform:translateY(-3px); box-shadow:0 20px 44px -10px color-mix(in srgb,var(--accent) 70%,transparent); }
