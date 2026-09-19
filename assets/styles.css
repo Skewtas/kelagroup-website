@@ -660,6 +660,16 @@ body::before{
 .hero-photo > img{ width:100%; height:100%; object-fit:cover; display:block; }
 .hero-photo .ph-note{ display:none; } /* clean dark hero until a real photo is dropped in */
 
+/* typewriter "Vi bygger …" (iveo-style selection box) */
+.type-line{ display:inline-flex; align-items:center; }
+.type-box{ position:relative; display:inline-block; min-width:22px; min-height:.72em; }
+.type-box::before, .type-box::after{ content:""; position:absolute; width:9px; height:9px; background:var(--accent); }
+.type-box::before{ top:-4px; left:-10px; }
+.type-box::after{ bottom:-2px; right:-10px; }
+.type-caret{ display:inline-block; width:3px; height:.72em; background:var(--accent); margin-left:8px; }
+@media (prefers-reduced-motion: no-preference){ .type-caret{ animation:cblink 1s steps(1) infinite; } }
+@keyframes cblink{ 50%{ opacity:0; } }
+
 /* statements — "så tänker vi" */
 .statements{ display:grid; }
 .statement{ display:grid; grid-template-columns:52px 1fr; gap:24px; align-items:start; padding:40px 0; border-top:1px solid var(--line); }

@@ -126,6 +126,38 @@
     });
   }
 
+  /* typewriter "Vi bygger …" */
+  var typer = document.getElementById('typer');
+  if(typer){
+    var words = [];
+    try { words = JSON.parse(typer.getAttribute('data-words') || '[]'); } catch(e){}
+    if(words.length){
+      if(reduce){
+        var wr = 0;
+        typer.textContent = words[0];
+        setInterval(function(){ wr = (wr + 1) % words.length; typer.textContent = words[wr]; }, 1800);
+      } else {
+        var wi = 0, ci = 0, deleting = false;
+        var tick = function(){
+          var w = words[wi];
+          if(!deleting){
+            ci++;
+            typer.textContent = w.slice(0, ci);
+            if(ci === w.length){ deleting = true; setTimeout(tick, 1500); return; }
+            setTimeout(tick, 75 + Math.random()*45);
+          } else {
+            ci--;
+            typer.textContent = w.slice(0, ci);
+            if(ci === 0){ deleting = false; wi = (wi + 1) % words.length; setTimeout(tick, 110); return; }
+            setTimeout(tick, 38);
+          }
+        };
+        typer.textContent = '';
+        setTimeout(tick, 500);
+      }
+    }
+  }
+
   /* floating "Boka möte" button on every page except the contact page */
   if(!/kontakt\.html/i.test(location.pathname)){
     var fab=document.createElement('a');
