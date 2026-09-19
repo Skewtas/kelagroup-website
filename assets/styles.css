@@ -749,7 +749,7 @@ body::before{
 /* ---------- LIGHT EDITORIAL HERO (H&M feel) ---------- */
 .hero-ed{ position:relative; z-index:1; background:var(--paper); padding:152px 0 84px; overflow:hidden; }
 .hed-grid{ display:grid; grid-template-columns:1.06fr .94fr; gap:56px; align-items:center; }
-@media (max-width:880px){ .hed-grid{ grid-template-columns:1fr; gap:38px; } .hero-ed{ padding:128px 0 56px; } }
+@media (max-width:880px){ .hed-grid{ grid-template-columns:1fr; gap:30px; } .hero-ed{ padding:120px 0 56px; } .hed-visual{ order:-1; } .hed-photo{ aspect-ratio:16/10; } .hed-tag{ bottom:16px; } }
 .hed-eyebrow{ display:inline-flex; align-items:center; gap:12px; font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
 .hed-eyebrow .rsq{ width:10px; height:10px; background:var(--accent); flex:none; }
 .hed-title{ font-family:"Archivo Black","Helvetica Neue",Arial,sans-serif; font-weight:400; font-size:clamp(42px,7vw,92px); line-height:1.0; letter-spacing:-.03em; color:var(--text); margin:22px 0 0; }
