@@ -13,7 +13,7 @@
 
   /* nav: over-video behaviour on the start page, always-solid on inner pages */
   var nav = document.getElementById('nav');
-  var hasVideo = !!document.querySelector('.hero-video, .hero-photo');
+  var hasVideo = !!document.querySelector('.hero-video, .hero-photo, .hed-bg');
   if(nav){
     if(hasVideo){
       var onScroll = function(){
