@@ -176,12 +176,14 @@
   if(calc){
     var pcRange = document.getElementById('pcRange');
     var pcSum = document.getElementById('pcSum');
+    var pcMonth = document.getElementById('pcMonth');
     var kr = function(n){ return (Math.round(n/1000)*1000).toLocaleString('sv-SE'); };
+    var krMonth = function(n){ return (Math.round(n/100)*100).toLocaleString('sv-SE'); };
     var chosen = function(role){ return calc.querySelector('[data-role="'+role+'"] .opt.sel'); };
     var name = function(el){ var t=el && el.querySelector('.opt-t'); return t ? t.textContent : ''; };
     function compute(){
       var base = chosen('base');
-      if(!base){ pcRange.textContent = 'Välj vad du vill bygga →'; if(pcSum){ pcSum.hidden=true; } return; }
+      if(!base){ pcRange.textContent = 'Välj vad du vill bygga →'; if(pcSum){ pcSum.hidden=true; } if(pcMonth){ pcMonth.hidden=true; } return; }
       var scope = chosen('scope'), design = chosen('design');
       var sm = scope ? parseFloat(scope.getAttribute('data-mult')) : 1;
       var dm = design ? parseFloat(design.getAttribute('data-mult')) : 1;
@@ -191,6 +193,10 @@
       var addNames = [];
       addons.forEach(function(a){ low += +a.getAttribute('data-low'); high += +a.getAttribute('data-high'); addNames.push(name(a)); });
       pcRange.textContent = kr(low) + '–' + kr(high) + ' kr';
+      if(pcMonth){
+        pcMonth.hidden = false;
+        pcMonth.innerHTML = 'eller fr. <b>' + krMonth(low/36) + ' kr/mån</b> <span>delbetala 36 mån</span>';
+      }
       if(pcSum){
         pcSum.hidden = false;
         pcSum.innerHTML =

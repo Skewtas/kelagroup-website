@@ -507,6 +507,14 @@ body::before{
 .marquee-track span{ display:inline-flex; align-items:center; font-family:"Archivo Black","Helvetica Neue",Arial,sans-serif; font-size:clamp(20px,2.6vw,30px); letter-spacing:-.02em; color:var(--text); opacity:.85; padding:20px 0; }
 .marquee-track span::after{ content:"—"; color:var(--accent); margin:0 30px; opacity:.6; }
 
+/* ---------- Delbetalning (priser) ---------- */
+.permonth{ display:inline-flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-top:12px; padding:8px 14px; border-radius:100px; background:color-mix(in srgb,var(--accent) 9%,transparent); border:1px solid color-mix(in srgb,var(--accent) 22%,transparent); font-size:14px; color:var(--text); }
+.permonth b{ color:var(--accent); font-size:16px; font-weight:800; letter-spacing:-.01em; }
+.permonth span{ color:var(--muted); font-size:12px; }
+.pay-banner{ display:flex; align-items:center; gap:16px; margin:0 0 26px; padding:18px 22px; border-radius:16px; background:var(--paper-2); border:1px solid var(--line); font-size:16px; line-height:1.5; color:var(--text); }
+.pay-banner b{ color:var(--text); }
+.pay-banner .pb-ic{ flex:none; width:46px; height:46px; border-radius:12px; display:inline-flex; align-items:center; justify-content:center; color:var(--accent); background:color-mix(in srgb,var(--accent) 12%,transparent); border:1px solid color-mix(in srgb,var(--accent) 24%,transparent); }
+
 /* ---------- Priskalkylator ---------- */
 .calc{ display:grid; grid-template-columns:1fr 340px; gap:44px; align-items:start; }
 .calc-main{ display:grid; gap:44px; }
@@ -535,6 +543,9 @@ body::before{
 .price-card{ background:var(--paper-2); border:1px solid var(--line); border-radius:22px; padding:30px 28px; }
 .pc-kicker{ display:block; color:var(--muted); font-size:12px; letter-spacing:.16em; text-transform:uppercase; }
 .pc-range{ font-family:"Archivo Black",sans-serif; font-weight:400; font-size:clamp(26px,3.6vw,36px); letter-spacing:-.02em; line-height:1.05; color:var(--accent); margin:12px 0 14px; min-height:1.1em; }
+.pc-month{ display:inline-flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin:0 0 16px; padding:8px 14px; border-radius:100px; background:color-mix(in srgb,var(--accent) 9%,transparent); border:1px solid color-mix(in srgb,var(--accent) 22%,transparent); font-size:14px; color:var(--text); }
+.pc-month b{ color:var(--accent); font-size:16px; font-weight:800; }
+.pc-month span{ color:var(--muted); font-size:12px; }
 .pc-note{ color:var(--muted); font-size:13.5px; line-height:1.5; margin:0 0 18px; }
 .pc-sum{ border-top:1px solid var(--line); padding-top:14px; margin-bottom:18px; display:grid; gap:7px; }
 .pc-sum .row{ display:flex; justify-content:space-between; gap:12px; font-size:13.5px; color:var(--text); }
