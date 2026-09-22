@@ -171,6 +171,62 @@
     }
   }
 
+  /* priskalkylator */
+  var calc = document.getElementById('calc');
+  if(calc){
+    var pcRange = document.getElementById('pcRange');
+    var pcSum = document.getElementById('pcSum');
+    var kr = function(n){ return (Math.round(n/1000)*1000).toLocaleString('sv-SE'); };
+    var chosen = function(role){ return calc.querySelector('[data-role="'+role+'"] .opt.sel'); };
+    var name = function(el){ var t=el && el.querySelector('.opt-t'); return t ? t.textContent : ''; };
+    function compute(){
+      var base = chosen('base');
+      if(!base){ pcRange.textContent = 'Välj vad du vill bygga →'; if(pcSum){ pcSum.hidden=true; } return; }
+      var scope = chosen('scope'), design = chosen('design');
+      var sm = scope ? parseFloat(scope.getAttribute('data-mult')) : 1;
+      var dm = design ? parseFloat(design.getAttribute('data-mult')) : 1;
+      var low = +base.getAttribute('data-low') * sm * dm;
+      var high = +base.getAttribute('data-high') * sm * dm;
+      var addons = calc.querySelectorAll('[data-role="addon"] .opt.sel');
+      var addNames = [];
+      addons.forEach(function(a){ low += +a.getAttribute('data-low'); high += +a.getAttribute('data-high'); addNames.push(name(a)); });
+      pcRange.textContent = kr(low) + '–' + kr(high) + ' kr';
+      if(pcSum){
+        pcSum.hidden = false;
+        pcSum.innerHTML =
+          '<div class="row"><span>Bygger</span><span>'+name(base)+'</span></div>'+
+          (scope ? '<div class="row"><span>Omfattning</span><span>'+name(scope)+'</span></div>' : '')+
+          (design ? '<div class="row"><span>Design</span><span>'+name(design)+'</span></div>' : '')+
+          '<div class="row"><span>Tillval</span><span>'+(addNames.length ? addNames.length+' st' : 'Inga')+'</span></div>';
+      }
+    }
+    calc.addEventListener('click', function(e){
+      var opt = e.target.closest('.opt'); if(!opt) return;
+      var grid = opt.closest('.opt-grid'); if(!grid) return;
+      if(grid.getAttribute('data-select') === 'single'){
+        grid.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('sel'); });
+        opt.classList.add('sel');
+      } else {
+        opt.classList.toggle('sel');
+      }
+      compute();
+    });
+    var pcReset = document.getElementById('pcReset');
+    if(pcReset) pcReset.addEventListener('click', function(e){
+      e.preventDefault();
+      calc.querySelectorAll('[data-role="base"] .opt, [data-role="addon"] .opt').forEach(function(o){ o.classList.remove('sel'); });
+      ['scope','design'].forEach(function(role){
+        var g = calc.querySelector('[data-role="'+role+'"]');
+        if(!g) return;
+        g.querySelectorAll('.opt').forEach(function(o){ o.classList.remove('sel'); });
+        var def = g.querySelector('.opt[data-mult="1"]'); if(def) def.classList.add('sel');
+      });
+      compute();
+      window.scrollTo({ top: calc.getBoundingClientRect().top + window.scrollY - 90, behavior:'smooth' });
+    });
+    compute();
+  }
+
   /* floating "Boka möte" button on every page except the contact page */
   if(!/kontakt\.html/i.test(location.pathname)){
     var fab=document.createElement('a');
