@@ -52,6 +52,9 @@ header.nav.solid{ backdrop-filter:saturate(120%) blur(16px); background:color-mi
 .nav-right{ justify-self:end; display:flex; align-items:center; gap:30px; }
 .logo{ justify-self:center; display:inline-flex; align-items:flex-end; color:var(--nav-fg,var(--text)); transition:color .4s; }
 .wordmark{ font-family:"Archivo Black","Helvetica Neue",Arial,sans-serif; font-weight:400; font-size:22px; letter-spacing:-.01em; text-transform:uppercase; line-height:.9; border-bottom:2px solid currentColor; padding-bottom:3px; }
+/* Startsidan (body utan .inner): röd logga, understreck vitt över heron */
+body:not(.inner) .logo .wordmark{ color:var(--accent); border-bottom-color:currentColor; }
+body:not(.inner) header.nav:not(.solid) .logo .wordmark{ border-bottom-color:#fff; }
 header.nav:not(.solid) .logo, header.nav:not(.solid) .nav-links a, header.nav:not(.solid) .textlink, header.nav:not(.solid) .toggle{ text-shadow:0 1px 14px rgba(0,0,0,.35); }
 .nav-links{ display:flex; gap:38px; align-items:center; }
 .nav-links a.link{ font-size:14.5px; color:var(--nav-fg,var(--muted)); opacity:.82; transition:opacity .25s,color .4s; }
@@ -504,6 +507,17 @@ body::before{
 .marquee-track span{ display:inline-flex; align-items:center; font-family:"Archivo Black","Helvetica Neue",Arial,sans-serif; font-size:clamp(20px,2.6vw,30px); letter-spacing:-.02em; color:var(--text); opacity:.85; padding:20px 0; }
 .marquee-track span::after{ content:"—"; color:var(--accent); margin:0 30px; opacity:.6; }
 
+/* ---------- Våra kunder (logga-remsa) ---------- */
+.clients{ background:#0F0F11; color:#fff; padding:34px 0 40px; overflow:hidden; position:relative; }
+.clients::before{ content:""; position:absolute; inset:0; background:radial-gradient(120% 140% at 50% -20%, rgba(227,27,35,.16), transparent 60%); pointer-events:none; }
+.clients-label{ position:relative; text-align:center; color:rgba(255,255,255,.55); font-size:12px; letter-spacing:.24em; text-transform:uppercase; margin:0 0 26px; }
+.clients-marquee{ position:relative; -webkit-mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image:linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.clients-track{ display:flex; align-items:center; gap:72px; width:max-content; }
+@media (prefers-reduced-motion: no-preference){ .clients-track{ animation:mq 30s linear infinite; } }
+.client-logo{ height:30px; width:auto; flex:none; filter:brightness(0) invert(1); opacity:.62; transition:opacity .3s; }
+.client-logo:hover{ opacity:1; }
+@media (max-width:640px){ .clients-track{ gap:48px; } .client-logo{ height:24px; } }
+
 /* ---------- testimonial ---------- */
 .quote{ max-width:900px; margin:0 auto; text-align:center; }
 .quote .mark{ font-family:"Archivo Black",Arial,sans-serif; font-size:60px; line-height:.6; color:var(--accent); opacity:.5; }
@@ -518,7 +532,7 @@ body::before{
 .fcard:hover{ box-shadow:0 30px 60px -30px color-mix(in srgb,var(--accent) 34%,transparent); border-color:color-mix(in srgb,var(--accent) 34%,var(--line)); }
 
 @media (prefers-reduced-motion: reduce){
-  .mk.float, .flowwrap.float, .mk-bars i, .mk::after, .flow-svg .conn, .flow-svg .ndot, .marquee-track{ animation:none !important; }
+  .mk.float, .flowwrap.float, .mk-bars i, .mk::after, .flow-svg .conn, .flow-svg .ndot, .marquee-track, .clients-track{ animation:none !important; }
 }
 
 /* ---------- capability grid: "we build everything" ---------- */
