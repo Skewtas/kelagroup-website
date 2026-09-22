@@ -176,8 +176,118 @@
     var fab=document.createElement('a');
     fab.className='fab';
     fab.href='kontakt.html';
+    fab.setAttribute('data-book','');
     fab.setAttribute('aria-label','Kontakta oss – boka möte');
     fab.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span>Boka möte</span>';
     document.body.appendChild(fab);
   }
+
+  /* ---------- Boka möte-modal (fysiskt / online → formulär) ---------- */
+  (function(){
+    var overlay=document.createElement('div');
+    overlay.className='bm-overlay'; overlay.id='bmOverlay'; overlay.hidden=true;
+    overlay.innerHTML=''+
+      '<div class="bm-modal" role="dialog" aria-modal="true" aria-labelledby="bmTitle">'+
+        '<button class="bm-close" id="bmClose" type="button" aria-label="Stäng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+
+        '<div class="bm-step" data-step="1">'+
+          '<span class="kicker mono">Boka möte</span>'+
+          '<h3 id="bmTitle">Hur vill du träffas?</h3>'+
+          '<p class="bm-sub">Välj det som passar dig bäst — vi återkommer inom 24 timmar.</p>'+
+          '<div class="bm-choices">'+
+            '<button class="bm-choice" type="button" data-type="Fysiskt möte">'+
+              '<span class="bm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></span>'+
+              '<span class="bm-ct">Fysiskt möte</span>'+
+              '<span class="bm-cd">Vi ses på plats i Stockholm.</span>'+
+            '</button>'+
+            '<button class="bm-choice" type="button" data-type="Online-möte">'+
+              '<span class="bm-ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l5-3v10l-5-3z"/><rect x="2" y="6" width="13" height="12" rx="2.5"/></svg></span>'+
+              '<span class="bm-ct">Online-möte</span>'+
+              '<span class="bm-cd">Videosamtal när det passar dig.</span>'+
+            '</button>'+
+          '</div>'+
+        '</div>'+
+        '<div class="bm-step" data-step="2" hidden>'+
+          '<button class="bm-back" id="bmBack" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Tillbaka</button>'+
+          '<span class="kicker mono">Boka möte · <span class="bm-chosen" id="bmChosen"></span></span>'+
+          '<h3>Berätta lite kort om er.</h3>'+
+          '<p class="bm-sub">Så återkommer vi med förslag på tid.</p>'+
+          '<form class="form" id="bmForm" action="https://formspree.io/f/xojkdewo" method="POST" novalidate>'+
+            '<input type="hidden" name="_subject" value="Ny mötesförfrågan från kelagroup.se">'+
+            '<input type="hidden" name="typ_av_mote" id="bmTypeField" value="">'+
+            '<div class="field"><label for="bm-name">Namn</label><input id="bm-name" name="name" type="text" autocomplete="name" placeholder="För- och efternamn" required></div>'+
+            '<div class="field"><label for="bm-email">E-post</label><input id="bm-email" name="email" type="email" autocomplete="email" placeholder="du@företag.se" required></div>'+
+            '<div class="field"><label for="bm-msg">Vad gäller det?</label><textarea id="bm-msg" name="message" placeholder="Berätta kort om ert projekt eller vad som tar tid …" required></textarea></div>'+
+            '<button type="submit" class="btn btn-accent" id="bmSubmit">Skicka förfrågan <span class="arrow" aria-hidden="true">→</span></button>'+
+            '<p class="bm-err" id="bmErr" hidden>Något gick fel — mejla oss gärna på <a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a>.</p>'+
+          '</form>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(overlay);
+
+    var step1=overlay.querySelector('[data-step="1"]');
+    var step2=overlay.querySelector('[data-step="2"]');
+    var typeField=overlay.querySelector('#bmTypeField');
+    var chosenEl=overlay.querySelector('#bmChosen');
+    var bmForm=overlay.querySelector('#bmForm');
+    var bmErr=overlay.querySelector('#bmErr');
+    var bmSubmit=overlay.querySelector('#bmSubmit');
+    var lastFocus=null;
+
+    function showStep(n){
+      step1.hidden = (n!==1); step2.hidden = (n!==2);
+    }
+    function openModal(){
+      lastFocus=document.activeElement;
+      overlay.hidden=false; showStep(1);
+      requestAnimationFrame(function(){ overlay.classList.add('open'); });
+      document.body.style.overflow='hidden';
+      var f=overlay.querySelector('.bm-choice'); if(f) f.focus();
+    }
+    function closeModal(){
+      overlay.classList.remove('open');
+      document.body.style.overflow='';
+      setTimeout(function(){ overlay.hidden=true; }, 260);
+      if(lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+    function chooseType(t){
+      typeField.value=t; chosenEl.textContent=t; showStep(2);
+      var n=overlay.querySelector('#bm-name'); if(n) n.focus();
+    }
+
+    overlay.querySelectorAll('.bm-choice').forEach(function(b){
+      b.addEventListener('click', function(){ chooseType(b.getAttribute('data-type')); });
+    });
+    overlay.querySelector('#bmClose').addEventListener('click', closeModal);
+    overlay.querySelector('#bmBack').addEventListener('click', function(){ showStep(1); });
+    overlay.addEventListener('click', function(e){ if(e.target===overlay) closeModal(); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape' && !overlay.hidden) closeModal(); });
+
+    /* submit → Formspree */
+    bmForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(bmErr) bmErr.hidden=true;
+      var action=bmForm.getAttribute('action')||'';
+      if(bmSubmit){ bmSubmit.disabled=true; bmSubmit.style.opacity='.6'; }
+      fetch(action, { method:'POST', body:new FormData(bmForm), headers:{ 'Accept':'application/json' } })
+        .then(function(r){
+          if(r.ok){
+            step2.innerHTML='<div class="bm-done"><div class="bm-check"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></div><h3>Tack! Vi hör av oss.</h3><p class="bm-sub">Vi återkommer inom 24 timmar med förslag på tid för ditt '+(typeField.value.toLowerCase())+'.</p><button class="btn btn-accent" type="button" id="bmDone">Stäng</button></div>';
+            var db=overlay.querySelector('#bmDone'); if(db) db.addEventListener('click', closeModal);
+          } else { if(bmErr) bmErr.hidden=false; if(bmSubmit){ bmSubmit.disabled=false; bmSubmit.style.opacity='1'; } }
+        })
+        .catch(function(){ if(bmErr) bmErr.hidden=false; if(bmSubmit){ bmSubmit.disabled=false; bmSubmit.style.opacity='1'; } });
+    });
+
+    /* triggers: FAB + alla "Boka…"-länkar som pekar mot kontakt.html */
+    function isBookTrigger(a){
+      if(a.hasAttribute('data-book')) return true;
+      var href=a.getAttribute('href')||'';
+      if(!/kontakt\.html/i.test(href)) return false;
+      return /^\s*boka/i.test(a.textContent||'');
+    }
+    document.addEventListener('click', function(e){
+      var a=e.target.closest('a, .fab'); if(!a) return;
+      if(isBookTrigger(a)){ e.preventDefault(); openModal(); }
+    });
+  })();
 })();
