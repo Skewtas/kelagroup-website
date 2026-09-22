@@ -542,8 +542,9 @@ body::before{
 .clients-track{ display:flex; align-items:center; gap:72px; width:max-content; }
 @media (prefers-reduced-motion: no-preference){ .clients-track{ animation:mq 30s linear infinite; } }
 .client-logo{ height:30px; width:auto; flex:none; filter:brightness(0) invert(1); opacity:.62; transition:opacity .3s; }
+.client-logo.bsg{ height:42px; }
 .client-logo:hover{ opacity:1; }
-@media (max-width:640px){ .clients-track{ gap:48px; } .client-logo{ height:24px; } }
+@media (max-width:640px){ .clients-track{ gap:48px; } .client-logo{ height:24px; } .client-logo.bsg{ height:34px; } }
 
 /* ---------- testimonial ---------- */
 .quote{ max-width:900px; margin:0 auto; text-align:center; }
