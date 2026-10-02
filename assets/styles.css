@@ -127,6 +127,15 @@ h1.hero-title .thin{ color:rgba(246,245,241,.72); }
 /* primary: RED → hover BLACK */
 .btn-accent{ background:var(--accent); color:#fff; box-shadow:0 10px 26px -8px color-mix(in srgb,var(--accent) 55%,transparent); }
 .btn-accent:hover{ transform:translateY(-2px); background:#0F0F11; color:#fff; box-shadow:0 14px 34px -10px rgba(15,15,17,.5); }
+/* WOW-CTA i heron: pulserande glöd + glans-svep */
+.hed-actions .btn-accent{ position:relative; overflow:hidden; padding:17px 34px; font-size:16.5px; animation:ctaPulse 2.8s ease-in-out infinite; }
+.hed-actions .btn-accent::after{ content:""; position:absolute; top:0; left:0; width:55%; height:100%; background:linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); transform:translateX(-170%) skewX(-16deg); pointer-events:none; animation:ctaShine 3.8s ease-in-out infinite; }
+.hed-actions .btn-accent .arrow{ transition:transform .25s ease; }
+.hed-actions .btn-accent:hover{ transform:translateY(-3px) scale(1.045); background:var(--accent); box-shadow:0 20px 46px -10px color-mix(in srgb,var(--accent) 85%,transparent); animation-play-state:paused; }
+.hed-actions .btn-accent:hover .arrow{ transform:translateX(5px); }
+@keyframes ctaPulse{ 0%,100%{ box-shadow:0 12px 28px -8px color-mix(in srgb,var(--accent) 60%,transparent), 0 0 0 0 color-mix(in srgb,var(--accent) 45%,transparent); } 55%{ box-shadow:0 16px 34px -8px color-mix(in srgb,var(--accent) 72%,transparent), 0 0 0 12px color-mix(in srgb,var(--accent) 0%,transparent); } }
+@keyframes ctaShine{ 0%{ transform:translateX(-170%) skewX(-16deg); } 30%,100%{ transform:translateX(320%) skewX(-16deg); } }
+@media (prefers-reduced-motion: reduce){ .hed-actions .btn-accent{ animation:none; } .hed-actions .btn-accent::after{ display:none; } }
 /* white pill (over dark/red) → hover keeps white */
 .btn-solid{ background:#fff; color:#0F0F11; }
 .btn-solid:hover{ transform:translateY(-2px); }
