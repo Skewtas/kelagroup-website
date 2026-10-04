@@ -3,14 +3,121 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Priskalkylator – vad kostar din hemsida, app eller system? | Kela group</title>
-<meta name="description" content="Räkna ut ett vägledande pris för hemsida, e-handel, app, system eller integration. Snabb prisuppskattning baserad på svenska marknadspriser – sen får du en fast offert utan förpliktelse.">
+<title>Priskalkylator – bygg din lösning och se priset direkt | Kela group</title>
+<meta name="description" content="Bygg din lösning – hemsida, webbshop, CRM, rekryteringssystem, eget system eller AI – och se ett uppskattat pris direkt. Tar ca 60 sekunder. Sen får du ett fast pris.">
 <link rel="canonical" href="https://kelagroup.se/priskalkylator.html">
-<meta property="og:title" content="Priskalkylator – vad kostar ditt projekt? | Kela group">
-<meta property="og:description" content="Få en snabb prisuppskattning för hemsida, app, system eller integration. Sen en fast offert utan förpliktelse.">
+<meta property="og:title" content="Priskalkylator – bygg din lösning och se priset direkt | Kela group">
+<meta property="og:description" content="Bygg din lösning och se priset direkt. Tar ca 60 sekunder.">
 <meta property="og:type" content="website">
 <link rel="preload" href="assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/styles.css?v=37">
+<style>
+/* ===== Premium priskalkylator (scopeat) ===== */
+#pkcalc{ display:grid; grid-template-columns:1fr 348px; gap:46px; align-items:start; }
+.pk-main{ min-width:0; }
+
+/* progress */
+.pk-prog{ display:flex; align-items:center; gap:6px; margin:0 0 34px; flex-wrap:wrap; }
+.pk-prog .ps{ display:inline-flex; align-items:center; gap:9px; }
+.pk-prog .pd{ width:26px; height:26px; border-radius:50%; border:1.6px solid var(--line); display:grid; place-items:center; font-family:ui-monospace,Menlo,monospace; font-size:12px; font-weight:700; color:var(--muted); transition:.25s; flex:none; }
+.pk-prog .pl{ font-size:13.5px; color:var(--muted); font-weight:600; transition:.25s; }
+.pk-prog .ps.active .pd{ background:var(--accent); border-color:var(--accent); color:#fff; }
+.pk-prog .ps.active .pl{ color:var(--text); }
+.pk-prog .ps.done .pd{ border-color:var(--accent); color:var(--accent); background:color-mix(in srgb,var(--accent) 12%,transparent); }
+.pk-prog .pc{ width:22px; height:1.6px; background:var(--line); flex:none; }
+@media (max-width:620px){ .pk-prog .pl{ display:none; } .pk-prog .pc{ width:14px; } }
+
+/* step */
+.pk-step-k{ display:block; font-family:ui-monospace,Menlo,monospace; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin:0 0 10px; }
+.pk-step-h{ font-family:"Archivo Black","Helvetica Neue",Arial,sans-serif; font-weight:400; font-size:clamp(26px,4vw,40px); letter-spacing:-.025em; line-height:1.05; margin:0 0 8px; }
+.pk-step-s{ color:var(--muted); font-size:17px; margin:0 0 26px; max-width:52ch; }
+
+/* choice cards grid */
+.pk-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(224px,1fr)); gap:14px; }
+.pk-grid.c3{ grid-template-columns:repeat(3,1fr); }
+@media (max-width:760px){ .pk-grid.c3{ grid-template-columns:1fr; } }
+.pk-card{ position:relative; text-align:left; background:var(--paper); border:1.6px solid var(--line); border-radius:18px; padding:22px 20px; cursor:pointer; display:flex; flex-direction:column; gap:5px; transition:border-color .2s, transform .2s, box-shadow .2s, background .2s; }
+.pk-card:hover{ border-color:color-mix(in srgb,var(--accent) 45%,var(--line)); transform:translateY(-3px); box-shadow:0 14px 30px -18px rgba(0,0,0,.4); }
+.pk-card .em{ font-size:26px; line-height:1; margin-bottom:8px; }
+.pk-card .t{ font-weight:750; font-size:17px; letter-spacing:-.01em; }
+.pk-card .d{ color:var(--muted); font-size:13.5px; line-height:1.45; }
+.pk-card .from{ margin-top:8px; color:var(--accent); font-weight:800; font-size:14.5px; }
+.pk-card.sel{ border-color:var(--accent); background:color-mix(in srgb,var(--accent) 5%,var(--paper)); box-shadow:0 0 0 1.5px var(--accent) inset; }
+.pk-pop{ position:absolute; top:-10px; right:16px; background:var(--accent); color:#fff; font-size:11px; font-weight:800; letter-spacing:.08em; padding:4px 10px; border-radius:100px; text-transform:uppercase; }
+
+/* toggles (addons / features) */
+.pk-togs{ display:grid; grid-template-columns:repeat(auto-fit,minmax(248px,1fr)); gap:12px; }
+.pk-tog{ position:relative; display:flex; align-items:center; gap:13px; text-align:left; background:var(--paper); border:1.6px solid var(--line); border-radius:14px; padding:15px 16px; cursor:pointer; transition:border-color .2s, background .2s, transform .15s; }
+.pk-tog:hover{ border-color:color-mix(in srgb,var(--accent) 40%,var(--line)); }
+.pk-tog:active{ transform:scale(.99); }
+.pk-tog .bx{ width:22px; height:22px; flex:none; border-radius:7px; border:1.6px solid var(--line); background:var(--paper); position:relative; transition:.2s; }
+.pk-tog .tt{ flex:1; font-weight:650; font-size:15px; }
+.pk-tog .pr{ color:var(--muted); font-size:13px; font-weight:600; white-space:nowrap; }
+.pk-tog.sel{ border-color:var(--accent); background:color-mix(in srgb,var(--accent) 6%,var(--paper)); }
+.pk-tog.sel .bx{ background:var(--accent); border-color:var(--accent); }
+.pk-tog.sel .bx::after{ content:""; position:absolute; left:7px; top:3px; width:6px; height:11px; border-right:2.4px solid #fff; border-bottom:2.4px solid #fff; transform:rotate(42deg); }
+.pk-tog.sel .pr{ color:var(--accent); }
+
+/* describe (custom) */
+.pk-ta{ width:100%; min-height:150px; border:1.6px solid var(--line); border-radius:16px; padding:16px 18px; font:inherit; font-size:16px; resize:vertical; background:var(--paper); color:var(--text); }
+.pk-ta:focus{ outline:none; border-color:var(--accent); }
+
+/* nav */
+.pk-nav{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:34px; }
+.pk-back{ background:none; border:none; color:var(--muted); font-size:14.5px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px; padding:8px 2px; transition:color .2s; }
+.pk-back:hover{ color:var(--accent); }
+.pk-back[hidden]{ visibility:hidden; }
+
+/* side price panel */
+.pk-side{ position:sticky; top:100px; }
+.pk-side-card{ background:var(--paper-2); border:1px solid var(--line); border-radius:22px; padding:26px 24px; }
+.pk-side-k{ display:block; font-family:ui-monospace,Menlo,monospace; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin-bottom:16px; }
+.pk-lines{ display:grid; gap:10px; margin-bottom:16px; }
+.pk-lines:empty{ display:none; }
+.pk-line{ display:flex; justify-content:space-between; gap:12px; font-size:14px; align-items:baseline; }
+.pk-line .lb{ color:var(--text); font-weight:600; }
+.pk-line .lb small{ display:block; color:var(--muted); font-weight:500; font-size:12px; }
+.pk-line .lp{ color:var(--muted); white-space:nowrap; font-variant-numeric:tabular-nums; }
+.pk-line.base .lb{ font-weight:750; }
+.pk-div{ height:1px; background:var(--line); margin:4px 0 16px; }
+.pk-total-k{ font-size:13px; color:var(--muted); }
+.pk-total{ font-family:"Archivo Black",sans-serif; font-weight:400; font-size:clamp(28px,4vw,38px); letter-spacing:-.02em; line-height:1.05; color:var(--accent); margin:3px 0 2px; font-variant-numeric:tabular-nums; transition:transform .18s; }
+.pk-total.bump{ transform:scale(1.045); }
+.pk-exkl{ font-size:12.5px; color:var(--muted); }
+.pk-disc{ font-size:12px; color:var(--faint,var(--muted)); line-height:1.5; margin:16px 0 0; padding-top:14px; border-top:1px dashed var(--line); }
+.pk-empty{ color:var(--muted); font-size:15px; }
+
+/* result */
+.pk-result{ background:var(--paper-2); border:1px solid var(--line); border-radius:22px; padding:30px 28px; }
+.pk-sum-list{ display:grid; gap:9px; margin:16px 0 22px; }
+.pk-sum-list .r{ display:flex; justify-content:space-between; gap:12px; font-size:15px; }
+.pk-sum-list .r .p{ color:var(--muted); font-variant-numeric:tabular-nums; }
+.pk-bigprice{ font-family:"Archivo Black",sans-serif; font-size:clamp(32px,6vw,52px); letter-spacing:-.03em; color:var(--accent); line-height:1; }
+.pk-lead{ margin-top:8px; }
+.pk-field{ margin-bottom:14px; }
+.pk-field label{ display:block; font-size:13px; font-weight:600; color:var(--muted); margin-bottom:6px; }
+.pk-field input{ width:100%; border:1.6px solid var(--line); border-radius:12px; padding:13px 15px; font:inherit; font-size:16px; background:var(--paper); color:var(--text); }
+.pk-field input:focus{ outline:none; border-color:var(--accent); }
+.pk-lead-grid{ display:grid; grid-template-columns:1fr 1fr; gap:0 14px; }
+@media (max-width:560px){ .pk-lead-grid{ grid-template-columns:1fr; } }
+.pk-ok{ color:var(--accent); font-weight:700; margin:10px 0 0; }
+.pk-err{ color:#c0392b; font-weight:500; margin:10px 0 0; }
+
+/* mobile sticky bar */
+.pk-bar{ position:fixed; left:0; right:0; bottom:0; z-index:60; display:none; gap:12px; align-items:center; padding:12px 16px calc(12px + env(safe-area-inset-bottom)); background:var(--paper); border-top:1px solid var(--line); box-shadow:0 -10px 30px -18px rgba(0,0,0,.4); }
+.pk-bar .pkb-price{ flex:1; text-align:left; background:none; border:none; cursor:pointer; padding:0; }
+.pk-bar .pkb-price .k{ display:block; font-size:11px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase; }
+.pk-bar .pkb-price .v{ font-family:"Archivo Black",sans-serif; font-size:19px; color:var(--accent); letter-spacing:-.01em; }
+.pk-bar .btn{ padding:13px 22px; }
+@media (max-width:900px){
+  #pkcalc{ grid-template-columns:1fr; }
+  .pk-side{ display:none; }
+  .pk-bar{ display:flex; }
+  .pk-main{ padding-bottom:84px; }
+  .pk-grid.c3{ grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion: reduce){ .pk-total{ transition:none; } }
+</style>
 </head>
 <body class="inner">
 
@@ -73,87 +180,27 @@
       <nav class="breadcrumb reveal" aria-label="Brödsmulor">
         <a href="index.html">Start</a><span class="sep">/</span><a href="priser.html">Priser</a><span class="sep">/</span><span>Priskalkylator</span>
       </nav>
-      <span class="ph-kicker mono reveal">Gratis verktyg</span>
-      <h1 class="reveal d1">Vad kostar ditt projekt?</h1>
-      <p class="ph-lead reveal d2">Få en snabb, vägledande prisuppskattning för en hemsida, e-handel, app, system eller integration — baserat på svenska marknadspriser. Vill du ha en exakt siffra får du en fast offert, utan förpliktelse.</p>
+      <span class="ph-kicker mono reveal">Gratis verktyg · tar ca 60 sekunder</span>
+      <h1 class="reveal d1">Bygg din lösning – se priset direkt</h1>
+      <p class="ph-lead reveal d2">Välj vad du vill bygga, lägg till funktioner och se ditt uppskattade pris uppdateras i realtid. Hemsida, webbshop, CRM, rekryteringssystem, eget system eller AI – på några klick.</p>
     </div>
   </section>
 
   <section class="sec" style="padding-top:0;">
     <div class="wrap">
-      <div class="calc" id="calc">
-        <div class="calc-main">
-
-          <div class="calc-step reveal">
-            <div class="cs-head"><span class="cs-num">1</span><h2>Vad vill du bygga?</h2></div>
-            <div class="opt-grid" data-role="base" data-select="single">
-              <button class="opt" type="button" data-low="15000" data-high="45000">
-                <span class="opt-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg></span>
-                <span class="opt-t">Hemsida</span><span class="opt-d">Företagswebbplats eller landningssida</span>
-              </button>
-              <button class="opt" type="button" data-low="35000" data-high="95000">
-                <span class="opt-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="18" cy="21" r="1"/><path d="M2 3h3l2.5 13h10L21 7H6"/></svg></span>
-                <span class="opt-t">E-handel</span><span class="opt-d">Webbshop med kassa och betalning</span>
-              </button>
-              <button class="opt" type="button" data-low="80000" data-high="250000">
-                <span class="opt-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></span>
-                <span class="opt-t">Mobilapp</span><span class="opt-d">Native app för iOS &amp; Android</span>
-              </button>
-              <button class="opt" type="button" data-low="45000" data-high="160000">
-                <span class="opt-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
-                <span class="opt-t">Skräddarsytt system</span><span class="opt-d">Affärssystem, portal, adminpanel</span>
-              </button>
-              <button class="opt" type="button" data-low="12000" data-high="60000">
-                <span class="opt-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12H5a3 3 0 0 1 0-6h4M15 12h4a3 3 0 0 1 0 6h-4M8 12h8"/></svg></span>
-                <span class="opt-t">Integration / API</span><span class="opt-d">Fortnox, CRM &amp; systemkopplingar</span>
-              </button>
-            </div>
+      <div id="pkcalc">
+        <div class="pk-main">
+          <div class="pk-prog" id="pkProg" aria-hidden="true"></div>
+          <div class="pk-steps" id="pkSteps"></div>
+          <div class="pk-nav" id="pkNav">
+            <button class="pk-back" id="pkBack" type="button" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Tillbaka</button>
+            <button class="btn btn-accent" id="pkNext" type="button">Fortsätt <span class="arrow" aria-hidden="true">→</span></button>
           </div>
-
-          <div class="calc-step reveal">
-            <div class="cs-head"><span class="cs-num">2</span><h2>Omfattning</h2></div>
-            <div class="opt-grid cols-3" data-role="scope" data-select="single">
-              <button class="opt" type="button" data-mult="0.7"><span class="opt-t">Litet</span><span class="opt-d">One-pager / MVP / enkel koppling</span></button>
-              <button class="opt sel" type="button" data-mult="1"><span class="opt-t">Standard</span><span class="opt-d">5–10 sidor / normal omfattning</span></button>
-              <button class="opt" type="button" data-mult="1.6"><span class="opt-t">Stort</span><span class="opt-d">Större, skräddarsytt bygge</span></button>
-            </div>
-          </div>
-
-          <div class="calc-step reveal">
-            <div class="cs-head"><span class="cs-num">3</span><h2>Design</h2></div>
-            <div class="opt-grid cols-3" data-role="design" data-select="single">
-              <button class="opt" type="button" data-mult="0.85"><span class="opt-t">Mallbaserad</span><span class="opt-d">Snyggt och snabbt på befintlig grund</span></button>
-              <button class="opt sel" type="button" data-mult="1"><span class="opt-t">Semi-skräddarsydd</span><span class="opt-d">Anpassad efter er profil</span></button>
-              <button class="opt" type="button" data-mult="1.3"><span class="opt-t">Unik design</span><span class="opt-d">Helt skräddarsydd, från grunden</span></button>
-            </div>
-          </div>
-
-          <div class="calc-step reveal">
-            <div class="cs-head"><span class="cs-num">4</span><h2>Tillval &amp; funktioner</h2></div>
-            <div class="opt-grid addons" data-role="addon" data-select="multi">
-              <button class="opt chk" type="button" data-low="8000" data-high="20000"><span class="opt-t">Bokningssystem</span></button>
-              <button class="opt chk" type="button" data-low="6000" data-high="15000"><span class="opt-t">Betalning (Klarna/Swish/kort)</span></button>
-              <button class="opt chk" type="button" data-low="8000" data-high="22000"><span class="opt-t">Inloggning / medlemssidor</span></button>
-              <button class="opt chk" type="button" data-low="8000" data-high="18000"><span class="opt-t">Fortnox-integration</span></button>
-              <button class="opt chk" type="button" data-low="8000" data-high="20000"><span class="opt-t">CRM-integration</span></button>
-              <button class="opt chk" type="button" data-low="10000" data-high="35000"><span class="opt-t">API-koppling / systemintegration</span></button>
-              <button class="opt chk" type="button" data-low="5000" data-high="12000"><span class="opt-t">Flerspråkighet</span></button>
-              <button class="opt chk" type="button" data-low="5000" data-high="15000"><span class="opt-t">SEO &amp; prestanda</span></button>
-              <button class="opt chk" type="button" data-low="12000" data-high="45000"><span class="opt-t">Automation / AI-agent</span></button>
-            </div>
-          </div>
-
         </div>
-
-        <aside class="calc-side">
-          <div class="price-card reveal">
-            <span class="pc-kicker mono">Uppskattat prisintervall</span>
-            <div class="pc-range" id="pcRange">Välj vad du vill bygga →</div>
-            <div class="pc-month" id="pcMonth" hidden></div>
-            <p class="pc-note">Vägledande marknadspris i Sverige. Du får alltid en fast offert efter att vi gått igenom detaljerna — utan förpliktelse.</p>
-            <div class="pc-sum" id="pcSum" hidden></div>
-            <a class="btn btn-accent pc-cta" href="kontakt.html" data-book>Boka en kostnadsfri offert <span class="arrow" aria-hidden="true">→</span></a>
-            <a class="pc-reset" id="pcReset" href="#" role="button">Börja om</a>
+        <aside class="pk-side">
+          <div class="pk-side-card">
+            <span class="pk-side-k">Ditt projekt</span>
+            <div id="pkSideBody"></div>
           </div>
         </aside>
       </div>
@@ -165,25 +212,10 @@
     <div class="wrap">
       <div class="sec-head reveal"><span class="kicker mono">Vanliga frågor</span><div><h2 class="display" style="color:var(--on-ink);">Bra att veta om priset.</h2></div></div>
       <div class="faq reveal">
-        <details><summary>Hur exakt är kalkylatorn?</summary><p>Den ger ett vägledande intervall baserat på marknadspriser. Exakt pris beror på era specifika behov — det sätter vi tillsammans i en kostnadsfri genomgång.</p></details>
+        <details><summary>Är priset bindande?</summary><p>Nej. Kalkylatorn ger en prisindikation. Efter en kort genomgång av projektet får du ett fast pris från oss.</p></details>
         <details><summary>Vad ingår i priset?</summary><p>Design, utveckling, tester och lansering. Vi är tydliga med vad som ingår innan vi börjar — inga överraskningar.</p></details>
-        <details><summary>Kostar det något att få en offert?</summary><p>Nej. Genomgång och offert är alltid gratis och utan förpliktelse.</p></details>
-        <details><summary>Varför spänner intervallet brett?</summary><p>Ett litet projekt och ett stort skiljer sig mycket. Ju mer vi vet om era behov, desto snävare (och tryggare) blir siffran.</p></details>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <section class="sec">
-    <div class="wrap">
-      <div class="cta reveal">
-        <span class="kicker mono">Redo?</span>
-        <h2 class="display">Vill du ha en exakt offert?</h2>
-        <p>Berätta kort vad du vill bygga så återkommer vi med en tydlig offert inom 24 timmar.</p>
-        <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-          <a class="btn btn-invert" href="kontakt.html" data-book>Boka ett möte <span class="arrow" aria-hidden="true">→</span></a>
-          <a class="btn btn-line" href="case-stodona.html">Se vad vi byggt</a>
-        </div>
+        <details><summary>Kostar det något att få ett fast pris?</summary><p>Nej. Genomgång och offert är alltid gratis och utan förpliktelse.</p></details>
+        <details><summary>Kan vi dela upp betalningen?</summary><p>Ja — projekt kan delbetalas på upp till 2–3 år. Månadskostnaden sätter vi i offerten.</p></details>
       </div>
     </div>
   </section>
@@ -204,6 +236,402 @@
   </footer>
 </main>
 
+<!-- mobil sticky prisbar -->
+<div class="pk-bar" id="pkBar">
+  <button class="pkb-price" id="pkBarPrice" type="button"><span class="k">Ditt pris</span><span class="v" id="pkBarVal">–</span></button>
+  <button class="btn btn-accent" id="pkBarNext" type="button">Fortsätt <span class="arrow" aria-hidden="true">→</span></button>
+</div>
+
 <script src="assets/main.js?v=37" defer></script>
+<script>
+/* ============================================================
+   KELA – Priskalkylator (central prislogik + wizard)
+   Alla priser nedan är initiala exempel och kan ändras här.
+   ============================================================ */
+(function(){
+  "use strict";
+  var FORMSPREE = "https://formspree.io/f/xojkdewo";
+
+  /* -------- PRICING CONFIG (ändra priser här) -------- */
+  var PRICING = {
+    rangeLow: 0.90, rangeHigh: 1.15,
+    solutions: [
+      {k:'hemsida',     em:'🌐', t:'Hemsida',            d:'För företag som behöver en ny, modern hemsida.',            from:9900,  type:'web'},
+      {k:'webbshop',    em:'🛒', t:'Webbshop',           d:'Sälj produkter eller tjänster online.',                     from:19900, type:'web'},
+      {k:'system',      em:'⚙️', t:'Eget system',        d:'System anpassade efter hur ditt företag arbetar.',          from:29900, type:'system'},
+      {k:'rekrytering', em:'👥', t:'Rekryteringssystem', d:'Hantera jobb, kandidater, processer och kunder.',           from:39900, type:'system'},
+      {k:'crm',         em:'📊', t:'CRM',                d:'Samla kunder, leads, uppföljning och försäljning.',         from:29900, type:'system'},
+      {k:'ai',          em:'✨', t:'AI & Automation',    d:'Automatisera administration, kundservice och arbetsflöden.', from:4900,  type:'system'},
+      {k:'annat',       em:'➕', t:'Något annat',        d:'Har du en idé? Vi kan förmodligen bygga den.',               type:'custom'}
+    ],
+    packages: {
+      hemsida: [
+        {k:'start',    t:'Start',    d:'För det mindre företaget. Upp till 5 sidor.',           base:9900},
+        {k:'business', t:'Business', d:'En mer komplett webbplats. Upp till 10 sidor.',         base:19900, popular:true},
+        {k:'premium',  t:'Premium',  d:'Större skräddarsydd webbplats med avancerad design.',   base:29900}
+      ],
+      webbshop: [
+        {k:'start',    t:'Start',    d:'Kom igång och sälj online. Mindre sortiment.',          base:19900},
+        {k:'business', t:'Business', d:'Komplett webbshop med fler funktioner.',                base:34900, popular:true},
+        {k:'premium',  t:'Premium',  d:'Skräddarsydd e-handel med avancerad funktionalitet.',   base:49900}
+      ]
+    },
+    addons: [
+      {k:'bokning',  t:'Bokningssystem',             price:4900},
+      {k:'inlogg',   t:'Kundinloggning / kundportal',price:7900},
+      {k:'betalning',t:'Betalning online',           price:3900},
+      {k:'swish',    t:'Swish',                       price:2900},
+      {k:'fortnox',  t:'Fortnox-integration',         price:4900},
+      {k:'crmint',   t:'CRM-integration',             price:4900},
+      {k:'aichatt',  t:'AI-chatt / AI-kundservice',   price:4900, from:true},
+      {k:'sms',      t:'Automatiska SMS',             price:2900, from:true},
+      {k:'mejl',     t:'Automatiska mejl',            price:2900, from:true},
+      {k:'sprak',    t:'Flera språk',                 price:2900, from:true},
+      {k:'blogg',    t:'Blogg / nyheter',             price:2900},
+      {k:'karriar',  t:'Karriärsida',                 price:2900},
+      {k:'offert',   t:'Offertformulär',              price:2900},
+      {k:'special',  t:'Specialbyggd funktion',       custom:true}
+    ],
+    features: [
+      {k:'inlogg',     t:'Användarinloggning',   price:4900},
+      {k:'roller',     t:'Olika användarroller',  price:4900},
+      {k:'admin',      t:'Adminpanel',            price:9900},
+      {k:'kundreg',    t:'Kundregister',          price:4900},
+      {k:'kandidatreg',t:'Kandidatregister',      price:4900},
+      {k:'crm',        t:'CRM',                   price:7900},
+      {k:'dashboard',  t:'Dashboard',             price:6900},
+      {k:'dokument',   t:'Dokumenthantering',     price:4900},
+      {k:'esign',      t:'E-signering',           price:4900},
+      {k:'bokningar',  t:'Bokningar',             price:4900},
+      {k:'kalender',   t:'Kalender',              price:3900},
+      {k:'fakturering',t:'Fakturering',           price:6900},
+      {k:'betalningar',t:'Betalningar',           price:4900},
+      {k:'mejl',       t:'Automatiska mejl',      price:2900},
+      {k:'sms',        t:'Automatiska SMS',       price:2900},
+      {k:'ai',         t:'AI-funktioner',         price:7900, from:true},
+      {k:'api',        t:'API / integrationer',   price:6900},
+      {k:'fortnox',    t:'Fortnox',               price:4900},
+      {k:'bankid',     t:'BankID',                price:6900},
+      {k:'statistik',  t:'Statistik & rapporter', price:4900},
+      {k:'annat',      t:'Annat',                 custom:true}
+    ],
+    design: [
+      {k:'has',   t:'Vi har redan design/brandbook', d:'KELA bygger utifrån befintligt material.', add:0},
+      {k:'kela',  t:'KELA skapar designen',          d:'Vi tar fram hela designen.',               add:9900},
+      {k:'brand', t:'Hjälp med varumärket',          d:'Design, färger, typografi & identitet.',   add:19900}
+    ]
+  };
+
+  /* -------- state & helpers -------- */
+  var S = { solution:null, pkg:null, addons:{}, features:{}, design:'has', customText:'' };
+  var stepIdx = 0;
+  var lastTotal = 0;
+
+  var $ = function(id){ return document.getElementById(id); };
+  var kr = function(n){ return (Math.round(n/100)*100).toLocaleString('sv-SE'); };
+  function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+  function sol(){ return PRICING.solutions.find(function(s){return s.k===S.solution;}); }
+  function solType(){ var s=sol(); return s? s.type : null; }
+
+  function flow(){
+    var t = solType();
+    if(t==='web')    return ['solution','size','addons','design','result'];
+    if(t==='system') return ['solution','features','design','result'];
+    if(t==='custom') return ['solution','describe','result'];
+    return ['solution'];
+  }
+  var STEP_LABEL = { solution:'Lösning', size:'Omfattning', addons:'Funktioner', features:'Funktioner', design:'Design', describe:'Din idé', result:'Resultat' };
+
+  /* -------- pricing -------- */
+  function compute(){
+    var s = sol();
+    var lines = [], custom = false;
+    if(!s) return {mode:'empty', lines:lines};
+    if(s.type==='custom') return {mode:'custom', lines:[{lb:s.t, lp:'Pris efter behov'}]};
+
+    var base;
+    if(s.type==='web'){
+      var pk = S.pkg && PRICING.packages[s.k].find(function(p){return p.k===S.pkg;});
+      base = pk ? pk.base : s.from;
+      lines.push({lb: s.t + (pk? ' · '+pk.t : ''), sub: pk? pk.d : 'Välj omfattning', lp: (pk?'':'från ')+kr(base)+' kr', base:true});
+    } else {
+      base = s.from;
+      lines.push({lb: s.t, sub:'Grundsystem', lp:'från '+kr(base)+' kr', base:true});
+    }
+    var total = base;
+
+    var list = (s.type==='web') ? PRICING.addons : PRICING.features;
+    var sel  = (s.type==='web') ? S.addons : S.features;
+    list.forEach(function(it){
+      if(!sel[it.k]) return;
+      if(it.custom){ custom = true; lines.push({lb:it.t, lp:'efter behov'}); return; }
+      total += it.price;
+      lines.push({lb:it.t, lp:(it.from?'från ':'')+'+'+kr(it.price)+' kr'});
+    });
+
+    var dz = PRICING.design.find(function(d){return d.k===S.design;});
+    if(dz && dz.add>0){ total += dz.add; lines.push({lb:dz.t, lp:'+'+kr(dz.add)+' kr'}); }
+
+    if(s.type==='web'){
+      return {mode:'exact', total:total, lines:lines, custom:custom};
+    }
+    var low = total*PRICING.rangeLow, high = total*PRICING.rangeHigh*(custom?1.1:1);
+    return {mode:'range', low:low, high:high, total:total, lines:lines, custom:custom};
+  }
+
+  function priceText(p){
+    if(p.mode==='exact')  return kr(p.total)+' kr';
+    if(p.mode==='range')  return 'ca '+kr(p.low)+' – '+kr(p.high)+' kr';
+    if(p.mode==='custom') return 'Pris efter behov';
+    return '–';
+  }
+
+  /* -------- render progress -------- */
+  function renderProg(){
+    var f = flow(), box = $('pkProg'); box.innerHTML='';
+    f.forEach(function(id, i){
+      if(i>0) box.appendChild(el('span','pc'));
+      var cls = 'ps'+(i===stepIdx?' active':'')+(i<stepIdx?' done':'');
+      var ps = el('span', cls);
+      ps.appendChild(el('span','pd', i<stepIdx?'✓':String(i+1)));
+      ps.appendChild(el('span','pl', STEP_LABEL[id]));
+      box.appendChild(ps);
+    });
+  }
+
+  /* -------- render side & bar -------- */
+  function flashTotal(){
+    var t=$('pkTotal'); if(!t) return; t.classList.add('bump'); setTimeout(function(){t.classList.remove('bump');},180);
+  }
+  function renderSide(){
+    var p = compute(), body = $('pkSideBody');
+    if(p.mode==='empty'){ body.innerHTML = '<p class="pk-empty">Välj vad du vill bygga så räknar vi ut ett pris direkt →</p>'; $('pkBarVal').textContent='–'; return; }
+    var h = '<div class="pk-lines">';
+    p.lines.forEach(function(l){
+      h += '<div class="pk-line'+(l.base?' base':'')+'"><span class="lb">'+l.lb+(l.sub?'<small>'+l.sub+'</small>':'')+'</span><span class="lp">'+l.lp+'</span></div>';
+    });
+    h += '</div><div class="pk-div"></div>';
+    if(p.mode==='custom'){
+      h += '<div class="pk-total-k">Uppskattat pris</div><div class="pk-total" id="pkTotal">Efter behov</div>';
+      h += '<p class="pk-disc">Vi bygger gärna skräddarsytt. Beskriv din idé så återkommer vi med ett pris.</p>';
+    } else {
+      h += '<div class="pk-total-k">Uppskattat pris</div><div class="pk-total" id="pkTotal">'+priceText(p)+'</div><div class="pk-exkl">exkl. moms</div>';
+      h += '<p class="pk-disc">Priset är en uppskattning. Efter en kort genomgång av projektet får du ett fast pris från oss.</p>';
+    }
+    body.innerHTML = h;
+    // bar
+    $('pkBarVal').textContent = (p.mode==='custom') ? 'Efter behov' : priceText(p);
+    if(p.total && p.total!==lastTotal){ flashTotal(); lastTotal = p.total; }
+  }
+
+  /* -------- step renderers -------- */
+  function stepSolution(){
+    var wrap = el('div','pk-step');
+    wrap.appendChild(el('span','pk-step-k','Steg 1'));
+    wrap.appendChild(el('h2','pk-step-h','Vad vill du bygga?'));
+    wrap.appendChild(el('p','pk-step-s','Välj vad du behöver och få en prisindikation direkt.'));
+    var g = el('div','pk-grid');
+    PRICING.solutions.forEach(function(s){
+      var c = el('button','pk-card'+(S.solution===s.k?' sel':''));
+      c.type='button';
+      c.innerHTML = '<span class="em">'+s.em+'</span><span class="t">'+s.t+'</span><span class="d">'+s.d+'</span>'+(s.from?'<span class="from">Från '+kr(s.from)+' kr</span>':'<span class="from">Beskriv din idé →</span>');
+      c.onclick = function(){
+        if(S.solution!==s.k){ S.pkg=null; S.addons={}; S.features={}; S.design='has'; }
+        S.solution = s.k; render(); // re-render to reflect selection (stay on step)
+      };
+      g.appendChild(c);
+    });
+    wrap.appendChild(g);
+    return wrap;
+  }
+
+  function stepSize(){
+    var s = sol();
+    var wrap = el('div','pk-step');
+    wrap.appendChild(el('span','pk-step-k','Steg 2 · '+s.t));
+    wrap.appendChild(el('h2','pk-step-h','Hur stor '+(s.k==='webbshop'?'webbshop':'hemsida')+' behöver du?'));
+    wrap.appendChild(el('p','pk-step-s','Välj en nivå – du kan alltid bygga ut senare.'));
+    var g = el('div','pk-grid c3');
+    PRICING.packages[s.k].forEach(function(p){
+      var c = el('button','pk-card'+(S.pkg===p.k?' sel':''));
+      c.type='button';
+      c.innerHTML = (p.popular?'<span class="pk-pop">Populärast</span>':'')+'<span class="t">'+p.t+'</span><span class="d">'+p.d+'</span><span class="from">Från '+kr(p.base)+' kr</span>';
+      c.onclick = function(){ S.pkg=p.k; render(); };
+      g.appendChild(c);
+    });
+    wrap.appendChild(g);
+    return wrap;
+  }
+
+  function stepToggles(kind){ // 'addons' or 'features'
+    var list = (kind==='addons')? PRICING.addons : PRICING.features;
+    var sel  = (kind==='addons')? S.addons : S.features;
+    var wrap = el('div','pk-step');
+    wrap.appendChild(el('span','pk-step-k', (kind==='addons'?'Steg 3':'Steg 2')+' · '+sol().t));
+    wrap.appendChild(el('h2','pk-step-h', kind==='addons'?'Vad behöver hemsidan kunna?':'Vad behöver systemet kunna?'));
+    wrap.appendChild(el('p','pk-step-s','Klicka i det du vill ha – priset uppdateras direkt. Allt är valfritt.'));
+    var g = el('div','pk-togs');
+    list.forEach(function(it){
+      var t = el('button','pk-tog'+(sel[it.k]?' sel':''));
+      t.type='button';
+      var pr = it.custom ? 'Pris efter behov' : (it.from?'från ':'')+'+ '+kr(it.price)+' kr';
+      t.innerHTML = '<span class="bx" aria-hidden="true"></span><span class="tt">'+it.t+'</span><span class="pr">'+pr+'</span>';
+      t.onclick = function(){ if(sel[it.k]) delete sel[it.k]; else sel[it.k]=true; render(); };
+      g.appendChild(t);
+    });
+    wrap.appendChild(g);
+    return wrap;
+  }
+
+  function stepDesign(){
+    var wrap = el('div','pk-step');
+    wrap.appendChild(el('span','pk-step-k','Design'));
+    wrap.appendChild(el('h2','pk-step-h','Hur mycket ska vi göra?'));
+    wrap.appendChild(el('p','pk-step-s','Vi anpassar priset efter hur mycket design du behöver hjälp med.'));
+    var g = el('div','pk-grid c3');
+    PRICING.design.forEach(function(d){
+      var c = el('button','pk-card'+(S.design===d.k?' sel':''));
+      c.type='button';
+      c.innerHTML = '<span class="t">'+d.t+'</span><span class="d">'+d.d+'</span>'+(d.add>0?'<span class="from">+ '+kr(d.add)+' kr</span>':'<span class="from">Ingår</span>');
+      c.onclick = function(){ S.design=d.k; render(); };
+      g.appendChild(c);
+    });
+    wrap.appendChild(g);
+    return wrap;
+  }
+
+  function stepDescribe(){
+    var wrap = el('div','pk-step');
+    wrap.appendChild(el('span','pk-step-k','Steg 2'));
+    wrap.appendChild(el('h2','pk-step-h','Beskriv din idé'));
+    wrap.appendChild(el('p','pk-step-s','Berätta kort vad du vill bygga så återkommer vi med ett förslag och ett pris.'));
+    var ta = el('textarea','pk-ta'); ta.placeholder='T.ex. “En plattform där våra kunder kan logga in, se sina ärenden och boka tid…”'; ta.value=S.customText;
+    ta.oninput = function(){ S.customText = ta.value; };
+    wrap.appendChild(ta);
+    return wrap;
+  }
+
+  function stepResult(){
+    var p = compute(), s = sol();
+    var wrap = el('div','pk-step');
+    wrap.appendChild(el('span','pk-step-k','Resultat'));
+    wrap.appendChild(el('h2','pk-step-h','Din lösning'));
+    var res = el('div','pk-result');
+    var h = '<div class="pk-sum-list">';
+    p.lines.forEach(function(l){ h += '<div class="r"><span>'+l.lb+'</span><span class="p">'+l.lp+'</span></div>'; });
+    h += '</div>';
+    if(p.mode==='custom'){
+      h += '<div class="pk-total-k">Uppskattat pris</div><div class="pk-bigprice">Efter behov</div>';
+    } else {
+      h += '<div class="pk-total-k">Uppskattat pris</div><div class="pk-bigprice">'+priceText(p)+'</div><div class="pk-exkl" style="margin-top:4px;">exkl. moms · prisindikation, inte bindande offert</div>';
+    }
+    res.innerHTML = h;
+    wrap.appendChild(res);
+
+    // lead form
+    var lead = el('div','pk-lead');
+    lead.innerHTML =
+      '<h3 style="font-family:\'Archivo Black\',sans-serif;font-weight:400;font-size:clamp(20px,3vw,26px);letter-spacing:-.02em;margin:30px 0 6px;">Vill du veta exakt vad det kostar?</h3>'+
+      '<p style="color:var(--muted);margin:0 0 18px;">Skicka din konfiguration så återkommer vi med ett fast pris – oftast inom 24 timmar. Du behöver inte beskriva projektet igen.</p>'+
+      '<form id="pkLead" novalidate>'+
+        '<div class="pk-lead-grid">'+
+          '<div class="pk-field"><label for="pk-name">Namn</label><input id="pk-name" name="namn" type="text" autocomplete="name" required></div>'+
+          '<div class="pk-field"><label for="pk-comp">Företag</label><input id="pk-comp" name="foretag" type="text" autocomplete="organization"></div>'+
+          '<div class="pk-field"><label for="pk-email">E-post</label><input id="pk-email" name="epost" type="email" autocomplete="email" required></div>'+
+          '<div class="pk-field"><label for="pk-tel">Telefon</label><input id="pk-tel" name="telefon" type="tel" autocomplete="tel"></div>'+
+        '</div>'+
+        '<button class="btn btn-accent" type="submit" id="pkLeadBtn" style="width:100%;justify-content:center;margin-top:6px;">Skicka mitt projekt <span class="arrow" aria-hidden="true">→</span></button>'+
+        '<p class="pk-ok" id="pkOk" hidden>Tack! Vi har tagit emot din konfiguration och återkommer med ett fast pris.</p>'+
+        '<p class="pk-err" id="pkErr" hidden>Något gick fel — mejla oss gärna på <a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a>.</p>'+
+      '</form>';
+    wrap.appendChild(lead);
+    setTimeout(bindLead, 0);
+    return wrap;
+  }
+
+  function summaryText(){
+    var p = compute(), s = sol(), out = [];
+    out.push('Lösning: ' + (s?s.t:'-'));
+    if(s && s.type==='web' && S.pkg){ var pk=PRICING.packages[s.k].find(function(x){return x.k===S.pkg;}); out.push('Omfattning: '+(pk?pk.t:'')); }
+    var selList = s && s.type==='web' ? PRICING.addons.filter(function(a){return S.addons[a.k];}) : (s && s.type==='system' ? PRICING.features.filter(function(a){return S.features[a.k];}) : []);
+    if(selList.length) out.push('Funktioner: ' + selList.map(function(a){return a.t;}).join(', '));
+    var dz = PRICING.design.find(function(d){return d.k===S.design;}); if(dz) out.push('Design: '+dz.t);
+    if(S.customText) out.push('Idé: '+S.customText);
+    out.push('Uppskattat pris: ' + priceText(p) + (p.mode==='custom'?'':' (exkl. moms)'));
+    out.push('Källa: priskalkylator · ' + new Date().toISOString().slice(0,10));
+    return out.join('\n');
+  }
+
+  function bindLead(){
+    var form = $('pkLead'); if(!form) return;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var ok=$('pkOk'), err=$('pkErr'), btn=$('pkLeadBtn');
+      ok.hidden=true; err.hidden=true;
+      var fd = new FormData(form);
+      fd.append('sammanfattning', summaryText());
+      fd.append('_subject', 'Ny projektförfrågan (kalkylator) – ' + (sol()?sol().t:''));
+      fd.append('uppskattat_pris', priceText(compute()));
+      if(btn){ btn.disabled=true; btn.style.opacity='.6'; }
+      fetch(FORMSPREE, { method:'POST', body:fd, headers:{'Accept':'application/json'} })
+        .then(function(r){
+          if(r.ok){ form.querySelector('.pk-lead-grid').style.display='none'; btn.style.display='none'; ok.hidden=false; }
+          else { err.hidden=false; btn.disabled=false; btn.style.opacity='1'; }
+        })
+        .catch(function(){ err.hidden=false; btn.disabled=false; btn.style.opacity='1'; });
+    });
+  }
+
+  /* -------- main render -------- */
+  function currentStepId(){ return flow()[stepIdx]; }
+  function renderStep(){
+    var id = currentStepId(), host = $('pkSteps'); host.innerHTML='';
+    var node;
+    if(id==='solution') node = stepSolution();
+    else if(id==='size') node = stepSize();
+    else if(id==='addons') node = stepToggles('addons');
+    else if(id==='features') node = stepToggles('features');
+    else if(id==='design') node = stepDesign();
+    else if(id==='describe') node = stepDescribe();
+    else if(id==='result') node = stepResult();
+    host.appendChild(node);
+  }
+  function renderNav(){
+    var f = flow(), id = currentStepId();
+    $('pkBack').hidden = (stepIdx===0);
+    var next = $('pkNext'), barNext = $('pkBarNext');
+    var isLast = (id==='result');
+    next.style.display = isLast ? 'none' : '';
+    barNext.textContent = isLast ? '' : 'Fortsätt →';
+    barNext.style.display = isLast ? 'none' : '';
+    // enable/disable next based on required choice
+    var canNext = true;
+    if(id==='solution') canNext = !!S.solution;
+    if(id==='size') canNext = !!S.pkg;
+    next.disabled = !canNext; next.style.opacity = canNext?'1':'.5'; next.style.pointerEvents = canNext?'':'none';
+    barNext.disabled = !canNext; barNext.style.opacity = canNext?'1':'.5';
+  }
+  function render(){
+    renderProg(); renderStep(); renderSide(); renderNav();
+  }
+  function go(dir){
+    var f = flow();
+    if(dir>0 && stepIdx < f.length-1) stepIdx++;
+    else if(dir<0 && stepIdx>0) stepIdx--;
+    render();
+    var top = document.getElementById('pkcalc'); if(top){ var y=top.getBoundingClientRect().top+window.scrollY-90; window.scrollTo({top:y, behavior:'smooth'}); }
+  }
+
+  /* -------- events -------- */
+  $('pkNext').addEventListener('click', function(){ if(!$('pkNext').disabled) go(1); });
+  $('pkBack').addEventListener('click', function(){ go(-1); });
+  $('pkBarNext').addEventListener('click', function(){ if(!$('pkBarNext').disabled) go(1); });
+  $('pkBarPrice').addEventListener('click', function(){
+    var top = document.getElementById('pkcalc'); if(top){ var y=top.getBoundingClientRect().top+window.scrollY-90; window.scrollTo({top:y, behavior:'smooth'}); }
+  });
+
+  render();
+})();
+</script>
 </body>
 </html>
