@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kela group — digital byrå | redesign (Caia-inspirerad)</title>
+<meta name="description" content="Kela group bygger hemsidor, system, appar och automationer som sparar tid och sänker kostnader. Redesign-förslag i ren, elegant stil.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F1EB; --bg2:#ECE7DE; --paper:#FAF8F4; --ink:#1C1A18; --muted:#817A70;
+  --faint:#ABA398; --line:#E0D9CD; --accent:#E31B23; --accent-deep:#B3141B;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Jost",-apple-system,Helvetica,Arial,sans-serif;font-weight:300;font-size:16.5px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+img,video{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1240px;margin:0 auto;padding:0 30px;}
+h1,h2,h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;line-height:1.05;margin:0;letter-spacing:.005em;}
+.eyebrow{font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:400;}
+.serif-em{font-style:italic;color:var(--accent);}
+.btn{display:inline-flex;align-items:center;gap:11px;padding:16px 32px;background:var(--ink);color:var(--paper);font-size:12px;letter-spacing:.22em;text-transform:uppercase;font-weight:400;border:1px solid var(--ink);cursor:pointer;transition:.3s;}
+.btn:hover{background:transparent;color:var(--ink);}
+.btn.red{background:var(--accent);border-color:var(--accent);color:#fff;}
+.btn.red:hover{background:var(--ink);border-color:var(--ink);color:#fff;}
+.btn.line{background:transparent;color:var(--ink);}
+.btn.line:hover{background:var(--ink);color:var(--paper);}
+
+.announce{background:var(--ink);color:#EDE7DD;text-align:center;padding:9px 16px;font-size:11px;letter-spacing:.24em;text-transform:uppercase;}
+.announce b{color:#fff;font-weight:400;}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+.nav-in{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:74px;}
+.nav-links{display:none;gap:34px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;}
+.nav-links a{color:var(--muted);transition:.2s;}
+.nav-links a:hover{color:var(--ink);}
+.brand{justify-self:center;font-family:"Jost",sans-serif;font-weight:400;font-size:25px;letter-spacing:.46em;text-transform:uppercase;padding-left:.46em;}
+.nav-r{justify-self:end;display:flex;align-items:center;gap:22px;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+.nav-r a.cta{color:var(--ink);border-bottom:1px solid var(--accent);padding-bottom:3px;}
+.menu-ic{width:22px;height:22px;stroke:var(--ink);cursor:pointer;}
+@media(min-width:940px){.nav-links{display:flex;}.menu-ic{display:none;}}
+@media(max-width:939px){.nav-r .hidem{display:none;}}
+
+/* hero */
+.hero{padding:clamp(40px,6vw,70px) 0 clamp(50px,7vw,90px);}
+.hero-in{display:grid;grid-template-columns:1fr .92fr;gap:54px;align-items:center;}
+.hero-copy .eyebrow{display:block;margin-bottom:26px;}
+.hero-copy h1{font-size:clamp(46px,6.6vw,92px);}
+.hero-copy p{color:var(--muted);font-size:19px;max-width:40ch;margin:26px 0 34px;}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.hero-media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--bg2);}
+.hero-media video{width:100%;height:100%;object-fit:cover;}
+.hero-media .cap{position:absolute;left:18px;bottom:16px;color:#fff;font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-shadow:0 1px 10px rgba(0,0,0,.5);}
+@media(max-width:880px){.hero-in{grid-template-columns:1fr;gap:34px;}.hero-media{aspect-ratio:16/11;}}
+
+/* clients */
+.clients{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:30px 0;}
+.clients .lbl{text-align:center;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--faint);margin-bottom:22px;}
+.clients .row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:34px 56px;}
+.clients img{height:26px;filter:brightness(0) opacity(.5);transition:.3s;}
+.clients img:hover{opacity:.85;}
+.clients img.bsg{height:34px;}
+
+/* sections */
+.sec{padding:clamp(66px,9vw,120px) 0;}
+.sec-head{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:end;margin-bottom:54px;}
+.sec-head .eyebrow{white-space:nowrap;padding-bottom:6px;}
+.sec-head h2{font-size:clamp(34px,5.2vw,60px);}
+@media(max-width:700px){.sec-head{grid-template-columns:1fr;gap:12px;}}
+
+/* services list */
+.srv{border-top:1px solid var(--line);}
+.srv-row{display:grid;grid-template-columns:70px 1.1fr 1.4fr auto;gap:24px;align-items:center;padding:30px 4px;border-bottom:1px solid var(--line);transition:.3s;cursor:default;}
+.srv-row:hover{padding-left:16px;background:var(--paper);}
+.srv-row .no{font-size:13px;letter-spacing:.1em;color:var(--accent);}
+.srv-row h3{font-size:clamp(24px,3vw,34px);}
+.srv-row p{color:var(--muted);font-size:15.5px;margin:0;}
+.srv-row .go{justify-self:end;color:var(--muted);transition:.3s;}
+.srv-row:hover .go{color:var(--accent);transform:translateX(5px);}
+@media(max-width:760px){.srv-row{grid-template-columns:48px 1fr;gap:6px 16px;}.srv-row p{grid-column:2;}.srv-row .go{display:none;}}
+
+/* case */
+.case{background:var(--ink);color:#EDE7DD;}
+.case .wrap{padding-top:clamp(66px,9vw,110px);padding-bottom:clamp(66px,9vw,110px);}
+.case .eyebrow{color:#9A938A;}
+.case h2{color:#fff;font-size:clamp(32px,5vw,54px);margin:14px 0 10px;}
+.case .lead{color:#B8B0A6;max-width:58ch;margin:0 0 44px;}
+.case-rows{display:grid;gap:0;}
+.case-row{display:grid;grid-template-columns:1.5fr 1fr 24px 1fr;gap:16px;align-items:center;padding:16px 0;border-top:1px solid rgba(255,255,255,.12);}
+.case-row .s{font-weight:400;}
+.case-row .s small{display:block;color:#8E867C;font-size:12.5px;}
+.case-row .o{color:#8E867C;}
+.case-row .o s{text-decoration-color:rgba(227,27,35,.7);}
+.case-row .ar{color:var(--accent);justify-self:center;}
+.case-row .n{color:#fff;font-weight:400;}
+.case-row .n small{display:block;color:#9A938A;font-size:12px;}
+.case-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;margin-top:48px;padding-top:34px;border-top:1px solid rgba(255,255,255,.12);}
+.case-sum .k{font-size:12px;color:#9A938A;letter-spacing:.04em;}
+.case-sum .v{font-family:"Cormorant Garamond",serif;font-size:clamp(34px,4.6vw,52px);color:#fff;line-height:1;margin-top:6px;}
+.case-sum .v.acc{color:var(--accent);}
+.case-sum .sub{font-size:12.5px;color:#8E867C;margin-top:6px;}
+@media(max-width:760px){.case-row{grid-template-columns:1fr auto 1fr;}.case-row .s{grid-column:1/-1;margin-bottom:4px;}.case-sum{grid-template-columns:1fr;gap:22px;}}
+
+/* calc promo */
+.promo{display:grid;grid-template-columns:1.1fr .9fr;gap:50px;align-items:center;background:var(--paper);border:1px solid var(--line);padding:clamp(34px,5vw,64px);}
+.promo h2{font-size:clamp(32px,4.6vw,52px);margin:16px 0 16px;}
+.promo p{color:var(--muted);max-width:40ch;margin:0 0 28px;}
+.promo .mini{background:var(--bg);border:1px solid var(--line);padding:26px;}
+.promo .mini .k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.promo .mini .r{display:flex;justify-content:space-between;font-size:14px;margin:9px 0;}
+.promo .mini .r .m{color:var(--muted);}
+.promo .mini .tot{font-family:"Cormorant Garamond",serif;font-size:34px;color:var(--accent);line-height:1;margin-top:8px;}
+@media(max-width:820px){.promo{grid-template-columns:1fr;gap:30px;}}
+
+/* process */
+.proc{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+.proc .p{background:var(--bg);padding:38px 28px;}
+.proc .p .no{font-size:13px;color:var(--accent);letter-spacing:.1em;}
+.proc .p h3{font-size:24px;margin:16px 0 10px;}
+.proc .p p{color:var(--muted);font-size:14.5px;margin:0;}
+@media(max-width:800px){.proc{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.proc{grid-template-columns:1fr;}}
+
+/* big cta */
+.cta{text-align:center;}
+.cta h2{font-size:clamp(38px,6.5vw,82px);}
+.cta p{color:var(--muted);font-size:19px;max-width:40ch;margin:20px auto 34px;}
+
+/* footer */
+footer{background:var(--ink);color:#B8B0A6;padding:72px 0 34px;}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:36px;}
+@media(max-width:820px){.foot-grid{grid-template-columns:1fr 1fr;gap:30px;}}
+footer .brand{justify-self:start;color:#fff;font-size:22px;margin-bottom:14px;}
+footer h5{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#fff;margin:0 0 16px;font-weight:400;}
+footer a{display:block;color:#B8B0A6;font-size:14px;margin-bottom:10px;transition:.2s;}
+footer a:hover{color:#fff;}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.12);margin-top:46px;padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:12px;color:#8E867C;letter-spacing:.06em;}
+</style>
+</head>
+<body>
+
+<div class="announce">Digital byrå · Stockholm — <b>vi bygger i hela Europa</b></div>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <div style="display:flex;align-items:center;gap:20px;">
+      <svg class="menu-ic" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      <nav class="nav-links"><a href="#tjanster">Tjänster</a><a href="#case">Case</a><a href="#pris">Priser</a></nav>
+    </div>
+    <div class="brand">Kela</div>
+    <div class="nav-r">
+      <span class="hidem">hej@kelagroup.se</span>
+      <a class="cta" href="#kontakt">Boka möte</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <span class="eyebrow">Hemsidor · System · Automationer · AI</span>
+      <h1>Vi bygger bort<br>det <span class="serif-em">onödiga</span>.</h1>
+      <p>Hemsidor, system, appar och automationer som sparar tid, förenklar och sänker era kostnader. Mindre admin. Mer affär.</p>
+      <div class="hero-actions">
+        <a class="btn red" href="#kontakt">Boka ett möte</a>
+        <a class="btn line" href="#case">Se vad vi byggt</a>
+      </div>
+    </div>
+    <div class="hero-media">
+      <video src="assets/team/hero-video.mp4?v=3" poster="assets/team/hero-poster.jpg?v=2" autoplay muted loop playsinline preload="auto"></video>
+      <span class="cap">Kela group · Stockholm</span>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<div class="clients">
+  <div class="wrap">
+    <div class="lbl">Utvalda kunder</div>
+    <div class="row">
+      <img src="assets/clients/stodona.png" alt="Stodona">
+      <img src="assets/clients/xllenta.webp" alt="Xllenta">
+      <img src="assets/clients/tailorevents.png" alt="Tailor Events">
+      <img src="assets/clients/ashsweden.png" alt="ASH Sweden">
+      <img class="bsg" src="assets/clients/bsg.svg" alt="BSG">
+    </div>
+  </div>
+</div>
+
+<!-- TJÄNSTER -->
+<section class="sec" id="tjanster">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Vad vi bygger</span><h2>Ett team. Hela er digitala verktygslåda.</h2></div>
+    <div class="srv">
+      <div class="srv-row"><span class="no">01</span><h3>Hemsidor</h3><p>Snabba, snygga och konverterande webbplatser byggda från grunden.</p><span class="go">→</span></div>
+      <div class="srv-row"><span class="no">02</span><h3>System &amp; portaler</h3><p>Affärssystem, CRM, bokning och interna verktyg kring hur ni jobbar.</p><span class="go">→</span></div>
+      <div class="srv-row"><span class="no">03</span><h3>Automationer &amp; AI</h3><p>Offerter, uppföljning och kundtjänst som sköter sig själva – dygnet runt.</p><span class="go">→</span></div>
+      <div class="srv-row"><span class="no">04</span><h3>Appar &amp; portaler</h3><p>Native appar i App Store och Google Play, kopplade till era system.</p><span class="go">→</span></div>
+      <div class="srv-row"><span class="no">05</span><h3>Integrationer</h3><p>Fortnox, CRM och API-kopplingar som får era system att prata med varandra.</p><span class="go">→</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CASE -->
+<section class="case" id="case">
+  <div class="wrap">
+    <span class="eyebrow">Kundcase · Stodona AB</span>
+    <h2>Samma verksamhet — en bråkdel av kostnaden.</h2>
+    <p class="lead">Vi bytte ut dyra månadsabonnemang mot egna system, byggda för hur Stodona faktiskt jobbar och kopplade till varandra.</p>
+    <div class="case-rows">
+      <div class="case-row"><div class="s">Hemsida</div><div class="o"><s>179 kr/mån</s></div><div class="ar">→</div><div class="n">Egen hemsida<small>ingen abonnemangsavgift</small></div></div>
+      <div class="case-row"><div class="s">Bokningssystem</div><div class="o"><s>4 000–6 000 kr/mån</s></div><div class="ar">→</div><div class="n">15 000 kr<small>engångssumma</small></div></div>
+      <div class="case-row"><div class="s">AI-chatt – webb &amp; mail</div><div class="o"><s>≈ 40 000 kr/mån</s></div><div class="ar">→</div><div class="n">4 000 kr/mån<small>ersatte 1 heltidstjänst</small></div></div>
+      <div class="case-row"><div class="s">Fakturapåminnelser</div><div class="o"><s>≈ 2 500 kr/mån</s></div><div class="ar">→</div><div class="n">5 000 kr<small>engångssumma</small></div></div>
+      <div class="case-row"><div class="s">Personal- &amp; kundapp</div><div class="o"><s>1 000 kr/mån</s></div><div class="ar">→</div><div class="n">20 000 kr<small>engång, kopplade till systemet</small></div></div>
+    </div>
+    <div class="case-sum">
+      <div><div class="k">Löpande – tidigare</div><div class="v">≈ 52 000<small style="font-size:14px;"> kr/mån</small></div><div class="sub">i abonnemang &amp; licenser</div></div>
+      <div><div class="k">Löpande – nu</div><div class="v acc">≈ 5 000<small style="font-size:14px;"> kr/mån</small></div><div class="sub">≈ 565 000 kr lägre per år</div></div>
+      <div><div class="k">Engångsinvestering</div><div class="v">47 000 kr</div><div class="sub">intjänad på ungefär en månad</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRISKALKYLATOR -->
+<section class="sec" id="pris">
+  <div class="wrap">
+    <div class="promo">
+      <div>
+        <span class="eyebrow">Priskalkylator · ca 60 sekunder</span>
+        <h2>Vad kostar din idé?</h2>
+        <p>Hemsida, webbshop, CRM, rekryteringssystem eller en helt egen lösning. Bygg din lösning och se priset direkt.</p>
+        <a class="btn red" href="priskalkylator.html">Räkna ut priset</a>
+      </div>
+      <div class="mini" aria-hidden="true">
+        <div class="k">Ditt projekt</div>
+        <div class="r"><span style="font-weight:400;">Business-hemsida</span><span class="m">19 900 kr</span></div>
+        <div class="r"><span>Bokningssystem</span><span class="m">+4 900 kr</span></div>
+        <div class="r"><span>Fortnox</span><span class="m">+4 900 kr</span></div>
+        <div class="r"><span>AI-chatt</span><span class="m">+4 900 kr</span></div>
+        <div style="height:1px;background:var(--line);margin:14px 0;"></div>
+        <div class="k">Uppskattat pris</div>
+        <div class="tot">34 600 kr</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="sec" style="padding-top:0;">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Så jobbar vi</span><h2>Fyra steg. Inget krångel.</h2></div>
+    <div class="proc">
+      <div class="p"><span class="no">01</span><h3>Vi hittar problemet</h3><p>Var läcker tiden och pengarna?</p></div>
+      <div class="p"><span class="no">02</span><h3>Vi bygger lösningen</h3><p>Snyggt, snabbt och byggt för er.</p></div>
+      <div class="p"><span class="no">03</span><h3>Vi mäter resultatet</h3><p>I kronor och sparad tid.</p></div>
+      <div class="p"><span class="no">04</span><h3>Vi förbättrar</h3><p>Och bygger vidare.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="sec cta" id="kontakt">
+  <div class="wrap">
+    <span class="eyebrow">Säg hej</span>
+    <h2 style="margin-top:18px;">Har ni ett system<br>ni <span class="serif-em">hatar</span>?</h2>
+    <p>Berätta vad som tar för mycket tid — så hittar vi vad ni kan bygga bort.</p>
+    <a class="btn red" href="kontakt.html">Boka 30 minuter med oss</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand">Kela</div>
+        <p style="color:#9b9288;max-width:30ch;font-size:14px;">Digital byrå som bygger hemsidor, system, appar och automationer. Stockholm &amp; hela Europa.</p>
+      </div>
+      <div><h5>Tjänster</h5><a href="#tjanster">Hemsidor</a><a href="#tjanster">System</a><a href="#tjanster">Automationer</a><a href="#tjanster">Appar</a></div>
+      <div><h5>Företaget</h5><a href="#case">Case</a><a href="priskalkylator.html">Priskalkylator</a><a href="#pris">Priser</a><a href="#kontakt">Kontakt</a></div>
+      <div><h5>Säg hej</h5><a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a><a href="kontakt.html">Boka ett möte</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Kela group AB — Org.nr 559578-1971</span>
+      <span>Redesign-förslag · Caia-inspirerad</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
