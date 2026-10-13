@@ -347,21 +347,22 @@
   (function(){
     var launcher=document.createElement('button');
     launcher.className='kchat-btn'; launcher.type='button'; launcher.setAttribute('aria-label','Öppna chatten');
-    launcher.innerHTML='<span class="nub"></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chatta med oss</span>';
+    launcher.innerHTML='<span class="kb-av">K<span class="on"></span></span><span class="kb-tx"><b>Chatta med oss</b><i>Svarar oftast direkt</i></span>';
     document.body.appendChild(launcher);
 
     var panel=document.createElement('div');
     panel.className='kchat'; panel.setAttribute('role','dialog'); panel.setAttribute('aria-label','Kela chatt');
     panel.innerHTML=''+
-      '<div class="kchat-hd"><div class="av">K</div><div class="ti"><b>Kela assistent</b><span>Oftast svar direkt</span></div><button class="kchat-x" type="button" aria-label="Stäng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'+
+      '<div class="kchat-hd"><div class="av">K<span class="on"></span></div><div class="ti"><b>Kela assistent</b><span>Online · svarar oftast direkt</span></div><button class="kchat-x" type="button" aria-label="Stäng"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'+
       '<div class="kchat-msgs" id="kchatMsgs"></div>'+
       '<div class="kchat-qr" id="kchatQr"></div>'+
-      '<form class="kchat-in" id="kchatForm"><textarea id="kchatInput" rows="1" placeholder="Skriv ditt meddelande…" aria-label="Meddelande"></textarea><button class="kchat-send" type="submit" aria-label="Skicka"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></form>';
+      '<form class="kchat-in" id="kchatForm"><textarea id="kchatInput" rows="1" placeholder="Skriv ditt meddelande…" aria-label="Meddelande"></textarea><button class="kchat-send" type="submit" aria-label="Skicka"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></form>'+
+      '<div class="kchat-foot">⚡ Drivs av Kela AI</div>';
     document.body.appendChild(panel);
 
     var msgs=panel.querySelector('#kchatMsgs'), qr=panel.querySelector('#kchatQr'), form=panel.querySelector('#kchatForm'), input=panel.querySelector('#kchatInput');
     var history=[], greeted=false, typingEl=null;
-    var QUICK=['Vad kan ni bygga?','Vad kostar det?','Boka ett möte','Se ett kundcase'];
+    var QUICK=['Vad kan ni bygga?','Koppla ihop våra system','Vad kostar det?','Boka ett möte'];
     function scroll(){ msgs.scrollTop=msgs.scrollHeight; }
     function esc(s){ return (s||'').replace(/[&<>]/g,function(c){return c==='&'?'&amp;':c==='<'?'&lt;':'&gt;';}); }
     function addMsg(role,html){ var d=document.createElement('div'); d.className='kmsg '+role; d.innerHTML=html; msgs.appendChild(d); scroll(); }
@@ -375,11 +376,11 @@
       if(has('hej','hallå','tja','tjena','god morgon','god kväll','hello')) return 'Hej! 👋 Vad kul att du hör av dig. Jag kan hjälpa dig med allt om Kela group — tjänster, priser, bokning och våra kundcase. Vad undrar du?';
       if(has('pris','kostar','kostnad','offert','dyrt','billig')) return 'Du kan räkna ut ditt eget pris på <strong>60 sekunder</strong> i vår priskalkylator 👉 <a href="priskalkylator.html">Räkna ut priset →</a><br><br>Ungefärligt: hemsida fr. 9 900 kr, e-handel fr. 19 900 kr, eget system fr. 29 900 kr. Du kan även delbetala på 2–3 år. Vill du ha ett exakt pris? '+BOOK;
       if(has('boka','möte','ring','prata','träffas','kontakt','mejl','mail','maila','hör av')) return 'Absolut! Vi tar gärna ett kostnadsfritt samtal — fysiskt eller online. '+BOOK+'<br><br>Eller mejla oss på <a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a> så svarar vi inom 24 timmar.';
+      if(has('integr','integrera','api','koppl','synk','ekonomisystem','ekonomi','bokför','fortnox','visma','business central','dynamics','navision','erp','lager','lön ','löne')) return 'Ja — <strong>vi kopplar ihop allt</strong>. Har systemet ett API kan vi integrera det: affärssystem och ekonomisystem (t.ex. Fortnox, Visma, Business Central), CRM, lager, lön, e-handel, bokning och mer.<br><br>Era system slutar vara isolerade öar och börjar prata med varandra automatiskt — ingen dubbelregistrering, allt på ett ställe. Berätta vilka system ni använder idag så föreslår vi en lösning: '+BOOK;
       if(has('hemsida','webb','website','sajt','e-handel','webbshop','butik')) return 'Vi bygger snabba, snygga och konverterande hemsidor och webbshoppar från grunden — din bästa säljare dygnet runt. Hemsida fr. 9 900 kr, e-handel fr. 19 900 kr.<br><br><a href="priskalkylator.html">Räkna ut priset →</a>';
       if(has('system','crm','affärssystem','portal','bokning','rekryter')) return 'Vi bygger egna system, CRM, bokning och portaler — anpassade efter hur ni faktiskt jobbar. Hos Stodona bytte vi dyra abonnemang mot egna system och sänkte kostnaden med ca <strong>565 000 kr/år</strong>.<br><br><a href="priskalkylator.html">Räkna ut ett pris →</a> eller '+BOOK;
       if(has('automation','automatisera',' ai','ai-','chatbot','agent','robot')) return 'Vi bygger automationer och AI som sköter det repetitiva — offerter, uppföljning, fakturor och kundtjänst dygnet runt (precis som jag 😊).<br><br>Vill du veta vad ni kan automatisera? '+BOOK;
       if(has('app','mobil','ios','android','play')) return 'Vi bygger native appar för iOS och Android och lanserar dem åt er i App Store och Google Play — kopplade till era system. <a href="priskalkylator.html">Se ett pris →</a>';
-      if(has('fortnox','integration','api','koppl','synk')) return 'Vi kopplar ihop era system — Fortnox, CRM och API-integrationer så att allt pratar med varandra. Berätta vad ni använder idag så föreslår vi en lösning: '+BOOK;
       if(has('case','kund','stodona','resultat','exempel','referens','besparing')) return 'Kundcase <strong>Stodona AB</strong>: vi sänkte löpande kostnad från ca <strong>52 000 → 5 000 kr/mån</strong> (~565 000 kr/år lägre) med egna system och AI. Engångsinvesteringen var intjänad på ungefär en månad.<br><br>Vill du ha liknande resultat? '+BOOK;
       if(has('tid','hur lång','när ','snabbt','leverans','deadline','klar')) return 'Det beror på omfattning — en enklare hemsida kan vara live på 1–2 veckor, större system tar längre. Vi sätter alltid en tydlig tidsplan innan vi börjar. '+BOOK;
       if(has('delbetal','avbetal','månadskostnad','ränta','finansier')) return 'Ja! Du kan delbetala projektet på upp till 2–3 år och komma igång direkt istället för en stor engångskostnad. Månadskostnaden sätter vi i offerten.';
@@ -410,7 +411,7 @@
     }
 
     function openChat(){ panel.classList.add('open'); launcher.classList.add('hide');
-      if(!greeted){ greeted=true; typing(true); setTimeout(function(){ typing(false); addMsg('bot','Hej! 👋 Jag är Kelas assistent. Jag kan hjälpa dig med tjänster, priser, bokning och våra kundcase. Vad kan jag hjälpa dig med?'); showQuick(); }, 500); }
+      if(!greeted){ greeted=true; typing(true); setTimeout(function(){ typing(false); addMsg('bot','Hej! 👋 Jag är Kelas assistent. Jag hjälper dig med tjänster, priser, bokning, kundcase — och hur vi <strong>kopplar ihop era system</strong> med allt som har ett API. Vad kan jag hjälpa dig med?'); showQuick(); }, 500); }
       setTimeout(function(){ input.focus(); }, 360);
     }
     function closeChat(){ panel.classList.remove('open'); launcher.classList.remove('hide'); }
