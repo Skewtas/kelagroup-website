@@ -10,7 +10,7 @@
 <meta property="og:description" content="Hemsidor, system, appar och automationer som sparar tid, sänker kostnader och hjälper företag växa.">
 <meta property="og:type" content="website">
 <link rel="preload" href="assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/styles.css?v=41">
+<link rel="stylesheet" href="assets/styles.css?v=42">
 <style>
 /* Stodona-case (scopeat) */
 .scase{border:1px solid var(--line);border-radius:24px;overflow:hidden;background:var(--paper);}
@@ -35,6 +35,15 @@
   .scase-row .sys{grid-column:1/-1;margin-bottom:4px;}
   .scase-sum{grid-template-columns:1fr;}
 }
+/* Färdiga moduler */
+.mods{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+@media(max-width:980px){.mods{grid-template-columns:1fr 1fr;}}
+@media(max-width:520px){.mods{grid-template-columns:1fr;}}
+.mod{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:26px 22px;transition:transform .25s,border-color .25s,box-shadow .25s;}
+.mod:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 45%,var(--line));box-shadow:0 22px 46px -28px rgba(0,0,0,.4);}
+.mod .ic{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 24%,transparent);margin-bottom:16px;}
+.mod h3{font-size:18.5px;letter-spacing:-.01em;margin:0 0 6px;color:var(--text);font-weight:650;}
+.mod p{color:var(--muted);font-size:13.5px;line-height:1.5;margin:0;}
 </style>
 </head>
 <body>
@@ -202,6 +211,28 @@
     </div>
   </section>
 
+  <!-- FÄRDIGA MODULER -->
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="kicker mono">Färdiga system</span>
+        <div><h2 class="display">Moduler vi redan byggt.</h2><p class="lead">Det här är inte idéer — det är färdiga system som används i skarp drift varje dag. Koppla på det ni behöver och anpassa efter er verksamhet.</p></div>
+      </div>
+      <div class="mods reveal">
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M9 6h6M12 18h.01"/></svg></div><h3>Personalapp</h3><p>In- och utcheckning, kvalitetskontroller och allt ni behöver — för medarbetarna i fickan.</p></div>
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M12 17a2.5 2.5 0 0 0 2.5-2.5c0-1.5-2.5-3.5-2.5-3.5s-2.5 2-2.5 3.5A2.5 2.5 0 0 0 12 17z"/></svg></div><h3>Kundapp</h3><p>Era kunder i fickan — bokningar, ärenden och kommunikation, kopplat till systemet.</p></div>
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M12 7.5l1 2 2.2.3-1.6 1.5.4 2.2L12 12.4 10 13.5l.4-2.2-1.6-1.5 2.2-.3z"/></svg></div><h3>Feedbackhantering</h3><p>Samla in, mät och agera på kundernas feedback — automatiskt.</p></div>
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div><h3>Fakturapåminnelser</h3><p>Automatiska påminnelser 1–2 gånger i veckan på obetalda fakturor. Få betalt i tid.</p></div>
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></div><h3>Dashboard &amp; översikt</h3><p>All er data samlad i realtid — en tydlig överblick över hela verksamheten.</p></div>
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11l2 2 3.5-3.5"/></svg></div><h3>SEO &amp; analys</h3><p>Synlighet i sök och tydlig mätning — så ni vet vad som faktiskt ger resultat.</p></div>
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="M2 7l10 6 10-6"/></svg></div><h3>Nyhetsbrev &amp; SMS</h3><p>Nå kunderna automatiskt med nyhetsbrev och SMS — i rätt tid, till rätt person.</p></div>
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-2.5-7.5L3 11z"/></svg></div><h3>Automatisk annonshantering</h3><p>Annonser som sätts upp och optimeras löpande — mer effekt för varje krona.</p></div>
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-3.6 2.6L15.5 16 12 13.5 8.5 16l1.1-4.4L6 9l4.2-1.4z"/><path d="M5 19l1 .3M19 19l-1 .3"/></svg></div><h3>Content generator</h3><p>AI som skapar texter och innehåll åt er — snabbare marknadsföring, mindre jobb.</p></div>
+        <div class="mod"><div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 12h18M12 8v13M12 8S10 3 7.5 4.5 10 8 12 8zM12 8s2-5 4.5-3.5S14 8 12 8z"/></svg></div><h3>Presentkort</h3><p>Sälj, lös in och håll koll på presentkort — kopplat till kassan och systemet.</p></div>
+      </div>
+    </div>
+  </section>
+
   <!-- RÖD STATEMENT -->
   <section class="sec red">
     <div class="wrap" style="text-align:center;">
@@ -312,6 +343,6 @@
   </footer>
 </main>
 
-<script src="assets/main.js?v=41" defer></script>
+<script src="assets/main.js?v=42" defer></script>
 </body>
 </html>
