@@ -128,20 +128,16 @@ h1.hero-title .thin{ color:rgba(246,245,241,.72); }
 .btn-accent{ background:var(--accent); color:#fff; box-shadow:0 10px 26px -8px color-mix(in srgb,var(--accent) 55%,transparent); }
 .btn-accent:hover{ transform:translateY(-2px); background:#0F0F11; color:#fff; box-shadow:0 14px 34px -10px rgba(15,15,17,.5); }
 /* WOW-CTA i heron: pulserande glöd + glans-svep */
-/* DELUXE hero-CTA — modern, tech, levande */
-@property --bd-a{ syntax:'<angle>'; inherits:false; initial-value:0deg; }
-.hed-actions .btn-accent{ position:relative; overflow:visible; padding:18px 42px; font-size:16.5px; font-weight:650; letter-spacing:.01em; border:none; border-radius:999px; background:linear-gradient(135deg,#ff2d35,#c70f16); color:#fff; box-shadow:0 16px 38px -12px rgba(227,27,35,.75); isolation:isolate; }
-.hed-actions .btn-accent > *{ position:relative; z-index:2; }
-.hed-actions .btn-accent::before{ content:""; position:absolute; inset:-2px; border-radius:inherit; padding:2px; background:conic-gradient(from var(--bd-a), transparent 0deg, #ff7a80 40deg, #ffffff 72deg, #ff7a80 104deg, transparent 150deg, transparent 360deg); -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite:exclude; animation:bdSpin 2.6s linear infinite; z-index:1; pointer-events:none; }
-.hed-actions .btn-accent::after{ content:""; position:absolute; inset:0; border-radius:inherit; background:linear-gradient(110deg, transparent 30%, rgba(255,255,255,.55) 50%, transparent 70%); transform:translateX(-130%); animation:bdShine 3.4s ease-in-out infinite; z-index:1; pointer-events:none; }
-.hed-actions .btn-accent .arrow{ transition:transform .25s ease; }
-.hed-actions .btn-accent .bd-dot{ width:8px; height:8px; border-radius:50%; background:#fff; margin-right:2px; box-shadow:0 0 0 0 rgba(255,255,255,.7); animation:bdDot 1.9s ease-out infinite; }
-.hed-actions .btn-accent:hover{ transform:translateY(-3px) scale(1.05); box-shadow:0 24px 54px -12px rgba(227,27,35,.9), 0 0 48px -8px rgba(255,90,100,.65); }
-.hed-actions .btn-accent:hover .arrow{ transform:translateX(6px); }
-@keyframes bdSpin{ to{ --bd-a:360deg; } }
-@keyframes bdShine{ 0%{ transform:translateX(-130%); } 42%,100%{ transform:translateX(230%); } }
-@keyframes bdDot{ 0%{ box-shadow:0 0 0 0 rgba(255,255,255,.65);} 70%,100%{ box-shadow:0 0 0 9px rgba(255,255,255,0);} }
-@media (prefers-reduced-motion: reduce){ .hed-actions .btn-accent::before,.hed-actions .btn-accent::after,.hed-actions .btn-accent .bd-dot{ animation:none; } }
+/* Hero-CTA — blank 3D-plastknapp (Web 2.0-stil) */
+.hed-actions .btn-accent{ position:relative; border:none; cursor:pointer; padding:20px 46px; font-size:17px; font-weight:800; letter-spacing:.04em; color:#fff; text-shadow:0 1px 2px rgba(80,0,0,.6); border-radius:20px; background:linear-gradient(180deg,#ff6a5d 0%,#ee2b22 46%,#b60d10 54%,#d93a2d 100%); box-shadow: inset 0 2px 3px rgba(255,255,255,.65), inset 0 -11px 18px rgba(90,0,0,.5), 0 0 0 3px #5e0a0c, 0 0 0 6px #2a2a2d, 0 16px 28px -6px rgba(0,0,0,.65); transition:transform .12s ease, box-shadow .12s ease, filter .2s ease; overflow:hidden; }
+.hed-actions .btn-accent::before{ content:""; position:absolute; left:6px; right:6px; top:5px; height:44%; border-radius:15px 15px 55% 55%/15px 15px 42% 42%; background:linear-gradient(180deg, rgba(255,255,255,.82) 0%, rgba(255,255,255,.30) 55%, rgba(255,255,255,.05) 100%); pointer-events:none; }
+.hed-actions .btn-accent::after{ content:none; }
+.hed-actions .btn-accent > *{ position:relative; z-index:1; }
+.hed-actions .btn-accent .bd-dot{ display:none; }
+.hed-actions .btn-accent .arrow{ transition:transform .2s ease; }
+.hed-actions .btn-accent:hover{ transform:translateY(-2px); filter:brightness(1.07) saturate(1.05); box-shadow: inset 0 2px 3px rgba(255,255,255,.7), inset 0 -11px 18px rgba(90,0,0,.5), 0 0 0 3px #5e0a0c, 0 0 0 6px #2a2a2d, 0 22px 36px -6px rgba(0,0,0,.72); }
+.hed-actions .btn-accent:hover .arrow{ transform:translateX(5px); }
+.hed-actions .btn-accent:active{ transform:translateY(2px); box-shadow: inset 0 3px 9px rgba(90,0,0,.75), inset 0 2px 3px rgba(255,255,255,.3), 0 0 0 3px #5e0a0c, 0 0 0 6px #2a2a2d, 0 5px 12px -4px rgba(0,0,0,.6); }
 /* white pill (over dark/red) → hover keeps white */
 .btn-solid{ background:#fff; color:#0F0F11; }
 .btn-solid:hover{ transform:translateY(-2px); }
