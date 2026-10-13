@@ -45,7 +45,7 @@
 .mod h3{font-size:18.5px;letter-spacing:-.01em;margin:0 0 6px;color:var(--text);font-weight:650;}
 .mod p{color:var(--muted);font-size:13.5px;line-height:1.5;margin:0;}
 /* Vad vi kan göra – scroll-deck (korten kastas bakåt) */
-.svc{position:relative;display:block;width:100%;height:440vh;background:var(--bg);}
+.svc{position:relative;display:block;width:100%;height:600vh;background:var(--bg);}
 .svc-sticky{position:sticky;top:0;width:100%;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;box-sizing:border-box;padding:0 20px;}
 .svc-head{text-align:center;padding:0 20px;margin-bottom:clamp(18px,3.6vh,42px);}
 .svc-head .kicker{color:var(--accent);}
@@ -64,7 +64,7 @@
 .svc-hint{margin-top:13px;font-size:11.5px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;display:inline-flex;align-items:center;gap:7px;}
 .svc-hint svg{animation:svcBob 1.8s ease-in-out infinite;}
 @keyframes svcBob{0%,100%{transform:translateY(0);}50%{transform:translateY(4px);}}
-@media(max-width:600px){.svc{height:460vh;}.svc-card p{max-width:none;}.svc-card li{font-size:12px;}}
+@media(max-width:600px){.svc{height:640vh;}.svc-card p{max-width:none;}.svc-card li{font-size:12px;}}
 @media(prefers-reduced-motion:reduce){.svc-hint svg{animation:none;}}
 </style>
 </head>
@@ -186,8 +186,24 @@
           <ul><li>Fortnox, Visma, Business Central</li><li>API-kopplingar</li><li>Allt synkat automatiskt</li></ul>
         </article>
 
+        <article class="svc-card">
+          <span class="num">06 — SEO &amp; SYNLIGHET</span>
+          <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.6-4.6"/><path d="M8 11l2 2 3-4"/></svg></span>
+          <h3>SEO &amp; synlighet</h3>
+          <p>Vi får er att synas högst upp på Google — teknisk SEO, innehåll som rankar och löpande optimering som drar in kunder.</p>
+          <ul><li>Teknisk SEO</li><li>Innehåll som rankar</li><li>Löpande optimering</li></ul>
+        </article>
+
+        <article class="svc-card">
+          <span class="num">07 — ANNONSER &amp; CONTENT</span>
+          <span class="ic" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4h3l6 4V6l-6 4H3z"/><path d="M16 9a3.5 3.5 0 0 1 0 6"/><path d="M18.5 6.5a7 7 0 0 1 0 11"/></svg></span>
+          <h3>Annonser &amp; sociala medier</h3>
+          <p>Meta-annonser på Facebook &amp; Instagram, Google Ads och content till era kanaler — vi skapar, publicerar och optimerar.</p>
+          <ul><li>Meta-annonser (FB &amp; IG)</li><li>Google Ads</li><li>Content till Instagram &amp; TikTok</li></ul>
+        </article>
+
       </div>
-      <div class="svc-prog" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><span></span></div>
+      <div class="svc-prog" aria-hidden="true"><span class="on"></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <div class="svc-hint" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>Scrolla</div>
     </div>
   </section>
