@@ -352,4 +352,83 @@
       if(isBookTrigger(a)){ e.preventDefault(); openModal(); }
     });
   })();
+
+  /* ---------- KELA chatt-assistent ---------- */
+  (function(){
+    var launcher=document.createElement('button');
+    launcher.className='kchat-btn'; launcher.type='button'; launcher.setAttribute('aria-label','Öppna chatten');
+    launcher.innerHTML='<span class="nub"></span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>Chatta med oss</span>';
+    document.body.appendChild(launcher);
+
+    var panel=document.createElement('div');
+    panel.className='kchat'; panel.setAttribute('role','dialog'); panel.setAttribute('aria-label','Kela chatt');
+    panel.innerHTML=''+
+      '<div class="kchat-hd"><div class="av">K</div><div class="ti"><b>Kela assistent</b><span>Oftast svar direkt</span></div><button class="kchat-x" type="button" aria-label="Stäng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>'+
+      '<div class="kchat-msgs" id="kchatMsgs"></div>'+
+      '<div class="kchat-qr" id="kchatQr"></div>'+
+      '<form class="kchat-in" id="kchatForm"><textarea id="kchatInput" rows="1" placeholder="Skriv ditt meddelande…" aria-label="Meddelande"></textarea><button class="kchat-send" type="submit" aria-label="Skicka"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button></form>';
+    document.body.appendChild(panel);
+
+    var msgs=panel.querySelector('#kchatMsgs'), qr=panel.querySelector('#kchatQr'), form=panel.querySelector('#kchatForm'), input=panel.querySelector('#kchatInput');
+    var history=[], greeted=false, typingEl=null;
+    var QUICK=['Vad kan ni bygga?','Vad kostar det?','Boka ett möte','Se ett kundcase'];
+    function scroll(){ msgs.scrollTop=msgs.scrollHeight; }
+    function esc(s){ return (s||'').replace(/[&<>]/g,function(c){return c==='&'?'&amp;':c==='<'?'&lt;':'&gt;';}); }
+    function addMsg(role,html){ var d=document.createElement('div'); d.className='kmsg '+role; d.innerHTML=html; msgs.appendChild(d); scroll(); }
+    function showQuick(){ qr.innerHTML=''; QUICK.forEach(function(t){ var b=document.createElement('button'); b.type='button'; b.textContent=t; b.onclick=function(){ send(t); }; qr.appendChild(b); }); }
+    function typing(on){ if(on){ typingEl=document.createElement('div'); typingEl.className='ktyping'; typingEl.innerHTML='<i></i><i></i><i></i>'; msgs.appendChild(typingEl); scroll(); } else if(typingEl){ typingEl.remove(); typingEl=null; } }
+
+    function local(qRaw){
+      var q=(qRaw||'').toLowerCase();
+      var has=function(){ for(var i=0;i<arguments.length;i++){ if(q.indexOf(arguments[i])>-1) return true; } return false; };
+      var BOOK='<a href="kontakt.html" class="kbook" data-book>Boka ett möte →</a>';
+      if(has('hej','hallå','tja','tjena','god morgon','god kväll','hello')) return 'Hej! 👋 Vad kul att du hör av dig. Jag kan hjälpa dig med allt om Kela group — tjänster, priser, bokning och våra kundcase. Vad undrar du?';
+      if(has('pris','kostar','kostnad','offert','dyrt','billig')) return 'Du kan räkna ut ditt eget pris på <strong>60 sekunder</strong> i vår priskalkylator 👉 <a href="priskalkylator.html">Räkna ut priset →</a><br><br>Ungefärligt: hemsida fr. 9 900 kr, e-handel fr. 19 900 kr, eget system fr. 29 900 kr. Du kan även delbetala på 2–3 år. Vill du ha ett exakt pris? '+BOOK;
+      if(has('boka','möte','ring','prata','träffas','kontakt','mejl','mail','maila','hör av')) return 'Absolut! Vi tar gärna ett kostnadsfritt samtal — fysiskt eller online. '+BOOK+'<br><br>Eller mejla oss på <a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a> så svarar vi inom 24 timmar.';
+      if(has('hemsida','webb','website','sajt','e-handel','webbshop','butik')) return 'Vi bygger snabba, snygga och konverterande hemsidor och webbshoppar från grunden — din bästa säljare dygnet runt. Hemsida fr. 9 900 kr, e-handel fr. 19 900 kr.<br><br><a href="priskalkylator.html">Räkna ut priset →</a>';
+      if(has('system','crm','affärssystem','portal','bokning','rekryter')) return 'Vi bygger egna system, CRM, bokning och portaler — anpassade efter hur ni faktiskt jobbar. Hos Stodona bytte vi dyra abonnemang mot egna system och sänkte kostnaden med ca <strong>565 000 kr/år</strong>.<br><br><a href="priskalkylator.html">Räkna ut ett pris →</a> eller '+BOOK;
+      if(has('automation','automatisera',' ai','ai-','chatbot','agent','robot')) return 'Vi bygger automationer och AI som sköter det repetitiva — offerter, uppföljning, fakturor och kundtjänst dygnet runt (precis som jag 😊).<br><br>Vill du veta vad ni kan automatisera? '+BOOK;
+      if(has('app','mobil','ios','android','play')) return 'Vi bygger native appar för iOS och Android och lanserar dem åt er i App Store och Google Play — kopplade till era system. <a href="priskalkylator.html">Se ett pris →</a>';
+      if(has('fortnox','integration','api','koppl','synk')) return 'Vi kopplar ihop era system — Fortnox, CRM och API-integrationer så att allt pratar med varandra. Berätta vad ni använder idag så föreslår vi en lösning: '+BOOK;
+      if(has('case','kund','stodona','resultat','exempel','referens','besparing')) return 'Kundcase <strong>Stodona AB</strong>: vi sänkte löpande kostnad från ca <strong>52 000 → 5 000 kr/mån</strong> (~565 000 kr/år lägre) med egna system och AI. Engångsinvesteringen var intjänad på ungefär en månad.<br><br>Vill du ha liknande resultat? '+BOOK;
+      if(has('tid','hur lång','när ','snabbt','leverans','deadline','klar')) return 'Det beror på omfattning — en enklare hemsida kan vara live på 1–2 veckor, större system tar längre. Vi sätter alltid en tydlig tidsplan innan vi börjar. '+BOOK;
+      if(has('delbetal','avbetal','månadskostnad','ränta','finansier')) return 'Ja! Du kan delbetala projektet på upp till 2–3 år och komma igång direkt istället för en stor engångskostnad. Månadskostnaden sätter vi i offerten.';
+      if(has('vad gör','vad kan','vilka tjänst','erbjuder','jobbar ni','bygger ni','hjälpa')) return 'Vi är en digital byrå som bygger:<br>• <strong>Hemsidor</strong> &amp; e-handel<br>• <strong>System &amp; portaler</strong> (CRM, bokning, rekrytering)<br>• <strong>Automationer &amp; AI</strong><br>• <strong>Appar</strong> (iOS &amp; Android)<br>• <strong>Integrationer</strong> (Fortnox, API)<br><br>Allt som sparar tid och sänker kostnader. <a href="priskalkylator.html">Räkna ut priset →</a>';
+      if(has('tack','tackar','toppen','perfekt','grymt','super')) return 'Varsågod! 😊 Finns det något mer jag kan hjälpa dig med? Annars är du varmt välkommen att '+BOOK.replace('Boka ett möte','boka ett möte')+'.';
+      return 'Bra fråga! Det vill jag ge dig ett riktigt bra svar på — enklast är att vi tar ett kort samtal, då får du svar direkt och anpassat efter er. '+BOOK+'<br><br>Du kan också mejla <a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a>.';
+    }
+
+    function getReply(userText){
+      return new Promise(function(resolve){
+        var done=false, ctrl=('AbortController' in window)?new AbortController():null;
+        var to=setTimeout(function(){ if(ctrl) try{ctrl.abort();}catch(e){} }, 9000);
+        if(!('fetch' in window)){ clearTimeout(to); return resolve(local(userText)); }
+        fetch('/api/chat',{ method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({messages:history}), signal:ctrl?ctrl.signal:undefined })
+          .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+          .then(function(d){ clearTimeout(to); done=true; if(d&&d.reply){ resolve(esc(d.reply).replace(/\n/g,'<br>')); } else { resolve(local(userText)); } })
+          .catch(function(){ clearTimeout(to); if(!done) resolve(local(userText)); });
+      });
+    }
+
+    function send(text){
+      text=(text||'').trim(); if(!text) return;
+      addMsg('user', esc(text)); history.push({role:'user',content:text});
+      input.value=''; input.style.height='auto'; qr.innerHTML=''; typing(true);
+      getReply(text).then(function(html){
+        setTimeout(function(){ typing(false); addMsg('bot', html); history.push({role:'assistant',content:html.replace(/<[^>]+>/g,' ')}); showQuick(); }, 450);
+      });
+    }
+
+    function openChat(){ panel.classList.add('open'); launcher.classList.add('hide');
+      if(!greeted){ greeted=true; typing(true); setTimeout(function(){ typing(false); addMsg('bot','Hej! 👋 Jag är Kelas assistent. Jag kan hjälpa dig med tjänster, priser, bokning och våra kundcase. Vad kan jag hjälpa dig med?'); showQuick(); }, 500); }
+      setTimeout(function(){ input.focus(); }, 360);
+    }
+    function closeChat(){ panel.classList.remove('open'); launcher.classList.remove('hide'); }
+
+    launcher.addEventListener('click', openChat);
+    panel.querySelector('.kchat-x').addEventListener('click', closeChat);
+    form.addEventListener('submit', function(e){ e.preventDefault(); send(input.value); });
+    input.addEventListener('keydown', function(e){ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); send(input.value); } });
+    input.addEventListener('input', function(){ input.style.height='auto'; input.style.height=Math.min(input.scrollHeight,96)+'px'; });
+  })();
 })();
