@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7A2433"/>
+      <stop offset="1" stop-color="#4A121C"/>
+    </linearGradient>
+    <linearGradient id="gl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".16"/>
+      <stop offset=".5" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bg)"/>
+  <rect width="64" height="64" rx="16" fill="url(#gl)"/>
+  <!-- K i Archivo Black-stil -->
+  <path fill="#F6D3D9" d="M15 11h10.5v14.2L36.6 11H49L35.6 27.4 50 44H37.4l-8.1-9.9-3.8 4.4V44H15z"/>
+  <!-- logans streck -->
+  <rect x="15" y="49" width="35" height="4.5" rx="1" fill="#F6D3D9"/>
+  <!-- liten accentprick -->
+  <circle cx="54.5" cy="51.2" r="2.6" fill="#F6D3D9" opacity=".55"/>
+</svg>
