@@ -10,7 +10,7 @@
 <meta property="og:description" content="Hemsidor, system, appar och automationer som sparar tid, sänker kostnader och hjälper företag växa.">
 <meta property="og:type" content="website">
 <link rel="preload" href="assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/pop.css?v=2">
+<link rel="stylesheet" href="assets/pop.css?v=4">
 </head>
 <body>
 
@@ -531,15 +531,6 @@
   }));
 
 
-  /* Mobil: klisterlapparna turas om i fyra platser */
-  (() => {
-    const cs = [...document.querySelectorAll('.hero-stage > .chipw')], mq = matchMedia('(max-width:640px)');
-    let g = 0, t;
-    const show = () => { cs.forEach((c, i) => { const on = Math.floor(i / 4) === g; c.classList.toggle('on', on); if (on) { c.classList.remove('s0','s1','s2','s3'); c.classList.add('s' + (i % 4)); } }); };
-    const run = () => { clearInterval(t); if (mq.matches) { show(); t = setInterval(() => { g = (g + 1) % Math.ceil(cs.length / 4); show(); }, 2800); } };
-    mq.addEventListener('change', run); run();
-  })();
-
   /* Scroll-drivna effekter */
   const vcard = $('#vcard'), stage = $('#stage');
   const floaters = $$('.hero-stage > .chipw');
@@ -623,5 +614,6 @@
   }
 })();
 </script>
+<script src="assets/chip-rail.js?v=1"></script>
 </body>
 </html>

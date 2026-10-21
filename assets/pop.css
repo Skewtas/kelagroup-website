@@ -402,6 +402,9 @@ footer{background:var(--ink);color:var(--white);padding:clamp(72px,9vw,120px) 0 
 @media (max-width:1100px){.bgrid{grid-template-columns:repeat(2,1fr)}.bcard:last-child{grid-column:span 2}}
 @media (max-width:640px){.bgrid{grid-template-columns:1fr}.bcard:last-child{grid-column:auto}.bcard{min-height:200px}}
 
+.chip-rail{display:none}
+@keyframes chiprail{to{transform:translateX(calc(-50% - 5px))}}
+
 /* ---------- Reveals ---------- */
 .rv{opacity:0;transform:translateY(36px);transition:opacity .8s var(--ease), transform .9s var(--ease)}
 .rv.in{opacity:1;transform:none}
@@ -441,12 +444,13 @@ footer{background:var(--ink);color:var(--white);padding:clamp(72px,9vw,120px) 0 
   .chip{font-size:.8rem;padding:7px 13px 7px 7px;gap:8px}
   .chip .ic{width:28px;height:28px;font-size:.75rem}
   .chip small{font-size:.68rem}
-  .hero-stage .chipw{left:auto;right:auto;top:auto;bottom:auto;opacity:0;visibility:hidden;transition:opacity .6s,visibility .6s}
-  .hero-stage .chipw.on{opacity:1;visibility:visible}
-  .hero-stage .chipw.s0{left:6px;top:-26px}
-  .hero-stage .chipw.s1{right:6px;top:30%}
-  .hero-stage .chipw.s2{left:6px;bottom:44%}
-  .hero-stage .chipw.s3{right:10px;bottom:40px}
+  .hero-stage > .chipw{display:none}
+  .chip-rail{display:grid;gap:10px;margin:18px calc(-1 * var(--gut)) 0;overflow:hidden}
+  .chip-row{overflow:hidden;padding:4px 0}
+  .chip-track{display:flex;gap:10px;width:max-content;animation:chiprail 34s linear infinite}
+  .chip-row.rev .chip-track{animation-direction:reverse;animation-duration:38s}
+  #stage .chip-rail .chipw{position:static!important;inset:auto!important;transform:none!important;opacity:1!important;visibility:visible!important;display:block!important;flex:none}
+  #stage .chip-rail .chip{animation:none!important;transform:none!important}
   .round{border-radius:28px;margin-left:8px;margin-right:8px}
   .calc{border-radius:28px}
   .scard{top:calc(80px + var(--i) * 8px);border-radius:28px;padding:28px 22px}
