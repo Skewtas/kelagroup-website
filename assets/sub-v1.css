@@ -147,7 +147,7 @@
 .faq .ans,.faq details>p{padding:0 24px 24px;color:var(--muted);max-width:64ch;margin:0}
 
 /* Mörkt band (FAQ på priskalkylatorn) */
-.band-ink{background:var(--ink);color:var(--white);border-radius:var(--r-xl);margin:0 clamp(8px,1.2vw,16px)}
+.band-ink{position:relative;overflow:hidden;background:var(--ink);color:var(--white);border-radius:var(--r-xl);margin:0 clamp(8px,1.2vw,16px)}
 .band-ink .kicker::before{background:var(--lav)}
 .band-ink .sec-head h2{color:var(--white)}
 .band-ink .faq details{background:rgba(255,255,255,.07)}
@@ -417,8 +417,8 @@ a:hover>.save-card .sc-link .arr{transform:translateX(4px)}
 
 /* Första sektionen direkt under heron får alltid luft */
 .page-hero+section{padding-top:clamp(40px,5vw,72px)!important}
-/* Priskalkylatorn: chattknappen ovanför mobilens prisbar */
-@media (max-width:900px){.pk-bar~.kchat-btn{bottom:92px}}
+/* Priskalkylatorn i mobil: prisbaren tar platsen – chattknappen skulle täcka knapparna */
+@media (max-width:900px){.pk-bar~.kchat-btn{display:none}}
 
 /* ---------- Boka möte-ruta ---------- */
 .bm-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(46,12,18,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s}
@@ -449,3 +449,7 @@ a:hover>.save-card .sc-link .arr{transform:translateX(4px)}
 .bm-done{text-align:center;padding:10px 0}
 .bm-done .bm-check{width:64px;height:64px;border-radius:50%;background:var(--lav);color:var(--ink);display:grid;place-items:center;margin:0 auto 18px}
 .bm-done .btn{margin-top:18px}
+.bm-modal.wide{max-width:860px}
+.bm-cal iframe{display:block;width:100%;height:min(640px,70vh);border:0;border-radius:var(--r-m);background:var(--lav-soft)}
+.bm-alt{margin-top:14px;color:var(--muted);font-size:.92rem}
+.bm-link{background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}

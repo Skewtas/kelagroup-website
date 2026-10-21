@@ -113,7 +113,10 @@
     });
   }
 
-  /* ---------- Boka möte-modal (fysiskt / online → formulär) ---------- */
+  /* ---------- Boka möte-modal (fysiskt / online → välj tid i kalendern, eller formulär) ---------- */
+  /* Kalenderbokning: fyll i er Cal.com-länk (t.ex. 'kelagroup/30min') så väljer kunden
+     en ledig tid direkt. Tom = kunden skickar en förfrågan via formuläret som tidigare. */
+  var CAL_LINK = '';
   (function(){
     var overlay=document.createElement('div');
     overlay.className='bm-overlay'; overlay.id='bmOverlay'; overlay.hidden=true;
@@ -136,6 +139,13 @@
               '<span class="bm-cd">Videosamtal när det passar dig.</span>'+
             '</button>'+
           '</div>'+
+        '</div>'+
+        '<div class="bm-step" data-step="3" hidden>'+
+          '<button class="bm-back" data-back type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Tillbaka</button>'+
+          '<span class="kicker">Boka möte · <span class="bm-chosen" id="bmChosenCal"></span></span>'+
+          '<h3>Välj en tid som passar.</h3>'+
+          '<div class="bm-cal" id="bmCal"></div>'+
+          '<p class="bm-alt">Hittar du ingen tid? <button type="button" class="bm-link" id="bmToForm">Skicka en förfrågan i stället</button></p>'+
         '</div>'+
         '<div class="bm-step" data-step="2" hidden>'+
           '<button class="bm-back" id="bmBack" type="button"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg> Tillbaka</button>'+
@@ -164,8 +174,10 @@
     var bmSubmit=overlay.querySelector('#bmSubmit');
     var lastFocus=null;
 
+    var step3=overlay.querySelector('[data-step="3"]');
     function showStep(n){
-      step1.hidden = (n!==1); step2.hidden = (n!==2);
+      step1.hidden = (n!==1); step2.hidden = (n!==2); step3.hidden = (n!==3);
+      overlay.querySelector('.bm-modal').classList.toggle('wide', n===3);
     }
     function openModal(){
       lastFocus=document.activeElement;
@@ -181,9 +193,18 @@
       if(lastFocus && lastFocus.focus) lastFocus.focus();
     }
     function chooseType(t){
-      typeField.value=t; chosenEl.textContent=t; showStep(2);
+      typeField.value=t; chosenEl.textContent=t;
+      if(CAL_LINK){
+        overlay.querySelector('#bmChosenCal').textContent=t;
+        var cal=overlay.querySelector('#bmCal');
+        cal.innerHTML='<iframe title="Välj tid för möte" loading="lazy" src="https://cal.com/'+CAL_LINK+'?embed=true&layout=month_view&theme=light&notes='+encodeURIComponent(t)+'"></iframe>';
+        showStep(3); return;
+      }
+      showStep(2);
       var n=overlay.querySelector('#bm-name'); if(n) n.focus();
     }
+    overlay.querySelector('#bmToForm').addEventListener('click', function(){ showStep(2); var n=overlay.querySelector('#bm-name'); if(n) n.focus(); });
+    overlay.querySelector('[data-back]').addEventListener('click', function(){ showStep(1); });
 
     overlay.querySelectorAll('.bm-choice').forEach(function(b){
       b.addEventListener('click', function(){ chooseType(b.getAttribute('data-type')); });

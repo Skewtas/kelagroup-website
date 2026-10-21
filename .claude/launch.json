@@ -4,14 +4,35 @@
     {
       "name": "kela-site",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4321"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4321"
+      ],
       "port": 4321
     },
     {
       "name": "kela-fresh",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "4330"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4330"
+      ],
       "port": 4330
+    },
+    {
+      "name": "kela-functions",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "wrangler@4",
+        "pages",
+        "dev",
+        ".",
+        "--port",
+        "8788"
+      ],
+      "port": 8788
     }
   ]
 }
