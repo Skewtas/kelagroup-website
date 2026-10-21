@@ -1,0 +1,79 @@
+/* =========================================================
+   cards-v3.css – tillägg till cards-v1/v2 (laddas direkt efter cards-v2.css).
+   Kort 03: Stodona – chattboten Camilla + kundresa med automatiska flöden.
+   Endast pop-v6-variabler. Animeras bara när kortet är .on.
+   ========================================================= */
+
+/* Exempeletiketten på det mörka kortet */
+.scard:nth-child(3) .sc-ex{color:var(--white);opacity:.6}
+
+/* Grundläge (även utan rörelse): hela konversationen och alla steg syns,
+   skriver-indikatorerna är dolda. */
+.cv-st{opacity:0}
+.cv-ssel,.cv-snl{transform-origin:center}
+
+/* ---------- Chatten (12 s-loop) ---------- */
+.scard.on .cv-sm1{animation:cv-sm1 12s var(--bounce) infinite}
+.scard.on .cv-smeta{animation:cv-smeta 12s infinite}
+.scard.on .cv-st1{animation:cv-st1 12s infinite}
+.scard.on .cv-sm2{animation:cv-sm2 12s var(--bounce) infinite}
+.scard.on .cv-sch{animation:cv-sch 12s var(--bounce) infinite}
+.scard.on .cv-ssel{animation:cv-ssel 12s var(--bounce) infinite}
+.scard.on .cv-sm3{animation:cv-sm3 12s var(--bounce) infinite}
+.scard.on .cv-st2{animation:cv-st2 12s infinite}
+.scard.on .cv-sm4{animation:cv-sm4 12s var(--bounce) infinite}
+@keyframes cv-sm1{0%,3%{transform:translateY(10px);opacity:0}7%,93%{transform:none;opacity:1}98%,100%{opacity:0}}
+@keyframes cv-smeta{0%,10%{opacity:0}14%,93%{opacity:.5}98%,100%{opacity:0}}
+@keyframes cv-st1{0%,15%{opacity:0}17%,25%{opacity:1}27%,100%{opacity:0}}
+@keyframes cv-sm2{0%,26%{transform:translateY(10px);opacity:0}30%,93%{transform:none;opacity:1}98%,100%{opacity:0}}
+@keyframes cv-sch{0%,32%{transform:translateY(8px);opacity:0}36%,93%{transform:none;opacity:1}98%,100%{opacity:0}}
+@keyframes cv-ssel{0%,43%{transform:scale(.85);opacity:0}46%{transform:scale(1.08);opacity:1}48%,93%{transform:none;opacity:1}98%,100%{opacity:0}}
+@keyframes cv-sm3{0%,49%{transform:translateY(10px);opacity:0}53%,93%{transform:none;opacity:1}98%,100%{opacity:0}}
+@keyframes cv-st2{0%,55%{opacity:0}57%,66%{opacity:1}68%,100%{opacity:0}}
+@keyframes cv-sm4{0%,67%{transform:translateY(10px);opacity:0}71%,93%{transform:none;opacity:1}98%,100%{opacity:0}}
+
+/* ---------- Kundresan: stegen tänds i tur och ordning ---------- */
+.cv-sline{stroke-dashoffset:0}
+.scard.on .cv-sline{animation:cv-sline 12s linear infinite}
+@keyframes cv-sline{0%,5%{stroke-dashoffset:100;opacity:1}77%,92%{stroke-dashoffset:0;opacity:1}97%,100%{stroke-dashoffset:0;opacity:0}}
+.scard.on .cv-sn1 .cv-snl{animation:cv-snl1 12s var(--bounce) infinite}
+.scard.on .cv-sn1 .cv-snt{animation:cv-snt1 12s infinite}
+@keyframes cv-snl1{0%,5%{transform:scale(.3);opacity:0}8%{transform:scale(1.2);opacity:1}10%,92%{transform:scale(1);opacity:1}97%,100%{transform:scale(.3);opacity:0}}
+@keyframes cv-snt1{0%,5%{opacity:.35}8%,92%{opacity:1}97%,100%{opacity:.35}}
+.scard.on .cv-sn2 .cv-snl{animation:cv-snl2 12s var(--bounce) infinite}
+.scard.on .cv-sn2 .cv-snt{animation:cv-snt2 12s infinite}
+@keyframes cv-snl2{0%,14%{transform:scale(.3);opacity:0}17%{transform:scale(1.2);opacity:1}19%,92%{transform:scale(1);opacity:1}97%,100%{transform:scale(.3);opacity:0}}
+@keyframes cv-snt2{0%,14%{opacity:.35}17%,92%{opacity:1}97%,100%{opacity:.35}}
+.scard.on .cv-sn3 .cv-snl{animation:cv-snl3 12s var(--bounce) infinite}
+.scard.on .cv-sn3 .cv-snt{animation:cv-snt3 12s infinite}
+@keyframes cv-snl3{0%,23%{transform:scale(.3);opacity:0}26%{transform:scale(1.2);opacity:1}28%,92%{transform:scale(1);opacity:1}97%,100%{transform:scale(.3);opacity:0}}
+@keyframes cv-snt3{0%,23%{opacity:.35}26%,92%{opacity:1}97%,100%{opacity:.35}}
+.scard.on .cv-sn4 .cv-snl{animation:cv-snl4 12s var(--bounce) infinite}
+.scard.on .cv-sn4 .cv-snt{animation:cv-snt4 12s infinite}
+@keyframes cv-snl4{0%,32%{transform:scale(.3);opacity:0}35%{transform:scale(1.2);opacity:1}37%,92%{transform:scale(1);opacity:1}97%,100%{transform:scale(.3);opacity:0}}
+@keyframes cv-snt4{0%,32%{opacity:.35}35%,92%{opacity:1}97%,100%{opacity:.35}}
+.scard.on .cv-sn5 .cv-snl{animation:cv-snl5 12s var(--bounce) infinite}
+.scard.on .cv-sn5 .cv-snt{animation:cv-snt5 12s infinite}
+@keyframes cv-snl5{0%,41%{transform:scale(.3);opacity:0}44%{transform:scale(1.2);opacity:1}46%,92%{transform:scale(1);opacity:1}97%,100%{transform:scale(.3);opacity:0}}
+@keyframes cv-snt5{0%,41%{opacity:.35}44%,92%{opacity:1}97%,100%{opacity:.35}}
+.scard.on .cv-sn6 .cv-snl{animation:cv-snl6 12s var(--bounce) infinite}
+.scard.on .cv-sn6 .cv-snt{animation:cv-snt6 12s infinite}
+@keyframes cv-snl6{0%,50%{transform:scale(.3);opacity:0}53%{transform:scale(1.2);opacity:1}55%,92%{transform:scale(1);opacity:1}97%,100%{transform:scale(.3);opacity:0}}
+@keyframes cv-snt6{0%,50%{opacity:.35}53%,92%{opacity:1}97%,100%{opacity:.35}}
+.scard.on .cv-sn7 .cv-snl{animation:cv-snl7 12s var(--bounce) infinite}
+.scard.on .cv-sn7 .cv-snt{animation:cv-snt7 12s infinite}
+@keyframes cv-snl7{0%,59%{transform:scale(.3);opacity:0}62%{transform:scale(1.2);opacity:1}64%,92%{transform:scale(1);opacity:1}97%,100%{transform:scale(.3);opacity:0}}
+@keyframes cv-snt7{0%,59%{opacity:.35}62%,92%{opacity:1}97%,100%{opacity:.35}}
+.scard.on .cv-sn8 .cv-snl{animation:cv-snl8 12s var(--bounce) infinite}
+.scard.on .cv-sn8 .cv-snt{animation:cv-snt8 12s infinite}
+@keyframes cv-snl8{0%,68%{transform:scale(.3);opacity:0}71%{transform:scale(1.2);opacity:1}73%,92%{transform:scale(1);opacity:1}97%,100%{transform:scale(.3);opacity:0}}
+@keyframes cv-snt8{0%,68%{opacity:.35}71%,92%{opacity:1}97%,100%{opacity:.35}}
+.scard.on .cv-sn9 .cv-snl{animation:cv-snl9 12s var(--bounce) infinite}
+.scard.on .cv-sn9 .cv-snt{animation:cv-snt9 12s infinite}
+@keyframes cv-snl9{0%,77%{transform:scale(.3);opacity:0}80%{transform:scale(1.2);opacity:1}82%,92%{transform:scale(1);opacity:1}97%,100%{transform:scale(.3);opacity:0}}
+@keyframes cv-snt9{0%,77%{opacity:.35}80%,92%{opacity:1}97%,100%{opacity:.35}}
+
+/* ---------- Rörelsekänslighet: slutläge, inga skriver-prickar ---------- */
+@media (prefers-reduced-motion:reduce){
+  .cv-st{display:none}
+}

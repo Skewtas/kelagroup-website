@@ -13,11 +13,13 @@
 <link rel="stylesheet" href="assets/pop-v6.css">
 <link rel="stylesheet" href="assets/cards-v1.css?v=1">
 <link rel="stylesheet" href="assets/cards-v2.css?v=1">
+<link rel="stylesheet" href="assets/cards-v3.css?v=1">
 <style>
 /* Branscher: 7 kort */
 @media (min-width:1101px){#branscher .bgrid{grid-template-columns:repeat(4,1fr)}#branscher .bcard:last-child{grid-column:span 2}}
 #branscher .bcard:nth-child(6){background:var(--butter)}#branscher .bcard:nth-child(7){background:var(--peach)}
 </style>
+<link rel="stylesheet" href="assets/nav-v1.css">
 </head>
 <body>
 
@@ -26,7 +28,7 @@
     <a class="logo" href="index.html" aria-label="Kela group AB – startsida"><b>KELA</b></a>
     <nav class="nav-links" aria-label="Huvudmeny">
       <div class="has-menu">
-        <a href="tjanster.html" aria-haspopup="true">Tjänster ▾</a>
+        <a href="tjanster.html" aria-haspopup="true">Tjänster<svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.8 5 6.8 8 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         <div class="mega" aria-label="Våra tjänster">
           <div class="mega-head"><span>Vad vi bygger</span><a href="tjanster.html">Se alla →</a></div>
           <div class="mega-grid">
@@ -39,7 +41,7 @@
         </div>
       </div>
       <div class="has-menu">
-        <a href="#branscher" aria-haspopup="true">Branscher ▾</a>
+        <a href="#branscher" aria-haspopup="true">Branscher<svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.8 5 6.8 8 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         <div class="mega" aria-label="Branscher">
           <div class="mega-head"><span>Byggt för er bransch</span></div>
           <div class="mega-grid">
@@ -267,51 +269,69 @@
 
         <li class="scard" style="--i:2"><div class="sl"><span class="num">03 — AUTOMATIONER &amp; AI</span><h3>Automationer &amp; AI</h3></div>
           <div class="sv" aria-hidden="true"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
-            <!-- flow nodes -->
-            <g>
-              <rect class="f-w s-w" x="8" y="24" width="140" height="70" rx="16" fill-opacity=".07" stroke-opacity=".18"/>
-              <circle class="f-l" cx="36" cy="59" r="15"/><path class="s-k" d="M31 52h7l3 3v11h-10z M34 59h5M34 63h5" fill="none" stroke-width="1.5" stroke-linejoin="round"/>
-              <text class="tw tb" x="58" y="55" font-size="13">Offert</text><text class="tm tw" x="58" y="72" font-size="8.5" opacity=".6">Skickad 09:12</text>
-              <g class="cv-chk cv-chk1"><circle class="f-l" cx="140" cy="28" r="10"/><path class="s-k" d="M135.5 28l3 3 6-6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <defs>
+              <clipPath id="sto-av"><circle cx="38" cy="44" r="16"/></clipPath>
+            </defs>
+            <!-- Camilla – Stodonas chattbot -->
+            <rect class="f-w s-w" x="8" y="14" width="292" height="372" rx="20" fill-opacity=".05" stroke-opacity=".14"/>
+            <circle class="f-l" cx="38" cy="44" r="17"/>
+            <image href="assets/cases/stodona/site-camilla.jpg" x="22" y="28" width="32" height="32" clip-path="url(#sto-av)" preserveAspectRatio="xMidYMid slice"/>
+            <text class="tw tb" x="62" y="41" font-size="13">Camilla</text>
+            <circle class="f-l cv-live" cx="65" cy="54" r="3"/><text class="tm tw" x="73" y="57" font-size="8" opacity=".6">Stodonas digitala assistent</text>
+            <rect class="s-w" x="248" y="34" width="40" height="20" rx="10" fill="none" stroke-opacity=".3"/><text class="tm tw" x="268" y="47.5" font-size="8" text-anchor="middle" opacity=".7">24/7</text>
+            <rect class="f-w" x="20" y="72" width="268" height="1" fill-opacity=".12"/>
+            <g class="cv-sm1">
+              <rect class="f-w" x="112" y="86" width="176" height="40" rx="14" fill-opacity=".14"/>
+              <text class="tw" x="126" y="102" font-size="10.5">Hej! Kan jag boka om</text>
+              <text class="tw" x="126" y="117" font-size="10.5">städningen på torsdag?</text>
             </g>
-            <g>
-              <rect class="f-w s-w" x="190" y="24" width="140" height="70" rx="16" fill-opacity=".07" stroke-opacity=".18"/>
-              <circle class="f-l" cx="218" cy="59" r="15"/><path class="s-k" d="M211 53h14v12h-14z M211 57h14" fill="none" stroke-width="1.5" stroke-linejoin="round"/>
-              <text class="tw tb" x="240" y="55" font-size="13">Faktura</text><text class="tm tw" x="240" y="72" font-size="8.5" opacity=".6">Skapad auto</text>
-              <g class="cv-chk cv-chk2"><circle class="f-l" cx="322" cy="28" r="10"/><path class="s-k" d="M317.5 28l3 3 6-6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <text class="tm tw cv-smeta" x="288" y="140" font-size="7.5" text-anchor="end" opacity=".5">Kund i Bromma · BankID ✓</text>
+            <g class="cv-st cv-st1">
+              <rect class="f-w" x="20" y="150" width="52" height="26" rx="13" fill-opacity=".14"/>
+              <circle class="f-w cv-d1" cx="34" cy="163" r="3"/><circle class="f-w cv-d2" cx="46" cy="163" r="3"/><circle class="f-w cv-d3" cx="58" cy="163" r="3"/>
             </g>
-            <g>
-              <rect class="f-w s-w" x="372" y="24" width="140" height="70" rx="16" fill-opacity=".07" stroke-opacity=".18"/>
-              <circle class="f-l" cx="400" cy="59" r="15"/><path class="s-k" d="M394 63h12l-2-3v-4a4 4 0 0 0-8 0v4z M398.5 65.5a1.6 1.6 0 0 0 3 0" fill="none" stroke-width="1.5" stroke-linejoin="round"/>
-              <text class="tw tb" x="422" y="55" font-size="13">Påminnelse</text><text class="tm tw" x="422" y="72" font-size="8.5" opacity=".6">Dag 10 · auto</text>
-              <g class="cv-chk cv-chk3"><circle class="f-l" cx="504" cy="28" r="10"/><path class="s-k" d="M499.5 28l3 3 6-6" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g>
+            <g class="cv-sm2">
+              <rect class="f-l" x="20" y="150" width="200" height="40" rx="14"/>
+              <text x="34" y="166" font-size="10.5">Absolut! Lediga tider med</text>
+              <text x="34" y="181" font-size="10.5">din vanliga städare:</text>
             </g>
-            <path class="s-w" d="M150 59h38M332 59h38" fill="none" stroke-width="1.5" stroke-dasharray="3 5" opacity=".35"/>
-            <circle class="f-l cv-pulse" cx="152" cy="59" r="4.5" style="--dx:34px;--dy:0px"/>
-            <circle class="f-l cv-pulse cv-p2" cx="334" cy="59" r="4.5" style="--dx:34px;--dy:0px"/>
-            <path class="s-w" d="M442 96v22a10 10 0 0 1-10 10H260" fill="none" stroke-width="1.5" stroke-dasharray="3 5" opacity=".35"/>
-            <!-- chat -->
-            <rect class="f-w s-w" x="8" y="138" width="504" height="248" rx="20" fill-opacity=".05" stroke-opacity=".14"/>
-            <circle class="f-l" cx="40" cy="170" r="15"/><text class="td" x="40" y="174.5" font-size="11" text-anchor="middle">AI</text>
-            <text class="tw tb" x="64" y="167" font-size="13">AI-assistent</text>
-            <circle class="f-l cv-live" cx="67" cy="181" r="3"/><text class="tm tw" x="75" y="184" font-size="8.5" opacity=".6">Online dygnet runt</text>
-            <rect class="s-w" x="456" y="160" width="40" height="20" rx="10" fill="none" stroke-opacity=".3"/><text class="tm tw" x="476" y="173.5" font-size="8" text-anchor="middle" opacity=".7">24/7</text>
-            <g class="cv-m1">
-              <rect class="f-w" x="236" y="200" width="256" height="36" rx="16" fill-opacity=".14"/>
-              <text class="tw" x="252" y="222" font-size="11.5">Har Svensson betalat fakturan?</text>
+            <g class="cv-sch">
+              <rect class="s-l" x="20.5" y="198.5" width="92" height="23" rx="11.5" fill="none" stroke-opacity=".7"/>
+              <text class="tw tb" x="66.5" y="213.5" font-size="9.5" text-anchor="middle">Mån · 09:00</text>
+              <rect class="s-l" x="120.5" y="198.5" width="92" height="23" rx="11.5" fill="none" stroke-opacity=".7"/>
+              <text class="tw tb" x="166.5" y="213.5" font-size="9.5" text-anchor="middle">Tis · 13:00</text>
+              <g class="cv-ssel"><rect class="f-l" x="120" y="198" width="93" height="24" rx="12"/><text class="tb" x="166.5" y="213.5" font-size="9.5" text-anchor="middle">Tis · 13:00</text></g>
             </g>
-            <g class="cv-m2">
-              <rect class="f-l" x="28" y="248" width="318" height="58" rx="16"/>
-              <text class="t" x="46" y="271" font-size="11.5">Ja — betald idag 14:02. Jag har stängt</text>
-              <text class="t" x="46" y="289" font-size="11.5">ärendet och skickat ett tack-mejl.</text>
+            <g class="cv-sm3">
+              <rect class="f-w" x="190" y="234" width="98" height="28" rx="14" fill-opacity=".14"/>
+              <text class="tw" x="204" y="252" font-size="10.5">Tisdag passar!</text>
             </g>
-            <g class="cv-typing">
-              <rect class="f-w" x="28" y="318" width="62" height="30" rx="15" fill-opacity=".14"/>
-              <circle class="f-w cv-d1" cx="46" cy="333" r="3.2"/><circle class="f-w cv-d2" cx="59" cy="333" r="3.2"/><circle class="f-w cv-d3" cx="72" cy="333" r="3.2"/>
+            <g class="cv-st cv-st2">
+              <rect class="f-w" x="20" y="274" width="52" height="26" rx="13" fill-opacity=".14"/>
+              <circle class="f-w cv-d1" cx="34" cy="287" r="3"/><circle class="f-w cv-d2" cx="46" cy="287" r="3"/><circle class="f-w cv-d3" cx="58" cy="287" r="3"/>
             </g>
-            <rect class="f-w" x="28" y="348" width="464" height="26" rx="13" fill-opacity=".08"/><text class="tw" x="44" y="364.5" font-size="10" opacity=".45">Skriv ett meddelande…</text><circle class="f-l" cx="479" cy="361" r="9"/><path class="s-k" d="M475 361h8M480 357.5l3.5 3.5-3.5 3.5" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <g class="cv-sm4">
+              <rect class="f-l" x="20" y="274" width="222" height="40" rx="14"/>
+              <text x="34" y="290" font-size="10.5">Klart! Flyttad till <tspan class="tb">tis 13:00</tspan>.</text>
+              <text x="34" y="305" font-size="10.5">Bekräftelse skickad via sms ✓</text>
+            </g>
+            <rect class="f-w" x="20" y="344" width="268" height="28" rx="14" fill-opacity=".08"/><text class="tw" x="36" y="362" font-size="10" opacity=".45">Skriv ett meddelande…</text><circle class="f-l" cx="274" cy="358" r="9"/><path class="s-k" d="M270 358h8M275 354.5l3.5 3.5-3.5 3.5" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+            <!-- Kundresa – automatiska flöden -->
+            <text class="tm tw" x="318" y="28" font-size="8" letter-spacing=".08em" opacity=".55">KUNDRESA · AUTOMATISK</text>
+            <path class="s-w" d="M330 54V370" fill="none" stroke-width="1.5" stroke-dasharray="3 5" opacity=".3"/>
+            <path class="s-l cv-sline" d="M330 54V370" fill="none" stroke-width="2" stroke-linecap="round" pathLength="100" stroke-dasharray="100"/>
+            <g class="cv-sn cv-sn1"><circle class="f-k s-w" cx="330" cy="54" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="54" r="9.5"/><path class="s-k" d="M326 54l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="53" font-size="10">Bokning via stodona.se</text><text class="tm tw" x="348" y="64" font-size="8" opacity=".6">Bokis · pris direkt</text></g></g>
+            <g class="cv-sn cv-sn2"><circle class="f-k s-w" cx="330" cy="93.5" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="93.5" r="9.5"/><path class="s-k" d="M326 93.5l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="92.5" font-size="10">Bekräftelse + välkomst-sms</text><text class="tm tw" x="348" y="103.5" font-size="8" opacity=".6">Bokis · direkt efter bokning</text></g></g>
+            <g class="cv-sn cv-sn3"><circle class="f-k s-w" cx="330" cy="133" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="133" r="9.5"/><path class="s-k" d="M326 133l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="132" font-size="10">Påminnelse inför städningen</text><text class="tm tw" x="348" y="143" font-size="8" opacity=".6">Bokis · sms</text></g></g>
+            <g class="cv-sn cv-sn4"><circle class="f-k s-w" cx="330" cy="172.5" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="172.5" r="9.5"/><path class="s-k" d="M326 172.5l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="171.5" font-size="10">Städning klar</text><text class="tm tw" x="348" y="182.5" font-size="8" opacity=".6">Personalapp · kvalitetskontroll</text></g></g>
+            <g class="cv-sn cv-sn5"><circle class="f-k s-w" cx="330" cy="212" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="212" r="9.5"/><path class="s-k" d="M326 212l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="211" font-size="10">Feedback-sms</text><text class="tm tw" x="348" y="222" font-size="8" opacity=".6">Feedis · betyget till städaren</text></g></g>
+            <g class="cv-sn cv-sn6"><circle class="f-k s-w" cx="330" cy="251.5" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="251.5" r="9.5"/><path class="s-k" d="M326 251.5l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="250.5" font-size="10">Faktura</text><text class="tm tw" x="348" y="261.5" font-size="8" opacity=".6">Fortnox · skickas automatiskt</text></g></g>
+            <g class="cv-sn cv-sn7"><circle class="f-k s-w" cx="330" cy="291" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="291" r="9.5"/><path class="s-k" d="M326 291l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="290" font-size="10">Påminnelse om obetald</text><text class="tm tw" x="348" y="301" font-size="8" opacity=".6">Påminnis · mail &amp; sms</text></g></g>
+            <g class="cv-sn cv-sn8"><circle class="f-k s-w" cx="330" cy="330.5" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="330.5" r="9.5"/><path class="s-k" d="M326 330.5l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="329.5" font-size="10">Grattis-sms på födelsedagen</text><text class="tm tw" x="348" y="340.5" font-size="8" opacity=".6">Till kunder &amp; personal</text></g></g>
+            <g class="cv-sn cv-sn9"><circle class="f-k s-w" cx="330" cy="370" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="370" r="9.5"/><path class="s-k" d="M326 370l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="369" font-size="10">Återkommande bokning</text><text class="tm tw" x="348" y="380" font-size="8" opacity=".6">Bokis · nästa städning</text></g></g>
           </svg></div>
-          <div class="sr"><p>Offerter, uppföljning, fakturor och kundtjänst som sköter sig själva — dygnet runt, utan en enda knapptryckning.</p><ul><li>AI-agenter dygnet runt</li><li>Chatt-bottar</li><li>Automatiska flöden</li></ul></div></li>
+          <div class="sr"><span class="sc-ex">Exempel: Stodona – chattboten Camilla &amp; automatiska kundflöden</span><p>Offerter, uppföljning, fakturor och kundtjänst som sköter sig själva — dygnet runt, utan en enda knapptryckning.</p><ul><li>AI-agenter dygnet runt</li><li>Chatt-bottar</li><li>Automatiska flöden</li></ul></div></li>
 
         <li class="scard" style="--i:3"><div class="sl"><span class="num">04 — APPAR</span><h3>Appar för iOS &amp; Android</h3></div>
           <div class="sv" aria-hidden="true"><svg viewBox="0 0 520 400" role="presentation" focusable="false">

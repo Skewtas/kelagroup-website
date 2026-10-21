@@ -1,0 +1,42 @@
+/* ---------- Toppmeny v1: kompakt, frostad "ö" som ser likadan ut hela vägen ---------- */
+html .nav{top:14px}
+html .nav .nav-in{
+  max-width:1180px;height:62px;padding:7px 7px 7px 24px;gap:20px;
+  color:var(--ink);
+  background:rgba(255,250,251,.8);
+  -webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);
+  border:1px solid rgba(92,26,38,.09);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 12px 32px -22px rgba(60,18,28,.45);
+  transition:background .35s var(--ease),box-shadow .35s var(--ease),border-color .35s
+}
+html .nav.scrolled .nav-in{background:rgba(255,250,251,.95);border-color:rgba(92,26,38,.11);box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 16px 40px -24px rgba(60,18,28,.5)}
+html .nav:not(.scrolled) .nav-in{color:var(--ink)}
+
+/* Logga: strecket närmare bokstäverna */
+.logo b{line-height:.76;padding-bottom:1px;border-bottom-width:2.5px}
+.nav .logo b{font-size:1.5rem}
+
+/* Länkar */
+html .nav-links{gap:2px}
+html .nav-links>a,html .has-menu>a{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:.93rem;letter-spacing:-.005em;padding:.62em 1em;border-radius:999px;color:color-mix(in srgb,var(--ink) 82%,transparent);transition:background .2s,color .2s}
+html .nav-links>a:hover,html .has-menu>a:hover,html .has-menu:focus-within>a{background:var(--lav-soft);color:var(--ink)}
+.nav .chev{width:10px;height:10px;flex:none;opacity:.6;transition:transform .3s var(--ease),opacity .2s}
+.has-menu:hover .chev,.has-menu:focus-within .chev{transform:rotate(180deg);opacity:1}
+
+/* Mega-meny */
+html .mega{top:calc(100% + 16px);padding:12px;border:1px solid rgba(92,26,38,.08);border-radius:22px;box-shadow:0 30px 60px -28px rgba(60,18,28,.4),0 2px 8px -4px rgba(60,18,28,.12)}
+html .mega::before{top:-18px;height:18px}
+html .mega-card{border-radius:14px;align-items:center}
+html .mega-card .ico{width:38px;height:38px;background:var(--lav-soft);color:var(--ink);box-shadow:inset 0 0 0 1px rgba(92,26,38,.08)}
+html .mega-card:hover .ico,html .mega-card:focus-visible .ico{background:var(--ink);color:var(--white)}
+
+/* CTA i menyn */
+html .nav-cta .btn{height:48px;padding:0 1.35em;font-size:.9rem}
+
+@media (max-width:900px){
+  html .nav .nav-in{height:58px;padding:5px 5px 5px 20px}
+  html .burger{width:46px;height:46px}
+  html .burger span{left:14px;right:14px}
+  html .burger span:nth-child(1){top:18px}html .burger span:nth-child(2){top:26px}
+}
+@media (max-width:640px){html .nav{top:10px}}
