@@ -8,17 +8,17 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#F3D3D7">
-<title>System & automationer för städbolag – tjänster & priser | Kela group</title>
-<meta name="description" content="Bokningssystem, AI-chatt, feedback, påminnelser, dashboard och appar för städbolag – kopplat via API till ert affärssystem (Timewave, Tengella m.fl.). Se alla tjänster och priser.">
+<title>System & automationer för städbolag – tjänster & offert | Kela group</title>
+<meta name="description" content="Bokningssystem, AI-chatt, feedback, påminnelser, dashboard och appar för städbolag – kopplat via API till ert affärssystem (Timewave, Tengella m.fl.). Se alla tjänster och få en offert efter era behov.">
 <link rel="canonical" href="https://kelagroup.se/stadbolag.html">
-<meta property="og:title" content="System & automationer för städbolag – tjänster & priser">
-<meta property="og:description" content="Bokningssystem, AI-chatt, feedback, påminnelser, dashboard och appar för städbolag – kopplat via API till ert affärssystem. Se tjänster och priser.">
+<meta property="og:title" content="System & automationer för städbolag – tjänster & offert">
+<meta property="og:description" content="Bokningssystem, AI-chatt, feedback, påminnelser, dashboard och appar för städbolag – kopplat via API till ert affärssystem. Se tjänster och få en offert.">
 <meta property="og:type" content="website">
 <link rel="preload" href="assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/pop-v6.css">
 <link rel="stylesheet" href="assets/sub-v1.css">
 <style>
-/* ---------- Städbolag: tjänster & priser (scopeat) ---------- */
+/* ---------- Städbolag: tjänster & moduler (scopeat) ---------- */
 .integ{border:1px solid var(--line);background:var(--paper);border-radius:18px;padding:22px clamp(20px,3vw,34px);display:flex;align-items:center;gap:clamp(16px,3vw,40px);flex-wrap:wrap;}
 .integ .it-lead{font-size:14.5px;color:var(--text);font-weight:600;max-width:34ch;}
 .integ .it-lead small{display:block;color:var(--muted);font-weight:500;font-size:12.5px;margin-top:4px;line-height:1.4;}
@@ -41,6 +41,10 @@
 .pcard .price .f{font-size:12px;color:var(--muted);letter-spacing:.02em;}
 .pcard .price b{font-family:'Archivo Black',sans-serif;font-size:23px;letter-spacing:-.02em;color:var(--text);}
 .pcard .price .u{font-size:13px;color:var(--muted);}
+.p-ask{display:inline-flex;align-items:center;gap:.45em;font-weight:700;font-size:15px;color:var(--text);text-decoration:none}
+.p-ask .arr{transition:transform .35s var(--bounce)}
+.p-ask:hover{text-decoration:underline;text-underline-offset:4px}
+.p-ask:hover .arr{transform:translateX(4px)}
 
 .pcard.wide{grid-column:1/-1;}
 .mp-rows{list-style:none;padding:0;margin:4px 0 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;}
@@ -282,7 +286,7 @@
 .dp-result .note{position:relative;display:block;margin-top:14px;font-size:13px;color:rgba(255,255,255,.75);}
 @media(prefers-reduced-motion:reduce){.dp-head h2 em,.dp-track li::before{animation:none;}.dp-track::after{transition:none;width:80%;}}
 </style>
-<link rel="stylesheet" href="assets/boka-v1.css">
+<link rel="stylesheet" href="assets/boka-v2.css">
 <link rel="stylesheet" href="assets/nav-v1.css">
 </head>
 <body>
@@ -320,8 +324,8 @@
           </div>
         </div>
       </div>
-      <a href="priskalkylator.html">Priser</a>
       <a href="case.html">Case</a>
+      <a href="kontakt.html">Kontakt</a>
     </nav>
     <div class="nav-cta">
       <a class="btn btn-dark" href="kontakt.html" data-book>Boka möte <span class="arr" aria-hidden="true">→</span></a>
@@ -341,7 +345,6 @@
       <a href="bransch-stad.html">Städ & service</a><a href="bransch-skonhet.html">Skönhet & salong</a><a href="bransch-harstylist.html">Frisör & hårstylist</a><a href="bransch-makeup.html">Makeupartister</a><a href="bransch-frilans.html">Frilansare & konsulter</a><a href="bransch-brollop.html">Bröllop</a><a href="bransch-rekrytering.html">Rekrytering & personal</a>
     </div>
     <ul class="big">
-      <li><a href="priskalkylator.html">Priser</a></li>
       <li><a href="case.html">Case</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
     </ul>
@@ -359,7 +362,8 @@
       <h1 class="rv d1">Städbolaget som sköter sig självt</h1>
       <p class="ph-lead rv d2">Bokningar, chatt, feedback, påminnelser, dashboard och appar — byggt för städbranschen och kopplat via API direkt till ert affärssystem. Allt pratar med varandra, så ni kan driva verksamheten istället för att administrera den.</p>
       <div class="ph-actions rv d3">
-        <a class="btn btn-dark" href="#priser">Se tjänster &amp; priser <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn-dark" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn-line" href="#tjanster">Se tjänster</a>
         <a class="btn btn-line" href="#digitaliseringsplan">Se digitaliseringsplanen</a>
       </div>
     </div>
@@ -382,10 +386,10 @@
     </div>
   </section>
 
-  <section class="sec tight" id="priser" style="padding-top:0;">
+  <section class="sec tight" id="tjanster" style="padding-top:0;">
     <div class="wrap">
       <div class="sec-head rv">
-        <span class="kicker">Tjänster &amp; priser</span>
+        <span class="kicker">Tjänster &amp; moduler</span>
         <div>
           <h2 class="display">Moduler byggda för städbolag</h2>
           <p class="lead">Varje modul fungerar på egen hand — men det är när de kopplas ihop med varandra och ert affärssystem som städbolaget börjar sköta sig självt.</p>
@@ -425,7 +429,7 @@
                 </div>
               </div>
             </div>
-            <div class="price"><span class="f">Från</span><b>6 999 kr</b><span class="u">/mån</span> <span class="setup">+ uppstartskostnad</span></div>
+            <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
           </div>
           <div class="fmain"><div class="fgroup"><h4>Bokning &amp; schema</h4><ul class="pfeat"><li>Onlinebokning som räknar ut pris direkt</li><li>Beräknar restiden mellan uppdragen</li><li><b>Automatisk schemaläggning</b> som hittar lediga luckor</li><li>Tilläggstjänster och abonnemang</li></ul></div><div class="fgroup"><h4>Kunden får all info</h4><ul class="pfeat"><li><b>Orderbekräftelse</b> direkt när bokningen är gjord</li><li><b>Välkomstmail och sms</b> med allt kunden behöver veta inför städningen</li><li><b>Påminnelser</b> före besöket, till exempel att ha rätt material hemma</li><li>Färre frågor till kontoret och färre missade besök</li></ul></div><div class="fgroup"><h4>Rätt person på rätt jobb</h4><ul class="pfeat"><li>Säkerställer rätt kompetens på varje bokning</li><li><b>Ni bestämmer</b> vem som får bokningen</li><li>Baserat på beläggning, erfarenhet och era egna regler</li></ul></div><div class="fgroup"><h4>Även internt</h4><ul class="pfeat"><li>Skicka offerter direkt från systemet</li><li>Lägg bokningar åt kunder på telefon eller mejl</li><li>Samma system för kunder och kontor</li></ul></div></div>
         </article>
@@ -455,7 +459,7 @@
                 </div>
               </div>
             </div>
-            <div class="price"><span class="f">Från</span><b>15 000 kr</b><span class="u">/mån</span> <span class="setup">+ uppstartskostnad</span></div>
+            <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
           </div>
           <div class="fmain"><div class="fgroup"><h4>Sköter ärendena själv</h4><ul class="pfeat"><li>Bokning, ombokning och ändringar</li><li>Avbokning och sjukdom</li><li>Fakturafrågor, obetalda fakturor och betalningar</li><li>Kunder kan lägga beställningar direkt i chatten</li></ul></div><div class="fgroup"><h4>Hittar rätt tid</h4><ul class="pfeat"><li>Hjälper kunden hitta nya tider och föreslår alternativ</li><li>Kunden får <b>samma städare</b> om hen önskar</li><li>Ser om städaren har ett engångsuppdrag som en kollega kan ta, och frigör tiden åt den återkommande kunden</li></ul></div><div class="fgroup"><h4>Stöd dygnet runt</h4><ul class="pfeat"><li>Svarar kunder direkt, även kvällar och helger</li><li>Stöttar kunden med allt de behöver</li><li>Internt stöd för bokningshanteringen</li></ul></div></div>
         </article>
@@ -483,7 +487,7 @@
                 </div>
               </div>
             </div>
-            <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+            <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
           </div>
           <div class="fmain"><div class="fgroup"><h4>Efter varje städning</h4><ul class="pfeat"><li>Kunden får ett sms och betygsätter städningen</li><li>All feedback samlas på ett ställe</li></ul></div><div class="fgroup"><h4>Ros till personalen</h4><ul class="pfeat"><li>Vid bra feedback får personalen <b>direkt ett sms</b> med kundens ord</li><li>Tänk att få ett sms om hur nöjd en kund är en torsdagseftermiddag</li></ul></div><div class="fgroup"><h4>Ris hanteras snabbt</h4><ul class="pfeat"><li>Missnöje går till kontoret med förslag på åtgärd</li><li>Återkoppling till både kund och personal</li></ul></div><div class="fgroup"><h4>Fler recensioner</h4><ul class="pfeat"><li>Nöjda kunder får en länk till Google, Trustpilot eller Reco</li><li>Fler omdömen där nya kunder letar</li></ul></div></div>
         </article>
@@ -499,7 +503,7 @@
           <h3 class="pname">Påminnis <span class="pcat">Påminnelsehantering</span></h3>
           <p class="plead">Obetalda fakturor jagas automatiskt, utan att ni lyfter ett finger.</p>
           <ul class="pfeat"><li>Mail och sms skickas automatiskt</li><li>Ni väljer dagar och tider för utskick</li><li>Tydliga, trevliga betalningsinstruktioner</li><li>Bättre likviditet</li></ul>
-          <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Headof -->
@@ -512,7 +516,7 @@
           <h3 class="pname">Headof <span class="pcat">Dashboard</span></h3>
           <p class="plead">Hela verksamheten live, kopplad till ert affärssystem.</p>
           <ul class="pfeat"><li>Försäljning, timmar och bokningar</li><li>Avbokningar och personalrapporter</li><li>Era viktigaste nyckeltal</li><li>Skräddarsytt efter den data ni vill se</li></ul>
-          <div class="price"><span class="f">Från</span><b>999 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Personalapp -->
@@ -525,7 +529,7 @@
           <h3 class="pname">Personalapp <span class="pcat">För fältpersonal</span></h3>
           <p class="plead">Allt personalen behöver ute på jobbet, i en app.</p>
           <ul class="pfeat"><li>In- och utcheck med GPS</li><li>Kvalitetskontroller</li><li>Tid- och materialrapportering</li><li><b>AI-arbetsledare</b> i chatten som besvarar ca 95 % av alla frågor och vägleder personalen</li><li>Kan AI:n inte hjälpa till larmas en riktig arbetsledare direkt</li><li>Uppdatera kundinfo</li><li>Meddelar kunden automatiskt vid försening</li></ul>
-          <div class="price"><span class="f">Från</span><b>1 999 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Kundapp -->
@@ -539,7 +543,7 @@
           <h3 class="pname">Kundapp <span class="pcat">För era kunder</span></h3>
           <p class="plead">Kunden sköter sitt eget, allt på ett ställe.</p>
           <ul class="pfeat"><li>Se alla bokningar</li><li>Ändra, boka om eller avboka</li><li>Uppdatera sina uppgifter</li><li>Lämna feedback</li><li>Hämta fakturainformation</li></ul>
-          <div class="price"><span class="f">Från</span><b>999 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Rekryteringsverktyg -->
@@ -553,7 +557,7 @@
           <h3 class="pname">Rekryteringsverktyg <span class="pcat">Likt Teamtailor</span></h3>
           <p class="plead">Hela rekryteringen på ett ställe, från ansökan till första dagen.</p>
           <ul class="pfeat"><li>Kandidatbank</li><li>Automatiska återkopplingar</li><li>Enkel hantering av hela flödet</li><li>Onboarding av nyanställda</li></ul>
-          <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Sökmotoroptimering -->
@@ -568,7 +572,7 @@
           <h3 class="pname">Sökmotoroptimering <span class="pcat">SEO</span></h3>
           <p class="plead">Syns högst upp när kunder söker städning i ert område.</p>
           <ul class="pfeat"><li>Teknisk SEO</li><li>Innehåll som rankar</li><li>Lokal synlighet</li><li>Löpande optimering</li></ul>
-          <div class="price"><span class="f">Från</span><b>3 500 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Marknadsportal (wide) -->
@@ -577,9 +581,9 @@
           <h3 class="pname">Marknadsportal <span class="pcat">Tilläggstjänster</span></h3>
           <p class="plead">All marknadsföring samlad på ett ställe. Vi skapar, publicerar och optimerar åt er. Välj de tilläggstjänster ni vill ha.</p>
           <ul class="mp-rows">
-            <li><div class="t">Meta ads<small>Annonser på Facebook och Instagram.</small></div><ul class="pfeat"><li>Vi skapar annonserna</li><li>Publicering och löpande optimering</li></ul><div class="pr"><b>1 500 kr</b> <span>/mån</span></div></li>
-            <li><div class="t">Nyhetsbrev<small>Utskick via mail och sms.</small></div><ul class="pfeat"><li><b>Segmentera</b> och nå rätt kunder</li><li>Kundbrev</li><li>Kampanjer</li><li><b>Grattis-sms</b> till kunder och personal</li></ul><div class="pr"><b>1 000 kr</b> <span>/mån</span></div></li>
-            <li><div class="t">Content för Instagram<small>Innehåll till ert Instagramkonto.</small></div><ul class="pfeat"><li>Vi genererar inlägg åt er</li><li>Löpande, varje månad</li></ul><div class="pr"><b>1 000 kr</b> <span>/mån</span></div></li>
+            <li><div class="t">Meta ads<small>Annonser på Facebook och Instagram.</small></div><ul class="pfeat"><li>Vi skapar annonserna</li><li>Publicering och löpande optimering</li></ul><div class="pr"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div></li>
+            <li><div class="t">Nyhetsbrev<small>Utskick via mail och sms.</small></div><ul class="pfeat"><li><b>Segmentera</b> och nå rätt kunder</li><li>Kundbrev</li><li>Kampanjer</li><li><b>Grattis-sms</b> till kunder och personal</li></ul><div class="pr"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div></li>
+            <li><div class="t">Content för Instagram<small>Innehåll till ert Instagramkonto.</small></div><ul class="pfeat"><li>Vi genererar inlägg åt er</li><li>Löpande, varje månad</li></ul><div class="pr"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div></li>
           </ul>
         </article>
 
@@ -587,7 +591,7 @@
 
       <p class="pnote rv">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
-        Månadspriser, från-priser. Vi skräddarsyr en lösning och offert efter just er verksamhet — hör av er så räknar vi på det.
+        Vi skräddarsyr en lösning och offert efter just er verksamhet — <a href="kontakt.html" data-book>skicka en förfrågan</a> så återkommer vi inom 24 timmar.
       </p>
     </div>
   </section>
@@ -749,15 +753,15 @@
         <p>Kela group AB<br>Stockholm</p>
       </div>
       <div class="f-col"><h3>Vad vi bygger</h3><a href="bygga-hemsida.html">Websites</a><a href="bygga-system.html">Systems</a><a href="bygga-automationer.html">Automation</a><a href="ai-agenter.html">AI</a><a href="bygga-app.html">Apps</a></div>
-      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Priser</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
+      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Få en offert</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
       <div class="f-col"><h3>Säg hej</h3><a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a><a href="kontakt.html">Boka ett möte</a></div>
     </div>
     <div class="f-bot"><span>© 2026 Kela group AB — Org.nr 559578-1971</span><span class="mono">Stockholm · hela Europa</span></div>
   </div>
 </footer>
 
-<script src="assets/sub-v1.js" defer></script>
-<script src="assets/boka-v1.js" defer></script>
+<script src="assets/sub-v2.js" defer></script>
+<script src="assets/boka-v2.js" defer></script>
 <script>
 /* Levande demos: stegar igenom [data-s]/[data-e]/[data-sel] när de syns */
 (function(){

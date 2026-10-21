@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#F3D3D7">
 <title>Städ &amp; service – system, bokning &amp; hemsida | Kela</title>
 <link rel="canonical" href="https://kelagroup.se/bransch-stad.html">
-<meta name="description" content="Så kör Stodona sitt städbolag på Kelas system. Bokis, Chattis, Feedis, Påminnis, Headof, personalapp och kundapp – system för städbolag, kopplade via API till Timewave, Tengella, Fortnox eller Visma. Se tjänster och från-priser.">
+<meta name="description" content="Så kör Stodona sitt städbolag på Kelas system. Bokis, Chattis, Feedis, Påminnis, Headof, personalapp och kundapp – system för städbolag, kopplade via API till Timewave, Tengella, Fortnox eller Visma. Få en offert efter era behov.">
 <link rel="preload" href="assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/pop-v6.css">
 <style>
@@ -103,6 +103,10 @@
 .price b{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.4vw,34px);letter-spacing:-.04em;line-height:1}
 .price .u{font-weight:700}
 .price .setup{font-size:.85rem;opacity:.7;font-weight:600}
+.price .p-ask{display:inline-flex;align-items:center;gap:.45em;font-weight:700;font-size:1rem;color:inherit;text-decoration:none}
+.price .p-ask .arr{transition:transform .35s var(--bounce)}
+.price .p-ask:hover{text-decoration:underline;text-underline-offset:4px}
+.price .p-ask:hover .arr{transform:translateX(4px)}
 .c-bokis{grid-column:span 2;grid-row:span 2;background:var(--peach)}
 .c-chat{grid-column:span 2;grid-row:span 2;background:var(--ink);color:var(--white)}
 .c-chat .ico{background:var(--lav);color:var(--on-lav)}
@@ -460,7 +464,7 @@
   .evs{right:60px}
 }
 </style>
-<link rel="stylesheet" href="assets/boka-v1.css">
+<link rel="stylesheet" href="assets/boka-v2.css">
 <link rel="stylesheet" href="assets/nav-v1.css">
 </head>
 <body>
@@ -497,8 +501,8 @@
           </div>
         </div>
       </div>
-      <a href="priskalkylator.html">Priser</a>
       <a href="case.html">Case</a>
+      <a href="kontakt.html">Kontakt</a>
     </nav>
     <div class="nav-cta">
       <a class="btn btn-dark" href="kontakt.html" data-book>Boka möte <span class="arr" aria-hidden="true">→</span></a>
@@ -518,7 +522,6 @@
       <a href="bransch-stad.html">Städ & service</a><a href="bransch-skonhet.html">Skönhet & salong</a><a href="bransch-harstylist.html">Frisör & hårstylist</a><a href="bransch-makeup.html">Makeupartister</a><a href="bransch-frilans.html">Frilansare & konsulter</a><a href="bransch-brollop.html">Bröllop</a><a href="bransch-rekrytering.html">Rekrytering &amp; personal</a>
     </div>
     <ul class="big">
-      <li><a href="priskalkylator.html">Priser</a></li>
       <li><a href="case.html">Case</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
     </ul>
@@ -731,12 +734,12 @@
     </div>
   </section>
 
-  <!-- TJÄNSTER & PRISER -->
-  <section class="sec" id="priser" style="padding-top:0" aria-labelledby="mod-h">
+  <!-- TJÄNSTER & MODULER -->
+  <section class="sec" id="tjanster" style="padding-top:0" aria-labelledby="mod-h">
     <div class="wrap">
       <div class="head">
         <div>
-          <span class="kicker">Tjänster &amp; priser</span>
+          <span class="kicker">Tjänster &amp; moduler</span>
           <h2 class="h2 rv" id="mod-h">Moduler byggda<br>för städbolag.</h2>
         </div>
         <p class="lead rv">Varje modul fungerar på egen hand — men det är när de kopplas ihop med varandra och ert affärssystem som städbolaget börjar sköta sig självt.</p>
@@ -754,7 +757,7 @@
             <div><h4>Rätt person på rätt jobb</h4><ul class="pts"><li>Säkerställer rätt kompetens på varje bokning</li><li><b>Ni bestämmer</b> vem som får bokningen</li><li>Baserat på beläggning, erfarenhet och era egna regler</li></ul></div>
             <div><h4>Även internt</h4><ul class="pts"><li>Skicka offerter direkt från systemet</li><li>Lägg bokningar åt kunder på telefon eller mejl</li><li>Samma system för kunder och kontor</li></ul></div>
           </div>
-          <div class="price"><span class="f">Från</span><b>6 999 kr</b><span class="u">/mån</span><span class="setup">+ uppstartskostnad</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Chattis -->
@@ -777,7 +780,7 @@
               <div class="msg bot" data-s="8">Klart! Flyttad till <b>tis 28 okt 13:00</b> med Anna. Bekräftelse skickad ✓</div>
             </div>
           </div>
-          <div class="price"><span class="f">Från</span><b>15 000 kr</b><span class="u">/mån</span><span class="setup">+ uppstartskostnad</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Feedis -->
@@ -799,7 +802,7 @@
               <div class="fban" data-s="10"><span class="k">K</span><div><b>Till Anna</b>Maria gav dig 5 ★ – ”Allt skinande rent, tack Anna!”</div></div>
             </div>
           </div>
-          <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Påminnis -->
@@ -813,7 +816,7 @@
             <div class="note" data-s="6">Betalning registrerad automatiskt</div>
           </div>
           <ul class="pts"><li>Mail och sms skickas automatiskt</li><li>Ni väljer dagar och tider för utskick</li><li>Tydliga, trevliga betalningsinstruktioner</li><li>Bättre likviditet</li></ul>
-          <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Headof -->
@@ -826,7 +829,7 @@
             <div class="bars"><i style="--h:38%"></i><i style="--h:52%"></i><i style="--h:45%"></i><i style="--h:64%"></i><i style="--h:58%"></i><i style="--h:76%"></i><i style="--h:92%"></i></div>
           </div>
           <ul class="pts"><li>Försäljning, timmar och bokningar</li><li>Avbokningar och personalrapporter</li><li>Era viktigaste nyckeltal</li><li>Skräddarsytt efter den data ni vill se</li></ul>
-          <div class="price"><span class="f">Från</span><b>999 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Personalapp -->
@@ -847,7 +850,7 @@
               </div>
             </div>
           </div>
-          <div class="price"><span class="f">Från</span><b>1 999 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Kundapp -->
@@ -863,7 +866,7 @@
             </div>
           </div>
           <ul class="pts"><li>Se alla bokningar</li><li>Ändra, boka om eller avboka</li><li>Uppdatera sina uppgifter</li><li>Lämna feedback</li><li>Hämta fakturainformation</li></ul>
-          <div class="price"><span class="f">Från</span><b>999 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Rekrytering -->
@@ -880,7 +883,7 @@
             <div class="note" data-s="6">Välkomstmail och onboarding skickat</div>
           </div>
           <ul class="pts"><li>Kandidatbank</li><li>Automatiska återkopplingar</li><li>Enkel hantering av hela flödet</li><li>Onboarding av nyanställda</li></ul>
-          <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- SEO -->
@@ -894,7 +897,7 @@
             <ol class="serp" data-s="3"><li class="you">Ert städbolag</li><li>Konkurrent AB</li><li>Städjätten</li></ol>
           </div>
           <ul class="pts"><li>Teknisk SEO</li><li>Innehåll som rankar</li><li>Lokal synlighet</li><li>Löpande optimering</li></ul>
-          <div class="price"><span class="f">Från</span><b>3 500 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Marknadsportal -->
@@ -903,14 +906,14 @@
           <div class="pn"><h3>Marknadsportal</h3><span class="pcat">Tilläggstjänster</span></div>
           <p class="plead">All marknadsföring samlad på ett ställe. Vi skapar, publicerar och optimerar åt er. Välj de tilläggstjänster ni vill ha.</p>
           <ul class="mrows">
-            <li><div class="t">Meta ads<small>Annonser på Facebook och Instagram.</small></div><ul class="pts"><li>Vi skapar annonserna</li><li>Publicering och löpande optimering</li></ul><div class="price"><b>1 500 kr</b><span class="u">/mån</span></div></li>
-            <li><div class="t">Nyhetsbrev<small>Utskick via mail och sms.</small></div><ul class="pts"><li><b>Segmentera</b> och nå rätt kunder</li><li>Kundbrev</li><li>Kampanjer</li><li><b>Grattis-sms</b> till kunder och personal</li></ul><div class="price"><b>1 000 kr</b><span class="u">/mån</span></div></li>
-            <li><div class="t">Content för Instagram<small>Innehåll till ert Instagramkonto.</small></div><ul class="pts"><li>Vi genererar inlägg åt er</li><li>Löpande, varje månad</li></ul><div class="price"><b>1 000 kr</b><span class="u">/mån</span></div></li>
+            <li><div class="t">Meta ads<small>Annonser på Facebook och Instagram.</small></div><ul class="pts"><li>Vi skapar annonserna</li><li>Publicering och löpande optimering</li></ul><div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div></li>
+            <li><div class="t">Nyhetsbrev<small>Utskick via mail och sms.</small></div><ul class="pts"><li><b>Segmentera</b> och nå rätt kunder</li><li>Kundbrev</li><li>Kampanjer</li><li><b>Grattis-sms</b> till kunder och personal</li></ul><div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div></li>
+            <li><div class="t">Content för Instagram<small>Innehåll till ert Instagramkonto.</small></div><ul class="pts"><li>Vi genererar inlägg åt er</li><li>Löpande, varje månad</li></ul><div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div></li>
           </ul>
         </article>
       </div>
 
-      <p class="pnote rv"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>Månadspriser, från-priser. Vi skräddarsyr en lösning och offert efter just er verksamhet — hör av er så räknar vi på det.</p>
+      <p class="pnote rv"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>Vi skräddarsyr en lösning och offert efter just er verksamhet — <a href="kontakt.html" data-book>skicka en förfrågan</a> så återkommer vi inom 24 timmar.</p>
     </div>
   </section>
 
@@ -1055,7 +1058,7 @@
       <div class="proc-grid" id="procGrid">
         <span class="proc-line" aria-hidden="true"><i id="procLine"></i></span>
         <div class="pstep rv"><span class="n">01</span><h3>Möte &amp; kartläggning</h3><p>Hur bokningar kommer in, hur ni svarar kunder, planerar schema och fakturerar. Kostnadsfritt.</p></div>
-        <div class="pstep rv"><span class="n">02</span><h3>Förslag &amp; fast pris</h3><p>En skriftlig plan med vad som görs först — och en offert efter just er verksamhet.</p></div>
+        <div class="pstep rv"><span class="n">02</span><h3>Förslag &amp; offert</h3><p>En skriftlig plan med vad som görs först — och en offert efter just er verksamhet.</p></div>
         <div class="pstep rv"><span class="n">03</span><h3>Vi bygger</h3><p>Ni ser allt löpande. Modulerna kopplas till ert affärssystem.</p></div>
         <div class="pstep rv"><span class="n">04</span><h3>Lansering &amp; support</h3><p>Varje fas ger effekt direkt — sedan bygger vi vidare steg för steg.</p></div>
       </div>
@@ -1074,8 +1077,8 @@
         <details class="rv"><summary>Används systemen på riktigt?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Ja. Vi kör vårt eget städbolag Stodona på dem, varje dag:</p><ul><li>Bokning och hemsidan stodona.se</li><li>Personalapp, feedback och fakturapåminnelser</li><li>Kundportal och rekrytering</li></ul></div></details>
         <details class="rv"><summary>Måste vi byta affärssystem?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Nej. Vi integrerar mot det ni redan använder — ni byter ingenting.</p><ul><li>Timewave, Tengella, Fortnox och Visma</li><li>+ allt med API</li></ul></div></details>
         <details class="rv"><summary>Måste vi ta alla moduler på en gång?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Nej. Varje modul fungerar på egen hand. Vi börjar där ni tappar mest tid och pengar idag och bygger vidare steg för steg.</p></div></details>
-        <details class="rv"><summary>Vad kostar det?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Varje modul har ett månadspris från — Bokis från 6 999 kr/mån och Chattis från 15 000 kr/mån (+ uppstartskostnad), övriga från 999 kr/mån. Vi skräddarsyr en lösning och offert efter just er verksamhet.</p></div></details>
-        <details class="rv"><summary>Vad kostar kartläggningen?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>0 kr. Ni får en skriftlig plan med vad som ska göras först och vad varje steg ger.</p></div></details>
+        <details class="rv"><summary>Vad kostar det?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Det beror på vilka moduler ni behöver och hur de ska kopplas till ert affärssystem. Vi skräddarsyr en lösning och ger en offert efter just er verksamhet – kostnadsfritt och utan förpliktelse.</p></div></details>
+        <details class="rv"><summary>Vad kostar kartläggningen?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Ingenting – kartläggningen är kostnadsfri. Ni får en skriftlig plan med vad som ska göras först och vad varje steg ger.</p></div></details>
         <details class="rv"><summary>Kan kunden få samma städare vid ombokning?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Ja. Chattis föreslår nya tider och kunden får samma städare om hen önskar. Den ser också om städaren har ett engångsuppdrag som en kollega kan ta.</p></div></details>
         <details class="rv"><summary>Vad händer om AI-arbetsledaren inte kan svara?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Då larmas en riktig arbetsledare direkt.</p></div></details>
       </div>
@@ -1111,7 +1114,7 @@
       <p>Vi börjar med en kostnadsfri kartläggning av hur ni jobbar idag.</p>
       <div class="cta-btns">
         <a class="btn btn-dark bigbtn" id="magnet" href="kontakt.html">Boka kostnadsfri kartläggning <span class="arr" aria-hidden="true">→</span></a>
-        <a class="btn btn-line bigbtn" href="#priser">Se tjänster &amp; priser</a>
+        <a class="btn btn-line bigbtn" href="#tjanster">Se tjänster &amp; moduler</a>
       </div>
     </div>
   </section>
@@ -1133,7 +1136,7 @@
         <p>Kela group AB<br>Stockholm</p>
       </div>
       <div class="f-col"><h3>Vad vi bygger</h3><a href="bygga-hemsida.html">Websites</a><a href="bygga-system.html">Systems</a><a href="bygga-automationer.html">Automation</a><a href="ai-agenter.html">AI</a><a href="bygga-app.html">Apps</a></div>
-      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Priser</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
+      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Få en offert</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
       <div class="f-col"><h3>Säg hej</h3><a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a><a href="kontakt.html">Boka ett möte</a></div>
     </div>
     <div class="f-bot"><span>© 2026 Kela group AB — Org.nr 559578-1971</span><span class="mono">Stockholm · hela Europa</span></div>
@@ -1340,6 +1343,6 @@
 })();
 </script>
 <script src="assets/chip-rail.js?v=1"></script>
-<script src="assets/boka-v1.js" defer></script>
+<script src="assets/boka-v2.js" defer></script>
 </body>
 </html>

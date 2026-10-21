@@ -8,17 +8,29 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#F3D3D7">
-<title>Kontakt – boka ett kostnadsfritt samtal | Kela group</title>
-<meta name="description" content="Redo att bygga? Boka ett kostnadsfritt samtal så tittar vi på er verksamhet och visar var system och AI sparar tid och pengar.">
+<title>Kontakt – skicka en förfrågan eller boka möte | Kela group</title>
+<meta name="description" content="Lämna namn, e-post, telefon, företag och önskemål så återkommer vi inom 24 timmar – med svar, förslag på möte eller en offert efter era behov.">
 <link rel="canonical" href="https://kelagroup.se/kontakt.html">
-<meta property="og:title" content="Kontakt – boka ett kostnadsfritt samtal | Kela group">
+<meta property="og:title" content="Kontakt – skicka en förfrågan eller boka möte | Kela group">
 <meta property="og:description" content="Boka ett kostnadsfritt samtal med Kela group. Vi bygger hemsidor, system och automation i hela Europa.">
 <meta property="og:type" content="website">
 <link rel="preload" href="assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/pop-v6.css">
 <link rel="stylesheet" href="assets/sub-v1.css">
-<link rel="stylesheet" href="assets/boka-v1.css">
+<link rel="stylesheet" href="assets/boka-v2.css">
 <link rel="stylesheet" href="assets/nav-v1.css">
+<style>
+.opt{text-transform:none;letter-spacing:0;opacity:.75;font-weight:500}
+.cf-how{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.cf-how legend{padding:0;margin:0 0 10px;font-size:.92rem;font-weight:600;color:var(--muted)}
+.cf-how label{position:relative;cursor:pointer}
+.cf-how input{position:absolute;opacity:0;width:1px;height:1px}
+.cf-how span{display:inline-flex;padding:10px 16px;border-radius:999px;background:var(--white);border:1.5px solid transparent;font-weight:600;font-size:.94rem;transition:background .2s,color .2s,border-color .2s}
+.cf-how label:hover span{border-color:var(--ink)}
+.cf-how input:checked+span{background:var(--ink);color:var(--white)}
+.cf-how input:focus-visible+span{outline:2px solid var(--ink);outline-offset:2px}
+#contactForm [aria-invalid="true"]{border-color:#b3261e}
+</style>
 </head>
 <body>
 
@@ -55,8 +67,8 @@
           </div>
         </div>
       </div>
-      <a href="priskalkylator.html">Priser</a>
       <a href="case.html">Case</a>
+      <a href="kontakt.html">Kontakt</a>
     </nav>
     <div class="nav-cta">
       <a class="btn btn-dark" href="kontakt.html" data-book>Boka möte <span class="arr" aria-hidden="true">→</span></a>
@@ -76,7 +88,6 @@
       <a href="bransch-stad.html">Städ & service</a><a href="bransch-skonhet.html">Skönhet & salong</a><a href="bransch-harstylist.html">Frisör & hårstylist</a><a href="bransch-makeup.html">Makeupartister</a><a href="bransch-frilans.html">Frilansare & konsulter</a><a href="bransch-brollop.html">Bröllop</a><a href="bransch-rekrytering.html">Rekrytering & personal</a>
     </div>
     <ul class="big">
-      <li><a href="priskalkylator.html">Priser</a></li>
       <li><a href="case.html">Case</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
     </ul>
@@ -92,7 +103,7 @@
       </nav>
       <span class="ph-kicker rv">Kontakt</span>
       <h1 class="rv d1">Låt oss bygga något ihop</h1>
-      <p class="ph-lead rv d2">Boka ett kostnadsfritt samtal så tittar vi på er verksamhet och visar konkret var rätt <a href="bygga-system.html">system</a> och <a href="bygga-automationer.html">automation</a> sparar tid och pengar. Vi svarar inom 24 timmar.</p>
+      <p class="ph-lead rv d2">Skicka en förfrågan eller boka ett kostnadsfritt samtal så tittar vi på er verksamhet och visar konkret var rätt <a href="bygga-system.html">system</a> och <a href="bygga-automationer.html">automation</a> sparar tid och pengar. Vi svarar inom 24 timmar.</p>
     </div>
   </section>
 
@@ -100,33 +111,38 @@
     <div class="wrap">
       <div class="contact-grid">
         <form class="form rv" id="contactForm" action="https://formspree.io/f/xojkdewo" method="POST" novalidate>
-          <input type="hidden" name="_subject" value="Ny förfrågan från kelagroup.se">
+          <input type="hidden" name="_subject" value="Ny förfrågan – Kontaktsidan – kelagroup.se">
+          <input type="hidden" name="sida" value="/kontakt.html">
           <div class="field">
-            <label for="cf-name">Namn</label>
+            <label for="cf-name">Namn *</label>
             <input id="cf-name" name="name" type="text" autocomplete="name" placeholder="För- och efternamn" required>
           </div>
           <div class="field">
-            <label for="cf-email">E-post</label>
+            <label for="cf-email">E-post *</label>
             <input id="cf-email" name="email" type="email" autocomplete="email" placeholder="du@företag.se" required>
           </div>
           <div class="field">
-            <label for="cf-topic">Vad gäller det?</label>
-            <input id="cf-topic" name="topic" type="text" list="cf-topics" placeholder="Hemsida, system, bokning, automation …">
-            <datalist id="cf-topics">
-              <option value="Bygga hemsida"></option>
-              <option value="Bygga system"></option>
-              <option value="Bokningssystem"></option>
-              <option value="Bygga automationer"></option>
-              <option value="Annat"></option>
-            </datalist>
+            <label for="cf-phone">Telefon <span class="opt">(valfritt)</span></label>
+            <input id="cf-phone" name="phone" type="tel" autocomplete="tel" placeholder="07x-xxx xx xx">
           </div>
           <div class="field">
-            <label for="cf-msg">Meddelande</label>
-            <textarea id="cf-msg" name="message" placeholder="Berätta kort om ditt projekt …" required></textarea>
+            <label for="cf-company">Företag <span class="opt">(valfritt)</span></label>
+            <input id="cf-company" name="company" type="text" autocomplete="organization" placeholder="Företagets namn">
           </div>
-          <button type="submit" class="btn btn-dark" id="cf-submit">Skicka <span class="arr" aria-hidden="true">→</span></button>
-          <p id="formOk" style="display:none; align-items:center; gap:10px; color:var(--accent); font-weight:600; margin:4px 0 0;">Tack! Vi återkommer inom 24 timmar.</p>
-          <p id="formErr" style="display:none; color:#c0392b; font-weight:500; margin:4px 0 0;">Något gick fel — mejla oss gärna direkt på <a href="mailto:mikaela.wigert@stodona.se">mikaela.wigert@stodona.se</a>.</p>
+          <div class="field">
+            <label for="cf-msg">Önskemål <span class="opt">(valfritt)</span></label>
+            <textarea id="cf-msg" name="message" placeholder="Berätta kort vad ni behöver – hemsida, system, bokning, automation …"></textarea>
+          </div>
+          <fieldset class="cf-how">
+            <legend>Hur vill du helst ha kontakt? <span class="opt">(valfritt)</span></legend>
+            <label><input type="radio" name="kontaktsatt" value="Videomöte"><span>Videomöte</span></label>
+            <label><input type="radio" name="kontaktsatt" value="Fysiskt möte"><span>Fysiskt möte</span></label>
+            <label><input type="radio" name="kontaktsatt" value="Ring mig"><span>Ring mig</span></label>
+          </fieldset>
+          <button type="submit" class="btn btn-dark" id="cf-submit">Skicka förfrågan <span class="arr" aria-hidden="true">→</span></button>
+          <p id="formInv" style="display:none; color:#b3261e; font-weight:600; margin:4px 0 0;" role="alert"></p>
+          <p id="formOk" style="display:none; align-items:center; gap:10px; color:var(--ink); font-weight:600; margin:4px 0 0;" role="status">Tack! Vi har fått din förfrågan och återkommer inom 24 timmar.</p>
+          <p id="formErr" style="display:none; color:#b3261e; font-weight:500; margin:4px 0 0;" role="alert">Något gick fel — mejla oss gärna direkt på <a href="mailto:mikaela.wigert@stodona.se">mikaela.wigert@stodona.se</a>.</p>
         </form>
 
         <aside class="contact-info rv d1">
@@ -144,7 +160,7 @@
           </div>
           <div class="ci-item">
             <h4>Utforska</h4>
-            <p><a href="tjanster.html">Våra tjänster</a> &middot; <a href="priskalkylator.html">Priser</a> &middot; <a href="case.html">Case</a></p>
+            <p><a href="tjanster.html">Våra tjänster</a> &middot; <a href="priskalkylator.html">Få en offert</a> &middot; <a href="case.html">Case</a></p>
           </div>
         </aside>
       </div>
@@ -168,14 +184,14 @@
         <p>Kela group AB<br>Stockholm</p>
       </div>
       <div class="f-col"><h3>Vad vi bygger</h3><a href="bygga-hemsida.html">Websites</a><a href="bygga-system.html">Systems</a><a href="bygga-automationer.html">Automation</a><a href="ai-agenter.html">AI</a><a href="bygga-app.html">Apps</a></div>
-      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Priser</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
+      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Få en offert</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
       <div class="f-col"><h3>Säg hej</h3><a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a><a href="kontakt.html">Boka ett möte</a></div>
     </div>
     <div class="f-bot"><span>© 2026 Kela group AB — Org.nr 559578-1971</span><span class="mono">Stockholm · hela Europa</span></div>
   </div>
 </footer>
 
-<script src="assets/sub-v1.js" defer></script>
-<script src="assets/boka-v1.js" defer></script>
+<script src="assets/sub-v2.js" defer></script>
+<script src="assets/boka-v2.js" defer></script>
 </body>
 </html>

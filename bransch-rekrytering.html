@@ -10,7 +10,7 @@
 <meta name="theme-color" content="#F3D3D7">
 <title>Rekrytering &amp; personal – rekryteringssystem, onboarding &amp; personalapp | Kela</title>
 <link rel="canonical" href="https://kelagroup.se/bransch-rekrytering.html">
-<meta name="description" content="Rekryteringssystem, onboarding, personalapp, interna utbildningar, personalundersökningar och offboarding – Kela bygger HR-flöden för företag med många anställda och timanställda. I drift hos Stodona. Rekryteringsverktyg från 1 500 kr/mån, personalapp från 1 999 kr/mån.">
+<meta name="description" content="Rekryteringssystem, onboarding, personalapp, interna utbildningar, personalundersökningar och offboarding – Kela bygger HR-flöden för företag med många anställda och timanställda. I drift hos Stodona. Offert efter era behov.">
 <link rel="preload" href="assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/pop-v6.css">
 <style>
@@ -95,6 +95,10 @@
 .price b{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.4vw,34px);letter-spacing:-.04em;line-height:1}
 .price .u{font-weight:700}
 .price .tm{font-weight:700;font-size:.95rem}
+.price .p-ask{display:inline-flex;align-items:center;gap:.45em;font-weight:700;font-size:1rem;color:inherit;text-decoration:none}
+.price .p-ask .arr{transition:transform .35s var(--bounce)}
+.price .p-ask:hover{text-decoration:underline;text-underline-offset:4px}
+.price .p-ask:hover .arr{transform:translateX(4px)}
 .split{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;align-items:start}
 .split>div:first-child{display:flex;flex-direction:column;gap:14px}
 .c-rek{grid-column:span 2;grid-row:span 2;background:var(--peach)}
@@ -297,7 +301,7 @@
   .hr-dev{transform:none!important}
 }
 </style>
-<link rel="stylesheet" href="assets/boka-v1.css">
+<link rel="stylesheet" href="assets/boka-v2.css">
 <link rel="stylesheet" href="assets/nav-v1.css">
 </head>
 <body>
@@ -334,8 +338,8 @@
           </div>
         </div>
       </div>
-      <a href="priskalkylator.html">Priser</a>
       <a href="case.html">Case</a>
+      <a href="kontakt.html">Kontakt</a>
     </nav>
     <div class="nav-cta">
       <a class="btn btn-dark" href="kontakt.html" data-book>Boka möte <span class="arr" aria-hidden="true">→</span></a>
@@ -355,7 +359,6 @@
       <a href="bransch-stad.html">Städ & service</a><a href="bransch-skonhet.html">Skönhet & salong</a><a href="bransch-harstylist.html">Frisör & hårstylist</a><a href="bransch-makeup.html">Makeupartister</a><a href="bransch-frilans.html">Frilansare & konsulter</a><a href="bransch-brollop.html">Bröllop</a><a href="bransch-rekrytering.html">Rekrytering &amp; personal</a>
     </div>
     <ul class="big">
-      <li><a href="priskalkylator.html">Priser</a></li>
       <li><a href="case.html">Case</a></li>
       <li><a href="kontakt.html">Kontakt</a></li>
     </ul>
@@ -462,7 +465,7 @@
     <div class="wrap">
       <div class="head">
         <div>
-          <span class="kicker">Lösningar &amp; priser</span>
+          <span class="kicker">Lösningar</span>
           <h2 class="h2 rv" id="mod-h">Allt kring er<br>personal, i ett flöde.</h2>
         </div>
         <p class="lead rv">Två färdiga system som redan körs skarpt – plus de delar vi bygger skräddarsytt efter hur just ni anställer, utbildar och tar hand om er personal.</p>
@@ -486,7 +489,7 @@
             <div class="note" data-s="6">Välkomstmail och onboarding skickat</div>
           </div>
           <ul class="pts"><li><b>Kandidatbank</b> – bra sökande sparas till nästa gång</li><li><b>Automatisk återkoppling</b> till alla sökande</li><li>Tydligt flöde: Ansökt → Intervju → Erbjudande → Anställd</li><li><b>Onboarding</b> av nyanställda ingår</li><li>Kopplas till er egen jobbsida</li></ul>
-          <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Personalapp -->
@@ -507,7 +510,7 @@
               </div>
             </div>
           </div>
-          <div class="price"><span class="f">Från</span><b>1 999 kr</b><span class="u">/mån</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Onboarding -->
@@ -550,7 +553,7 @@
               <div class="note" data-s="5">Tack! Ditt svar är skickat</div>
             </div>
           </div>
-          <div class="price"><span class="f">Pris</span><span class="tm">Offert efter era behov</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Interna utbildningar -->
@@ -568,7 +571,7 @@
               <ul class="pts"><li>Lektioner på ett par minuter, ett moment i taget</li><li>Flera språk – personalen väljer själv</li><li>Badges och diplom när modulen är klar</li></ul>
             </div>
           </div>
-          <div class="price"><span class="f">Pris</span><span class="tm">Offert efter era behov</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
 
         <!-- Övrig HR -->
@@ -578,11 +581,11 @@
           <p class="plead">Resten av HR-vardagen, byggd in i samma app. Det här finns till exempel i Stodonas personalapp:</p>
           <ul class="tags"><li>Schema</li><li>Anmäl frånvaro &amp; VAB</li><li>Ansök om ledighet</li><li>Lönespecifikationer</li><li>Intranät &amp; nyheter</li><li>Personalhandbok</li><li>Beställ material</li><li>Jobba extra</li><li>Kundfeedback till personalen</li><li>Språkval</li></ul>
           <ul class="pts"><li>Kopplas via API till de system ni redan har</li><li>Vi bygger det ni behöver – inget mer</li></ul>
-          <div class="price"><span class="f">Pris</span><span class="tm">Offert efter era behov</span></div>
+          <div class="price"><a class="p-ask" href="kontakt.html" data-book>Få en offert <span class="arr" aria-hidden="true">→</span></a></div>
         </article>
       </div>
 
-      <p class="pnote rv"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>Månadspriser, från-priser. Onboarding ingår i rekryteringsverktyget. Offboarding, personalundersökningar, interna utbildningar och övriga HR-flöden bygger vi skräddarsytt – hör av er så räknar vi på det.</p>
+      <p class="pnote rv"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>Onboarding ingår i rekryteringsverktyget. Offboarding, personalundersökningar, interna utbildningar och övriga HR-flöden bygger vi skräddarsytt – <a href="kontakt.html" data-book>skicka en förfrågan</a> så får ni en offert efter era behov.</p>
     </div>
   </section>
 
@@ -692,7 +695,7 @@
       <div class="proc-grid" id="procGrid">
         <span class="proc-line" aria-hidden="true"><i id="procLine"></i></span>
         <div class="pstep rv"><span class="n">01</span><h3>Möte &amp; kartläggning</h3><p>Hur ni rekryterar, skolar in, schemalägger och följer upp personalen idag – och var tiden försvinner.</p></div>
-        <div class="pstep rv"><span class="n">02</span><h3>Förslag &amp; fast pris</h3><p>Vad som görs först och vad det kostar. Börja med rekrytering eller personalapp och bygg vidare.</p></div>
+        <div class="pstep rv"><span class="n">02</span><h3>Förslag &amp; offert</h3><p>Vad som görs först och en offert efter era behov. Börja med rekrytering eller personalapp och bygg vidare.</p></div>
         <div class="pstep rv"><span class="n">03</span><h3>Vi bygger</h3><p>Ni ser allt löpande. Allt kopplas till de system ni redan använder.</p></div>
         <div class="pstep rv"><span class="n">04</span><h3>Lansering &amp; support</h3><p>Vi hjälper er igång med personalen – och finns kvar när ni vill bygga vidare.</p></div>
       </div>
@@ -709,7 +712,7 @@
       </div>
       <div class="faqs">
         <details class="rv"><summary>Används systemen på riktigt?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Ja. Rekryteringsverktyget och personalappen körs varje dag hos Stodona, Kelas eget städbolag:</p><ul><li>Lediga jobb och ansökningar via stodona.se</li><li>GPS-incheck, kvalitetskontroll och AI-arbetsledare i personalappen</li></ul></div></details>
-        <details class="rv"><summary>Vad kostar det?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Rekryteringsverktyget från 1 500 kr/mån och personalappen från 1 999 kr/mån. Offboarding, personalundersökningar, interna utbildningar och övriga HR-flöden bygger vi skräddarsytt och ger en offert efter era behov.</p></div></details>
+        <details class="rv"><summary>Vad kostar det?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Det beror på vilka delar ni behöver. Rekryteringsverktyget och personalappen finns färdiga, och offboarding, personalundersökningar, interna utbildningar och övriga HR-flöden bygger vi skräddarsytt. Ni får alltid en offert efter era behov – kostnadsfritt och utan förpliktelse.</p></div></details>
         <details class="rv"><summary>Ingår onboarding?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Ja, onboarding av nyanställda ingår i rekryteringsverktyget. Vi sätter upp checklistan efter hur ni tar emot nya medarbetare.</p></div></details>
         <details class="rv"><summary>Passar det för timanställda och personal ute på fältet?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Det är just dem det är byggt för. Allt sker i mobilen:</p><ul><li>In- och utcheck med GPS</li><li>Tid- och materialrapport</li><li>Frågor till AI-arbetsledaren i stället för samtal till kontoret</li></ul></div></details>
         <details class="rv"><summary>Vad händer om AI-arbetsledaren inte kan svara?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Då larmas en riktig arbetsledare direkt. AI:n svarar på ca 95 % av frågorna – resten går vidare till en människa.</p></div></details>
@@ -748,7 +751,7 @@
       <p>Vi börjar med en kostnadsfri kartläggning av hur ni rekryterar och tar hand om personalen idag.</p>
       <div class="cta-btns">
         <a class="btn btn-dark bigbtn" id="magnet" href="kontakt.html">Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
-        <a class="btn btn-line bigbtn" href="#losningar">Se lösningar &amp; priser</a>
+        <a class="btn btn-line bigbtn" href="#losningar">Se lösningar</a>
       </div>
     </div>
   </section>
@@ -770,7 +773,7 @@
         <p>Kela group AB<br>Stockholm</p>
       </div>
       <div class="f-col"><h3>Vad vi bygger</h3><a href="bygga-hemsida.html">Websites</a><a href="bygga-system.html">Systems</a><a href="bygga-automationer.html">Automation</a><a href="ai-agenter.html">AI</a><a href="bygga-app.html">Apps</a></div>
-      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Priser</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
+      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Få en offert</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
       <div class="f-col"><h3>Säg hej</h3><a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a><a href="kontakt.html">Boka ett möte</a></div>
     </div>
     <div class="f-bot"><span>© 2026 Kela group AB — Org.nr 559578-1971</span><span class="mono">Stockholm · hela Europa</span></div>
@@ -934,6 +937,6 @@
 })();
 </script>
 <script src="assets/chip-rail.js?v=1"></script>
-<script src="assets/boka-v1.js" defer></script>
+<script src="assets/boka-v2.js" defer></script>
 </body>
 </html>
