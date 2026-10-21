@@ -419,3 +419,33 @@ a:hover>.save-card .sc-link .arr{transform:translateX(4px)}
 .page-hero+section{padding-top:clamp(40px,5vw,72px)!important}
 /* Priskalkylatorn: chattknappen ovanför mobilens prisbar */
 @media (max-width:900px){.pk-bar~.kchat-btn{bottom:92px}}
+
+/* ---------- Boka möte-ruta ---------- */
+.bm-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(46,12,18,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s}
+.bm-overlay.open{opacity:1}
+.bm-overlay[hidden]{display:none}
+.bm-modal{position:relative;width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--white);color:var(--ink);border-radius:var(--r-l);padding:clamp(28px,4vw,44px);box-shadow:0 50px 100px -30px rgba(46,12,18,.55);transform:translateY(16px) scale(.98);transition:transform .4s var(--bounce)}
+.bm-overlay.open .bm-modal{transform:none}
+.bm-close{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;border:0;background:var(--lav-soft);color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s}
+.bm-close:hover{background:var(--ink);color:var(--white)}
+.bm-modal .kicker{margin-bottom:14px}
+.bm-modal h3{font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;line-height:.98;margin-bottom:10px;padding-right:40px}
+.bm-sub{color:var(--muted);margin-bottom:24px}
+.bm-choices{display:grid;gap:12px}
+@media (min-width:480px){.bm-choices{grid-template-columns:1fr 1fr}}
+.bm-choice{text-align:left;font:inherit;color:var(--ink);background:var(--lav-soft);border:0;border-radius:var(--r-m);padding:22px 20px;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:background .3s,color .3s,transform .4s var(--bounce)}
+.bm-choice:nth-child(2){background:var(--butter)}
+.bm-choice:hover,.bm-choice:focus-visible{background:var(--ink);color:var(--white);transform:translateY(-3px)}
+.bm-choice .bm-ic{width:48px;height:48px;border-radius:50%;background:var(--white);color:var(--ink);display:grid;place-items:center;margin-bottom:10px}
+.bm-choice:hover .bm-ic{background:var(--lav)}
+.bm-choice .bm-ct{font-family:var(--display);font-size:1.3rem;letter-spacing:-.03em}
+.bm-choice .bm-cd{font-size:.9rem;opacity:.75;line-height:1.4}
+.bm-back{background:none;border:0;color:var(--muted);font:600 .9rem/1 var(--sans);cursor:pointer;padding:0;margin:0 0 18px;display:flex;align-items:center;gap:6px}
+.bm-back:hover{color:var(--ink)}
+.bm-modal .form{background:none;padding:0;border-radius:0;margin-top:6px}
+.bm-modal .field input,.bm-modal .field textarea{background:var(--lav-soft)}
+.bm-modal .field textarea{min-height:110px}
+.bm-err{color:#c0392b;font-weight:500}
+.bm-done{text-align:center;padding:10px 0}
+.bm-done .bm-check{width:64px;height:64px;border-radius:50%;background:var(--lav);color:var(--ink);display:grid;place-items:center;margin:0 auto 18px}
+.bm-done .btn{margin-top:18px}
