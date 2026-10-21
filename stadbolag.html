@@ -277,6 +277,7 @@
 .dp-result .note{position:relative;display:block;margin-top:14px;font-size:13px;color:rgba(255,255,255,.75);}
 @media(prefers-reduced-motion:reduce){.dp-head h2 em,.dp-track li::before{animation:none;}.dp-track::after{transition:none;width:80%;}}
 </style>
+<link rel="stylesheet" href="assets/boka-v1.css">
 <link rel="stylesheet" href="assets/nav-v1.css">
 </head>
 <body>
@@ -318,7 +319,7 @@
       <a href="case.html">Case</a>
     </nav>
     <div class="nav-cta">
-      <a class="btn btn-dark" href="kontakt.html">Kontakt <span class="arr" aria-hidden="true">→</span></a>
+      <a class="btn btn-dark" href="kontakt.html" data-book>Boka möte <span class="arr" aria-hidden="true">→</span></a>
       <button class="burger" id="burger" aria-expanded="false" aria-controls="mmenu" aria-label="Öppna meny"><span></span><span></span></button>
     </div>
   </div>
@@ -751,6 +752,7 @@
 </footer>
 
 <script src="assets/sub-v1.js" defer></script>
+<script src="assets/boka-v1.js" defer></script>
 <script>
 /* Levande demos: stegar igenom [data-s]/[data-e]/[data-sel] när de syns */
 (function(){

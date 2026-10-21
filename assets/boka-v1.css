@@ -1,0 +1,66 @@
+/* Kela – "Boka möte"-ruta + Boka-knapp som alltid syns (hör ihop med boka-v1.js) */
+
+/* ---------- Boka-knapp ---------- */
+.bk-sticky{position:fixed;left:20px;bottom:20px;z-index:84;display:inline-flex;align-items:center;gap:10px;padding:16px 24px 16px 20px;border-radius:999px;background:var(--ink);color:var(--white);text-decoration:none;font:700 1rem/1.1 var(--sans);box-shadow:0 18px 40px -14px rgba(46,12,18,.6),0 0 0 1.5px rgba(255,255,255,.45);opacity:0;visibility:hidden;transform:translateY(24px);transition:opacity .35s,transform .45s var(--bounce),visibility 0s .35s,background .25s}
+.bk-sticky.on{opacity:1;visibility:visible;transform:none;transition:opacity .35s,transform .45s var(--bounce),background .25s}
+.bk-sticky:hover{background:var(--ink-2)}
+.bk-sticky .bk-dot{width:10px;height:10px;border-radius:50%;background:var(--lav);box-shadow:0 0 0 0 rgba(243,211,215,.8);animation:bkping 1.8s infinite;flex:none}
+.bk-sticky .bk-s{font-weight:500;font-size:.8rem;opacity:.7}
+.bk-sticky .arr{transition:transform .35s var(--bounce)}
+.bk-sticky:hover .arr{transform:translateX(4px)}
+.bk-sticky.booked{display:none}
+@keyframes bkping{to{box-shadow:0 0 0 10px rgba(243,211,215,0)}}
+@media (max-width:640px){
+  .bk-sticky{left:12px;right:12px;bottom:12px;justify-content:center;padding:17px 20px;font-size:1.05rem}
+  .bk-sticky .bk-s{display:none}
+  html.bk-on .kchat-btn{bottom:84px}
+}
+@media (max-width:900px){html.has-pkbar .bk-sticky{display:none}}
+@media (prefers-reduced-motion:reduce){.bk-sticky .bk-dot{animation:none}}
+
+/* ---------- Bokningsruta ---------- */
+.bm-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(46,12,18,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .25s}
+.bm-overlay.open{opacity:1}
+.bm-overlay[hidden]{display:none}
+.bm-modal{position:relative;width:100%;max-width:600px;max-height:92vh;overflow:auto;background:var(--white);color:var(--ink);border-radius:32px;padding:clamp(26px,4vw,44px);box-shadow:0 50px 100px -30px rgba(46,12,18,.55);transform:translateY(16px) scale(.98);transition:transform .4s var(--bounce);font-family:var(--sans)}
+.bm-overlay.open .bm-modal{transform:none}
+.bm-modal.wide{max-width:860px}
+.bm-close{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;border:0;background:var(--lav-soft);color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background .2s,color .2s}
+.bm-close:hover{background:var(--ink);color:var(--white)}
+.bm-kick{display:inline-flex;align-items:center;gap:.55em;font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:14px}
+.bm-kick::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.bm-modal h3{font-family:var(--display);font-weight:400;font-size:clamp(28px,4vw,42px);letter-spacing:-.045em;line-height:.98;margin:0 0 10px;padding-right:40px}
+.bm-sub{color:var(--muted);margin:0 0 22px}
+.bm-choices{display:grid;gap:10px}
+@media (min-width:520px){.bm-choices{grid-template-columns:repeat(3,1fr)}}
+.bm-choice{text-align:left;font:inherit;color:var(--ink);background:var(--lav-soft);border:0;border-radius:24px;padding:20px 18px;cursor:pointer;display:flex;flex-direction:column;gap:5px;transition:background .3s,color .3s,transform .4s var(--bounce)}
+.bm-choice:nth-child(2){background:var(--butter)}
+.bm-choice:nth-child(3){background:var(--peach)}
+.bm-choice:hover,.bm-choice:focus-visible{background:var(--ink);color:var(--white);transform:translateY(-3px)}
+.bm-choice .bm-ic{width:46px;height:46px;border-radius:50%;background:var(--white);color:var(--ink);display:grid;place-items:center;margin-bottom:8px}
+.bm-choice:hover .bm-ic,.bm-choice:focus-visible .bm-ic{background:var(--lav)}
+.bm-choice .bm-ct{font-family:var(--display);font-size:1.2rem;letter-spacing:-.03em}
+.bm-choice .bm-cd{font-size:.86rem;opacity:.75;line-height:1.35}
+@media (max-width:519px){.bm-choice{flex-direction:row;align-items:center;gap:12px;padding:14px 16px;flex-wrap:wrap}.bm-choice .bm-ic{margin:0}.bm-choice .bm-cd{flex-basis:100%;padding-left:58px;margin-top:-8px}}
+.bm-trust{list-style:none;display:flex;flex-wrap:wrap;gap:6px 16px;margin:20px 0 0;padding:0;font-size:.84rem;font-weight:600;color:var(--muted)}
+.bm-trust li::before{content:"✓";margin-right:6px;color:var(--ink)}
+.bm-back{background:none;border:0;color:var(--muted);font:600 .9rem/1 var(--sans);cursor:pointer;padding:0;margin:0 0 18px;display:flex;align-items:center;gap:6px}
+.bm-back:hover{color:var(--ink)}
+.bm-form{display:grid;gap:14px;margin-top:8px}
+.bm-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:519px){.bm-row{grid-template-columns:1fr}}
+.bm-field{display:grid;gap:7px}
+.bm-field label{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.bm-field label i{font-style:normal;text-transform:none;letter-spacing:0;opacity:.8}
+.bm-field input,.bm-field textarea{width:100%;padding:15px 18px;border:1.5px solid transparent;border-radius:18px;background:var(--lav-soft);color:var(--ink);font:inherit;font-size:1rem;transition:border-color .2s,box-shadow .2s}
+.bm-field textarea{resize:vertical;min-height:84px}
+.bm-field input:focus,.bm-field textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 4px rgba(92,26,38,.08);background:var(--white)}
+.bm-submit{justify-content:center;cursor:pointer;font-size:1.05rem;padding:1.1em 1.6em;margin-top:4px}
+.bm-err{color:#c0392b;font-weight:500;margin:0}
+.bm-done{text-align:center;padding:10px 0}
+.bm-done .bm-check{width:64px;height:64px;border-radius:50%;background:var(--lav);color:var(--ink);display:grid;place-items:center;margin:0 auto 18px}
+.bm-done h3{padding:0}
+.bm-done .btn{margin-top:6px;cursor:pointer}
+.bm-cal iframe{display:block;width:100%;height:min(640px,70vh);border:0;border-radius:24px;background:var(--lav-soft)}
+.bm-alt{margin-top:14px;color:var(--muted);font-size:.92rem}
+.bm-link{background:none;border:0;padding:0;font:inherit;font-weight:700;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
