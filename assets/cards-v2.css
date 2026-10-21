@@ -1,0 +1,35 @@
+/* =========================================================
+   cards-v2.css – tillägg till cards-v1.css (laddas direkt efter).
+   Kort 02: VB FAST adminpanel (felanmälningar). Endast pop-v6-variabler.
+   ========================================================= */
+
+/* Exempeletikett i kortets text */
+.scard .sc-ex{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--muted);text-transform:uppercase}
+
+/* Logga i sidomenyn färgas vit */
+.sv .vb-flood{flood-color:var(--white)}
+
+/* Grundläge (även utan rörelse): status "Ny" syns, "Pågående" dold */
+.cv-vbs2{opacity:0}
+.cv-vbn{transform-origin:center}
+
+/* Animation när kortet är i bild: ny rad glider in, notis dyker upp, Ny → Pågående */
+.scard.on .cv-vbrow{animation:cv-vbrow 8s var(--bounce) infinite}
+.scard.on .cv-vbbg{animation:cv-vbbg 8s infinite}
+.scard.on .cv-vbt{animation:cv-vbt 8s var(--bounce) infinite}
+.scard.on .cv-vbs1{animation:cv-vbs1 8s infinite}
+.scard.on .cv-vbs2{animation:cv-vbs2 8s infinite}
+.scard.on .cv-vbn{animation:cv-vbn 8s var(--bounce) infinite}
+@keyframes cv-vbrow{0%{transform:translateY(-14px);opacity:0}8%,94%{transform:none;opacity:1}100%{opacity:0}}
+@keyframes cv-vbbg{0%,45%{opacity:1}70%,100%{opacity:0}}
+@keyframes cv-vbt{0%,10%{transform:translateY(18px);opacity:0}16%,58%{transform:none;opacity:1}66%,100%{transform:translateY(18px);opacity:0}}
+@keyframes cv-vbs1{0%,50%{opacity:1}55%,100%{opacity:0}}
+@keyframes cv-vbs2{0%,50%{opacity:0}55%,94%{opacity:1}100%{opacity:0}}
+@keyframes cv-vbn{0%,8%{transform:scale(1)}13%{transform:scale(1.35)}18%,100%{transform:scale(1)}}
+
+@media (max-width:640px){
+  .scard .sc-ex{font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){
+  .cv-vbs2{opacity:0}
+}
