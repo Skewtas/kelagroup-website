@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="sv" data-pal="rosavin">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Makeupartister – system, bokning &amp; hemsida | Kela</title>
+<link rel="canonical" href="https://kelagroup.se/bransch-makeup.html">
+<meta name="description" content="Portfolio-hemsida, förfrågningsformulär med lediga bröllopsdatum, offert för brudfölje, handpenning, påminnelser och recensioner – byggt för makeupartister av Kela.">
+<link rel="preload" href="assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/pop.css?v=2">
+<style>
+/* ---------- Hero ---------- */
+.hero-lead{max-width:560px;margin:18px auto 0;font-size:clamp(17px,1.4vw,20px);opacity:0;animation:fadeup .8s var(--ease) .5s forwards}
+.hero-sub{margin-top:22px}
+.mk{position:relative;max-width:1040px;margin:0 auto;display:grid;grid-template-columns:300px 1fr;gap:clamp(20px,3vw,40px);align-items:center;background:var(--lav-soft);border-radius:var(--r-xl);padding:clamp(22px,3.4vw,48px);box-shadow:0 40px 80px -30px rgba(20,20,18,.45);transform:scale(.9);transform-origin:50% 20%;will-change:transform;color:var(--ink)}
+/* Telefon med portfolio */
+.pf{width:100%;max-width:300px;justify-self:center;background:var(--ink);border-radius:40px;padding:10px;box-shadow:0 30px 60px -28px rgba(0,0,0,.55)}
+.pf-scr{background:var(--white);border-radius:31px;overflow:hidden;font-size:.78rem}
+.pf-top{display:flex;justify-content:space-between;align-items:center;padding:16px 16px 10px}
+.pf-top b{font-family:var(--display);font-weight:400;font-size:.95rem;letter-spacing:-.02em}
+.pf-top span{font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pf-hero{margin:0 10px;border-radius:20px;background:var(--lav);padding:22px 16px 18px;position:relative;overflow:hidden}
+.pf-hero::after{content:"";position:absolute;width:120px;height:120px;border-radius:50%;background:var(--lav-2);right:-34px;top:-40px}
+.pf-hero h4{position:relative;z-index:1;font-size:1.35rem;letter-spacing:-.04em;line-height:1;color:var(--on-lav)}
+.pf-hero p{position:relative;z-index:1;margin-top:6px;font-size:.7rem;color:var(--on-lav);opacity:.8}
+.pf-tabs{display:flex;gap:5px;padding:12px 10px 8px}
+.pf-tabs span{border-radius:999px;padding:5px 10px;font-weight:700;font-size:.64rem;background:var(--bone)}
+.pf-tabs span:first-child{background:var(--ink);color:var(--white)}
+.pf-gal{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;padding:0 10px}
+.pf-gal i{aspect-ratio:3/4;border-radius:10px;background:var(--peach)}
+.pf-gal i:nth-child(2){background:var(--butter)}.pf-gal i:nth-child(3){background:var(--lav-2)}.pf-gal i:nth-child(4){background:var(--lav)}.pf-gal i:nth-child(5){background:var(--peach)}.pf-gal i:nth-child(6){background:var(--butter)}
+.pf-btn{margin:12px 10px 14px;display:block;text-align:center;background:var(--ink);color:var(--white);border-radius:999px;padding:11px;font-weight:700;font-size:.74rem}
+/* Kalender-panel */
+.cal{background:var(--white);border-radius:var(--r-l);padding:clamp(18px,2.4vw,28px);box-shadow:0 20px 50px -30px rgba(20,20,18,.35)}
+.cal-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:16px}
+.cal-h .lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cal-h h3{font-size:clamp(24px,2.6vw,36px);letter-spacing:-.045em;margin-top:4px}
+.leg{display:flex;gap:10px;flex-wrap:wrap;font-size:.72rem;font-weight:600;color:var(--muted)}
+.leg span{display:inline-flex;align-items:center;gap:5px}
+.leg span::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--bone);box-shadow:inset 0 0 0 1px var(--line)}
+.leg .l-bk::before{background:var(--ink);box-shadow:none}
+.leg .l-rq::before{background:var(--lav);box-shadow:none}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;font-weight:700;font-size:.82rem;text-align:center}
+.days b{font-family:var(--mono);font-weight:400;font-size:.62rem;letter-spacing:.06em;color:var(--muted);padding-bottom:4px}
+.days i{font-style:normal;height:clamp(30px,3.2vw,42px);display:grid;place-items:center;border-radius:999px;background:var(--bone)}
+.days i.e{background:none}
+.days i.sat{box-shadow:inset 0 0 0 1.5px var(--ink)}
+.days i.bk{background:var(--ink);color:var(--white);box-shadow:none}
+.days i.rq{background:var(--lav);color:var(--on-lav);box-shadow:none;animation:rq 1.8s infinite}
+@keyframes rq{0%{box-shadow:0 0 0 0 var(--lav-2)}100%{box-shadow:0 0 0 9px rgba(255,255,255,0)}}
+.req{margin-top:16px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--lav-soft);border-radius:20px;padding:14px 16px}
+.req b{display:block;font-size:.92rem}
+.req span{display:block;font-size:.76rem;color:var(--muted);line-height:1.4}
+.req em{font-style:normal;background:var(--ink);color:var(--white);border-radius:999px;padding:.6em 1em;font-weight:700;font-size:.74rem;white-space:nowrap}
+
+/* ---------- Känner ni igen er ---------- */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;list-style:none;margin:0;padding:0}
+.pain{width:100%;height:100%;text-align:left;display:flex;flex-direction:column;gap:14px;background:var(--bone);color:var(--ink);border:0;border-radius:var(--r-m);padding:24px;font:inherit;cursor:pointer;transition:background .35s var(--ease),color .35s,transform .5s var(--bounce)}
+.pain:hover{transform:translateY(-3px)}
+.pain .pi{width:44px;height:44px;border-radius:50%;background:var(--white);display:grid;place-items:center;transition:background .35s}
+.pain b{font-family:var(--display);font-weight:400;font-size:clamp(20px,1.7vw,24px);letter-spacing:-.035em;line-height:1.05}
+.pain span.t{font-size:.93rem;line-height:1.45;color:var(--muted);transition:color .35s}
+.pain .ok{margin-top:auto;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
+.pain .ok::before{content:"○ ";}
+.pain[aria-pressed="true"]{background:var(--ink);color:var(--white)}
+.pain[aria-pressed="true"] .pi{background:var(--lav);color:var(--on-lav)}
+.pain[aria-pressed="true"] span.t{color:rgba(255,255,255,.75)}
+.pain[aria-pressed="true"] .ok{opacity:1}
+.pain[aria-pressed="true"] .ok::before{content:"● ";}
+.pain-foot{margin-top:28px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.pain-foot p{font-family:var(--display);font-size:clamp(20px,2vw,28px);letter-spacing:-.03em;color:var(--muted);transition:color .3s}
+.pain-foot p.lit{color:var(--ink)}
+
+/* ---------- Lösningar: bento ---------- */
+.card ul.pts{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:.9rem}
+.card ul.pts li{display:flex;gap:8px;line-height:1.35}
+.card ul.pts li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:currentColor;margin-top:.5em;opacity:.7}
+.c-port{grid-column:span 2;grid-row:span 2;background:var(--peach)}
+.c-port h3{font-size:clamp(36px,3.8vw,60px)}
+.c-port .pts{font-size:.98rem;max-width:44ch}
+.c-form{background:var(--white);box-shadow:inset 0 0 0 1px var(--line)}
+.c-quote{background:var(--butter)}
+.c-dep{background:var(--lav-soft)}
+.c-travel{background:var(--bone)}
+.c-ai{grid-column:span 2;background:var(--ink);color:var(--white)}
+.c-ai .ico{background:var(--lav);color:var(--on-lav)}
+.c-rem{background:var(--pink);box-shadow:inset 0 0 0 1px var(--line)}
+.c-rev{background:var(--butter)}
+.c-course{grid-column:span 2;background:var(--lav);color:var(--on-lav)}
+.c-course .ico{color:var(--ink)}
+.c-seen{grid-column:span 2;background:var(--bone)}
+/* mini-UI gemensamt */
+.mu{background:var(--white);color:var(--ink);border-radius:20px;padding:14px;font-size:.78rem;box-shadow:0 18px 40px -28px rgba(20,20,18,.4)}
+.mu .row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:var(--bone);margin-top:6px;font-weight:600}
+.mu .row:first-child{margin-top:0}
+.mu .row small{font-family:var(--mono);font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.pop{display:inline-flex;align-items:center;gap:6px;background:var(--ink);color:var(--white);border-radius:999px;padding:.55em 1em;font-weight:700;font-size:.76rem;margin-top:10px;transform:scale(.6);opacity:0;transition:transform .5s var(--bounce) .35s,opacity .3s .35s}
+.play .pop,.card:hover .pop{transform:none;opacity:1}
+.ck{opacity:0;transform:translateX(-10px);transition:opacity .45s var(--ease),transform .5s var(--bounce)}
+.play .ck{opacity:1;transform:none}
+.play .ck:nth-child(2){transition-delay:.12s}.play .ck:nth-child(3){transition-delay:.24s}.play .ck:nth-child(4){transition-delay:.36s}
+/* portfolio-galleri i kortet */
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.gal i{position:relative;aspect-ratio:1;border-radius:16px;background:var(--white);overflow:hidden;transform:translateY(14px);opacity:0;transition:transform .7s var(--bounce),opacity .5s var(--ease)}
+.gal i::after{content:attr(data-t);position:absolute;left:8px;bottom:8px;background:var(--white);border-radius:999px;padding:3px 8px;font-style:normal;font-weight:700;font-size:.62rem}
+.gal i:nth-child(1){background:var(--lav)}.gal i:nth-child(2){background:var(--butter)}.gal i:nth-child(3){background:var(--lav-2)}.gal i:nth-child(4){background:var(--pink)}.gal i:nth-child(5){background:var(--lav-soft)}.gal i:nth-child(6){background:var(--lav)}
+.play .gal i{transform:none;opacity:1}
+.play .gal i:nth-child(2){transition-delay:.08s}.play .gal i:nth-child(3){transition-delay:.16s}.play .gal i:nth-child(4){transition-delay:.24s}.play .gal i:nth-child(5){transition-delay:.32s}.play .gal i:nth-child(6){transition-delay:.4s}
+.port-row{display:flex;flex-direction:column;justify-content:space-between;gap:24px;height:100%}
+.port-row>div:first-child{display:flex;flex-direction:column;gap:14px}
+/* handpenning */
+.dep-bar{height:10px;border-radius:999px;background:var(--bone);overflow:hidden;margin:10px 0 6px}
+.dep-bar i{display:block;height:100%;width:0;background:var(--ink);border-radius:999px;transition:width 1.1s var(--ease) .2s}
+.play .dep-bar i{width:35%}
+.dep-l{display:flex;justify-content:space-between;font-size:.68rem;font-weight:600;color:var(--muted)}
+/* resa */
+.route{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.72rem}
+.route .pt{width:12px;height:12px;border-radius:50%;background:var(--ink);flex:none}
+.route .pt.b{background:var(--white);box-shadow:inset 0 0 0 3px var(--ink)}
+.route .ln{flex:1;height:3px;border-radius:3px;background:repeating-linear-gradient(90deg,var(--ink) 0 6px,transparent 6px 11px);clip-path:inset(0 100% 0 0);transition:clip-path 1.1s var(--ease) .15s}
+.play .route .ln{clip-path:inset(0 0 0 0)}
+/* sms */
+.sms{display:grid;gap:6px}
+.sms span{justify-self:start;max-width:92%;background:var(--white);border-radius:16px 16px 16px 4px;padding:8px 11px;font-size:.76rem;line-height:1.35;box-shadow:0 8px 20px -14px rgba(20,20,18,.4);opacity:0;transform:translateY(8px);transition:opacity .45s var(--ease),transform .5s var(--bounce)}
+.sms span small{display:block;font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.play .sms span{opacity:1;transform:none}.play .sms span:nth-child(2){transition-delay:.3s}
+/* chatt */
+.chat{display:grid;gap:8px;background:var(--ink-2);border-radius:20px;padding:14px;font-size:.8rem;line-height:1.4}
+.chat span{max-width:88%;padding:9px 12px;border-radius:16px;opacity:0;transform:translateY(8px);transition:opacity .45s var(--ease),transform .5s var(--bounce)}
+.chat .u{justify-self:end;background:var(--white);color:var(--ink);border-bottom-right-radius:4px}
+.chat .a{justify-self:start;background:var(--lav);color:var(--on-lav);border-bottom-left-radius:4px}
+.play .chat span{opacity:1;transform:none}.play .chat span:nth-child(2){transition-delay:.5s}.play .chat span:nth-child(3){transition-delay:1s}
+/* kurser */
+.seats{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}
+.seats i{width:22px;height:22px;border-radius:50%;background:var(--bone);box-shadow:inset 0 0 0 1px var(--line);transition:background .3s}
+.play .seats i.f{background:var(--ink);box-shadow:none}
+.play .seats i.f:nth-child(2){transition-delay:.1s}.play .seats i.f:nth-child(3){transition-delay:.2s}.play .seats i.f:nth-child(4){transition-delay:.3s}.play .seats i.f:nth-child(5){transition-delay:.4s}
+/* google */
+.serp .q{display:flex;align-items:center;gap:8px;border-radius:999px;box-shadow:inset 0 0 0 1px var(--line);padding:8px 12px;font-weight:600}
+.serp .res{margin-top:10px;padding:10px 12px;border-radius:14px;background:var(--lav-soft)}
+.serp .res b{display:block;font-size:.84rem}
+.serp .res span{font-size:.7rem;color:var(--muted)}
+.serp .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.serp .tags span{border-radius:999px;background:var(--bone);padding:5px 10px;font-weight:700;font-size:.66rem}
+
+/* ---------- Kundresan ---------- */
+.jr{background:var(--lav-soft)}
+.jr-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(32px,5vw,80px);align-items:start}
+.jr-side{position:sticky;top:120px}
+.jr-side .lead{margin-top:22px}
+.journey{position:relative}
+.jlist{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.jline{position:absolute;z-index:1;pointer-events:none;left:31px;top:30px;bottom:30px;width:3px;border-radius:3px;background:rgba(14,14,12,.1);overflow:hidden}
+.jline i{display:block;width:100%;height:100%;background:var(--ink);transform-origin:top;transform:scaleY(0)}
+.jstep{position:relative;display:grid;grid-template-columns:64px 1fr;gap:18px;align-items:start;background:var(--white);border-radius:var(--r-m);padding:18px 22px 18px 0;transition:box-shadow .5s var(--ease)}
+.jstep .jn{position:relative;z-index:1;width:42px;height:42px;margin-left:11px;border-radius:50%;background:var(--bone);display:grid;place-items:center;font-family:var(--mono);font-size:.78rem;transition:background .45s var(--ease),color .45s,transform .5s var(--bounce)}
+.jstep.on .jn{background:var(--ink);color:var(--lav);transform:scale(1.06)}
+.jstep h3{font-size:clamp(20px,1.8vw,26px);letter-spacing:-.035em;line-height:1.05;margin:8px 0 6px}
+.jstep p{color:var(--muted);font-size:.95rem}
+.jstep .tag{display:inline-block;margin-top:10px;background:var(--lav);color:var(--on-lav);border-radius:999px;padding:.4em .9em;font-weight:700;font-size:.74rem}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:900px;margin:0 auto;display:grid;gap:10px}
+.faq details{background:var(--bone);border-radius:var(--r-m);transition:background .3s}
+.faq details[open]{background:var(--lav-soft)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 24px;font-family:var(--display);font-size:clamp(19px,1.7vw,24px);letter-spacing:-.03em;line-height:1.15}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";flex:none;width:38px;height:38px;border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center;font-family:var(--sans);font-size:1.3rem;transition:transform .4s var(--bounce)}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq .ans{padding:0 24px 24px;color:var(--ink-2);max-width:68ch}
+.faq .ans ul{margin:8px 0 0;padding-left:1.1em}
+
+/* ---------- Andra branscher ---------- */
+.bgrid.four{grid-template-columns:repeat(4,1fr)}
+.bgrid.four .bcard{min-height:230px}
+@media (max-width:1100px){.bgrid.four{grid-template-columns:repeat(2,1fr)}.bgrid.four .bcard:last-child{grid-column:auto}}
+@media (max-width:640px){.bgrid.four{grid-template-columns:1fr}}
+
+/* ---------- Exempel: Makeup by Camilla ---------- */
+.cam-head{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(24px,4vw,64px);align-items:end;margin-bottom:56px}
+.cam-logo{display:inline-flex;align-items:center;background:var(--white);border-radius:999px;padding:12px 22px;box-shadow:0 0 0 1px var(--line);margin-top:24px}
+.cam-logo img{height:38px;width:auto}
+.cam-meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.cam-meta span{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;background:var(--bone);border-radius:999px;padding:.6em 1em}
+.cam-stage{position:relative;background:var(--lav-soft);border-radius:var(--r-xl);padding:clamp(18px,4vw,64px) clamp(18px,4vw,64px) clamp(70px,8vw,110px);overflow:hidden}
+.cam-stage::before{content:"";position:absolute;width:52vw;max-width:640px;aspect-ratio:1;border-radius:50%;background:var(--lav);right:-14%;top:-30%;opacity:.7}
+.brw{position:relative;max-width:980px;background:var(--white);border-radius:22px;overflow:hidden;box-shadow:0 40px 80px -36px rgba(20,20,18,.55), 0 0 0 1px var(--line)}
+.brw-bar{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--bone);border-bottom:1px solid var(--line)}
+.brw-dots{display:flex;gap:6px}.brw-dots i{width:11px;height:11px;border-radius:50%;background:var(--lav-2)}
+.brw-url{flex:1;max-width:420px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--white);border-radius:999px;padding:6px 14px;font-size:.78rem;font-weight:600;color:var(--muted);white-space:nowrap;overflow:hidden}
+.brw-scr{position:relative;aspect-ratio:16/9;background:#3d2f2a url('assets/cases/camilla/hero-wide.jpg') center 30%/cover;color:#fbf8f3;display:flex;flex-direction:column;justify-content:space-between;font-family:var(--sans)}
+.brw-scr::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(34,26,23,.82),rgba(34,26,23,0) 58%,rgba(34,26,23,.3)),linear-gradient(90deg,rgba(34,26,23,.45),transparent 60%)}
+.brw-nav{position:relative;display:flex;justify-content:space-between;align-items:center;padding:clamp(12px,2.2vw,24px) clamp(14px,3vw,36px)}
+.brw-nav img{height:clamp(22px,3.2vw,40px);width:auto;filter:invert(1)}
+.brw-nav ul{display:flex;gap:clamp(10px,2vw,26px);list-style:none;margin:0;padding:0;font-size:clamp(.5rem,.9vw,.72rem);font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+.brw-nav ul li:last-child{border:1px solid rgba(251,248,243,.8);border-radius:8px;padding:.5em .9em;margin-top:-.5em}
+.brw-txt{position:relative;padding:0 clamp(14px,3vw,36px) clamp(16px,3.4vw,44px);max-width:min(640px,66%)}
+.brw-txt h3{font-family:var(--sans);font-weight:500;text-transform:uppercase;letter-spacing:.02em;line-height:1.06;font-size:clamp(17px,3.3vw,40px)}
+.brw-txt h3 em{font-style:normal;color:#e9dccb}
+.brw-txt p{margin-top:.8em;font-size:clamp(.62rem,1.2vw,.95rem);opacity:.85}
+.brw-btns{display:flex;gap:8px;margin-top:clamp(10px,1.8vw,22px)}
+.brw-btns span{font-size:clamp(.48rem,.85vw,.7rem);font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:8px;padding:.95em 1.3em;border:1px solid #fbf8f3}
+.brw-btns span:first-child{background:#fbf8f3;color:#3d2f2a}
+.cam-phone{position:absolute;right:clamp(18px,4vw,64px);bottom:clamp(24px,3vw,44px);width:clamp(150px,19vw,240px);background:var(--ink);border-radius:clamp(26px,3vw,38px);padding:clamp(6px,.7vw,9px);box-shadow:0 40px 70px -26px rgba(0,0,0,.6);z-index:2;will-change:transform}
+.cam-phone video,.cam-phone img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:clamp(20px,2.4vw,30px);background:#3d2f2a}
+.cam-phone .chip{position:absolute;left:-30px;top:16%;font-size:.82rem;padding:8px 14px 8px 8px}
+.cam-phone .chip .ic{width:30px;height:30px}
+.cam-tag{position:absolute;left:clamp(18px,4vw,64px);bottom:clamp(16px,2.4vw,34px)}
+.cam-body{display:grid;grid-template-columns:1fr 1.35fr;gap:clamp(24px,4vw,56px);margin-top:clamp(56px,7vw,96px);align-items:start}
+.cam-media{display:grid;grid-template-columns:1fr 1fr;gap:12px;position:sticky;top:110px}
+.cam-media figure{margin:0;border-radius:var(--r-m);overflow:hidden;background:var(--bone);position:relative}
+.cam-media figure:first-child{grid-column:span 2;aspect-ratio:4/3}
+.cam-media figure:not(:first-child){aspect-ratio:4/5}
+.cam-media img{width:100%;height:100%;object-fit:cover}
+.cam-media figure:first-child img{object-position:center 30%}
+.cam-media figcaption{position:absolute;left:10px;bottom:10px;background:var(--white);border-radius:999px;padding:.45em .9em;font-size:.72rem;font-weight:700}
+.cam-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.cam-list li{display:grid;grid-template-columns:44px 1fr;gap:16px;align-items:start;background:var(--bone);border-radius:var(--r-m);padding:20px 22px}
+.cam-list .ic{width:44px;height:44px;border-radius:50%;background:var(--lav);color:var(--on-lav);display:grid;place-items:center}
+.cam-list b{display:block;font-size:1.05rem;line-height:1.25}
+.cam-list span{display:block;color:var(--muted);font-size:.94rem;margin-top:4px;line-height:1.45}
+.cam-foot{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:24px}
+.cam-foot small{color:var(--muted);font-size:.82rem}
+/* ---------- Responsivt ---------- */
+@media (max-width:900px){
+  .cam-head{grid-template-columns:1fr}
+  .cam-body{grid-template-columns:1fr}
+  .cam-media{position:static}
+  .cam-phone{width:150px}
+  .brw-txt h3{font-size:clamp(15px,2.9vw,30px)}
+}
+@media (max-width:640px){
+  .cam-stage{padding:14px 14px 236px;border-radius:28px}
+  .brw{border-radius:16px}
+  .brw-bar{padding:9px 12px}.brw-dots i{width:8px;height:8px}
+  .brw-url{font-size:.68rem;padding:4px 10px}
+  .brw-nav ul li:not(:last-child){display:none}
+  .brw-btns span:last-child{display:none}
+  .brw-txt{max-width:none}
+  .cam-phone{width:132px;right:14px;bottom:14px}
+  .cam-phone .chip{display:none}
+  .cam-tag{left:14px;bottom:22px}
+  .cam-tag .chip{white-space:normal;max-width:min(180px,calc(100vw - 210px));font-size:.82rem}
+  .cam-list li{grid-template-columns:38px 1fr;gap:12px;padding:16px}
+  .cam-list .ic{width:38px;height:38px}
+}
+
+@media (max-width:1100px){
+  .c-port{grid-row:auto}
+  .pains{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:900px){
+  .mk{grid-template-columns:240px 1fr}
+  .jr-grid{grid-template-columns:1fr}
+  .jr-side{position:static}
+}
+@media (max-width:640px){
+  .mk{grid-template-columns:1fr;border-radius:28px;padding:14px}
+  .mk .pf{display:none}
+  .cal{padding:16px;border-radius:22px}
+  .days{gap:4px;font-size:.74rem}
+  .req{grid-template-columns:1fr}
+  .req em{justify-self:start}
+  .pains{grid-template-columns:1fr}
+  .c-port,.c-ai,.c-course,.c-seen{grid-column:auto}
+  .jstep{grid-template-columns:52px 1fr;gap:12px;padding-right:16px}
+  .jstep .jn{margin-left:6px;width:38px;height:38px}
+  .jline{left:24px}
+  .faq summary{padding:18px 18px}
+  .faq .ans{padding:0 18px 20px}
+}
+@media (prefers-reduced-motion:reduce){
+  .mk{transform:none}
+  .hero-lead{opacity:1}
+  .jline i{transform:none}
+  .cam-phone{transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="logo" href="index.html" aria-label="Kela group AB – startsida"><b>KELA</b></a>
+    <nav class="nav-links" aria-label="Huvudmeny">
+      <div class="has-menu">
+        <a href="tjanster.html" aria-haspopup="true">Tjänster ▾</a>
+        <div class="mega" aria-label="Våra tjänster">
+          <div class="mega-head"><span>Vad vi bygger</span><a href="tjanster.html">Se alla →</a></div>
+          <div class="mega-grid">
+            <a class="mega-card" href="bygga-hemsida.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg></span><span><b><i>01</i>Bygga hemsida</b><span>Snabba, konverterande webbplatser byggda från grunden.</span></span></a>
+            <a class="mega-card" href="bygga-system.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span><b><i>02</i>Bygga system</b><span>Affärssystem och interna verktyg kring hur ni jobbar.</span></span></a>
+            <a class="mega-card" href="bokningssystem.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></span><span><b><i>03</i>Bokningssystem</b><span>Kalender, betalning och automatiska bekräftelser.</span></span></a>
+            <a class="mega-card" href="bygga-automationer.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1l2.1-2.1M17 7l2.1-2.1"/></svg></span><span><b><i>04</i>Bygga automationer</b><span>AI-agenter som sköter det repetitiva dygnet runt.</span></span></a>
+            <a class="mega-card" href="bygga-app.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></span><span><b><i>05</i>Mobilappar</b><span>Native appar i App Store och Google Play.</span></span></a>
+          </div>
+        </div>
+      </div>
+      <div class="has-menu">
+        <a href="#branscher" aria-haspopup="true">Branscher ▾</a>
+        <div class="mega" aria-label="Branscher">
+          <div class="mega-head"><span>Byggt för er bransch</span></div>
+          <div class="mega-grid">
+            <a class="mega-card" href="bransch-stad.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M7 21V10l5-6 5 6v11"/><path d="M10 21v-5h4v5"/></svg></span><span><b>Städ & service</b><span>Bokning, schema, personalapp och påminnelser för städbolag.</span></span></a>
+            <a class="mega-card" href="bransch-skonhet.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 5 6.5 5 9.5a5 5 0 0 1-10 0C7 9.5 9 7 12 3z"/></svg></span><span><b>Skönhet & salong</b><span>Hudvård, naglar, fransar och spa – bokat dygnet runt.</span></span></a>
+            <a class="mega-card" href="bransch-harstylist.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="3"/><circle cx="6" cy="17" r="3"/><path d="M8.5 8.5L20 18M8.5 15.5L20 6"/></svg></span><span><b>Frisör & hårstylist</b><span>Onlinebokning, påminnelser och återkommande kunder.</span></span></a>
+            <a class="mega-card" href="bransch-makeup.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M10 21V11h4v10M11 11V5l2-2v8"/></svg></span><span><b>Makeupartister</b><span>Portfolio, förfrågningar och bröllopsbokningar.</span></span></a>
+            <a class="mega-card" href="bransch-frilans.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><span><b>Frilansare & konsulter</b><span>Hemsida, offert, fakturor och kundflöde på autopilot.</span></span></a>
+          </div>
+        </div>
+      </div>
+      <a href="priskalkylator.html">Priser</a>
+      <a href="case.html">Case</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-dark" href="kontakt.html">Kontakt <span class="arr" aria-hidden="true">→</span></a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="mmenu" aria-label="Öppna meny"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mmenu" id="mmenu" aria-hidden="true">
+  <div>
+    <ul class="big"><li><a href="tjanster.html">Tjänster</a></li></ul>
+    <div class="sub">
+      <a href="bygga-hemsida.html">Bygga hemsida</a><a href="bygga-system.html">Bygga system</a><a href="bokningssystem.html">Bokningssystem</a><a href="bygga-automationer.html">Bygga automationer</a><a href="bygga-app.html">Mobilappar</a>
+    </div>
+    <ul class="big"><li><a href="#branscher">Branscher</a></li></ul>
+    <div class="sub">
+      <a href="bransch-stad.html">Städ & service</a><a href="bransch-skonhet.html">Skönhet & salong</a><a href="bransch-harstylist.html">Frisör & hårstylist</a><a href="bransch-makeup.html">Makeupartister</a><a href="bransch-frilans.html">Frilansare & konsulter</a>
+    </div>
+    <ul class="big">
+      <li><a href="priskalkylator.html">Priser</a></li>
+      <li><a href="case.html">Case</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+    </ul>
+  </div>
+  <a class="btn btn-dark" href="kontakt.html">Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
+</div>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap hero-top">
+      <span class="kicker" style="justify-content:center">Bransch · Makeupartister</span>
+      <h1 id="h1"><span class="l1"><span>Vi bygger</span></span>
+        <span class="type-line"><span class="type-box"><span id="typer" data-words='["portfolios","bokningar","offerter","hemsidor","kurssidor","AI-chatt"]'>portfolios</span><span class="type-caret" aria-hidden="true"></span></span></span>
+      </h1>
+      <p class="hero-sub">…för makeupartister.</p>
+      <p class="hero-lead">Från första DM:et till bröllopsdagen: portfolio som säljer, lediga datum direkt, offert för hela följet och handpenning som betalas av sig själv.</p>
+      <div class="hero-cta"><a class="btn btn-dark" href="kontakt.html"><span class="dot" aria-hidden="true"></span>Boka ett möte <span class="arr" aria-hidden="true">→</span></a></div>
+    </div>
+
+    <div class="hero-stage" id="stage">
+      <div class="mk" id="mk" aria-hidden="true">
+        <div class="pf">
+          <div class="pf-scr">
+            <div class="pf-top"><b>Din studio</b><span>Makeup</span></div>
+            <div class="pf-hero"><h4>Brud- &amp; festmakeup</h4><p>Bröllop · Fest · Foto &amp; film · Kurser</p></div>
+            <div class="pf-tabs"><span>Brud</span><span>Fest</span><span>Foto</span><span>Kurser</span></div>
+            <div class="pf-gal"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <span class="pf-btn">Kolla ditt datum →</span>
+          </div>
+        </div>
+        <div class="cal">
+          <div class="cal-h">
+            <div><span class="lbl">Lediga bröllopsdatum</span><h3>Juni 2027</h3></div>
+            <div class="leg"><span class="l-bk">Bokad</span><span class="l-rq">Förfrågan</span><span>Ledig</span></div>
+          </div>
+          <div class="days">
+            <b>M</b><b>T</b><b>O</b><b>T</b><b>F</b><b>L</b><b>S</b>
+            <i class="e"></i><i>1</i><i>2</i><i>3</i><i>4</i><i class="sat bk">5</i><i>6</i><i>7</i><i>8</i><i>9</i><i>10</i><i>11</i><i class="sat bk">12</i><i>13</i><i class="bk">14</i><i>15</i><i>16</i><i>17</i><i>18</i><i class="sat bk">19</i><i>20</i><i>21</i><i>22</i><i>23</i><i>24</i><i>25</i><i class="sat rq">26</i><i>27</i><i>28</i><i>29</i><i>30</i>
+          </div>
+          <div class="req">
+            <div><b>Ny förfrågan · Bröllop 26 juni</b><span>Brud + 3 i följet · provsminkning · restid inräknad</span></div>
+            <em>Skicka offert →</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="chipw p1" data-speed="-0.18" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4M9 15l2 2 4-4"/></svg></span><span>Bröllop 14 juni – bokat<small>Datumet låst i kalendern</small></span></div></div>
+      <div class="chipw p2 dark" data-speed="0.12" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Handpenning betald<small>Via betallänk</small></span></div></div>
+      <div class="chipw p3" data-speed="-0.08" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="M2 7l10 6 10-6"/></svg></span><span>Ny förfrågan<small>Datum, plats &amp; antal</small></span></div></div>
+      <div class="chipw p4" data-speed="0.2" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span><span>Offert skickad<small>Brud + 3 i följet</small></span></div></div>
+      <div class="chipw p5 dark" data-speed="0.1" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span>Provsminkning bokad<small>Påminnelse dagen innan</small></span></div></div>
+      <div class="chipw p6" data-speed="-0.14" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span>Reseavgift uträknad<small>Restid i kalendern</small></span></div></div>
+      <div class="chipw p8" data-speed="-0.1" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg></span><span>Ny Google-recension<small>Efter bröllopet</small></span></div></div>
+      <div class="chipw p11" data-speed="0.14" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg></span><span>Workshop bokad<small>Betald online</small></span></div></div>
+    </div>
+  </section>
+
+  <!-- KÄNNER NI IGEN ER -->
+  <section class="sec" aria-labelledby="pain-h">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="kicker">Känner ni igen er?</span>
+          <h2 class="h2 rv" id="pain-h">Mer pussel<br>än pensel.</h2>
+        </div>
+        <p class="lead rv">Klicka i det som stämmer. Allt det här går att bygga bort – så att tiden går till kunderna, inte till inkorgen.</p>
+      </div>
+      <ul class="pains">
+        <li class="rv"><button class="pain" type="button" aria-pressed="false"><span class="pi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><b>Förfrågningar överallt</b><span class="t">DM, mejl, sms och kommentarer – och samma frågor om pris och datum varje dag.</span><span class="ok">Stämmer</span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-pressed="false"><span class="pi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></span><b>Datum bokas ett år i förväg</b><span class="t">Bröllopsdatum som ska hållas koll på långt fram – utan att något dubbelbokas eller glöms.</span><span class="ok">Stämmer</span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-pressed="false"><span class="pi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span><b>Offerter för hand</b><span class="t">Brud, mammor, tärnor, provsminkning, tidig start – räknat från noll varje gång.</span><span class="ok">Stämmer</span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-pressed="false"><span class="pi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg></span><b>Handpenning att jaga</b><span class="t">Datumet är ”bokat” – men förskottet har inte kommit. Och resten ska in före dagen.</span><span class="ok">Stämmer</span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-pressed="false"><span class="pi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><b>Restid som ingen räknat på</b><span class="t">Uppdrag på landet eller i en annan stad – reseavgift och restid glöms i offerten och i kalendern.</span><span class="ok">Stämmer</span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-pressed="false"><span class="pi" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><b>Portfolion syns bara på Instagram</b><span class="t">Den som googlar ”makeupartist bröllop” i er stad hittar någon annan.</span><span class="ok">Stämmer</span></button></li>
+      </ul>
+      <div class="pain-foot rv">
+        <p id="painP">Markera det som stämmer.</p>
+        <a class="btn btn-dark" href="kontakt.html">Prata med oss om det <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LÖSNINGAR -->
+  <section class="sec" style="padding-top:0" aria-labelledby="sol-h">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="kicker">Det här bygger vi</span>
+          <h2 class="h2 rv" id="sol-h">Allt runt<br>borsten.</h2>
+        </div>
+        <p class="lead rv">Välj det ni behöver – allt hänger ihop: förfrågan blir offert, offert blir bokning, bokning blir betald.</p>
+      </div>
+
+      <div class="bento">
+        <article class="card c-port rv">
+          <div class="port-row">
+            <div>
+              <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></span>
+              <h3>Portfolio som säljer</h3>
+              <ul class="pts">
+                <li>Galleri per kategori: brud, fest, foto/film, kurser</li>
+                <li>Paket och vad som ingår – tydligt, innan någon frågar</li>
+                <li>”Kolla ditt datum” direkt från varje sida</li>
+                <li>Snabb på mobilen – länken i er Instagram-bio</li>
+              </ul>
+            </div>
+            <div class="ui gal" aria-hidden="true"><i data-t="Brud"></i><i data-t="Fest"></i><i data-t="Foto"></i><i data-t="Film"></i><i data-t="Brud"></i><i data-t="Kurs"></i></div>
+          </div>
+        </article>
+
+        <article class="card c-form rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></span>
+          <h3>Förfrågan &amp; datumkoll</h3>
+          <ul class="pts"><li>Kunden ser direkt om datumet är ledigt</li><li>Alla förfrågningar på ett ställe</li></ul>
+          <div class="ui mu" aria-hidden="true">
+            <div class="row ck"><small>Datum</small>26 juni</div>
+            <div class="row ck"><small>Antal</small>Brud + 3</div>
+            <div class="row ck"><small>Plats</small>Bröllopslokal</div>
+            <span class="pop">✓ Datumet är ledigt</span>
+          </div>
+        </article>
+
+        <article class="card c-quote rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg></span>
+          <h3>Offert för brudfölje</h3>
+          <ul class="pts"><li>Räknas ut med era priser och tillägg</li><li>Skickas och godkänns digitalt</li></ul>
+          <div class="ui mu" aria-hidden="true">
+            <div class="row ck">Brud <small>✓</small></div>
+            <div class="row ck">Följe × 3 <small>✓</small></div>
+            <div class="row ck">Provsminkning <small>✓</small></div>
+            <span class="pop">Offert skickad →</span>
+          </div>
+        </article>
+
+        <article class="card c-dep rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20M6 15h4"/></svg></span>
+          <h3>Handpenning &amp; förskott</h3>
+          <ul class="pts"><li>Betallänk i bekräftelsen – datumet låses när det är betalt</li><li>Automatisk påminnelse om resten före dagen</li><li>Fakturor synkas till Fortnox eller Visma</li></ul>
+          <div class="ui mu" aria-hidden="true">
+            <div class="dep-bar"><i></i></div>
+            <div class="dep-l"><span>Handpenning</span><span>Resterande</span></div>
+            <span class="pop">✓ Handpenning betald</span>
+          </div>
+        </article>
+
+        <article class="card c-travel rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span>
+          <h3>Resor till kund</h3>
+          <ul class="pts"><li>Reseavgift enligt era egna regler</li><li>Restiden blockeras i kalendern – inga krockar</li></ul>
+          <div class="ui mu" aria-hidden="true">
+            <div class="route"><span class="pt"></span><span class="ln"></span><span class="pt b"></span></div>
+            <div class="dep-l" style="margin-top:6px"><span>Studion</span><span>Bröllopet</span></div>
+            <span class="pop">Restid inräknad</span>
+          </div>
+        </article>
+
+        <article class="card c-ai rv">
+          <div class="card-row">
+            <div>
+              <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><rect x="7" y="7" width="10" height="10" rx="3"/></svg></span>
+              <h3>AI-chatt dygnet runt</h3>
+              <ul class="pts"><li>Svarar på frågor om paket, datum och resor – på hemsidan och i mejl</li><li>Skickar förfrågan vidare, bokar och ombokar</li><li>Ni slipper svara på samma fråga en gång till</li></ul>
+            </div>
+            <div class="ui chat" aria-hidden="true">
+              <span class="u">Hej! Är du ledig 26 juni? Vi är fyra som ska sminkas.</span>
+              <span class="a">26 juni är ledigt! Vill du ha en offert för brud + 3 och provsminkning?</span>
+              <span class="u">Ja tack!</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card c-rem rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+          <h3>Påminnelser</h3>
+          <ul class="pts"><li>Sms &amp; mejl inför provsminkning och dagen</li><li>Förberedelser: hud, tider, adress</li></ul>
+          <div class="ui sms" aria-hidden="true">
+            <span><small>Sms · imorgon</small>Påminnelse: provsminkning kl 10.</span>
+            <span><small>Mejl · 1 vecka kvar</small>Så förbereder du huden inför bröllopet.</span>
+          </div>
+        </article>
+
+        <article class="card c-rev rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+          <h3>Recensioner</h3>
+          <ul class="pts"><li>Betygs-sms efter uppdraget</li><li>Nöjd kund → länk till Google-recension</li><li>Missnöjd → till er först</li></ul>
+          <div class="ui stars" aria-hidden="true"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        </article>
+
+        <article class="card c-course rv">
+          <div class="card-row">
+            <div>
+              <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/></svg></span>
+              <h3>Kurser, workshops &amp; presentkort</h3>
+              <ul class="pts"><li>Sälj platser online – betalt vid bokning</li><li>Privatlektioner och gruppkurser i samma kalender</li><li>Presentkort som säljer sig själva inför högtider</li></ul>
+            </div>
+            <div class="ui mu" aria-hidden="true">
+              <div class="row"><span>Workshop · Vardagsmakeup</span><small>Lör</small></div>
+              <div class="seats"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i></div>
+              <div class="dep-l"><span>Bokade platser</span><span>Lediga</span></div>
+              <span class="pop">+ Presentkort</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card c-seen rv">
+          <div class="card-row">
+            <div>
+              <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11l2 2 3.5-3.5"/></svg></span>
+              <h3>Synas på Google &amp; Instagram</h3>
+              <ul class="pts"><li>Lokal SEO: ”makeupartist + stad”, ”brudmakeup + ort”</li><li>Meta-annonser inför bröllopssäsongen</li><li>Inlägg och texter med AI – och nyhetsbrev/sms till tidigare kunder</li></ul>
+            </div>
+            <div class="ui mu serp" aria-hidden="true">
+              <div class="q"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>makeupartist bröllop</div>
+              <div class="res"><b>Din studio – Brud- &amp; festmakeup</b><span>Portfolio · Paket · Kolla ditt datum</span></div>
+              <div class="tags"><span>Google</span><span>Instagram</span><span>Facebook</span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXEMPEL: MAKEUP BY CAMILLA -->
+  <section class="sec" id="exempel" style="padding-top:0" aria-labelledby="cam-h">
+    <div class="wrap">
+      <div class="cam-head">
+        <div>
+          <span class="kicker">Exempel · byggt av Kela</span>
+          <h2 class="h2 rv" id="cam-h">Makeup by<br>Camilla.</h2>
+        </div>
+        <div class="rv">
+          <p class="lead">Camilla Edvinsson är frilansande makeupartist och hårstylist i Stockholm – bröllop, fest och tv. Vi byggde hennes hemsida och hela flödet bakom: från bröllopsmeny och förfrågan till kundlänk och Instagram-material.</p>
+          <div class="cam-meta" aria-label="Det här ingår"><span>Hemsida</span><span>Förfrågningar</span><span>Kundportal</span><span>Admin</span><span>Instagram-content</span></div>
+        </div>
+      </div>
+
+      <div class="cam-stage rv">
+        <div class="brw" role="img" aria-label="Startsidan på makeupbycamilla.se: rubriken ”Makeup som framhäver det vackraste hos dig” över en bild där Camilla sminkar en brud">
+          <div class="brw-bar" aria-hidden="true">
+            <span class="brw-dots"><i></i><i></i><i></i></span>
+            <span class="brw-url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>makeupbycamilla.se</span>
+            <span class="brw-dots" style="visibility:hidden"><i></i><i></i><i></i></span>
+          </div>
+          <div class="brw-scr" aria-hidden="true">
+            <div class="brw-nav">
+              <img src="assets/clients/makeup-by-camilla.svg" alt="" width="145" height="40">
+              <ul><li>Bröllop</li><li>Makeup</li><li>Portfolio</li><li>Om Camilla</li><li>Boka</li></ul>
+            </div>
+            <div class="brw-txt">
+              <h3>Makeup som framhäver <em>det vackraste hos dig</em></h3>
+              <p>Professionell makeup för bröllop, fest och livets speciella tillfällen.</p>
+              <div class="brw-btns"><span>Boka makeup</span><span>Utforska mina tjänster</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cam-phone" id="camPhone">
+          <video id="camVid" src="assets/cases/camilla/story-har.mp4" poster="assets/cases/camilla/story-har.jpg" muted loop playsinline preload="none" aria-label="Instagram-story i hemsidans stil: ”Hår som håller hela dagen”"></video>
+          <div class="chip" aria-hidden="true"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></svg></span><span>Story i hemsidans stil<small>Av hennes egna bilder</small></span></div>
+        </div>
+        <div class="chipw cam-tag dark" aria-hidden="true"><div class="chip"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4M9 15l2 2 4-4"/></svg></span><span>Kolla ditt bröllopsdatum<small>Svar direkt på sidan</small></span></div></div>
+      </div>
+
+      <div class="cam-body">
+        <div class="cam-media rv">
+          <figure><img src="assets/cases/camilla/camilla-sminkar.jpg" alt="Camilla Edvinsson sminkar en kund som har papiljotter i håret" loading="lazy" width="750" height="1000"><figcaption>Hennes egna bilder</figcaption></figure>
+          <figure><img src="assets/cases/camilla/story-lediga-datum.jpg" alt="Instagram-story: ”Lediga datum – bröllop 2027”" loading="lazy" width="450" height="800"></figure>
+          <figure><img src="assets/cases/camilla/karusell-provsminkning.jpg" alt="Instagram-karusell: ”3 saker inför provsminkningen”" loading="lazy" width="640" height="800"></figure>
+        </div>
+
+        <div>
+          <ul class="cam-list">
+            <li class="rv"><span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg></span><div><b>Hemsida med portfolio</b><span>Bröllop, fest &amp; event och foto &amp; produktion – med portfolio sorterad i kategorier och en egen sida för bröllopsmakeup.</span></div></li>
+            <li class="rv"><span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg></span><div><b>Bröllopsmeny</b><span>Bruden bygger sitt paket – brudsminkning, hår, provsminkning, tärnor, familj. Valen och summan följer med till förfrågan.</span></div></li>
+            <li class="rv"><span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4M9 15l2 2 4-4"/></svg></span><div><b>Kolla datumet direkt</b><span>Skriv in bröllopsdatumet och se på en gång om dagen ser ledig ut.</span></div></li>
+            <li class="rv"><span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="M2 7l10 6 10-6"/></svg></span><div><b>Bokningsförfrågan i fyra steg</b><span>Tillfälle, detaljer, kontakt, skicka. Den som redan vet vad hen vill ha kan välja en ledig tid direkt.</span></div></li>
+            <li class="rv"><span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></span><div><b>Personlig kundlänk</b><span>Kunden följer vägen till bröllopsdagen: offert att godkänna, tidsplan, provsminkning, inspirationsbilder, meddelanden och önskemål om ombokning.</span></div></li>
+            <li class="rv"><span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span><div><b>Admin för Camilla</b><span>Inkorg, ärenden, kalender, kunder, lediga tider, tjänster, offerter och automatiska utskick vid varje steg.</span></div></li>
+            <li class="rv"><span class="ic" aria-hidden="true"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/></svg></span><div><b>Instagram-material i samma stil</b><span>Färdiga stories och karuseller i hemsidans färger och typsnitt, gjorda av hennes egna bilder – plus en idébank med texter.</span></div></li>
+          </ul>
+          <div class="cam-foot rv">
+            <a class="btn btn-dark" href="https://makeupbycamilla.se" target="_blank" rel="noopener">Besök makeupbycamilla.se <span class="arr" aria-hidden="true">↗</span></a>
+            <a class="btn btn-line" href="kontakt.html">Vill ni ha något liknande?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KUNDRESAN -->
+  <section class="jr sec round" aria-labelledby="jr-h">
+    <div class="wrap jr-grid">
+      <div class="jr-side">
+        <span class="kicker">Så hänger det ihop</span>
+        <h2 class="h2 rv" id="jr-h">Från DM till<br>bröllopsdag.</h2>
+        <p class="lead rv">Ett flöde – från att någon hittar er till att de kommer tillbaka. Ni gör makeupen, systemet sköter resten.</p>
+      </div>
+      <div class="journey" id="journey">
+        <span class="jline" aria-hidden="true"><i id="jline"></i></span>
+        <ol class="jlist">
+        <li class="jstep"><span class="jn">01</span><div><h3>Hittar er</h3><p>På Google eller via Instagram – och landar i en portfolio som visar rätt jobb.</p><span class="tag">SEO · Hemsida</span></div></li>
+        <li class="jstep"><span class="jn">02</span><div><h3>Kollar datumet</h3><p>Ser direkt om dagen är ledig och skickar en förfrågan med plats och antal.</p><span class="tag">Förfrågningsformulär</span></div></li>
+        <li class="jstep"><span class="jn">03</span><div><h3>Får en offert</h3><p>För hela följet, med provsminkning och reseavgift – godkänner digitalt.</p><span class="tag">Offert</span></div></li>
+        <li class="jstep"><span class="jn">04</span><div><h3>Betalar handpenning</h3><p>Datumet låses. Resten påminns om automatiskt före dagen.</p><span class="tag">Betallänk · Fakturor</span></div></li>
+        <li class="jstep"><span class="jn">05</span><div><h3>Provsminkning &amp; påminnelser</h3><p>Tid bokad, sms dagen innan, tips inför bröllopet.</p><span class="tag">Sms &amp; mejl</span></div></li>
+        <li class="jstep"><span class="jn">06</span><div><h3>Bröllopsdagen</h3><p>Restid i kalendern, adress och tider samlat – ni fokuserar på bruden.</p><span class="tag">Kalender</span></div></li>
+        <li class="jstep"><span class="jn">07</span><div><h3>Betyg &amp; recension</h3><p>Nöjd? Länk till Google. Något som skavde? Det kommer till er först.</p><span class="tag">Feedbacksystem</span></div></li>
+        <li class="jstep"><span class="jn">08</span><div><h3>Kommer tillbaka</h3><p>Till festen, en kurs – eller köper ett presentkort till någon annan.</p><span class="tag">Nyhetsbrev · Presentkort</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- SÅ JOBBAR VI -->
+  <section class="sec" aria-labelledby="proc-h">
+    <div class="wrap">
+      <div class="head" style="justify-content:center;text-align:center;flex-direction:column;align-items:center">
+        <span class="kicker">Så jobbar vi</span>
+        <h2 class="h2 rv" id="proc-h">Fyra steg.<br>Inget krångel.</h2>
+      </div>
+      <div class="proc-grid" id="procGrid">
+        <span class="proc-line" aria-hidden="true"><i id="procLine"></i></span>
+        <div class="pstep rv" style="background:var(--lav-soft)"><span class="n">01</span><h3>Möte &amp; kartläggning</h3><p>Hur kommer förfrågningarna in idag? Vad tar mest tid?</p></div>
+        <div class="pstep rv" style="background:var(--lav-soft)"><span class="n">02</span><h3>Förslag &amp; fast pris</h3><p>Ni vet vad ni får – och vad det kostar – innan vi börjar.</p></div>
+        <div class="pstep rv" style="background:var(--lav-soft)"><span class="n">03</span><h3>Vi bygger</h3><p>Ni ser allt löpande och tycker till på vägen.</p></div>
+        <div class="pstep rv" style="background:var(--lav-soft)"><span class="n">04</span><h3>Lansering &amp; support</h3><p>Vi lanserar, lär er systemet och finns kvar efteråt.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" style="padding-top:0" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="svc-head">
+        <span class="kicker">Vanliga frågor</span>
+        <h2 class="h2 rv" id="faq-h">Bra att veta.</h2>
+      </div>
+      <div class="faq rv">
+        <details>
+          <summary>Ser kunderna mina andra bokningar när de kollar datum?</summary>
+          <div class="ans">Nej. De ser bara om dagen är ledig eller inte – inga namn, inga detaljer. Ni bestämmer själva vilka dagar och tider som går att förfråga.</div>
+        </details>
+        <details>
+          <summary>Jag får de flesta förfrågningar på Instagram. Funkar det ändå?</summary>
+          <div class="ans">Ja. Länken i bion går direkt till portfolio och ”kolla ditt datum”, så DM-frågorna blir kompletta förfrågningar med datum, plats och antal. Vi kan också hjälpa till med inlägg och Meta-annonser.</div>
+        </details>
+        <details>
+          <summary>Hur fungerar handpenning och resterande betalning?</summary>
+          <div class="ans">Efter godkänd offert får kunden en betallänk för handpenningen – när den är betald låses datumet. Resterande belopp påminns om automatiskt innan dagen, enligt era villkor.</div>
+        </details>
+        <details>
+          <summary>Kan offerten räkna med brudfölje, provsminkning och resa?</summary>
+          <div class="ans">Ja, med era egna priser och regler:
+            <ul><li>Brud, följe och tillägg som tidig start eller touch-up</li><li>Provsminkning separat eller inräknad</li><li>Reseavgift och restid efter avstånd eller zon</li></ul>
+          </div>
+        </details>
+        <details>
+          <summary>Vi är flera artister. Går det att ha en kalender per person?</summary>
+          <div class="ans">Ja. Varje artist får sin egen kalender och ni ser allt samlat. Stora följen kan fördelas på flera artister samma dag.</div>
+        </details>
+        <details>
+          <summary>Vad kostar det?</summary>
+          <div class="ans">Det beror på vad ni behöver. Efter första mötet får ni ett förslag med fast pris – inga överraskningar. Vill ni få en känsla innan dess kan ni testa <a href="priskalkylator.html">priskalkylatorn</a>.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANDRA BRANSCHER -->
+  <section class="sec" id="branscher" style="padding-top:0" aria-labelledby="br-h">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="kicker">Andra branscher</span>
+          <h2 class="h2 rv" id="br-h">Fler vi<br>bygger för.</h2>
+        </div>
+      </div>
+      <div class="bgrid four">
+        <a class="bcard rv" href="bransch-stad.html"><span class="bn">01</span><h3>Städ & service</h3><p>Bokning, schema, personalapp och påminnelser för städbolag.</p><span class="bgo" aria-hidden="true">→</span></a>
+        <a class="bcard rv" href="bransch-skonhet.html"><span class="bn">02</span><h3>Skönhet & salong</h3><p>Hudvård, naglar, fransar och spa – bokat dygnet runt.</p><span class="bgo" aria-hidden="true">→</span></a>
+        <a class="bcard rv" href="bransch-harstylist.html"><span class="bn">03</span><h3>Frisör & hårstylist</h3><p>Onlinebokning, påminnelser och återkommande kunder.</p><span class="bgo" aria-hidden="true">→</span></a>
+        <a class="bcard rv" href="bransch-frilans.html"><span class="bn">04</span><h3>Frilansare & konsulter</h3><p>Hemsida, offert, fakturor och kundflöde på autopilot.</p><span class="bgo" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta sec round" aria-labelledby="cta-h">
+    <span class="blob" style="width:38vw;height:38vw;left:-12vw;top:-14vw" data-blob="0.08" aria-hidden="true"></span>
+    <span class="blob" style="width:30vw;height:30vw;right:-8vw;bottom:-12vw" data-blob="-0.06" aria-hidden="true"></span>
+    <div class="wrap">
+      <span class="kicker">Säg hej</span>
+      <h2 id="cta-h"><span class="r">Mer</span> <span class="r">tid</span> <span class="r">i</span> <span class="r">stolen.</span> <span class="r">Mindre</span> <span class="r">i</span> <span class="r">inkorgen.</span></h2>
+      <p>Berätta hur ni tar emot förfrågningar idag – så visar vi vad som går att automatisera inför nästa bröllopssäsong.</p>
+      <div class="cta-btns">
+        <a class="btn btn-dark bigbtn" id="magnet" href="kontakt.html">Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn-line bigbtn" href="priskalkylator.html">Räkna på priset</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-top">
+      <div class="rv">
+        <h2>Har ni något som känns onödigt krångligt?</h2>
+        <p>Det är förmodligen där vi ska börja.</p>
+        <a class="btn btn-lav" href="kontakt.html">Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+      <img class="rv" src="assets/team/office.webp" alt="Kela group-teamet på väg genom kontoret">
+    </div>
+    <div class="f-grid">
+      <div>
+        <a class="logo" href="index.html"><b>KELA</b></a>
+        <p>Kela group AB<br>Stockholm</p>
+      </div>
+      <div class="f-col"><h3>Vad vi bygger</h3><a href="bygga-hemsida.html">Websites</a><a href="bygga-system.html">Systems</a><a href="bygga-automationer.html">Automation</a><a href="ai-agenter.html">AI</a><a href="bygga-app.html">Apps</a></div>
+      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Priser</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
+      <div class="f-col"><h3>Säg hej</h3><a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a><a href="kontakt.html">Boka ett möte</a></div>
+    </div>
+    <div class="f-bot"><span>© 2026 Kela group AB — Org.nr 559578-1971</span><span class="mono">Stockholm · hela Europa</span></div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s, c=document) => c.querySelector(s);
+  const $$ = (s, c=document) => [...c.querySelectorAll(s)];
+  const clamp = (v, a=0, b=1) => Math.min(b, Math.max(a, v));
+
+  /* Mobilmeny */
+  const nav = $('#nav'), burger = $('#burger'), mm = $('#mmenu');
+  const setMenu = open => {
+    burger.setAttribute('aria-expanded', open);
+    burger.setAttribute('aria-label', open ? 'Stäng meny' : 'Öppna meny');
+    mm.classList.toggle('open', open);
+    mm.setAttribute('aria-hidden', !open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  burger.addEventListener('click', () => setMenu(burger.getAttribute('aria-expanded') !== 'true'));
+  $$('a', mm).forEach(a => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+  /* Skrivmaskinsrubriken */
+  const typer = $('#typer');
+  const words = JSON.parse(typer.dataset.words);
+  if (reduce) {
+    let i = 0; setInterval(() => { i = (i + 1) % words.length; typer.textContent = words[i]; }, 2600);
+  } else {
+    let wi = 0, ci = words[0].length, del = false;
+    const tick = () => {
+      const w = words[wi];
+      if (!del) {
+        typer.textContent = w.slice(0, ++ci);
+        if (ci >= w.length) { del = true; return setTimeout(tick, 1700); }
+        setTimeout(tick, 85);
+      } else {
+        typer.textContent = w.slice(0, --ci);
+        if (ci <= 0) { del = false; wi = (wi + 1) % words.length; return setTimeout(tick, 280); }
+        setTimeout(tick, 40);
+      }
+    };
+    setTimeout(() => { del = true; tick(); }, 2200);
+  }
+
+  /* Reveals */
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+  $$('.rv').forEach(el => io.observe(el));
+
+  /* "play" för mini-UI */
+  const playables = $$('.card');
+  if (reduce) playables.forEach(el => el.classList.add('play'));
+  else {
+    const playIO = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('play'); playIO.unobserve(e.target); }
+    }), { threshold: .4 });
+    playables.forEach(el => playIO.observe(el));
+  }
+
+  /* Känner ni igen er – klickbara kort */
+  const pains = $$('.pain'), painP = $('#painP');
+  pains.forEach(p => p.addEventListener('click', () => {
+    p.setAttribute('aria-pressed', p.getAttribute('aria-pressed') !== 'true');
+    const n = pains.filter(x => x.getAttribute('aria-pressed') === 'true').length;
+    painP.textContent = n === 0 ? 'Markera det som stämmer.' : n === 1 ? 'En sak vi kan bygga bort.' : n + ' saker vi kan bygga bort.';
+    painP.classList.toggle('lit', n > 0);
+  }));
+
+  /* Exempel: story-video spelas bara när den syns + lätt parallax på telefonen */
+  (() => {
+    const v = $('#camVid'), ph = $('#camPhone');
+    if (!v) return;
+    v.muted = true;
+    if (!reduce) {
+      new IntersectionObserver(es => es.forEach(e => {
+        if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
+      }), { threshold: .25 }).observe(v);
+      let raf = 0;
+      const move = () => { raf = 0; const r = ph.parentElement.getBoundingClientRect(); const p = clamp((innerHeight - r.top) / (innerHeight + r.height)); ph.style.transform = `translateY(${(0.5 - p) * 60}px)`; };
+      addEventListener('scroll', () => { if (!raf) raf = requestAnimationFrame(move); }, { passive: true }); move();
+    } else v.controls = true;
+  })();
+
+  /* Mobil: klisterlapparna turas om i fyra platser */
+  (() => {
+    const cs = $$('.hero-stage > .chipw'), mq = matchMedia('(max-width:640px)');
+    let g = 0, t;
+    const show = () => { cs.forEach((c, i) => { const on = Math.floor(i / 4) === g; c.classList.toggle('on', on); if (on) { c.classList.remove('s0','s1','s2','s3'); c.classList.add('s' + (i % 4)); } }); };
+    const run = () => { clearInterval(t); if (mq.matches) { show(); if (!reduce) t = setInterval(() => { g = (g + 1) % Math.ceil(cs.length / 4); show(); }, 2800); } };
+    mq.addEventListener('change', run); run();
+  })();
+
+  /* Scroll-drivna effekter */
+  const mk = $('#mk'), stage = $('#stage');
+  const floaters = $$('.hero-stage > .chipw');
+  const steps = $$('.jstep'), journey = $('#journey'), jline = $('#jline');
+  const rSet = $$('.cta h2 .r');
+  const blobs = $$('[data-blob]');
+  const procLine = $('#procLine'), procGrid = $('#procGrid');
+  const magnet = $('#magnet');
+  let mx = 0, my = 0, ticking = false;
+
+  if (reduce) {
+    const n = () => nav.classList.toggle('scrolled', scrollY > 30);
+    addEventListener('scroll', n, { passive:true }); n();
+    procLine.style.transform = 'none';
+    steps.forEach(s => s.classList.add('on'));
+    return;
+  }
+
+  const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
+  addEventListener('scroll', req, { passive:true });
+  addEventListener('resize', req);
+  if (matchMedia('(hover:hover)').matches) addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; req(); }, { passive:true });
+
+  function frame(){
+    ticking = false;
+    const vh = innerHeight;
+    nav.classList.toggle('scrolled', scrollY > 30);
+
+    // Hero: mockupen zoomar in, chips svävar i parallax
+    const sr = stage.getBoundingClientRect();
+    if (sr.bottom > 0) {
+      const p = clamp(1 - (sr.top - vh * .15) / (vh * .7));
+      mk.style.transform = `scale(${.9 + .1 * p}) translate3d(${mx * -8}px, ${my * -6}px, 0)`;
+      floaters.forEach(c => {
+        const s = parseFloat(c.dataset.speed) * (innerWidth < 640 ? .35 : 1);
+        c.style.transform = `translate3d(${mx * s * 120}px, ${(sr.top - vh * .5) * s + my * s * 80}px, 0)`;
+      });
+    }
+
+    // Kundresan: linjen fylls och stegen tänds
+    const jr = journey.getBoundingClientRect();
+    const jp = clamp((vh * .6 - jr.top) / jr.height);
+    jline.style.transform = `scaleY(${jp})`;
+    steps.forEach(s => { const r = s.getBoundingClientRect(); s.classList.toggle('on', r.top + 30 < vh * .6); });
+
+    // CTA-ord glider på plats
+    rSet.forEach(r => {
+      const rr = r.getBoundingClientRect();
+      if (rr.top > vh * 1.3 || rr.bottom < -200) return;
+      const k = clamp((vh - rr.top) / (vh * .55));
+      r.style.transform = `translateY(${(1 - k) * 40}px)`;
+    });
+    blobs.forEach(b => {
+      b.style.transform = `translate3d(0, ${b.parentElement.getBoundingClientRect().top * parseFloat(b.dataset.blob)}px, 0)`;
+    });
+
+    // Processlinjen ritas
+    const pr = procGrid.getBoundingClientRect();
+    procLine.style.transform = `scaleX(${clamp((vh * .8 - pr.top) / (pr.height + vh * .2))})`;
+  }
+  frame();
+
+  /* Magnetisk CTA-knapp */
+  if (matchMedia('(hover:hover)').matches) {
+    magnet.addEventListener('pointermove', e => {
+      const r = magnet.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      magnet.style.transform = `translate(${dx * .18}px, ${dy * .25}px)`;
+    });
+    magnet.addEventListener('pointerleave', () => magnet.style.transform = '');
+  }
+})();
+</script>
+</body>
+</html>

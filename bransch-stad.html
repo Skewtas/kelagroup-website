@@ -1,0 +1,1334 @@
+<!doctype html>
+<html lang="sv" data-pal="rosavin">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Städ &amp; service – system, bokning &amp; hemsida | Kela</title>
+<link rel="canonical" href="https://kelagroup.se/bransch-stad.html">
+<meta name="description" content="Så kör Stodona sitt städbolag på Kelas system. Bokis, Chattis, Feedis, Påminnis, Headof, personalapp och kundapp – system för städbolag, kopplade via API till Timewave, Tengella, Fortnox eller Visma. Se tjänster och från-priser.">
+<link rel="preload" href="assets/fonts/archivo-black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/pop.css?v=2">
+<style>
+/* ===== Städ & service – sidspecifikt (bygger på pop.css-tokens) ===== */
+.hero .kicker{justify-content:center;opacity:0;animation:fadeup .8s var(--ease) .1s forwards}
+.hero-lead{max-width:600px;margin:18px auto 0;font-size:clamp(17px,1.4vw,20px);opacity:0;animation:fadeup .8s var(--ease) .48s forwards}
+.hero-cta{gap:12px;flex-wrap:wrap}
+
+/* Hero-scen: telefon med Bokis + klisterlappar */
+.st-stage{position:relative;max-width:1100px;margin:56px auto 0;padding:0 var(--gut) clamp(64px,8vw,110px)}
+.dev{position:relative;z-index:2;display:flex;justify-content:center;will-change:transform}
+.hph{width:min(300px,82vw);background:var(--ink);border-radius:46px;padding:10px;box-shadow:0 40px 80px -30px rgba(20,20,18,.55);color:var(--ink)}
+.hph .scr{position:relative;background:var(--white);border-radius:37px;min-height:540px;padding:34px 16px 18px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.hph .notch{position:absolute;top:10px;left:50%;width:84px;height:20px;border-radius:999px;background:var(--ink);transform:translateX(-50%)}
+.hph .app{font-family:var(--display);font-size:1.5rem;letter-spacing:-.03em;line-height:1}
+.hph .sub{font-size:.8rem;color:var(--muted);margin-top:2px}
+.hph .lbl{font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.hph .row{display:flex;gap:6px;flex-wrap:wrap}
+.opt{border:1px solid var(--line);border-radius:999px;padding:.5em .85em;font-weight:700;font-size:.78rem;background:var(--white);transition:background .35s var(--ease),color .35s,border-color .35s,transform .35s var(--bounce)}
+.opt.off{opacity:.38;text-decoration:line-through}
+.day{flex:1;text-align:center;border:1px solid var(--line);border-radius:16px;padding:.45em 0;font-weight:800;font-size:.95rem;line-height:1.1;transition:background .35s var(--ease),color .35s,transform .35s var(--bounce)}
+.day small{display:block;font-weight:600;font-size:.62rem;color:var(--muted);transition:color .35s}
+.opt.sel,.day.sel{background:var(--ink);color:var(--white);border-color:var(--ink);transform:scale(1.04)}
+.day.sel small{color:rgba(255,255,255,.7)}
+.bk-price{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:8px;padding:12px 14px;border-radius:18px;background:var(--lav-soft);font-size:.72rem;color:var(--muted);font-weight:600}
+.bk-price b{font-family:var(--display);font-weight:400;font-size:1.25rem;color:var(--ink);letter-spacing:-.03em;white-space:nowrap}
+.bk-btn{margin-top:auto;text-align:center;background:var(--ink);color:var(--white);border-radius:999px;padding:.95em;font-weight:700;font-size:.9rem;transition:transform .3s var(--bounce),background .3s}
+.bk-btn.sel{transform:scale(.95);background:var(--ink-2)}
+.bk-form{display:flex;flex-direction:column;gap:10px;flex:1}
+.bk-done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;padding:10px}
+.bk-check{width:72px;height:72px;border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center;animation:popin .6s var(--bounce)}
+.bk-done b{font-family:var(--display);font-weight:400;font-size:1.45rem;letter-spacing:-.03em;line-height:1}
+.bk-when{font-family:var(--mono);font-size:.74rem;color:var(--muted)}
+.bk-done ul{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px;width:100%}
+.bk-done li{display:flex;align-items:center;gap:8px;background:var(--lav-soft);border-radius:999px;padding:8px 12px;font-weight:700;font-size:.74rem;text-align:left}
+.bk-done li::before{content:"✓";flex:none;width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center;font-size:.6rem}
+@keyframes popin{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+
+.st-stage .chipw{position:absolute;z-index:3}
+.q1{left:4%;top:6%}.q2{right:5%;top:4%}.q3{left:0;top:32%}.q4{right:1%;top:30%}
+.q5{left:6%;top:58%}.q6{right:4%;top:56%}.q7{left:14%;top:80%}.q8{right:12%;top:79%}
+.q1 .chip{animation-delay:-.9s}.q2 .chip{animation-delay:-2.1s}.q3 .chip{animation-delay:-3.3s}.q4 .chip{animation-delay:-4.4s}.q5 .chip{animation-delay:-5.2s}.q6 .chip{animation-delay:-1.4s}.q7 .chip{animation-delay:-2.8s}.q8 .chip{animation-delay:-6.1s}
+
+/* Seq-motor: dolda steg */
+.seq .hid{display:none!important}
+.seq [data-s]{animation:seqin .45s var(--ease)}
+@keyframes seqin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* Integrationer */
+.integ{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px;padding:clamp(22px,3vw,34px) clamp(22px,3.4vw,44px);border-radius:var(--r-l);background:var(--lav-soft)}
+.integ .it-lead{font-family:var(--display);font-size:clamp(20px,2vw,28px);letter-spacing:-.03em;line-height:1.05;max-width:24ch}
+.integ .it-lead small{display:block;font-family:var(--sans);font-size:.95rem;letter-spacing:0;line-height:1.45;color:var(--muted);margin-top:8px;max-width:46ch}
+.it-badges{display:flex;flex-wrap:wrap;gap:8px}
+.it-badges span{background:var(--white);border-radius:999px;padding:.7em 1.2em;font-weight:700;font-size:.92rem;box-shadow:0 0 0 1px var(--line)}
+.it-badges .api{background:var(--ink);color:var(--white);box-shadow:none}
+
+/* Känner ni igen er? */
+.pains{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;list-style:none;margin:0;padding:0}
+.pain{width:100%;height:100%;text-align:left;font:inherit;color:var(--ink);cursor:pointer;border:0;border-radius:var(--r-m);background:var(--lav-soft);padding:22px 22px 20px;display:flex;flex-direction:column;gap:14px;transition:background .4s var(--ease),color .4s,transform .45s var(--bounce)}
+.pain:hover{transform:translateY(-3px)}
+.pain .pq{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.pain .pq b{font-family:var(--display);font-weight:400;font-size:clamp(20px,1.7vw,24px);letter-spacing:-.035em;line-height:1.05}
+.pain .pl{flex:none;width:34px;height:34px;border-radius:50%;background:var(--white);color:var(--ink);display:grid;place-items:center;transition:transform .45s var(--bounce)}
+.pain .lab{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
+.pain .fx{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
+.pain .fx>span{display:block;overflow:hidden}
+.pain .fxp{display:block;font-size:.95rem;line-height:1.45;padding-top:2px}
+.pain .lab{display:block}
+.pain .fx .m{display:inline-block;margin-top:10px;background:var(--lav);color:var(--on-lav);border-radius:999px;padding:.35em .85em;font-weight:700;font-size:.78rem}
+.pain[aria-expanded="true"]{background:var(--ink);color:var(--white)}
+.pain[aria-expanded="true"] .pl{transform:rotate(45deg)}
+.pain[aria-expanded="true"] .fx{grid-template-rows:1fr}
+.pains-hint{margin-top:18px;color:var(--muted);font-size:.92rem;font-weight:600}
+
+/* Bento med produkter */
+.pbento{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.pbento .card{min-height:0}
+.pbento .card h3{font-size:clamp(30px,3vw,46px)}
+.pn{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pcat{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;border:1px solid currentColor;border-radius:999px;padding:.35em .8em;opacity:.75}
+.plead{font-size:1rem!important;max-width:52ch}
+.pts{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:.92rem;line-height:1.4}
+.pts li{position:relative;padding-left:20px}
+.pts li::before{content:"";position:absolute;left:2px;top:.5em;width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.55}
+.pts b{font-weight:700}
+.fgroups{display:grid;grid-template-columns:1fr 1fr;gap:18px 24px}
+.fgroups h4{font-family:var(--mono);font-weight:400;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;line-height:1.3;margin-bottom:8px;opacity:.7}
+.price{margin-top:auto;padding-top:16px;border-top:1px solid var(--line);display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px}
+.price .f{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
+.price b{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.4vw,34px);letter-spacing:-.04em;line-height:1}
+.price .u{font-weight:700}
+.price .setup{font-size:.85rem;opacity:.7;font-weight:600}
+.c-bokis{grid-column:span 2;grid-row:span 2;background:var(--peach)}
+.c-chat{grid-column:span 2;grid-row:span 2;background:var(--ink);color:var(--white)}
+.c-chat .ico{background:var(--lav);color:var(--on-lav)}
+.c-chat .price{border-color:rgba(255,255,255,.18)}
+.c-feed{grid-column:span 2;background:var(--white);box-shadow:inset 0 0 0 1px var(--line)}
+.c-pam{background:var(--butter)}
+.c-head{background:var(--lav)}
+.c-head,.c-head .pts{color:var(--on-lav)}
+.c-head .price{border-color:currentColor}
+.c-pers{grid-column:span 2;background:var(--lav-soft)}
+.c-kund{background:var(--pink);box-shadow:inset 0 0 0 1px var(--line)}
+.c-rek{background:var(--butter)}
+.c-seo{background:var(--peach)}
+.c-mark{grid-column:span 3;background:var(--ink-2);color:var(--white)}
+.c-mark .ico{background:var(--lav);color:var(--on-lav)}
+.split{display:grid;grid-template-columns:1.05fr 1fr;gap:22px;align-items:start}
+.split>div:first-child{display:flex;flex-direction:column;gap:14px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.tags li{border:1px solid currentColor;border-radius:999px;padding:.4em .85em;font-weight:600;font-size:.8rem}
+
+/* mini-UI */
+.mini{background:var(--white);color:var(--ink);border-radius:20px;padding:14px;font-size:.78rem;box-shadow:0 18px 40px -26px rgba(14,14,12,.45)}
+.mini small{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.chat{display:flex;flex-direction:column;gap:7px;justify-content:flex-end;min-height:286px;background:var(--white);color:var(--ink);border-radius:24px;padding:16px}
+.chat .top{display:flex;align-items:center;gap:8px;padding-bottom:10px;margin-bottom:auto;border-bottom:1px solid var(--line)}
+.chat .top b{font-family:var(--display);font-weight:400;font-size:1.05rem;letter-spacing:-.02em}
+.chat .top span{font-size:.72rem;color:var(--muted)}
+.msg{max-width:84%;padding:9px 12px;border-radius:16px;font-size:.8rem;line-height:1.38}
+.msg.me{align-self:flex-end;background:var(--ink);color:var(--white);border-bottom-right-radius:5px}
+.msg.bot{align-self:flex-start;background:var(--lav-soft);border-bottom-left-radius:5px}
+.typing{align-self:flex-start;display:flex;gap:4px;background:var(--lav-soft);border-radius:14px;padding:11px 13px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:tdot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes tdot{0%,60%,100%{opacity:.25;transform:none}30%{opacity:1;transform:translateY(-3px)}}
+.copts{display:flex;gap:6px;flex-wrap:wrap}
+.copts span{border:1px solid var(--line);border-radius:999px;padding:.45em .8em;font-weight:700;font-size:.74rem;transition:background .3s,color .3s}
+.copts span.sel{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.fstars{display:flex;gap:3px;font-size:1.25rem;line-height:1}
+.fstars span{color:rgba(14,14,12,.18);transition:color .25s,transform .4s var(--bounce)}
+.fstars span.sel{color:var(--ink);transform:scale(1.12)}
+.frev{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:.45em .9em .45em .45em;font-weight:700;font-size:.74rem}
+.frev b{width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center;font-size:.7rem}
+.fban{display:flex;gap:10px;align-items:flex-start;background:var(--ink);color:var(--white);border-radius:16px;padding:10px 12px;font-size:.74rem;line-height:1.35}
+.fban b{display:block}
+.fban .k{flex:none;width:26px;height:26px;border-radius:8px;background:var(--lav);color:var(--on-lav);display:grid;place-items:center;font-family:var(--display);font-size:.8rem}
+.inv{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.inv b{font-family:var(--display);font-weight:400;font-size:1.2rem;letter-spacing:-.03em}
+.st{border-radius:999px;padding:.35em .8em;font-weight:700;font-size:.72rem;white-space:nowrap}
+.st.red{background:rgba(14,14,12,.08);color:var(--muted)}
+.st.ok{background:var(--ink);color:var(--white)}
+.sms{margin-top:10px;background:var(--lav-soft);border-radius:14px 14px 14px 4px;padding:9px 11px;line-height:1.4}
+.note{margin-top:8px;display:flex;align-items:center;gap:6px;font-weight:700;font-size:.74rem}
+.note::before{content:"✓";flex:none;width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center;font-size:.6rem}
+.ui-min{min-height:128px}
+.bk-list{display:grid;gap:7px}
+.bk-it{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--lav-soft);border-radius:14px;padding:9px 11px}
+.bk-it b{display:block;font-size:.8rem}
+.bk-it span.d{font-size:.7rem;color:var(--muted)}
+.bk-it.dim{opacity:.5}
+.mbtn{border:1px solid var(--ink);border-radius:999px;padding:.35em .8em;font-weight:700;font-size:.72rem;white-space:nowrap;transition:background .3s,color .3s}
+.mbtn.sel{background:var(--ink);color:var(--white)}
+.kan{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.kan>div{background:var(--lav-soft);border-radius:12px;padding:8px 6px;min-height:84px;display:flex;flex-direction:column;gap:5px}
+.cand{background:var(--white);border-radius:999px;padding:.35em .55em;font-weight:700;font-size:.7rem;box-shadow:0 0 0 1px var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cand.ghost{opacity:.45}
+.cand.win{background:var(--ink);color:var(--white);box-shadow:none}
+.srch{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-weight:600}
+.srch svg{flex:none}
+.serp{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:5px;counter-reset:s}
+.serp li{counter-increment:s;display:flex;align-items:center;gap:8px;border-radius:12px;padding:7px 10px;background:var(--lav-soft);font-weight:600}
+.serp li::before{content:counter(s);font-family:var(--mono);font-size:.66rem;color:var(--muted)}
+.serp li.you{background:var(--ink);color:var(--white)}
+.serp li.you::before{color:rgba(255,255,255,.6)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.kpis div{background:var(--white);color:var(--ink);border-radius:12px;padding:8px}
+.kpis small{display:block;font-family:var(--mono);font-size:.56rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.kpis b{font-size:.8rem}
+.c-head .bars{height:96px;margin-top:6px}
+.pphone{width:190px;background:var(--ink);border-radius:32px;padding:8px;box-shadow:0 24px 50px -24px rgba(0,0,0,.55);margin:0 auto;color:var(--ink)}
+.pphone .scr{background:var(--white);border-radius:25px;padding:16px 12px;min-height:300px;display:flex;flex-direction:column;gap:8px;font-size:.74rem}
+.pin{display:flex;align-items:center;gap:8px;background:var(--lav-soft);border-radius:14px;padding:9px 10px}
+.pin .dot{flex:none;width:10px;height:10px;border-radius:50%;background:#1a9d4f;box-shadow:0 0 0 4px rgba(26,157,79,.18)}
+.pin b{display:block;font-size:.8rem}
+.pin span{font-size:.66rem;color:var(--muted)}
+.chk{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.chk li{display:flex;align-items:center;gap:7px;border-radius:999px;padding:6px 9px;background:var(--bone);font-weight:700;font-size:.7rem}
+.chk li::before{content:"";flex:none;width:15px;height:15px;border-radius:50%;border:1.5px solid var(--muted);transition:background .3s,border-color .3s}
+.chk li.sel::before{background:var(--ink);border-color:var(--ink);box-shadow:inset 0 0 0 3px var(--white)}
+.ai{margin-top:auto;background:var(--ink);color:var(--white);border-radius:14px 14px 14px 4px;padding:9px 10px;line-height:1.4;font-size:.7rem}
+.ai b{color:var(--lav)}
+.mrows{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.mrows>li{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:var(--r-m);padding:20px;display:flex;flex-direction:column;gap:12px}
+.mrows .t{font-family:var(--display);font-size:1.35rem;letter-spacing:-.03em;line-height:1.05}
+.mrows .t small{display:block;font-family:var(--sans);letter-spacing:0;font-size:.85rem;opacity:.7;margin-top:6px;line-height:1.35}
+.mrows .price{border-color:rgba(255,255,255,.18)}
+.pnote{display:flex;gap:10px;align-items:flex-start;margin-top:18px;color:var(--muted);font-size:.92rem;font-weight:600;max-width:70ch}
+.pnote svg{flex:none;margin-top:2px}
+
+/* Kugghjulet */
+.cogs{background:var(--ink);color:var(--white)}
+.cogs .kicker::before{background:var(--lav)}
+.cog-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(32px,5vw,80px);align-items:start}
+.cog-vis{position:sticky;top:110px}
+.cog-vis svg{width:100%;height:auto;display:block;overflow:visible}
+.cog-vis .sat{color:rgba(255,255,255,.42);transition:color .5s var(--ease)}
+.cog-vis .sat.on{color:var(--lav)}
+.cog-vis .lbl{font:700 12px var(--sans);fill:rgba(255,255,255,.55);transition:fill .5s var(--ease)}
+.cog-vis .lbl.on{fill:var(--white)}
+.cog-cap{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;margin-top:12px}
+.cog-cap b{font-family:var(--display);font-weight:400;font-size:1.2rem;letter-spacing:-.02em}
+.cog-cap span{font-family:var(--mono);font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.cogs h2{font-size:clamp(36px,4.6vw,70px);letter-spacing:-.045em;line-height:.95;margin-bottom:22px}
+.cogs .lead{color:rgba(255,255,255,.78);margin-bottom:36px}
+.cogs .lead b{color:var(--white)}
+.flow{list-style:none;margin:0;padding:0 0 0 54px;position:relative;display:grid;gap:14px;counter-reset:f}
+.flow::before{content:"";position:absolute;left:19px;top:20px;bottom:20px;width:3px;border-radius:3px;background:rgba(255,255,255,.14)}
+.flow::after{content:"";position:absolute;left:19px;top:20px;transform:scaleY(var(--p,0));width:3px;border-radius:3px;background:var(--lav);height:calc(100% - 40px);transform-origin:top}
+.flow li{counter-increment:f;position:relative;z-index:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-m);padding:20px 22px;font-size:clamp(16px,1.3vw,18px);line-height:1.45;color:rgba(255,255,255,.62);transition:color .5s var(--ease),background .5s,border-color .5s}
+.flow li::before{content:counter(f,decimal-leading-zero);position:absolute;left:-54px;top:12px;width:41px;height:41px;border-radius:50%;background:var(--ink-2);border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-family:var(--mono);font-size:.72rem;color:rgba(255,255,255,.7);transition:background .5s,color .5s,border-color .5s}
+.flow li b{color:var(--white)}
+.flow li.on{color:var(--white);background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.2)}
+.flow li.on::before{background:var(--lav);color:var(--on-lav);border-color:var(--lav)}
+.cog-sum{margin-top:26px;font-family:var(--display);font-size:clamp(22px,2.2vw,32px);letter-spacing:-.03em;line-height:1.1}
+.cog-sum b{font-weight:400;color:var(--lav)}
+
+/* Digitaliseringsplan */
+.dp-head{text-align:center;max-width:920px;margin:0 auto 48px}
+.dp-head .kicker{justify-content:center}
+.dp-head p{margin:22px auto 0}
+.dstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.dstats>div{border-radius:var(--r-l);padding:24px;background:var(--lav-soft)}
+.dstats>div:nth-child(2){background:var(--butter)}
+.dstats>div:nth-child(3){background:var(--peach)}
+.dstats>div:nth-child(4){background:var(--ink);color:var(--white)}
+.dstats b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(44px,5vw,72px);letter-spacing:-.05em;line-height:1}
+.dstats b i{font-style:normal;font-size:.45em;letter-spacing:-.02em}
+.dstats>div:nth-child(4) b{color:var(--lav)}
+.dstats span{display:block;margin-top:10px;font-weight:600;line-height:1.35}
+.dzero{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;border-radius:var(--r-l);padding:clamp(22px,3vw,36px);box-shadow:inset 0 0 0 1px var(--line);margin-bottom:36px}
+.dzero .n{font-family:var(--display);font-size:clamp(44px,5vw,72px);letter-spacing:-.05em;line-height:1;color:var(--lav-2)}
+.dzero h3{font-size:clamp(22px,2.2vw,32px);letter-spacing:-.04em;margin-bottom:8px}
+.dzero p{color:var(--muted);max-width:70ch}
+.free{background:var(--lav);color:var(--on-lav);border-radius:999px;padding:.6em 1.1em;font-weight:700;white-space:nowrap}
+.phases .scard{min-height:min(60vh,500px)}
+.phases .scard .when{font-family:var(--mono);font-size:.8rem;letter-spacing:.06em;text-transform:uppercase}
+.phases .scard h3{font-size:clamp(34px,4.4vw,68px)}
+.phases .scard ul.mods li{background:transparent}
+.cmp{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch}
+.cmp>div{border-radius:var(--r-m);padding:20px}
+.cmp .today{background:rgba(255,255,255,.55);color:var(--ink)}
+.cmp .after{background:var(--ink);color:var(--white)}
+.scard:nth-child(3) .cmp .today{background:rgba(255,255,255,.08);color:var(--white)}
+.scard:nth-child(3) .cmp .after{background:var(--lav);color:var(--on-lav)}
+.scard:nth-child(2) .cmp .today{background:var(--lav-soft)}
+.cmp h4{font-family:var(--mono);font-weight:400;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;opacity:.7;margin-bottom:12px}
+.scard .cmp ul{display:grid;gap:8px;flex-wrap:nowrap}
+.scard .cmp li{border:0;border-radius:0;padding:0 0 0 18px;position:relative;font-size:.95rem;line-height:1.4;font-weight:500}
+.scard .cmp li::before{content:"";position:absolute;left:0;top:.55em;width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.5}
+.cmp .today li{text-decoration:line-through;text-decoration-color:rgba(127,127,127,.5)}
+.cmp .arrow{align-self:center;width:42px;height:42px;border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center}
+.scard:nth-child(3) .cmp .arrow{background:var(--lav);color:var(--on-lav)}
+.dres{margin-top:14px;border-radius:var(--r-xl);background:var(--ink);color:var(--white);padding:clamp(28px,5vw,64px);text-align:center}
+.dres .rk{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
+.dres h3{font-size:clamp(34px,5vw,76px);letter-spacing:-.05em;color:var(--lav);margin:14px auto 30px;max-width:16ch}
+.wins{list-style:none;margin:0 auto 32px;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;max-width:1100px}
+.wins li{display:flex;flex-direction:column;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--r-m);padding:22px 16px;font-weight:600;line-height:1.35}
+.wins svg{color:var(--lav)}
+.dres .small{display:block;margin-top:16px;font-size:.85rem;opacity:.6}
+
+/* Så jobbar vi – fyra steg */
+.proc .pstep p{font-size:.95rem}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,5vw,80px);align-items:start}
+.faq-grid .h2{font-size:clamp(40px,5.4vw,84px)}
+.faq-grid .lead{margin-top:22px}
+.faqs{display:grid;gap:10px}
+.faqs details{border-radius:var(--r-m);background:var(--lav-soft);transition:background .35s var(--ease)}
+.faqs details[open]{background:var(--butter)}
+.faqs summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:22px 24px;font-family:var(--display);font-size:clamp(18px,1.6vw,23px);letter-spacing:-.03em;line-height:1.15}
+.faqs summary::-webkit-details-marker{display:none}
+.faqs summary .pl{flex:none;width:36px;height:36px;border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center;transition:transform .45s var(--bounce)}
+.faqs details[open] summary .pl{transform:rotate(45deg)}
+.faqs .ans{padding:0 24px 24px;color:var(--ink);max-width:62ch}
+.faqs .ans ul{margin:10px 0 0;padding-left:20px;display:grid;gap:4px}
+
+/* Andra branscher – fyra kort */
+.obr .bgrid{grid-template-columns:repeat(4,1fr)}
+
+/* Responsivt */
+@media (max-width:1100px){
+  .pains{grid-template-columns:repeat(2,1fr)}
+  .pbento{grid-template-columns:repeat(2,1fr)}
+  .c-bokis,.c-chat{grid-row:auto}
+  .c-mark{grid-column:span 2}
+  .c-seo{grid-column:span 2}
+  .mrows{grid-template-columns:1fr}
+  .wins{grid-template-columns:repeat(2,1fr)}
+  .dstats{grid-template-columns:repeat(2,1fr)}
+  .obr .bgrid{grid-template-columns:repeat(2,1fr)}
+  .obr .bcard:last-child{grid-column:auto}
+}
+@media (max-width:900px){
+  .cog-grid,.faq-grid{grid-template-columns:1fr}
+  .cog-vis{position:relative;top:0;max-width:440px;margin:0 auto}
+  .split{grid-template-columns:1fr}
+  .cmp{grid-template-columns:1fr}
+  .cmp .arrow{transform:rotate(90deg);justify-self:center}
+  .dzero{grid-template-columns:1fr;gap:12px}
+  .dzero .free{justify-self:start}
+}
+@media (max-width:640px){
+  .hero h1 .type-line{font-size:.6em}
+  .st-stage{margin-top:64px;padding-bottom:84px}
+  .hph .scr{min-height:500px}
+  .pains{grid-template-columns:1fr}
+  .pbento{grid-template-columns:1fr}
+  .c-bokis,.c-chat,.c-feed,.c-pers,.c-mark,.c-seo{grid-column:auto}
+  .fgroups{grid-template-columns:1fr}
+  .pbento .card{padding:22px}
+  .wins{grid-template-columns:1fr}
+  .dstats{grid-template-columns:1fr 1fr}
+  .dstats>div{padding:18px}
+  .obr .bgrid{grid-template-columns:1fr}
+  .flow{padding-left:46px}
+  .flow li::before{left:-46px;width:36px;height:36px}
+  .flow::before,.flow::after{left:16px}
+  .faqs summary{padding:18px 18px}
+  .faqs .ans{padding:0 18px 20px}
+  .integ{border-radius:28px}
+}
+@media (prefers-reduced-motion:reduce){
+  .hero .kicker,.hero-lead{opacity:1}
+  .dev{transform:none!important}
+}
+
+/* ===== Stodona – genomgående exempel ===== */
+.stodo{display:inline-flex;align-items:center;gap:6px;background:var(--white);color:var(--ink);border-radius:999px;padding:.4em .8em;font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;font-weight:600;box-shadow:0 0 0 1px var(--line);white-space:nowrap}
+.stodo::before{content:"";width:7px;height:7px;border-radius:50%;background:#1a9d4f;box-shadow:0 0 0 3px rgba(26,157,79,.18);flex:none}
+.hph .ph-brand{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hph .ph-brand img{height:19px;width:auto;display:block}
+.hph .ph-url{font-family:var(--mono);font-size:.56rem;letter-spacing:.04em;color:var(--muted);background:var(--bone);border-radius:999px;padding:.35em .6em;white-space:nowrap}
+
+.case{padding-top:clamp(64px,8vw,120px);padding-bottom:clamp(40px,5vw,72px)}
+.sc-head{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(24px,4vw,64px);align-items:end;margin-bottom:clamp(28px,4vw,48px)}
+.sc-head h2{font-size:clamp(38px,5.2vw,82px);letter-spacing:-.05em;line-height:.93}
+.sc-head .lead{margin-bottom:18px}
+.sc-head .lead b{font-weight:700}
+.sc-logo{display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}
+.sc-logo img{height:26px;width:auto;display:block}
+
+/* Webbläsarram: stodona.se */
+.bw{position:relative;border-radius:var(--r-l);background:var(--white);box-shadow:0 0 0 1px var(--line),0 50px 90px -50px rgba(20,20,18,.5);overflow:hidden}
+.bw-bar{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--bone);border-bottom:1px solid var(--line)}
+.bw-dots{display:flex;gap:6px;flex:none}
+.bw-dots i{width:11px;height:11px;border-radius:50%;background:rgba(14,14,12,.14)}
+.bw-url{flex:1;max-width:440px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--white);border-radius:999px;padding:7px 14px;font-family:var(--mono);font-size:.76rem;color:var(--ink);box-shadow:0 0 0 1px var(--line);min-width:0}
+.bw-url span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bw-go{flex:none;font-weight:700;font-size:.82rem;color:var(--ink);text-decoration:none;border-radius:999px;padding:.5em .95em;background:var(--ink);color:var(--white);transition:transform .35s var(--bounce)}
+.bw-go:hover{transform:translateY(-2px)}
+.sw{position:relative;color:#1d1d1b;background:#fff}
+.sw-nav{display:flex;align-items:center;gap:22px;padding:16px clamp(16px,3vw,32px);border-bottom:1px solid rgba(14,14,12,.07)}
+.sw-nav img{height:22px;width:auto;display:block}
+.sw-nav ul{display:flex;gap:18px;list-style:none;margin:0 auto 0 12px;padding:0;font-size:.8rem;font-weight:600;color:#55554f}
+.sw-nav .b{margin-left:auto;background:#1d1d1b;color:#fff;border-radius:10px;padding:.6em 1em;font-size:.78rem;font-weight:700;white-space:nowrap}
+.sw-hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(18px,3vw,40px);padding:clamp(20px,3.4vw,44px) clamp(16px,3vw,32px);align-items:center}
+.sw-hero h3{font-family:var(--display);font-weight:400;font-size:clamp(28px,3.4vw,52px);letter-spacing:-.045em;line-height:.98}
+.sw-hero p{margin-top:12px;font-size:.92rem;line-height:1.5;color:#55554f;max-width:44ch}
+.sw-book{margin-top:18px;border-radius:18px;background:#f6f5f1;padding:16px;display:grid;gap:10px}
+.sw-book label{font-size:.78rem;font-weight:700}
+.sw-opts{display:flex;flex-wrap:wrap;gap:6px}
+.sw-opts span{border:1px solid rgba(14,14,12,.14);background:#fff;border-radius:999px;padding:.45em .85em;font-size:.74rem;font-weight:700;transition:background .35s,color .35s,border-color .35s}
+.sw-opts span.sel{background:#1d1d1b;color:#fff;border-color:#1d1d1b}
+.sw-in{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:12px;padding:10px 12px;font-weight:700;font-size:.85rem;box-shadow:inset 0 0 0 1px rgba(14,14,12,.12)}
+.sw-in small{font-weight:500;color:#77776f;font-size:.74rem}
+.sw-cta{text-align:center;background:#1d1d1b;color:#fff;border-radius:12px;padding:.85em;font-weight:700;font-size:.86rem;transition:transform .3s var(--bounce)}
+.sw-cta.sel{transform:scale(.96)}
+.sw-bul{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:.78rem;font-weight:600}
+.sw-bul li{display:flex;gap:7px;align-items:center}
+.sw-bul li::before{content:"✓";flex:none;width:16px;height:16px;border-radius:50%;background:#1d1d1b;color:#fff;display:grid;place-items:center;font-size:.55rem}
+.sw-vid{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:1/1;background:#eceae5 url('assets/cases/stodona/stodona-hero-poster.jpg') center/cover}
+.sw-vid video{width:100%;height:100%;object-fit:cover;display:block}
+.sw-vid .vtoggle{right:14px;bottom:14px;width:38px;height:38px}
+.evs{position:absolute;left:14px;right:64px;bottom:14px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;z-index:2}
+.evs .chip{font-size:.82rem;padding:8px 14px 8px 8px;max-width:100%}
+.evs .chip .ic{width:30px;height:30px}
+.evs .chip>span:last-child{overflow:hidden;text-overflow:ellipsis}
+.sw-svc{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 clamp(16px,3vw,32px) 78px}
+.sw-svc div{position:relative;border-radius:16px;overflow:hidden;aspect-ratio:4/3;background:#eceae5 center/cover;display:flex;flex-direction:column;justify-content:flex-end;padding:12px;color:#fff}
+.sw-svc div::before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.72),rgba(0,0,0,.05) 70%)}
+.sw-svc b,.sw-svc span{position:relative}
+.sw-svc b{font-size:.9rem}
+.sw-svc span{font-size:.72rem;opacity:.85;line-height:1.3}
+.sw-chat{position:absolute;right:clamp(12px,2vw,24px);bottom:clamp(12px,2vw,24px);z-index:3;display:flex;align-items:center;gap:10px;background:#1d1d1b;color:#fff;border-radius:999px;padding:6px 16px 6px 6px;font-size:.78rem;font-weight:700;box-shadow:0 16px 30px -16px rgba(0,0,0,.6);animation:bob 7s ease-in-out infinite}
+.sw-chat img{width:34px;height:34px;border-radius:50%;object-fit:cover;display:block}
+.sw-chat small{display:block;font-weight:500;opacity:.7;font-size:.68rem}
+.bw-cap{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-top:16px;color:var(--muted);font-weight:600;font-size:.92rem}
+.bw-cap b{color:var(--ink)}
+.bw-cap .tg{border:1px solid var(--line);border-radius:999px;padding:.35em .8em;font-size:.78rem;font-weight:700;color:var(--ink);background:var(--white)}
+
+/* Resultat + en vanlig dag */
+.sd-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,56px);margin-top:clamp(40px,5vw,72px);align-items:start}
+.ckpis{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.ckpi{border-radius:var(--r-m);padding:20px 20px 18px;background:var(--lav-soft);min-width:0}
+.ckpi:nth-child(1){background:var(--ink);color:var(--white);grid-column:1/-1;display:flex;align-items:flex-end;justify-content:space-between;gap:8px 20px;flex-wrap:wrap}
+.ckpi:nth-child(1) b{font-size:clamp(44px,5.2vw,80px);color:var(--lav)}
+.ckpi:nth-child(1)>span{margin:0 0 .3em}
+.ckpi:nth-child(2){background:var(--butter)}
+.ckpi:nth-child(3){background:var(--peach)}
+.ckpi b{display:block;font-family:var(--display);font-weight:400;font-size:clamp(28px,2.9vw,46px);letter-spacing:-.05em;line-height:1;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ckpi b i{font-style:normal;font-size:.5em;letter-spacing:-.02em}
+.ckpi>span{display:block;margin-top:8px;font-weight:600;font-size:.9rem;line-height:1.3}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ba>div{border-radius:var(--r-m);padding:18px 20px;box-shadow:inset 0 0 0 1px var(--line)}
+.ba>div:nth-child(2){background:var(--lav-soft);box-shadow:none}
+.ba h3{font-family:var(--mono);font-size:.74rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.ba ul{list-style:none;margin:0;padding:0;display:grid;gap:7px;font-size:.92rem;line-height:1.35}
+.ba li{display:flex;gap:9px}
+.ba li::before{content:"–";flex:none;color:var(--muted);font-weight:700}
+.ba>div:nth-child(2) li::before{content:"✓";width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center;font-size:.6rem;margin-top:1px}
+.vd-h{font-family:var(--display);font-weight:400;font-size:clamp(26px,2.6vw,38px);letter-spacing:-.04em;line-height:1;margin-bottom:8px}
+.vd-sub{color:var(--muted);font-weight:600;margin-bottom:18px}
+.vd{list-style:none;margin:0 0 24px;padding:0 0 0 44px;position:relative;display:grid;gap:10px;counter-reset:v}
+.vd::before{content:"";position:absolute;left:15px;top:16px;bottom:16px;width:2px;border-radius:2px;background:var(--line)}
+.vd li{counter-increment:v;position:relative;background:var(--bone);border-radius:var(--r-m);padding:14px 16px;font-size:.95rem;line-height:1.4}
+.vd li::before{content:counter(v);position:absolute;left:-44px;top:10px;width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--white);display:grid;place-items:center;font-family:var(--mono);font-size:.72rem}
+.vd li .m{display:inline-block;margin-left:6px;background:var(--lav);color:var(--on-lav);border-radius:999px;padding:.2em .7em;font-weight:700;font-size:.72rem;vertical-align:1px}
+.case-built{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 24px;list-style:none;padding:0}
+.case-built li{border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-weight:700;font-size:.8rem;background:var(--white)}
+.case-built li:first-child{background:var(--ink);color:var(--white);border-color:var(--ink);font-family:var(--mono);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:.7rem;display:flex;align-items:center}
+.sc-btns{display:flex;flex-wrap:wrap;gap:10px}
+@media (min-width:1001px){.sd-grid>div:first-child{position:sticky;top:110px}}
+@media (max-width:1000px){
+  .sc-head,.sd-grid{grid-template-columns:1fr}
+  .sw-nav ul{display:none}
+  .sw-svc{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:700px){
+  .sw-hero{grid-template-columns:1fr}
+  .sw-vid{order:-1;aspect-ratio:4/3}
+  .sw-bul{grid-template-columns:1fr}
+  .bw-go{display:none}
+  .bw-dots{display:none}
+  .sw-chat{position:relative;right:auto;bottom:auto;margin:0 16px 16px;align-self:flex-start;width:max-content;max-width:calc(100% - 32px)}
+  .sw{display:flex;flex-direction:column}
+  .sw-svc{padding-bottom:16px}
+}
+@media (max-width:640px){
+  .ckpi:nth-child(1) b{font-size:clamp(40px,12vw,56px)}
+  .ba{grid-template-columns:1fr}
+  .vd{padding-left:40px}
+  .vd li::before{left:-40px}
+  .sw-nav{gap:10px}
+  .sw-nav img{height:18px}
+  .evs{right:60px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="logo" href="index.html" aria-label="Kela group AB – startsida"><b>KELA</b></a>
+    <nav class="nav-links" aria-label="Huvudmeny">
+      <div class="has-menu">
+        <a href="tjanster.html" aria-haspopup="true">Tjänster ▾</a>
+        <div class="mega" aria-label="Våra tjänster">
+          <div class="mega-head"><span>Vad vi bygger</span><a href="tjanster.html">Se alla →</a></div>
+          <div class="mega-grid">
+            <a class="mega-card" href="bygga-hemsida.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 9h20"/></svg></span><span><b><i>01</i>Bygga hemsida</b><span>Snabba, konverterande webbplatser byggda från grunden.</span></span></a>
+            <a class="mega-card" href="bygga-system.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><span><b><i>02</i>Bygga system</b><span>Affärssystem och interna verktyg kring hur ni jobbar.</span></span></a>
+            <a class="mega-card" href="bokningssystem.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></span><span><b><i>03</i>Bokningssystem</b><span>Kalender, betalning och automatiska bekräftelser.</span></span></a>
+            <a class="mega-card" href="bygga-automationer.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1l2.1-2.1M17 7l2.1-2.1"/></svg></span><span><b><i>04</i>Bygga automationer</b><span>AI-agenter som sköter det repetitiva dygnet runt.</span></span></a>
+            <a class="mega-card" href="bygga-app.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></span><span><b><i>05</i>Mobilappar</b><span>Native appar i App Store och Google Play.</span></span></a>
+          </div>
+        </div>
+      </div>
+      <div class="has-menu">
+        <a href="#branscher" aria-haspopup="true">Branscher ▾</a>
+        <div class="mega" aria-label="Branscher">
+          <div class="mega-head"><span>Byggt för er bransch</span></div>
+          <div class="mega-grid">
+            <a class="mega-card" href="bransch-stad.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21h16M7 21V10l5-6 5 6v11"/><path d="M10 21v-5h4v5"/></svg></span><span><b>Städ & service</b><span>Bokning, schema, personalapp och påminnelser för städbolag.</span></span></a>
+            <a class="mega-card" href="bransch-skonhet.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c3 4 5 6.5 5 9.5a5 5 0 0 1-10 0C7 9.5 9 7 12 3z"/></svg></span><span><b>Skönhet & salong</b><span>Hudvård, naglar, fransar och spa – bokat dygnet runt.</span></span></a>
+            <a class="mega-card" href="bransch-harstylist.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="3"/><circle cx="6" cy="17" r="3"/><path d="M8.5 8.5L20 18M8.5 15.5L20 6"/></svg></span><span><b>Frisör & hårstylist</b><span>Onlinebokning, påminnelser och återkommande kunder.</span></span></a>
+            <a class="mega-card" href="bransch-makeup.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M10 21V11h4v10M11 11V5l2-2v8"/></svg></span><span><b>Makeupartister</b><span>Portfolio, förfrågningar och bröllopsbokningar.</span></span></a>
+            <a class="mega-card" href="bransch-frilans.html"><span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><span><b>Frilansare & konsulter</b><span>Hemsida, offert, fakturor och kundflöde på autopilot.</span></span></a>
+          </div>
+        </div>
+      </div>
+      <a href="priskalkylator.html">Priser</a>
+      <a href="case.html">Case</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-dark" href="kontakt.html">Kontakt <span class="arr" aria-hidden="true">→</span></a>
+      <button class="burger" id="burger" aria-expanded="false" aria-controls="mmenu" aria-label="Öppna meny"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mmenu" id="mmenu" aria-hidden="true">
+  <div>
+    <ul class="big"><li><a href="tjanster.html">Tjänster</a></li></ul>
+    <div class="sub">
+      <a href="bygga-hemsida.html">Bygga hemsida</a><a href="bygga-system.html">Bygga system</a><a href="bokningssystem.html">Bokningssystem</a><a href="bygga-automationer.html">Bygga automationer</a><a href="bygga-app.html">Mobilappar</a>
+    </div>
+    <ul class="big"><li><a href="#branscher">Branscher</a></li></ul>
+    <div class="sub">
+      <a href="bransch-stad.html">Städ & service</a><a href="bransch-skonhet.html">Skönhet & salong</a><a href="bransch-harstylist.html">Frisör & hårstylist</a><a href="bransch-makeup.html">Makeupartister</a><a href="bransch-frilans.html">Frilansare & konsulter</a>
+    </div>
+    <ul class="big">
+      <li><a href="priskalkylator.html">Priser</a></li>
+      <li><a href="case.html">Case</a></li>
+      <li><a href="kontakt.html">Kontakt</a></li>
+    </ul>
+  </div>
+  <a class="btn btn-dark" href="kontakt.html">Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
+</div>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="h1">
+    <div class="wrap hero-top">
+      <span class="kicker">Bransch · Städ &amp; service · I drift hos Stodona</span>
+      <h1 id="h1"><span class="l1"><span>Vi bygger</span></span>
+        <span class="type-line"><span class="type-box"><span id="typer" data-words='["bokningssystem","chattbottar","personalappar","kundappar","påminnelser","dashboards","feedback"]'>bokningssystem</span><span class="type-caret" aria-hidden="true"></span></span></span>
+      </h1>
+      <p class="hero-sub">…för städbolag som sköter sig själva.</p>
+      <p class="hero-lead">Bokningar, chatt, feedback, påminnelser, dashboard och appar — byggt för städbranschen och kopplat via API direkt till ert affärssystem. Vi kör vårt eget städbolag Stodona på systemen – varje dag.</p>
+      <div class="hero-cta">
+        <a class="btn btn-dark" href="kontakt.html"><span class="dot" aria-hidden="true"></span>Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn-line" href="#case">Så kör Stodona ↓</a>
+      </div>
+    </div>
+
+    <div class="hero-stage st-stage" id="stage">
+      <div class="dev" id="dev">
+        <div class="hph seq" data-steps="10" data-speed="950" data-final="6" role="img" aria-label="Stodonas bokning i mobilen, byggd med Bokis: kunden väljer hemstädning, dag och tid, ser priset efter RUT och får bokningen bekräftad">
+          <div class="scr" aria-hidden="true">
+            <span class="notch"></span>
+            <div><div class="ph-brand"><img src="assets/clients/stodona.png" alt="" width="2000" height="567"><span class="ph-url">boka.stodona.se</span></div><div class="sub">Boka städning · byggt med Bokis</div></div>
+            <div class="bk-form" data-e="5">
+              <div class="lbl">Tjänst</div>
+              <div class="row"><span class="opt" data-sel="1">Hemstädning</span><span class="opt">Flyttstädning</span></div>
+              <div class="lbl">Dag</div>
+              <div class="row"><span class="day"><small>Mån</small>20</span><span class="day" data-sel="2"><small>Tis</small>21</span><span class="day"><small>Ons</small>22</span><span class="day"><small>Tor</small>23</span></div>
+              <div class="lbl">Tid</div>
+              <div class="row"><span class="opt">08:00</span><span class="opt off">10:00</span><span class="opt" data-sel="3">13:00</span></div>
+              <div class="bk-price"><span>Varannan vecka<br>85 kvm, efter RUT</span><b>1 255 kr</b></div>
+              <span class="bk-btn" data-sel="4">Boka städning</span>
+            </div>
+            <div class="bk-done" data-s="5">
+              <span class="bk-check"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
+              <b>Bokning bekräftad!</b>
+              <span class="bk-when">Tis 21 okt · 13:00</span>
+              <ul><li>Orderbekräftelse skickad</li><li>Välkomst-sms med all info</li><li>Påminnelse före besöket</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="chipw q1" data-speed="-0.16" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></span><span>Ny bokning via stodona.se<small>Bokis · pris direkt</small></span></div></div>
+      <div class="chipw q2 dark" data-speed="0.12" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg></span><span>Chattis<small>Bokar om dygnet runt</small></span></div></div>
+      <div class="chipw q3" data-speed="-0.08" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg></span><span>★★★★★ från kund<small>Feedis · till städaren direkt</small></span></div></div>
+      <div class="chipw q4" data-speed="0.18" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span><span>Faktura betald<small>Påminnis · Fortnox</small></span></div></div>
+      <div class="chipw q5 dark" data-speed="0.1" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span>Headof<small>Hela verksamheten live</small></span></div></div>
+      <div class="chipw q6" data-speed="-0.14" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/></svg></span><span>Incheckad · GPS ✓<small>Personalappen</small></span></div></div>
+      <div class="chipw q7" data-speed="0.14" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><span>Kunden bokade om själv<small>Kundportalen</small></span></div></div>
+      <div class="chipw q8 dark" data-speed="-0.12" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></span><span>Ert affärssystem<small>Kopplat via API</small></span></div></div>
+    </div>
+  </section>
+
+  <!-- STODONA: GENOMGÅENDE EXEMPEL -->
+  <section class="sec case" id="case" aria-labelledby="case-h">
+    <div class="wrap">
+      <div class="sc-head">
+        <div>
+          <span class="kicker">Kundcase · Stodona AB</span>
+          <h2 class="rv" id="case-h">Så kör Stodona hela sitt städbolag på Kelas system.</h2>
+        </div>
+        <div>
+          <p class="lead rv">Vi kör vårt eget städbolag <b>Stodona</b> på systemen – det här är vår vardag, varje dag. Allt ni ser på den här sidan används skarpt där.</p>
+          <div class="sc-logo rv"><img src="assets/clients/stodona.png" alt="Stodona" width="2000" height="567" loading="lazy"><span class="stodo">I drift varje dag</span></div>
+        </div>
+      </div>
+
+      <!-- stodona.se i en webbläsarram -->
+      <div class="bw rv">
+        <div class="bw-bar">
+          <span class="bw-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="bw-url"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>stodona.se</span></span>
+          <a class="bw-go" href="https://stodona.se" target="_blank" rel="noopener">Besök stodona.se ↗</a>
+        </div>
+        <div class="sw">
+          <div class="sw-nav" aria-hidden="true">
+            <img src="assets/clients/stodona.png" alt="" width="2000" height="567" loading="lazy">
+            <ul><li>Hemstädning</li><li>Flyttstädning</li><li>Fönsterputsning</li><li>Företagsstädning</li></ul>
+            <span class="b">Boka städning</span>
+          </div>
+          <div class="sw-hero">
+            <div aria-hidden="true">
+              <h3>Behöver du hjälp med städningen?</h3>
+              <p>Professionellt städbolag i Stockholm – allt från hemstädning och flyttstädning till storstädning. Samma team varje gång.</p>
+              <div class="sw-book seq" data-steps="7" data-speed="1100" data-final="4">
+                <label>Vad behöver du hjälp med?</label>
+                <div class="sw-opts"><span data-sel="1">Hemstädning</span><span>Flyttstädning</span><span>Storstädning</span><span>Fönsterputsning</span></div>
+                <label>Hur många kvm bor du på?</label>
+                <div class="sw-in"><span data-e="2">–</span><span data-s="2">85 kvm</span><small>RUT-avdrag direkt på fakturan</small></div>
+                <span class="sw-cta" data-sel="3">Se pris och boka</span>
+              </div>
+              <ul class="sw-bul"><li>100 % nöjdgaranti</li><li>Abonnemang för bättre priser</li><li>Samma team som lär känna ert hem</li><li>Hjälp direkt i chatten</li></ul>
+            </div>
+            <div class="sw-vid">
+              <video id="caseVid" aria-label="Stodonas hemsida stodona.se, byggd av Kela – video: händer som bäddar en säng med vita lakan" autoplay muted loop playsinline preload="metadata" poster="assets/cases/stodona/stodona-hero-poster.jpg">
+                <source src="assets/cases/stodona/stodona-hero.mp4" type="video/mp4">
+              </video>
+              <div class="evs seq" aria-hidden="true" data-steps="7" data-speed="1500" data-final="3">
+                <div class="chip" data-s="1" data-e="3"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></span><span>Ny bokning via stodona.se<small>Hemstädning · Bokis</small></span></div>
+                <div class="chip" data-s="2" data-e="4"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/></svg></span><span>Städaren har checkat in<small>GPS ✓ · Personalappen</small></span></div>
+                <div class="chip" data-s="3" data-e="5"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg></span><span>★★★★★ från kund<small>Skickat vidare till städaren · Feedis</small></span></div>
+                <div class="chip" data-s="4" data-e="6"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Faktura betald<small>Påminnis · Fortnox</small></span></div>
+                <div class="chip" data-s="5" data-e="7"><span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><span>Kunden bokade om själv<small>Kundportalen</small></span></div>
+              </div>
+              <button class="vtoggle" id="caseToggle" aria-label="Pausa video">❚❚</button>
+            </div>
+          </div>
+          <div class="sw-svc" aria-hidden="true">
+            <div style="background-image:url('assets/cases/stodona/site-hemstadning.jpg')"><b>Hemstädning</b><span>Regelbunden städning för ett fräscht hem.</span></div>
+            <div style="background-image:url('assets/cases/stodona/site-flyttstadning.jpg')"><b>Flyttstädning</b><span>Grundlig städning inför flytt.</span></div>
+            <div style="background-image:url('assets/cases/stodona/site-fonsterputsning.jpg')"><b>Fönsterputsning</b><span>Få skinande rena fönster.</span></div>
+            <div style="background-image:url('assets/cases/stodona/site-kontorsstadning.jpg')"><b>Kontorsstädning</b><span>Håll rent på kontoret.</span></div>
+          </div>
+          <div class="sw-chat" aria-hidden="true"><img src="assets/cases/stodona/site-camilla.jpg" alt="" width="192" height="192" loading="lazy"><span>Chatta med Camilla på Stodona<small>Stodonas digitala assistent</small></span></div>
+        </div>
+      </div>
+      <p class="bw-cap rv"><b>Hemsidan är också byggd av Kela</b> — med bokningen inbyggd:<span class="tg">Onlinebokning</span><span class="tg">Kundportal</span><span class="tg">Chatt</span><span class="tg">Lediga jobb</span><span class="tg">RUT direkt på fakturan</span></p>
+
+      <div class="sd-grid">
+        <div>
+          <div class="ckpis rv">
+            <div class="ckpi"><b>≈ <span class="cnt" data-to="565000" data-fmt="sv">565 000</span><i> kr</i></b><span>lägre kostnad per år</span></div>
+            <div class="ckpi"><b>4 → <span class="cnt" data-from="4" data-to="1">1</span></b><span>person i administrationen</span></div>
+            <div class="ckpi"><b><span class="cnt" data-to="3">3</span></b><span>heltidstjänster frigjorda</span></div>
+          </div>
+          <div class="ba rv">
+            <div>
+              <h3>Före</h3>
+              <ul>
+                <li>4 personer inom administration</li>
+                <li>Flera externa system och leverantörer</li>
+                <li>Manuella fakturor, feedback och rekrytering</li>
+                <li>Ingen inbyggd merförsäljning</li>
+              </ul>
+            </div>
+            <div>
+              <h3>Idag</h3>
+              <ul>
+                <li>1 person sköter admin och hinner stötta personal och kundmöten</li>
+                <li>Egna system anpassade efter verksamheten</li>
+                <li>Lägre fasta kostnader</li>
+                <li>Merförsäljning inbyggd i kundflödet</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="vd-h rv">En vanlig dag hos Stodona</h3>
+          <p class="vd-sub rv">Så rullar det – utan att någon sitter och flyttar data.</p>
+          <ol class="vd">
+            <li class="rv">Kunden bokar hemstädning på stodona.se och ser priset direkt. Bokningen landar i schemat.<span class="m">Bokis</span></li>
+            <li class="rv">Orderbekräftelse, välkomst-sms och påminnelse före besöket går ut automatiskt.<span class="m">Bokis</span></li>
+            <li class="rv">Städaren checkar in med GPS och bockar av kvalitetskontrollen i mobilen.<span class="m">Personalapp</span></li>
+            <li class="rv">Efter städningen får kunden ett sms-betyg. Bra betyg skickas direkt till städaren.<span class="m">Feedis</span></li>
+            <li class="rv">Fakturan går via Fortnox – blir den liggande jagas den med mail och sms.<span class="m">Påminnis</span></li>
+            <li class="rv">Kunden bokar om, avbokar eller hittar sin faktura själv i kundportalen.<span class="m">Kundportal</span></li>
+            <li class="rv">Nya städare söker via stodona.se och hanteras från ansökan till första dagen.<span class="m">Rekrytering</span></li>
+          </ol>
+          <ul class="case-built rv" aria-label="Det här byggde vi åt Stodona">
+            <li>Vi byggde</li>
+            <li>Bokningssystem</li><li>Feedbacksystem</li><li>Fakturaautomation · Fortnox</li><li>Hemsida</li><li>Rekryteringssystem</li><li>Personalapp</li><li>Kundportal</li><li>Automatiserad admin</li>
+          </ul>
+          <div class="sc-btns rv">
+            <a class="btn btn-dark" href="case.html">Läs hela caset <span class="arr" aria-hidden="true">→</span></a>
+            <a class="btn btn-line" href="https://stodona.se" target="_blank" rel="noopener">Besök stodona.se ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTEGRATIONER -->
+  <section class="sec" style="padding-bottom:0;padding-top:clamp(48px,6vw,80px)" aria-label="Integrationer">
+    <div class="wrap">
+      <div class="integ rv">
+        <div class="it-lead">Allt kopplas via API till ert affärssystem
+          <small>Vi integrerar mot det ni redan använder — ni byter ingenting, allt bara börjar hänga ihop.</small>
+        </div>
+        <div class="it-badges"><span>Timewave</span><span>Tengella</span><span>Fortnox</span><span>Visma</span><span class="api">+ allt med API</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KÄNNER NI IGEN ER -->
+  <section class="sec" aria-labelledby="pain-h">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="kicker">Känner ni igen er?</span>
+          <h2 class="h2 rv" id="pain-h">Så ser vardagen<br>ut idag.</h2>
+        </div>
+        <p class="lead rv">Tryck på det som stämmer — så ser ni vad som tar över det med Kela.</p>
+      </div>
+      <ul class="pains" role="list">
+        <li class="rv"><button class="pain" type="button" aria-expanded="false"><span class="pq"><b>Bokningar via telefon och mejl</b><span class="pl" aria-hidden="true">+</span></span><span class="fx"><span class="fxi"><span class="lab">Med Kela</span><span class="fxp">Pris och bokning direkt online, dygnet runt — och schemat lägger sig självt.</span><span class="m">Bokis</span></span></span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-expanded="false"><span class="pq"><b>Kvällsförfrågningar utan svar</b><span class="pl" aria-hidden="true">+</span></span><span class="fx"><span class="fxi"><span class="lab">Med Kela</span><span class="fxp">Chattis svarar kunder direkt, även kvällar och helger, och bokar om automatiskt.</span><span class="m">Chattis</span></span></span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-expanded="false"><span class="pq"><b>Offerter som tar dagar</b><span class="pl" aria-hidden="true">+</span></span><span class="fx"><span class="fxi"><span class="lab">Med Kela</span><span class="fxp">Skicka offerter direkt från systemet. Onlinebokningen räknar ut pris direkt.</span><span class="m">Bokis</span></span></span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-expanded="false"><span class="pq"><b>Tidrapporter på papper</b><span class="pl" aria-hidden="true">+</span></span><span class="fx"><span class="fxi"><span class="lab">Med Kela</span><span class="fxp">GPS-incheck och tid rakt in i affärssystemet.</span><span class="m">Personalapp</span></span></span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-expanded="false"><span class="pq"><b>Klagomål som upptäcks för sent</b><span class="pl" aria-hidden="true">+</span></span><span class="fx"><span class="fxi"><span class="lab">Med Kela</span><span class="fxp">Kvalitetskontroll efter varje uppdrag. Missnöje fångas i tid och ni får fler recensioner.</span><span class="m">Feedis</span></span></span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-expanded="false"><span class="pq"><b>Någon jagar obetalda fakturor</b><span class="pl" aria-hidden="true">+</span></span><span class="fx"><span class="fxi"><span class="lab">Med Kela</span><span class="fxp">Påminnelser via mail och sms går ut automatiskt.</span><span class="m">Påminnis</span></span></span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-expanded="false"><span class="pq"><b>Nyckeltal i Excel eller i huvudet</b><span class="pl" aria-hidden="true">+</span></span><span class="fx"><span class="fxi"><span class="lab">Med Kela</span><span class="fxp">Hela verksamheten live, kopplad till ert affärssystem.</span><span class="m">Headof</span></span></span></button></li>
+        <li class="rv"><button class="pain" type="button" aria-expanded="false"><span class="pq"><b>Kunden ringer för varje ändring</b><span class="pl" aria-hidden="true">+</span></span><span class="fx"><span class="fxi"><span class="lab">Med Kela</span><span class="fxp">Kunden fixar ändringar själv i appen.</span><span class="m">Kundapp</span></span></span></button></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- TJÄNSTER & PRISER -->
+  <section class="sec" id="priser" style="padding-top:0" aria-labelledby="mod-h">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="kicker">Tjänster &amp; priser</span>
+          <h2 class="h2 rv" id="mod-h">Moduler byggda<br>för städbolag.</h2>
+        </div>
+        <p class="lead rv">Varje modul fungerar på egen hand — men det är när de kopplas ihop med varandra och ert affärssystem som städbolaget börjar sköta sig självt.</p>
+      </div>
+
+      <div class="pbento">
+        <!-- Bokis -->
+        <article class="card c-bokis rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg></span>
+          <div class="pn"><h3>Bokis</h3><span class="pcat">Bokningssystem</span> <span class="stodo">I drift hos Stodona</span></div>
+          <p class="plead">Ett sömlöst bokningssystem som pratar direkt med ert schemasystem. Skräddarsytt helt utifrån er verksamhet och era tjänster.</p>
+          <div class="fgroups">
+            <div><h4>Bokning &amp; schema</h4><ul class="pts"><li>Onlinebokning som räknar ut pris direkt</li><li>Beräknar restiden mellan uppdragen</li><li><b>Automatisk schemaläggning</b> som hittar lediga luckor</li><li>Tilläggstjänster och abonnemang</li></ul></div>
+            <div><h4>Kunden får all info</h4><ul class="pts"><li><b>Orderbekräftelse</b> direkt när bokningen är gjord</li><li><b>Välkomstmail och sms</b> med allt kunden behöver veta inför städningen</li><li><b>Påminnelser</b> före besöket, t.ex. att ha rätt material hemma</li><li>Färre frågor till kontoret och färre missade besök</li></ul></div>
+            <div><h4>Rätt person på rätt jobb</h4><ul class="pts"><li>Säkerställer rätt kompetens på varje bokning</li><li><b>Ni bestämmer</b> vem som får bokningen</li><li>Baserat på beläggning, erfarenhet och era egna regler</li></ul></div>
+            <div><h4>Även internt</h4><ul class="pts"><li>Skicka offerter direkt från systemet</li><li>Lägg bokningar åt kunder på telefon eller mejl</li><li>Samma system för kunder och kontor</li></ul></div>
+          </div>
+          <div class="price"><span class="f">Från</span><b>6 999 kr</b><span class="u">/mån</span><span class="setup">+ uppstartskostnad</span></div>
+        </article>
+
+        <!-- Chattis -->
+        <article class="card c-chat rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></svg></span>
+          <div class="pn"><h3>Chattis</h3><span class="pcat">AI-chattbot</span></div>
+          <p class="plead">En chattbot som pratar direkt med ert affärssystem. Ca 95 % av ett städbolags mejl och kundserviceärenden handlar om bokningar och fakturor. Det sköter Chattis helt själv.</p>
+          <div class="split">
+            <div>
+              <ul class="pts"><li>Bokning, ombokning och ändringar</li><li>Avbokning och sjukdom</li><li>Fakturafrågor, obetalda fakturor och betalningar</li><li>Kunder kan lägga beställningar direkt i chatten</li><li>Föreslår nya tider — kunden får <b>samma städare</b> om hen önskar</li><li>Ser om städaren har ett engångsuppdrag som en kollega kan ta, och frigör tiden åt den återkommande kunden</li><li>Svarar direkt, även kvällar och helger</li><li>Internt stöd för bokningshanteringen</li></ul>
+            </div>
+            <div class="chat seq" data-steps="11" data-speed="1150" data-final="9" aria-hidden="true">
+              <div class="top"><b>Chattis</b><span>Svarar direkt · dygnet runt</span></div>
+              <div class="msg me" data-s="1">Hej! Jag är sjuk på torsdag. Kan vi flytta städningen?</div>
+              <div class="typing" data-s="2" data-e="3"><i></i><i></i><i></i></div>
+              <div class="msg bot" data-s="3">Krya på dig! Lediga tider med <b>Anna</b>, din vanliga städare:</div>
+              <div class="copts" data-s="4"><span>Mån 27 · 09:00</span><span data-sel="5">Tis 28 · 13:00</span></div>
+              <div class="msg me" data-s="6">Tisdag passar!</div>
+              <div class="typing" data-s="7" data-e="8"><i></i><i></i><i></i></div>
+              <div class="msg bot" data-s="8">Klart! Flyttad till <b>tis 28 okt 13:00</b> med Anna. Bekräftelse skickad ✓</div>
+            </div>
+          </div>
+          <div class="price"><span class="f">Från</span><b>15 000 kr</b><span class="u">/mån</span><span class="setup">+ uppstartskostnad</span></div>
+        </article>
+
+        <!-- Feedis -->
+        <article class="card c-feed rv">
+          <div class="split">
+            <div>
+              <span class="ico" aria-hidden="true" style="background:var(--lav);color:var(--on-lav)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.5 9.2l5.9-.9z"/></svg></span>
+              <div class="pn"><h3>Feedis</h3><span class="pcat">Feedbacksystem</span> <span class="stodo">I drift hos Stodona</span></div>
+              <p class="plead">Feedback är en av de viktigaste sakerna att agera på i städbranschen. Feedis ser till att varje kund blir bemött och att personalen får höra det, både ris och ros.</p>
+              <ul class="pts"><li>Kunden får ett sms och betygsätter städningen</li><li>All feedback samlas på ett ställe</li><li>Vid bra feedback får personalen <b>direkt ett sms</b> med kundens ord</li><li>Missnöje går till kontoret med förslag på åtgärd</li><li>Återkoppling till både kund och personal</li><li>Nöjda kunder får en länk till Google, Trustpilot eller Reco</li></ul>
+            </div>
+            <div class="chat seq" data-steps="13" data-speed="850" data-final="11" aria-hidden="true" style="background:var(--lav-soft)">
+              <div class="top"><b>Meddelanden</b><span>Från: Ert städbolag</span></div>
+              <div class="msg bot" data-s="1" style="background:var(--white)">Hej Maria! Hur nöjd är du med dagens städning? Tryck på ett betyg.</div>
+              <div class="fstars" data-s="1"><span data-sel="2">★</span><span data-sel="3">★</span><span data-sel="4">★</span><span data-sel="5">★</span><span data-sel="6">★</span></div>
+              <div class="msg me" data-s="7">Allt skinande rent, tack Anna!</div>
+              <div class="msg bot" data-s="8" style="background:var(--white)">Tack Maria! Vill du dela det med fler?</div>
+              <div class="frev" data-s="9" style="background:var(--white)"><b>G</b>Lämna omdöme på Google</div>
+              <div class="fban" data-s="10"><span class="k">K</span><div><b>Till Anna</b>Maria gav dig 5 ★ – ”Allt skinande rent, tack Anna!”</div></div>
+            </div>
+          </div>
+          <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+        </article>
+
+        <!-- Påminnis -->
+        <article class="card c-pam rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
+          <div class="pn"><h3>Påminnis</h3><span class="pcat">Påminnelser</span> <span class="stodo">I drift hos Stodona</span></div>
+          <p class="plead">Obetalda fakturor jagas automatiskt, utan att ni lyfter ett finger.</p>
+          <div class="mini ui-min seq" data-steps="9" data-speed="1100" data-final="6" aria-hidden="true">
+            <div class="inv"><div><small>Faktura #1042</small><b>1 245 kr</b></div><span class="st red" data-e="5">Förfallen</span><span class="st ok" data-s="5">Betald ✓</span></div>
+            <div class="sms" data-s="2"><small>SMS · 09:00</small>Hej! Vänlig påminnelse om faktura #1042. Betala enkelt med Swish.</div>
+            <div class="note" data-s="6">Betalning registrerad automatiskt</div>
+          </div>
+          <ul class="pts"><li>Mail och sms skickas automatiskt</li><li>Ni väljer dagar och tider för utskick</li><li>Tydliga, trevliga betalningsinstruktioner</li><li>Bättre likviditet</li></ul>
+          <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+        </article>
+
+        <!-- Headof -->
+        <article class="card c-head rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l3.5-4 3 2.5L21 7"/></svg></span>
+          <div class="pn"><h3>Headof</h3><span class="pcat">Dashboard</span></div>
+          <p class="plead">Hela verksamheten live, kopplad till ert affärssystem.</p>
+          <div aria-hidden="true">
+            <span class="live">Live</span>
+            <div class="bars"><i style="--h:38%"></i><i style="--h:52%"></i><i style="--h:45%"></i><i style="--h:64%"></i><i style="--h:58%"></i><i style="--h:76%"></i><i style="--h:92%"></i></div>
+          </div>
+          <ul class="pts"><li>Försäljning, timmar och bokningar</li><li>Avbokningar och personalrapporter</li><li>Era viktigaste nyckeltal</li><li>Skräddarsytt efter den data ni vill se</li></ul>
+          <div class="price"><span class="f">Från</span><b>999 kr</b><span class="u">/mån</span></div>
+        </article>
+
+        <!-- Personalapp -->
+        <article class="card c-pers rv">
+          <div class="split">
+            <div>
+              <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/></svg></span>
+              <div class="pn"><h3>Personalapp</h3><span class="pcat">För fältpersonal</span> <span class="stodo">I drift hos Stodona</span></div>
+              <p class="plead">Allt personalen behöver ute på jobbet, i en app.</p>
+              <ul class="pts"><li>In- och utcheck med GPS</li><li>Kvalitetskontroller</li><li>Tid- och materialrapportering</li><li><b>AI-arbetsledare</b> i chatten som besvarar ca 95 % av alla frågor och vägleder personalen</li><li>Kan AI:n inte hjälpa till larmas en riktig arbetsledare direkt</li><li>Uppdatera kundinfo</li><li>Meddelar kunden automatiskt vid försening</li></ul>
+            </div>
+            <div class="pphone seq" data-steps="9" data-speed="1000" data-final="6" aria-hidden="true">
+              <div class="scr">
+                <small style="font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:center">Personalapp</small>
+                <div class="pin"><span class="dot"></span><div><b data-e="1">Checka in</b><b data-s="1">Incheckad 08:02</b><span>Storgatan 12 · GPS ✓</span></div></div>
+                <ul class="chk"><li data-sel="2">Kök</li><li data-sel="3">Badrum</li><li data-sel="4">Kvalitetskontroll</li></ul>
+                <div class="ai" data-s="5"><b>AI-arbetsledare:</b> Ugnen ingår inte i dag, men fönsterbänkarna gör det.</div>
+              </div>
+            </div>
+          </div>
+          <div class="price"><span class="f">Från</span><b>1 999 kr</b><span class="u">/mån</span></div>
+        </article>
+
+        <!-- Kundapp -->
+        <article class="card c-kund rv">
+          <span class="ico" aria-hidden="true" style="background:var(--lav);color:var(--on-lav)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/></svg></span>
+          <div class="pn"><h3>Kundapp</h3><span class="pcat">För era kunder</span> <span class="stodo">I drift hos Stodona</span></div>
+          <p class="plead">Kunden sköter sitt eget, allt på ett ställe.</p>
+          <div class="mini ui-min seq" data-steps="9" data-speed="1100" data-final="5" aria-hidden="true">
+            <small style="margin-bottom:8px">Mina bokningar</small>
+            <div class="bk-list">
+              <div class="bk-it"><div><b data-e="4">Tis 28 okt · 13:00</b><b data-s="4">Ons 29 okt · 10:00</b><span class="d">Hemstädning · Anna</span></div><span class="mbtn" data-sel="2" data-e="4">Boka om</span><span class="st ok" data-s="4">Ombokad ✓</span></div>
+              <div class="bk-it dim"><div><b>Tis 11 nov · 13:00</b><span class="d">Hemstädning · Anna</span></div></div>
+            </div>
+          </div>
+          <ul class="pts"><li>Se alla bokningar</li><li>Ändra, boka om eller avboka</li><li>Uppdatera sina uppgifter</li><li>Lämna feedback</li><li>Hämta fakturainformation</li></ul>
+          <div class="price"><span class="f">Från</span><b>999 kr</b><span class="u">/mån</span></div>
+        </article>
+
+        <!-- Rekrytering -->
+        <article class="card c-rek rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M17 8v6M14 11h6"/></svg></span>
+          <div class="pn"><h3>Rekrytering</h3><span class="pcat">Likt Teamtailor</span> <span class="stodo">I drift hos Stodona</span></div>
+          <p class="plead">Hela rekryteringen på ett ställe, från ansökan till första dagen.</p>
+          <div class="mini ui-min seq" data-steps="9" data-speed="1100" data-final="6" aria-hidden="true">
+            <div class="kan">
+              <div><small>Ansökt</small><span class="cand" data-e="2">Sara L.</span><span class="cand ghost">Ali K.</span></div>
+              <div><small>Intervju</small><span class="cand" data-s="2" data-e="5">Sara L.</span></div>
+              <div><small>Anställd</small><span class="cand win" data-s="5">Sara L. ✓</span></div>
+            </div>
+            <div class="note" data-s="6">Välkomstmail och onboarding skickat</div>
+          </div>
+          <ul class="pts"><li>Kandidatbank</li><li>Automatiska återkopplingar</li><li>Enkel hantering av hela flödet</li><li>Onboarding av nyanställda</li></ul>
+          <div class="price"><span class="f">Från</span><b>1 500 kr</b><span class="u">/mån</span></div>
+        </article>
+
+        <!-- SEO -->
+        <article class="card c-seo rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11l2 2 3.5-3.5"/></svg></span>
+          <div class="pn"><h3>SEO</h3><span class="pcat">Sökmotoroptimering</span></div>
+          <p class="plead">Syns högst upp när kunder söker städning i ert område.</p>
+          <div class="mini ui-min seq" data-steps="8" data-speed="1100" data-final="4" aria-hidden="true">
+            <div class="srch"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>städfirma i närheten</div>
+            <ol class="serp" data-e="3"><li>Konkurrent AB</li><li>Städjätten</li><li class="you">Ert städbolag</li></ol>
+            <ol class="serp" data-s="3"><li class="you">Ert städbolag</li><li>Konkurrent AB</li><li>Städjätten</li></ol>
+          </div>
+          <ul class="pts"><li>Teknisk SEO</li><li>Innehåll som rankar</li><li>Lokal synlighet</li><li>Löpande optimering</li></ul>
+          <div class="price"><span class="f">Från</span><b>3 500 kr</b><span class="u">/mån</span></div>
+        </article>
+
+        <!-- Marknadsportal -->
+        <article class="card c-mark rv">
+          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4h3l6 4V6l-6 4H3z"/><path d="M16 9a3.5 3.5 0 0 1 0 6"/><path d="M18.5 6.5a7 7 0 0 1 0 11"/></svg></span>
+          <div class="pn"><h3>Marknadsportal</h3><span class="pcat">Tilläggstjänster</span></div>
+          <p class="plead">All marknadsföring samlad på ett ställe. Vi skapar, publicerar och optimerar åt er. Välj de tilläggstjänster ni vill ha.</p>
+          <ul class="mrows">
+            <li><div class="t">Meta ads<small>Annonser på Facebook och Instagram.</small></div><ul class="pts"><li>Vi skapar annonserna</li><li>Publicering och löpande optimering</li></ul><div class="price"><b>1 500 kr</b><span class="u">/mån</span></div></li>
+            <li><div class="t">Nyhetsbrev<small>Utskick via mail och sms.</small></div><ul class="pts"><li><b>Segmentera</b> och nå rätt kunder</li><li>Kundbrev</li><li>Kampanjer</li><li><b>Grattis-sms</b> till kunder och personal</li></ul><div class="price"><b>1 000 kr</b><span class="u">/mån</span></div></li>
+            <li><div class="t">Content för Instagram<small>Innehåll till ert Instagramkonto.</small></div><ul class="pts"><li>Vi genererar inlägg åt er</li><li>Löpande, varje månad</li></ul><div class="price"><b>1 000 kr</b><span class="u">/mån</span></div></li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="pnote rv"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>Månadspriser, från-priser. Vi skräddarsyr en lösning och offert efter just er verksamhet — hör av er så räknar vi på det.</p>
+    </div>
+  </section>
+
+  <!-- KUGGHJULET -->
+  <section class="cogs sec round" aria-labelledby="cog-h">
+    <div class="wrap cog-grid">
+      <div class="cog-vis rv">
+        <svg viewBox="0 0 400 310" role="img" aria-label="Kugghjul: ert affärssystem i mitten med Kelas moduler runt om som griper in i varandra">
+          <defs>
+            <g id="cog" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+              <circle r="33"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3" transform="rotate(36)"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3" transform="rotate(72)"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3" transform="rotate(108)"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3" transform="rotate(144)"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3" transform="rotate(180)"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3" transform="rotate(216)"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3" transform="rotate(252)"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3" transform="rotate(288)"/>
+              <rect x="-4.5" y="-46" width="9" height="14" rx="3" transform="rotate(324)"/>
+              <circle r="12" style="fill:var(--ink)"/>
+            </g>
+          </defs>
+          <g class="sat" data-m="1" transform="translate(90,82) scale(0.62)" style="fill:var(--ink-2)"><use href="#cog" class="cg" data-r="-1.6"/></g>
+          <g class="sat" data-m="2" transform="translate(310,82) scale(0.62)" style="fill:var(--ink-2)"><use href="#cog" class="cg" data-r="-1.6"/></g>
+          <g class="sat" data-m="3" transform="translate(90,226) scale(0.58)" style="fill:var(--ink-2)"><use href="#cog" class="cg" data-r="-1.75"/></g>
+          <g class="sat" data-m="4" transform="translate(310,226) scale(0.58)" style="fill:var(--ink-2)"><use href="#cog" class="cg" data-r="-1.75"/></g>
+          <g class="sat" data-m="5" transform="translate(200,30) scale(0.44)" style="fill:var(--ink-2)"><use href="#cog" class="cg" data-r="-2.3"/></g>
+          <g class="sat" data-m="5" transform="translate(200,280) scale(0.44)" style="fill:var(--ink-2)"><use href="#cog" class="cg" data-r="-2.3"/></g>
+          <g transform="translate(200,155) scale(1.18)" style="color:var(--lav);fill:var(--ink-2)"><use href="#cog" class="cg" data-r="1"/></g>
+          <circle cx="200" cy="155" r="31" style="fill:var(--ink-2)"/>
+          <text x="200" y="152" text-anchor="middle" style="font:800 12px var(--sans);fill:var(--white)">Affärs-</text>
+          <text x="200" y="166" text-anchor="middle" style="font:800 12px var(--sans);fill:var(--white)">system</text>
+          <text class="lbl" data-m="1" x="90" y="128" text-anchor="middle">Bokis</text>
+          <text class="lbl" data-m="2" x="310" y="128" text-anchor="middle">Personalapp</text>
+          <text class="lbl" data-m="3" x="90" y="270" text-anchor="middle">Feedis</text>
+          <text class="lbl" data-m="4" x="310" y="270" text-anchor="middle">Påminnis</text>
+          <text class="lbl" data-m="5" x="228" y="34">Headof</text>
+          <text class="lbl" data-m="5" x="228" y="284">Chattis</text>
+        </svg>
+        <div class="cog-cap"><b>Ert affärssystem i navet</b><span>Timewave · Tengella · Fortnox</span></div>
+      </div>
+      <div>
+        <span class="kicker">Allt hänger ihop</span>
+        <h2 class="rv" id="cog-h">Ett kugghjul där allt griper in i varandra.</h2>
+        <p class="lead rv">Med ert affärssystem — <b>Timewave</b>, <b>Tengella</b> och/eller <b>Fortnox</b> — i mitten och våra moduler runt om blir allt ett enda maskineri. Varje del driver nästa, helt automatiskt.</p>
+        <ol class="flow" id="flow">
+          <li data-m="1">En bokning i <b>Bokis</b> räknar ut pris och restid och schemaläggs automatiskt.</li>
+          <li data-m="2"><b>Personalappen</b> checkar in jobbet med GPS och rapporterar tid rakt in i affärssystemet.</li>
+          <li data-m="3">När städningen är klar frågar <b>Feedis</b> kunden om betyg — och ber om en recension på Google.</li>
+          <li data-m="4">Fakturan skapas i affärssystemet och <b>Påminnis</b> jagar den obetalda utan att ni lyfter ett finger.</li>
+          <li data-m="5"><b>Headof</b> visar allt live, medan <b>Chattis</b> sköter kundernas frågor dygnet runt.</li>
+        </ol>
+        <p class="cog-sum rv">Resultat: <b>mindre admin, bättre likviditet</b> och ett städbolag som rullar av sig självt.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIGITALISERINGSPLAN -->
+  <section class="sec" id="digitaliseringsplan" aria-labelledby="dp-h">
+    <div class="wrap">
+      <div class="dp-head">
+        <span class="kicker">Er digitaliseringsplan</span>
+        <h2 class="h2 rv" id="dp-h">Från admin till ett städbolag som rullar av sig självt.</h2>
+        <p class="lead rv">Ni behöver inte göra allt på en gång. Vi börjar där ni tappar mest tid och pengar idag och bygger vidare steg för steg. Varje fas ger effekt direkt.</p>
+      </div>
+
+      <div class="dstats">
+        <div class="rv"><b>4</b><span>faser till ett självgående bolag</span></div>
+        <div class="rv"><b>10</b><span>moduler byggda för städbranschen</span></div>
+        <div class="rv"><b>1</b><span>affärssystem i navet, inget byts ut</span></div>
+        <div class="rv"><b>0<i> kr</i></b><span>för kartläggningen</span></div>
+      </div>
+
+      <div class="dzero rv">
+        <span class="n" aria-hidden="true">00</span>
+        <div>
+          <h3>Kartläggning: så jobbar ni idag</h3>
+          <p>Vi går igenom hur bokningar kommer in, hur ni svarar kunder, hur schema och personal planeras, hur ni fakturerar och vilket affärssystem ni använder. Ni får en skriftlig plan med vad som ska göras först och vad varje steg ger.</p>
+        </div>
+        <span class="free">Kostnadsfritt</span>
+      </div>
+
+      <ol class="stack phases">
+        <li class="scard" style="--i:0">
+          <div class="sl"><span class="when">Fas 1 · Månad 1</span><h3>Fler bokningar, färre samtal</h3><ul class="mods"><li>Bokis</li><li>Chattis</li></ul></div>
+          <div class="sr"><div class="cmp">
+            <div class="today"><h4>Idag</h4><ul><li>Bokningar via telefon och mejl</li><li>Offerter som tar dagar</li><li>Kvällsförfrågningar utan svar</li></ul></div>
+            <span class="arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            <div class="after"><h4>Med Kela</h4><ul><li>Pris och bokning direkt online, dygnet runt</li><li>Chattis svarar och bokar om automatiskt</li><li>Schemat lägger sig självt</li></ul></div>
+          </div></div>
+        </li>
+        <li class="scard" style="--i:1">
+          <div class="sl"><span class="when">Fas 2 · Månad 2</span><h3>Ordning och kvalitet ute i fält</h3><ul class="mods"><li>Personalapp</li><li>Feedis</li></ul></div>
+          <div class="sr"><div class="cmp">
+            <div class="today"><h4>Idag</h4><ul><li>Tidrapporter på papper</li><li>Ovisst vem som var var</li><li>Klagomål som upptäcks för sent</li></ul></div>
+            <span class="arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            <div class="after"><h4>Med Kela</h4><ul><li>GPS-incheck och tid rakt in i affärssystemet</li><li>Kvalitetskontroll efter varje uppdrag</li><li>Missnöje fångas i tid och ni får fler recensioner</li></ul></div>
+          </div></div>
+        </li>
+        <li class="scard" style="--i:2">
+          <div class="sl"><span class="when">Fas 3 · Månad 3</span><h3>Pengarna in och full koll</h3><ul class="mods"><li>Påminnis</li><li>Headof</li><li>Kundapp</li></ul></div>
+          <div class="sr"><div class="cmp">
+            <div class="today"><h4>Idag</h4><ul><li>Någon jagar obetalda fakturor</li><li>Nyckeltal i Excel eller i huvudet</li><li>Kunden ringer för varje ändring</li></ul></div>
+            <span class="arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            <div class="after"><h4>Med Kela</h4><ul><li>Påminnelser via mail och sms går ut automatiskt</li><li>Headof visar allt live</li><li>Kunden fixar ändringar själv i appen</li></ul></div>
+          </div></div>
+        </li>
+        <li class="scard" style="--i:3">
+          <div class="sl"><span class="when">Fas 4 · Månad 4 →</span><h3>Väx utan mer administration</h3><ul class="mods"><li>SEO</li><li>Marknadsportal</li><li>Rekrytering</li></ul></div>
+          <div class="sr"><div class="cmp">
+            <div class="today"><h4>Idag</h4><ul><li>Tiden går till drift, inte tillväxt</li><li>Svårt att synas lokalt</li><li>Rekrytering i inkorgen</li></ul></div>
+            <span class="arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            <div class="after"><h4>Med Kela</h4><ul><li>Syns när kunder söker städning i ert område</li><li>Annonser, nyhetsbrev och content löpande</li><li>Kandidatbank och onboarding redo</li></ul></div>
+          </div></div>
+        </li>
+      </ol>
+
+      <div class="dres rv">
+        <span class="rk">Efter fyra månader</span>
+        <h3>Ett städbolag som sköter sig självt</h3>
+        <ul class="wins">
+          <li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 10h18M8 2v4M16 2v4"/></svg>Bokningar dygnet runt, utan telefonsamtal</li>
+          <li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/></svg>Tid och kvalitet rapporteras direkt från fält</li>
+          <li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>Obetalda fakturor jagas automatiskt</li>
+          <li><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"/><path d="M7 15l3.5-4 3 2.5L21 7"/></svg>Hela verksamheten live i en dashboard</li>
+        </ul>
+        <a class="btn btn-lav" href="kontakt.html">Boka kostnadsfri kartläggning <span class="arr" aria-hidden="true">→</span></a>
+        <span class="small">Exempel på upplägg. Ordning och takt anpassas efter kartläggningen.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SÅ JOBBAR VI -->
+  <section class="proc sec round" aria-labelledby="proc-h">
+    <div class="wrap">
+      <div class="head">
+        <span class="kicker">Så jobbar vi</span>
+        <h2 class="h2 rv" id="proc-h">Fyra steg.<br>Inget krångel.</h2>
+      </div>
+      <div class="proc-grid" id="procGrid">
+        <span class="proc-line" aria-hidden="true"><i id="procLine"></i></span>
+        <div class="pstep rv"><span class="n">01</span><h3>Möte &amp; kartläggning</h3><p>Hur bokningar kommer in, hur ni svarar kunder, planerar schema och fakturerar. Kostnadsfritt.</p></div>
+        <div class="pstep rv"><span class="n">02</span><h3>Förslag &amp; fast pris</h3><p>En skriftlig plan med vad som görs först — och en offert efter just er verksamhet.</p></div>
+        <div class="pstep rv"><span class="n">03</span><h3>Vi bygger</h3><p>Ni ser allt löpande. Modulerna kopplas till ert affärssystem.</p></div>
+        <div class="pstep rv"><span class="n">04</span><h3>Lansering &amp; support</h3><p>Varje fas ger effekt direkt — sedan bygger vi vidare steg för steg.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="sec" aria-labelledby="faq-h">
+    <div class="wrap faq-grid">
+      <div>
+        <span class="kicker">Vanliga frågor</span>
+        <h2 class="h2 rv" id="faq-h">Bra att<br>veta.</h2>
+        <p class="lead rv">Hittar ni inte svaret? Mejla <a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a>.</p>
+      </div>
+      <div class="faqs">
+        <details class="rv"><summary>Används systemen på riktigt?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Ja. Vi kör vårt eget städbolag Stodona på dem, varje dag:</p><ul><li>Bokning och hemsidan stodona.se</li><li>Personalapp, feedback och fakturapåminnelser</li><li>Kundportal och rekrytering</li></ul></div></details>
+        <details class="rv"><summary>Måste vi byta affärssystem?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Nej. Vi integrerar mot det ni redan använder — ni byter ingenting.</p><ul><li>Timewave, Tengella, Fortnox och Visma</li><li>+ allt med API</li></ul></div></details>
+        <details class="rv"><summary>Måste vi ta alla moduler på en gång?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Nej. Varje modul fungerar på egen hand. Vi börjar där ni tappar mest tid och pengar idag och bygger vidare steg för steg.</p></div></details>
+        <details class="rv"><summary>Vad kostar det?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Varje modul har ett månadspris från — Bokis från 6 999 kr/mån och Chattis från 15 000 kr/mån (+ uppstartskostnad), övriga från 999 kr/mån. Vi skräddarsyr en lösning och offert efter just er verksamhet.</p></div></details>
+        <details class="rv"><summary>Vad kostar kartläggningen?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>0 kr. Ni får en skriftlig plan med vad som ska göras först och vad varje steg ger.</p></div></details>
+        <details class="rv"><summary>Kan kunden få samma städare vid ombokning?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Ja. Chattis föreslår nya tider och kunden får samma städare om hen önskar. Den ser också om städaren har ett engångsuppdrag som en kollega kan ta.</p></div></details>
+        <details class="rv"><summary>Vad händer om AI-arbetsledaren inte kan svara?<span class="pl" aria-hidden="true">+</span></summary><div class="ans"><p>Då larmas en riktig arbetsledare direkt.</p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANDRA BRANSCHER -->
+  <section class="sec obr" id="branscher" style="padding-top:0" aria-labelledby="br-h">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="kicker">Andra branscher</span>
+          <h2 class="h2 rv" id="br-h">Byggt för<br>fler branscher.</h2>
+        </div>
+        <p class="lead rv">Samma system – anpassade efter hur varje bransch bokar, jobbar och får betalt.</p>
+      </div>
+      <div class="bgrid">
+        <a class="bcard rv" href="bransch-skonhet.html"><span class="bn">02</span><h3>Skönhet & salong</h3><p>Hudvård, naglar, fransar och spa – bokat dygnet runt.</p><span class="bgo" aria-hidden="true">→</span></a>
+        <a class="bcard rv" href="bransch-harstylist.html"><span class="bn">03</span><h3>Frisör & hårstylist</h3><p>Onlinebokning, påminnelser och återkommande kunder.</p><span class="bgo" aria-hidden="true">→</span></a>
+        <a class="bcard rv" href="bransch-makeup.html"><span class="bn">04</span><h3>Makeupartister</h3><p>Portfolio, förfrågningar och bröllopsbokningar.</p><span class="bgo" aria-hidden="true">→</span></a>
+        <a class="bcard rv" href="bransch-frilans.html"><span class="bn">05</span><h3>Frilansare & konsulter</h3><p>Hemsida, offert, fakturor och kundflöde på autopilot.</p><span class="bgo" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta sec round" aria-labelledby="cta-h">
+    <span class="blob" style="width:38vw;height:38vw;left:-12vw;top:-14vw" data-blob="0.08" aria-hidden="true"></span>
+    <span class="blob" style="width:30vw;height:30vw;right:-8vw;bottom:-12vw" data-blob="-0.06" aria-hidden="true"></span>
+    <div class="wrap">
+      <span class="kicker">Säg hej</span>
+      <h2 id="cta-h"><span class="r">Låt</span> <span class="r">städbolaget</span> <span class="r">sköta</span> <span class="r">sig</span> <span class="r">självt.</span></h2>
+      <p>Vi börjar med en kostnadsfri kartläggning av hur ni jobbar idag.</p>
+      <div class="cta-btns">
+        <a class="btn btn-dark bigbtn" id="magnet" href="kontakt.html">Boka kostnadsfri kartläggning <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn btn-line bigbtn" href="#priser">Se tjänster &amp; priser</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-top">
+      <div class="rv">
+        <h2>Har ni något som känns onödigt krångligt?</h2>
+        <p>Det är förmodligen där vi ska börja.</p>
+        <a class="btn btn-lav" href="kontakt.html">Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+      <img class="rv" src="assets/team/office.webp" alt="Kela group-teamet på väg genom kontoret">
+    </div>
+    <div class="f-grid">
+      <div>
+        <a class="logo" href="index.html"><b>KELA</b></a>
+        <p>Kela group AB<br>Stockholm</p>
+      </div>
+      <div class="f-col"><h3>Vad vi bygger</h3><a href="bygga-hemsida.html">Websites</a><a href="bygga-system.html">Systems</a><a href="bygga-automationer.html">Automation</a><a href="ai-agenter.html">AI</a><a href="bygga-app.html">Apps</a></div>
+      <div class="f-col"><h3>Företaget</h3><a href="case.html">Case</a><a href="priskalkylator.html">Priser</a><a href="om-oss.html">Om oss</a><a href="blogg.html">Blogg</a></div>
+      <div class="f-col"><h3>Säg hej</h3><a href="mailto:hej@kelagroup.se">hej@kelagroup.se</a><a href="kontakt.html">Boka ett möte</a></div>
+    </div>
+    <div class="f-bot"><span>© 2026 Kela group AB — Org.nr 559578-1971</span><span class="mono">Stockholm · hela Europa</span></div>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s, c=document) => c.querySelector(s);
+  const $$ = (s, c=document) => [...c.querySelectorAll(s)];
+  const clamp = (v, a=0, b=1) => Math.min(b, Math.max(a, v));
+
+  /* Mobilmeny */
+  const nav = $('#nav'), burger = $('#burger'), mm = $('#mmenu');
+  const setMenu = open => {
+    burger.setAttribute('aria-expanded', open);
+    burger.setAttribute('aria-label', open ? 'Stäng meny' : 'Öppna meny');
+    mm.classList.toggle('open', open);
+    mm.setAttribute('aria-hidden', !open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  burger.addEventListener('click', () => setMenu(burger.getAttribute('aria-expanded') !== 'true'));
+  $$('a', mm).forEach(a => a.addEventListener('click', () => setMenu(false)));
+  addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+  /* Skrivmaskinsrubriken */
+  const typer = $('#typer');
+  const words = JSON.parse(typer.dataset.words);
+  if (reduce) {
+    let i = 0; setInterval(() => { i = (i + 1) % words.length; typer.textContent = words[i]; }, 2600);
+  } else {
+    let wi = 0, ci = words[0].length, del = false;
+    const tick = () => {
+      const w = words[wi];
+      if (!del) {
+        typer.textContent = w.slice(0, ++ci);
+        if (ci >= w.length) { del = true; return setTimeout(tick, 1700); }
+        setTimeout(tick, 85);
+      } else {
+        typer.textContent = w.slice(0, --ci);
+        if (ci <= 0) { del = false; wi = (wi + 1) % words.length; return setTimeout(tick, 280); }
+        setTimeout(tick, 40);
+      }
+    };
+    setTimeout(() => { del = true; tick(); }, 2200);
+  }
+
+  /* Reveals */
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }), { threshold: .12, rootMargin: '0px 0px -6% 0px' });
+  $$('.rv').forEach(el => io.observe(el));
+
+  /* "play" för korten (staplar m.m.) */
+  const cards = $$('.pbento .card');
+  if (reduce) cards.forEach(c => c.classList.add('play'));
+  else {
+    const pio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('play'); pio.unobserve(e.target); } }), { threshold: .3 });
+    cards.forEach(c => pio.observe(c));
+  }
+
+  /* Levande demos: stegar igenom [data-s]/[data-e]/[data-sel] när de syns */
+  $$('.seq').forEach(box => {
+    const max = +box.dataset.steps || 10, speed = +box.dataset.speed || 1100;
+    const els = $$('[data-s],[data-e],[data-sel]', box);
+    let step = 0, timer = null;
+    const render = () => els.forEach(el => {
+      const s = el.dataset.s, e = el.dataset.e, sel = el.dataset.sel;
+      if (s != null || e != null) el.classList.toggle('hid', !((s == null || step >= +s) && (e == null || step < +e)));
+      if (sel != null) el.classList.toggle('sel', step >= +sel);
+    });
+    if (reduce) { step = +box.dataset.final || max; render(); return; }
+    render();
+    const tick = () => { step = step >= max ? 0 : step + 1; render(); };
+    new IntersectionObserver(en => en.forEach(x => {
+      if (x.isIntersecting && !timer) timer = setInterval(tick, speed);
+      else if (!x.isIntersecting && timer) { clearInterval(timer); timer = null; }
+    })).observe(box);
+  });
+
+  /* Känner ni igen er? */
+  $$('.pain').forEach(b => b.addEventListener('click', () => b.setAttribute('aria-expanded', b.getAttribute('aria-expanded') !== 'true')));
+
+  /* Mobil: klisterlapparna turas om i fyra platser */
+  (() => {
+    const cs = $$('.hero-stage > .chipw'), mq = matchMedia('(max-width:640px)');
+    let g = 0, t;
+    const show = () => { cs.forEach((c, i) => { const on = Math.floor(i / 4) === g; c.classList.toggle('on', on); if (on) { c.classList.remove('s0','s1','s2','s3'); c.classList.add('s' + (i % 4)); } }); };
+    const run = () => { clearInterval(t); if (mq.matches) { show(); t = setInterval(() => { g = (g + 1) % Math.ceil(cs.length / 4); show(); }, 2800); } };
+    mq.addEventListener('change', run); run();
+  })();
+
+  /* Kundcase: räknare + video */
+  const fmt = n => Math.round(n).toLocaleString('sv-SE').replace(/\u00a0|\u202f/g, '\u00a0');
+  $$('.cnt').forEach(el => {
+    const to = +el.dataset.to, from = +(el.dataset.from || 0);
+    if (reduce) return;
+    el.textContent = fmt(from);
+    const cio = new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      cio.unobserve(el);
+      const t0 = performance.now(), dur = Math.abs(to - from) > 10 ? 1800 : 1100;
+      const step = t => { const k = clamp((t - t0) / dur), q = 1 - Math.pow(1 - k, 3); el.textContent = fmt(from + (to - from) * q); if (k < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    }), { threshold: .6 });
+    cio.observe(el);
+  });
+  (() => {
+    const v = $('#caseVid'), vt = $('#caseToggle');
+    let user = !reduce;
+    const setV = play => { play ? v.play().catch(()=>{}) : v.pause(); vt.textContent = play ? '❚❚' : '▶'; vt.setAttribute('aria-label', play ? 'Pausa video' : 'Spela video'); };
+    if (reduce) { v.removeAttribute('autoplay'); setV(false); }
+    vt.addEventListener('click', () => { user = v.paused; setV(user); });
+    new IntersectionObserver(es => es.forEach(e => { if (user) e.isIntersecting ? v.play().catch(()=>{}) : v.pause(); })).observe(v);
+  })();
+
+  /* Kugghjulsflödet: markera steg + modul */
+  const flowLis = $$('#flow li'), flow = $('#flow');
+  const sats = $$('.cog-vis [data-m]');
+  const cogs = $$('.cog-vis .cg');
+  const markFlow = () => {
+    const vh = innerHeight; let act = 0;
+    flowLis.forEach((li, i) => { const on = li.getBoundingClientRect().top < vh * .62; li.classList.toggle('on', on); if (on) act = +li.dataset.m; });
+    sats.forEach(s => s.classList.toggle('on', +s.dataset.m === act));
+    const r = flow.getBoundingClientRect();
+    flow.style.setProperty('--p', clamp((vh * .62 - r.top) / r.height));
+  };
+
+  const scards = $$('.scard');
+  const rSet = $$('.cta h2 .r');
+  const blobs = $$('[data-blob]');
+  const procLine = $('#procLine'), procGrid = $('#procGrid');
+  const stage = $('#stage'), dev = $('#dev'), floaters = $$('.hero-stage > .chipw');
+  const magnet = $('#magnet');
+  let mx = 0, my = 0, ticking = false;
+
+  if (reduce) {
+    const n = () => { nav.classList.toggle('scrolled', scrollY > 30); markFlow(); };
+    addEventListener('scroll', n, { passive:true }); n();
+    procLine.style.transform = 'none';
+    return;
+  }
+
+  const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
+  addEventListener('scroll', req, { passive:true });
+  addEventListener('resize', req);
+  if (matchMedia('(hover:hover)').matches) addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; req(); }, { passive:true });
+
+  function frame(){
+    ticking = false;
+    const vh = innerHeight;
+    nav.classList.toggle('scrolled', scrollY > 30);
+
+    // Hero: telefon och klisterlappar i parallax
+    const sr = stage.getBoundingClientRect();
+    if (sr.bottom > 0) {
+      dev.style.transform = `translate3d(${mx * -10}px, ${my * -8 + Math.max(0, -sr.top) * -.04}px, 0)`;
+      floaters.forEach(c => {
+        const s = parseFloat(c.dataset.speed) * (innerWidth < 640 ? .35 : 1);
+        c.style.transform = `translate3d(${mx * s * 120}px, ${(sr.top - vh * .5) * s + my * s * 80}px, 0)`;
+      });
+    }
+
+    // Kugghjul roterar med scroll
+    const a = scrollY * .18;
+    cogs.forEach(c => c.setAttribute('transform', `rotate(${a * parseFloat(c.dataset.r)})`));
+    markFlow();
+
+    // Staplade faskort krymper när nästa glider över
+    scards.forEach((c, i) => {
+      const next = scards[i + 1];
+      if (!next) return;
+      const ra = c.getBoundingClientRect(), rb = next.getBoundingClientRect();
+      const q = clamp(1 - (rb.top - ra.top) / ra.height);
+      c.style.transform = `scale(${1 - q * .05})`;
+      c.style.filter = q > 0 ? `brightness(${1 - q * .1})` : '';
+    });
+
+    // CTA-ord på plats + blobbar
+    rSet.forEach(r => {
+      const rr = r.getBoundingClientRect();
+      if (rr.top > vh * 1.3 || rr.bottom < -200) return;
+      const k = clamp((vh - rr.top) / (vh * .55));
+      r.style.transform = `translateY(${(1 - k) * 40}px)`;
+    });
+    blobs.forEach(b => { b.style.transform = `translate3d(0, ${b.parentElement.getBoundingClientRect().top * parseFloat(b.dataset.blob)}px, 0)`; });
+
+    // Processlinjen ritas
+    const pr = procGrid.getBoundingClientRect();
+    procLine.style.transform = `scaleX(${clamp((vh * .8 - pr.top) / (pr.height + vh * .2))})`;
+  }
+  frame();
+
+  /* Magnetisk CTA-knapp */
+  if (matchMedia('(hover:hover)').matches) {
+    magnet.addEventListener('pointermove', e => {
+      const r = magnet.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      magnet.style.transform = `translate(${dx * .18}px, ${dy * .25}px)`;
+    });
+    magnet.addEventListener('pointerleave', () => magnet.style.transform = '');
+  }
+})();
+</script>
+</body>
+</html>

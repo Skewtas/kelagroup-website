@@ -17,4 +17,9 @@
   <url><loc>https://kelagroup.se/om-oss.html</loc><lastmod>2026-08-10</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>
   <url><loc>https://kelagroup.se/blogg.html</loc><lastmod>2026-08-10</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://kelagroup.se/kontakt.html</loc><lastmod>2026-08-10</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://kelagroup.se/bransch-stad.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kelagroup.se/bransch-skonhet.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kelagroup.se/bransch-harstylist.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kelagroup.se/bransch-makeup.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://kelagroup.se/bransch-frilans.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
