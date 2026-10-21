@@ -1,0 +1,166 @@
+/* =========================================================
+   cards-v1.css – illustrationer i de staplade tjänstekorten
+   (.stack .scard). Laddas efter pop-v5.css. Endast pop-v5-variabler.
+   ========================================================= */
+
+/* ---------- Layout: text vänster, visual höger ---------- */
+.scard{
+  grid-template-columns:minmax(0,1fr) minmax(0,1.12fr);
+  grid-template-rows:1fr auto;
+  grid-template-areas:"sl sv" "sr sv";
+  column-gap:clamp(28px,4vw,64px);
+  row-gap:22px;
+  overflow:hidden;
+}
+.scard .sl{grid-area:sl;gap:20px}
+.scard .sr{grid-area:sr;justify-content:flex-end;gap:20px}
+.scard h3{font-size:clamp(38px,4.6vw,74px)}
+.scard .sv{grid-area:sv;position:relative;display:flex;align-items:center;justify-content:center;min-width:0;min-height:0}
+.scard .sv svg{display:block;width:100%;height:100%;max-height:470px;overflow:visible}
+
+/* ---------- Färgklasser i SVG:erna ---------- */
+.sv .f-w{fill:var(--white)}
+.sv .f-k{fill:var(--ink)}
+.sv .f-k2{fill:var(--ink-2)}
+.sv .f-l{fill:var(--lav)}
+.sv .f-s{fill:var(--lav-soft)}
+.sv .f-p{fill:var(--peach)}
+.sv .f-b{fill:var(--butter)}
+.sv .f-o{fill:var(--bone)}
+.sv .f-m{fill:var(--muted)}
+.sv .f-ln{fill:var(--line)}
+.sv .s-k{stroke:var(--ink)}
+.sv .s-w{stroke:var(--white)}
+.sv .s-l{stroke:var(--lav)}
+.sv .s-s{stroke:var(--lav-soft)}
+.sv .s-ln{stroke:var(--line)}
+.sv text{font-family:var(--sans);fill:var(--ink)}
+.sv .tm{font-family:var(--mono)}
+.sv .td{font-family:var(--display);letter-spacing:-.03em}
+.sv .tb{font-weight:700}
+.sv .tw,.sv .tw text{fill:var(--white)}
+.sv .tmu,.sv .tmu text{fill:var(--muted)}
+.sv .tb text{font-weight:700}
+.sv .tm text{font-family:var(--mono)}
+
+/* ---------- Animationer (bara när kortet är i bild) ---------- */
+.sv [class*="cv-"]{transform-box:fill-box}
+
+/* 01 – webbshop: markör klickar, varukorg + Lighthouse */
+.scard.on .cv-cursor{animation:cv-cursor 6s var(--ease) infinite}
+.scard.on .cv-buy{animation:cv-buy 6s infinite}
+.cv-badge{transform-origin:center}
+.scard.on .cv-badge{animation:cv-badge 6s var(--bounce) infinite}
+.cv-ring{stroke-dashoffset:0;transform:rotate(-90deg);transform-origin:center}
+.scard.on .cv-ring{animation:cv-ring 1.8s var(--ease) both}
+@keyframes cv-cursor{
+  0%{transform:translate(150px,-150px);opacity:0}
+  8%{opacity:1}
+  30%,36%{transform:translate(0,0)}
+  33%{transform:translate(0,0) scale(.86)}
+  60%{transform:translate(0,0);opacity:1}
+  75%,100%{transform:translate(150px,-150px);opacity:0}
+}
+@keyframes cv-buy{0%,31%{fill:var(--ink)}34%,58%{fill:var(--muted)}64%,100%{fill:var(--ink)}}
+@keyframes cv-badge{0%,33%{transform:scale(0)}40%{transform:scale(1.35)}46%,90%{transform:scale(1)}100%{transform:scale(0)}}
+@keyframes cv-ring{from{stroke-dashoffset:100}to{stroke-dashoffset:0}}
+
+/* 02 – system: ny rad glider in, bokning fylls i kalendern */
+.scard.on .cv-row{animation:cv-row 7s var(--bounce) infinite}
+.scard.on .cv-rowbg{animation:cv-rowbg 7s infinite}
+.cv-slot{transform-origin:center}
+.scard.on .cv-slot{animation:cv-slot 7s var(--bounce) infinite}
+.cv-bars rect{transform-origin:bottom}
+.scard.on .cv-bars rect{animation:cv-grow 1.2s var(--bounce) both}
+.scard.on .cv-bars rect:nth-child(2){animation-delay:.08s}
+.scard.on .cv-bars rect:nth-child(3){animation-delay:.16s}
+.scard.on .cv-bars rect:nth-child(4){animation-delay:.24s}
+.scard.on .cv-bars rect:nth-child(5){animation-delay:.32s}
+.scard.on .cv-bars rect:nth-child(6){animation-delay:.4s}
+.scard.on .cv-bars rect:nth-child(7){animation-delay:.48s}
+.scard.on .cv-bars rect:nth-child(8){animation-delay:.56s}
+@keyframes cv-row{0%{transform:translateY(-14px);opacity:0}8%,92%{transform:none;opacity:1}100%{opacity:0}}
+@keyframes cv-rowbg{0%,40%{opacity:1}70%,100%{opacity:0}}
+@keyframes cv-slot{0%,30%{transform:scale(0);opacity:0}38%{transform:scale(1.15);opacity:1}44%,92%{transform:scale(1)}100%{transform:scale(0);opacity:0}}
+@keyframes cv-grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+
+/* 03 / 05 – pulser som färdas längs linjerna */
+.scard.on .cv-pulse{animation:cv-travel 2.4s cubic-bezier(.45,0,.55,1) infinite}
+.cv-pulse{opacity:0}
+.scard.on .cv-p2{animation-delay:.4s}
+.scard.on .cv-p3{animation-delay:.8s}
+.scard.on .cv-p4{animation-delay:1.2s}
+.scard.on .cv-p5{animation-delay:1.6s}
+.scard.on .cv-p6{animation-delay:2s}
+@keyframes cv-travel{0%{transform:translate(0,0);opacity:0}15%,80%{opacity:1}100%{transform:translate(var(--dx),var(--dy));opacity:0}}
+
+/* 03 – bockar poppar i tur och ordning, chatten skriver */
+.cv-chk{transform-origin:center}
+.scard.on .cv-chk{animation:cv-pop 6s var(--bounce) infinite}
+.scard.on .cv-chk2{animation-delay:.9s}
+.scard.on .cv-chk3{animation-delay:1.8s}
+@keyframes cv-pop{0%{transform:scale(0)}6%{transform:scale(1.25)}10%,85%{transform:scale(1)}95%,100%{transform:scale(0)}}
+.scard.on .cv-m1{animation:cv-msg 8s var(--bounce) infinite}
+.scard.on .cv-m2{animation:cv-msg2 8s var(--bounce) infinite}
+.scard.on .cv-typing{animation:cv-typing 8s infinite}
+.scard.on .cv-d1,.scard.on .cv-d2,.scard.on .cv-d3{animation:cv-dot 1s ease-in-out infinite}
+.scard.on .cv-d2{animation-delay:.15s}
+.scard.on .cv-d3{animation-delay:.3s}
+@keyframes cv-msg{0%{transform:translateY(12px);opacity:0}6%,92%{transform:none;opacity:1}100%{opacity:0}}
+@keyframes cv-msg2{0%,30%{transform:translateY(12px);opacity:0}36%,92%{transform:none;opacity:1}100%{opacity:0}}
+@keyframes cv-typing{0%,8%{transform:translateY(-70px);opacity:0}10%,28%{transform:translateY(-70px);opacity:1}31%,36%{transform:none;opacity:0}44%,92%{transform:none;opacity:1}100%{opacity:0}}
+@keyframes cv-dot{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-3px);opacity:1}}
+.scard.on .cv-live{animation:cv-blink 1.6s ease-in-out infinite}
+@keyframes cv-blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* 04 – push-notis glider ner */
+.scard.on .cv-push{animation:cv-push 6s var(--bounce) infinite}
+@keyframes cv-push{0%{transform:translateY(-30px);opacity:0}8%,80%{transform:none;opacity:1}90%,100%{transform:translateY(-30px);opacity:0}}
+
+/* 05 – nav: ring pingar, streckade ledningar flödar */
+.cv-ping{transform-origin:center;opacity:0}
+.scard.on .cv-ping{animation:cv-ping 2.4s var(--ease) infinite}
+@keyframes cv-ping{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.6);opacity:0}}
+.scard.on .cv-wire{animation:cv-dash 1.4s linear infinite}
+@keyframes cv-dash{to{stroke-dashoffset:-22}}
+.cv-orbit{transform-origin:center}
+.scard.on .cv-orbit{animation:cv-spin 40s linear infinite}
+@keyframes cv-spin{to{transform:rotate(360deg)}}
+
+/* 06 – sökning: markör blinkar, grafen ritas */
+.scard.on .cv-caret{animation:cv-blink 1s steps(1) infinite}
+.cv-line{stroke-dashoffset:0}
+.scard.on .cv-line{animation:cv-ring 2.2s var(--ease) .2s both}
+.scard.on .cv-area{animation:cv-fade 1.2s var(--ease) 1.2s both}
+.scard.on .cv-top{animation:cv-rise 1s var(--bounce) both}
+@keyframes cv-fade{from{opacity:0}}
+@keyframes cv-rise{from{transform:translateY(130px);opacity:.4}}
+
+/* 07 – hjärtan stiger */
+.cv-fh{opacity:0}
+.scard.on .cv-fh{animation:cv-float 3.2s ease-out infinite}
+.scard.on .cv-fh2{animation-delay:1s}
+.scard.on .cv-fh3{animation-delay:2s}
+@keyframes cv-float{0%{transform:translateY(60px) scale(.6);opacity:0}20%{opacity:1}100%{transform:translateY(-40px) scale(1.1);opacity:0}}
+.cv-heart{transform-origin:center}
+.scard.on .cv-heart{animation:cv-like 3.2s var(--bounce) infinite}
+@keyframes cv-like{0%,8%{transform:scale(1)}14%{transform:scale(1.3)}22%,100%{transform:scale(1)}}
+
+/* ---------- Surfplatta / mobil ---------- */
+@media (max-width:900px){
+  .scard{grid-template-columns:1fr;grid-template-rows:auto;grid-template-areas:"sl" "sv" "sr";row-gap:20px}
+  .scard .sv svg{height:auto;max-height:320px}
+}
+@media (max-width:640px){
+  .scard .sl{gap:12px}
+  .scard{row-gap:16px}
+  .scard .sv{margin:0 -6px}
+  .scard .sv svg{max-height:230px}
+  .scard .sr{gap:14px}
+}
+
+/* ---------- Rörelsekänslighet: allt står still i slutläge ---------- */
+@media (prefers-reduced-motion:reduce){
+  .sv *{animation:none!important}
+  .cv-pulse,.cv-fh,.cv-ping{display:none}
+}

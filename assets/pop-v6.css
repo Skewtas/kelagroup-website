@@ -9,7 +9,7 @@
   --ink-2:#1C1C20;
   --white:#FFFFFF;
   --bone:#F6F5F1;
-  --ultra:#2C3AE0;
+  --ultra:var(--ink);
   --mint:#F2F2F7;
   --butter:#EFE9DF;
   --peach:#E2D9CB;
@@ -31,13 +31,13 @@ img,video{display:block;max-width:100%}
 a{color:inherit}
 h1,h2,h3,h4,h5{font-family:var(--display);font-weight:400;letter-spacing:-.035em;line-height:.95;margin:0}
 p{margin:0}
-:focus-visible{outline:3px solid var(--ultra);outline-offset:3px;border-radius:10px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:10px}
 .wrap{max-width:1360px;margin:0 auto;padding:0 var(--gut)}
 
 /* ---------- Knappar ---------- */
 .btn{display:inline-flex;align-items:center;gap:.6em;font:600 .98rem/1 var(--sans);text-decoration:none;padding:1.05em 1.6em;border-radius:999px;border:1px solid var(--ink);transition:transform .35s var(--bounce), background .25s, color .25s, border-color .25s;white-space:nowrap}
 .btn-dark{background:var(--ink);color:var(--white)}
-.btn-dark:hover{background:var(--ultra);border-color:var(--ultra);transform:translateY(-2px)}
+.btn-dark:hover{background:var(--ink-2);border-color:var(--ink-2);transform:translateY(-2px);box-shadow:0 12px 26px -12px rgba(20,20,18,.45)}
 .btn-line{background:transparent;color:var(--ink)}
 .btn-line:hover{background:var(--ink);color:var(--white);transform:translateY(-2px)}
 .btn-lav{background:var(--lav);color:var(--ink);border-color:var(--lav)}
@@ -296,7 +296,7 @@ section{position:relative}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(26,157,79,.6)}100%{box-shadow:0 0 0 10px rgba(26,157,79,0)}}
 .bars{background:var(--white);border-radius:20px;padding:14px;height:150px;display:flex;align-items:flex-end;gap:7px;margin-top:10px}
 .bars i{flex:1;border-radius:7px 7px 3px 3px;background:var(--lav);height:8%;transition:height .9s var(--bounce)}
-.bars i:last-child{background:var(--ultra)}
+.bars i:last-child{background:var(--ink)}
 .play .bars i{height:var(--h)}
 .gen{background:var(--ink-2);border-radius:20px;padding:16px;font-family:var(--mono);font-size:.78rem;line-height:1.6;min-height:118px;color:rgba(255,255,255,.85)}
 .gen .cur{display:inline-block;width:7px;height:1em;background:var(--lav);vertical-align:-2px;animation:blink 1s steps(1) infinite}
