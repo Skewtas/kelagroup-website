@@ -154,3 +154,42 @@ export function percentInput(bp) {
   if (!bp) return '';
   return (bp / 100).toString().replace('.', ',');
 }
+
+/**
+ * Digitaliseringsplanens lönsamhet. Allt exkl. moms, i öre.
+ * - Frigjord tid = Σ timmar/mån × andel som automatiseras.
+ * - Värdet av tiden = frigjord tid × timkostnad. Plus kostnader som försvinner (t.ex. gamla system).
+ * - Nettobesparing/mån = bruttobesparing − nya månadskostnader i offerten.
+ * - Återbetalningstid = engångsinvestering / nettobesparing per månad.
+ * @param {any} plan  content.plan
+ * @param {{once:{net:number}, monthly:{net:number}}} totals  offertens summor
+ */
+export function calcPlan(plan, totals) {
+  const rows = (plan?.current || []).filter((r) => r && (r.hours_month || 0) > 0);
+  const hoursToday = rows.reduce((s, r) => s + Number(r.hours_month || 0), 0);
+  const hoursSaved = Math.round(rows.reduce((s, r) => s + Number(r.hours_month || 0) * (Number(r.automation_pct || 0) / 100), 0) * 10) / 10;
+  const hourly = Number(plan?.hourly_cost_minor || 0);
+  const timeValue = roundHalfUp(hoursSaved * hourly);
+  const removed = (plan?.removed_costs || []).reduce((s, c) => s + Number(c?.monthly_minor || 0), 0);
+  const gross = timeValue + removed;
+  const newMonthly = totals?.monthly?.net || 0;
+  const investment = totals?.once?.net || 0;
+  const net = gross - newMonthly;
+  const payback = net > 0 && investment > 0 ? Math.round((investment / net) * 10) / 10 : investment === 0 && net > 0 ? 0 : null;
+  return {
+    hours_today: Math.round(hoursToday * 10) / 10,
+    hours_saved: hoursSaved,
+    hours_saved_year: Math.round(hoursSaved * 12),
+    time_value_month: timeValue,
+    removed_costs_month: removed,
+    gross_saving_month: gross,
+    new_monthly_cost: newMonthly,
+    net_saving_month: net,
+    net_saving_year: net * 12,
+    investment,
+    payback_months: payback,
+    result_year1: net * 12 - investment,
+    result_year3: net * 36 - investment,
+    has_data: rows.length > 0 || removed > 0,
+  };
+}

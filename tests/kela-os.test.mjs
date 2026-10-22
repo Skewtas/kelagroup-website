@@ -3,6 +3,7 @@
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn, execFileSync } from 'node:child_process';
+import { createServer } from 'node:http';
 import { mkdtempSync, rmSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
@@ -17,7 +18,19 @@ const PORT = 8790 + Math.floor(Math.random() * 100);
 const BASE = `http://localhost:${PORT}`;
 const SETUP_TOKEN = randomBytes(18).toString('hex');
 const PW = 'Test-' + randomBytes(9).toString('base64url');
-let STATE, server;
+let STATE, server, mock;
+// Låtsas-Claude: tar emot SDK-anropet och svarar med ett fast, giltigt Messages-svar.
+const MOCK_PORT = PORT + 200;
+const mockCalls = [];
+const MOCK_PLAN = {
+  summary: 'Vi rekommenderar att automatisera bokningen först.',
+  current: [{ process: 'Bokning via telefon', today: 'Kontoret svarar i telefon', problem: 'Missade samtal', hours_month: 40, automation_pct: 150 },
+    { process: 'Schemaläggning', today: 'Excel varje söndag', problem: 'Tar tid', hours_month: 12, automation_pct: 50 }],
+  hourly_cost_sek: 450, removed_costs: [{ label: 'Gammalt bokningsverktyg', monthly_sek: 990 }],
+  goals: [{ goal: 'Fler bokningar online', metric: 'Andel onlinebokningar', today: '10 %', target: '70 %' }],
+  phases: [{ title: 'Onlinebokning', period: 'Månad 1–2', actions: '- Bokningssystem\n- Ny hemsida', effect: 'Färre samtal' }],
+  assumptions: ['Timkostnad 450 kr inkl. sociala avgifter (uppskattning)'],
+};
 
 const WRANGLER = join(ROOT, 'node_modules', '.bin', 'wrangler');
 const wranglerCmd = existsSync(WRANGLER) ? [WRANGLER, []] : ['npx', ['-y', 'wrangler@4']];
@@ -43,11 +56,21 @@ class Client {
 const ok = (r, msg) => { assert.ok(r.status >= 200 && r.status < 300, `${msg || ''} → ${r.status} ${r.text.slice(0, 300)}`); return r.json; };
 
 before(async () => {
+  mock = createServer((req, res) => {
+    let body = ''; req.on('data', (d) => { body += d; });
+    req.on('end', () => {
+      mockCalls.push({ url: req.url, headers: req.headers, body: JSON.parse(body || '{}') });
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ id: 'msg_test', type: 'message', role: 'assistant', model: 'claude-opus-5-5', stop_reason: 'end_turn', stop_sequence: null,
+        content: [{ type: 'text', text: JSON.stringify(MOCK_PLAN) }], usage: { input_tokens: 10, output_tokens: 10 } }));
+    });
+  });
+  await new Promise((r) => mock.listen(MOCK_PORT, r));
   STATE = mkdtempSync(join(tmpdir(), 'kela-os-test-'));
   const [cmd, pre] = wranglerCmd;
   execFileSync(cmd, [...pre, 'd1', 'migrations', 'apply', 'kela-os', '--local', '--config', 'db/wrangler.toml', '--persist-to', STATE], { cwd: ROOT, stdio: 'pipe' });
   server = spawn(cmd, [...pre, 'pages', 'dev', '.', '--port', String(PORT), '--d1', `DB=${DB_ID}`, '--persist-to', STATE,
-    '--binding', 'OS_ENV=development', '--binding', `OS_SETUP_TOKEN=${SETUP_TOKEN}`, '--binding', `OS_SECRET_KEY=${randomBytes(32).toString('base64')}`,
+    '--binding', 'OS_ENV=development', '--binding', 'ANTHROPIC_API_KEY=test-key', '--binding', `ANTHROPIC_BASE_URL=http://localhost:${MOCK_PORT}`, '--binding', `OS_SETUP_TOKEN=${SETUP_TOKEN}`, '--binding', `OS_SECRET_KEY=${randomBytes(32).toString('base64')}`,
     '--show-interactive-dev-session=false'], { cwd: ROOT, stdio: 'pipe', detached: true });
   let log = '';
   server.stdout.on('data', (d) => { log += d; }); server.stderr.on('data', (d) => { log += d; });
@@ -59,6 +82,7 @@ before(async () => {
 });
 
 after(() => {
+  try { mock.close(); } catch { /* */ }
   try { process.kill(-server.pid, 'SIGTERM'); } catch { /* */ }
   try { rmSync(STATE, { recursive: true, force: true }); } catch { /* */ }
 });
@@ -365,6 +389,49 @@ test('PDF-export: utskriftsversionen blir en riktig PDF', async (t) => {
   assert.ok(pages >= 2, `omslag + innehåll (${pages} sidor)`);
 });
 
+// ---------------------------------------------------------------- Digitaliseringsplan + AI
+test('digitaliseringsplan: AI-utkast via Claude, granskning krävs, planen först och lönsamhet räknas mot priset', async () => {
+  const q = ok(await admin.post('/api/os/quotes', { customer_id: ctx.customerId, title: 'Digitalisering av bokning' }));
+  ok(await admin.patch(`/api/os/quotes/${q.id}`, { items: [
+    { name: 'Bokningssystem', billing: 'once', qty_milli: 1000, unit_price_minor: 2500000 },
+    { name: 'Drift', billing: 'monthly', qty_milli: 1000, unit_price_minor: 300000 }] }));
+  assert.equal((await admin.post(`/api/os/quotes/${q.id}/plan-draft`, { notes: 'kort' })).status, 422);
+  const NOTES = 'Sex städare. All bokning via telefon och mejl, ca två timmar per dag. Schemat görs i Excel. HEMLIG-MARKÖR-123';
+  const d = ok(await admin.post(`/api/os/quotes/${q.id}/plan-draft`, { notes: NOTES }));
+  // Anropet till Claude
+  const call = mockCalls.at(-1);
+  assert.match(call.url, /^\/v1\/messages(\?|$)/);
+  assert.equal(call.body.model, 'claude-opus-5-5');
+  assert.equal(call.body.fallbacks, 'default');
+  assert.match(String(call.headers['anthropic-beta']), /server-side-fallback-2026-07-01/);
+  assert.equal(call.body.output_config.format.type, 'json_schema');
+  assert.equal(call.headers.authorization || call.headers['x-api-key'], call.headers.authorization ? 'Bearer test-key' : 'test-key');
+  assert.match(JSON.stringify(call.body.messages), /Bokningssystem/, 'tjänsterna i offerten skickas med');
+  // Svaret normaliseras och markeras som AI-utkast
+  assert.equal(d.plan.ai_draft, true); assert.equal(d.plan.enabled, true);
+  assert.equal(d.plan.current[0].automation_pct, 100, 'orimliga värden begränsas');
+  assert.equal(d.plan.hourly_cost_minor, 45000); assert.equal(d.plan.removed_costs[0].monthly_minor, 99000);
+  // Inget sparas automatiskt
+  assert.equal(ok(await admin.get(`/api/os/quotes/${q.id}`)).version.content.digital_plan, null);
+  ok(await admin.patch(`/api/os/quotes/${q.id}`, { content: { digital_plan: d.plan } }));
+  const blocked = await admin.post(`/api/os/quotes/${q.id}/send`);
+  assert.equal(blocked.status, 409); assert.equal(blocked.json.error, 'ai_review_required');
+  ok(await admin.patch(`/api/os/quotes/${q.id}`, { content: { digital_plan: { ...d.plan, ai_draft: false } } }));
+  const sent = ok(await admin.post(`/api/os/quotes/${q.id}/send`));
+  const page = await (await fetch(sent.share_url.replace(/^https?:\/\/[^/]+/, BASE))).text();
+  assert.match(page, /Digitaliseringsplan och offert för/);
+  const order = ['>Sammanfattning<', '>Nuläge<', '>Mål och nyckeltal<', '>Färdplan<', '>Investering<', '>Lönsamhet<', '>Godkännande<'].map((h) => page.indexOf(h));
+  assert.ok(order.every((x) => x > 0), 'alla avsnitt finns: ' + order);
+  assert.deepEqual([...order].sort((a, b) => a - b), order, 'planen kommer först, priset sist följt av lönsamhet');
+  // Lönsamhet: (40 h × 100 % + 12 h × 50 %) = 46 h × 450 = 20 700 + 990 = 21 690 − 3 000 = 18 690 kr/mån; 25 000 / 18 690 = 1,3 mån
+  assert.match(page, /46 h/); assert.match(page, /18\s690\skr\/mån/); assert.match(page, /1,3 mån/);
+  assert.match(page, /inte en garanti/);
+  // Revisionsloggen visar att AI användes, men inte anteckningarna
+  const a = ok(await admin.get('/api/os/audit?q=AI-utkast'));
+  assert.ok(a.entries.some((x) => x.action === 'ai.plan_draft'));
+  assert.ok(!JSON.stringify(a).includes('HEMLIG-MARKÖR'), 'mötesanteckningar loggas inte');
+});
+
 // ---------------------------------------------------------------- Projekt (fas 2) och produktimport
 test('projekt: mallar, kanban-steg, status och idempotent automatisering', async () => {
   const tpl = ok(await admin.get('/api/os/project-templates'));
@@ -502,7 +569,7 @@ test('befintliga publika sidor och chatten fungerar som förut', async () => {
   }
   assert.match(await (await fetch(BASE + '/')).text(), /KELA/i);
   const chat = await fetch(BASE + '/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ messages: [{ role: 'user', content: 'Hej' }] }) });
-  assert.ok([200, 501].includes(chat.status), 'chatten svarar som tidigare (501 utan API-nyckel)');
+  assert.ok([200, 501, 502].includes(chat.status), 'chatten svarar som tidigare (501 utan nyckel, 502 med testnyckeln)');
   assert.equal((await fetch(BASE + '/functions/_lib/auth.ts')).status, 404, 'serverkod exponeras inte');
   const robots = await (await fetch(BASE + '/robots.txt')).text();
   assert.match(robots, /Disallow: \/os\//); assert.match(robots, /Disallow: \/offert\//);

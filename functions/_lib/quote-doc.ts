@@ -1,7 +1,7 @@
 // KELA OS – renderar offerten som ett exklusivt digitalt dokument (webb + utskrift/PDF).
 // All text escapas. Innehåll från redigeraren är ren text: tomrad = nytt stycke, rader som börjar med "- " blir punktlistor.
 import { escapeHtml as e, randomToken } from './core';
-import { formatMoney, calcLine, calcQuote } from '../../os/lib/calc.js';
+import { formatMoney, calcLine, calcQuote, calcPlan } from '../../os/lib/calc.js';
 
 interface Opts {
   mode: 'preview' | 'public';
@@ -30,7 +30,7 @@ const pct = (bp: number) => (bp / 100).toLocaleString('sv-SE', { maximumFraction
 const qty = (m: number) => (m / 1000).toLocaleString('sv-SE', { maximumFractionDigits: 3 });
 
 function itemsTable(items: any[], cur: string, opts: { optional?: boolean; interactive?: boolean } = {}) {
-  return `<table class="tbl"><thead><tr>${opts.optional ? '<th class="ck"></th>' : ''}<th>Beskrivning</th><th class="r">Antal</th><th class="r">À-pris</th><th class="r">Belopp</th></tr></thead><tbody>
+  return `<table class="tbl price-t"><thead><tr>${opts.optional ? '<th class="ck"></th>' : ''}<th>Beskrivning</th><th class="r">Antal</th><th class="r">À-pris</th><th class="r">Belopp</th></tr></thead><tbody>
   ${items.map((it) => {
     const l = calcLine(it);
     return `<tr>${opts.optional ? `<td class="ck">${opts.interactive ? `<input type="checkbox" class="opt" value="${e(it.id)}" aria-label="Välj ${e(it.name)}">` : '<span class="box"></span>'}</td>` : ''}
@@ -59,6 +59,41 @@ export function renderQuoteDocument(snap: any, o: Opts): { body: string; csp: st
   const sec = (title: string, inner: string, cls = '') => inner ? `<section class="sec ${cls}"><div class="sec-h"><span class="num">${String(++n).padStart(2, '0')}</span><h2>${e(title)}</h2></div><div class="sec-b">${inner}</div></section>` : '';
 
   const includes = (c.includes || []).filter(Boolean);
+  // ---------- Digitaliseringsplan ----------
+  const dp = c.digital_plan && c.digital_plan.enabled ? c.digital_plan : null;
+  const roi = dp ? calcPlan(dp, t) : null;
+  const hrs = (n: number) => `${n.toLocaleString('sv-SE', { maximumFractionDigits: 1 })} h`;
+  const months = (n: number | null) => n == null ? '–' : n < 1 ? 'under 1 månad' : `${n.toLocaleString('sv-SE', { maximumFractionDigits: 1 })} mån`;
+  const figures = roi && roi.has_data ? `<div class="figs">
+      <div class="fig"><div class="fig-v">${hrs(roi.hours_saved)}</div><div class="fig-l">frigörs varje månad</div></div>
+      <div class="fig"><div class="fig-v">${formatMoney(roi.net_saving_year, cur)}</div><div class="fig-l">nettobesparing per år</div></div>
+      <div class="fig"><div class="fig-v">${months(roi.payback_months)}</div><div class="fig-l">återbetalningstid</div></div>
+    </div>` : '';
+  const dpSummary = dp ? (rich(dp.summary) + figures) : '';
+  const dpCurrent = dp && (dp.current || []).length ? `<p class="muted">Så ser arbetet ut i dag – och hur mycket av det som kan försvinna.</p>
+    <table class="tbl now"><thead><tr><th>Process</th><th>I dag</th><th class="r">Tid/mån</th><th class="r">Kan automatiseras</th></tr></thead><tbody>
+    ${dp.current.map((r: any) => `<tr><td><strong>${e(r.process)}</strong>${r.problem ? `<div class="desc">${e(r.problem)}</div>` : ''}</td><td>${e(r.today || '')}</td>
+      <td class="r nw">${r.hours_month ? hrs(Number(r.hours_month)) : '–'}</td><td class="r nw"><span class="pct"><i class="w${Math.round(Number(r.automation_pct || 0) / 5) * 5}"></i></span>${Number(r.automation_pct || 0)} %</td></tr>`).join('')}
+    </tbody><tfoot><tr><td colspan="2"><strong>Totalt</strong></td><td class="r nw"><strong>${hrs(roi!.hours_today)}</strong></td><td class="r nw"><strong>${hrs(roi!.hours_saved)}</strong> frigörs</td></tr></tfoot></table>` : '';
+  const dpGoals = dp && (dp.goals || []).length ? `<table class="tbl goals"><thead><tr><th>Mål</th><th>Så mäter vi</th><th class="r">I dag</th><th class="r">Mål</th></tr></thead><tbody>
+    ${dp.goals.map((g: any) => `<tr><td><strong>${e(g.goal)}</strong></td><td>${e(g.metric || '')}</td><td class="r">${e(g.today || '–')}</td><td class="r"><strong>${e(g.target || '–')}</strong></td></tr>`).join('')}</tbody></table>` : '';
+  const dpPhases = dp && (dp.phases || []).length ? `<div class="phases">${dp.phases.map((p: any, i: number) => `<div class="phase">
+      <div class="ph-h"><span class="ph-n">Fas ${i + 1}</span>${p.period ? `<span class="pd">${e(p.period)}</span>` : ''}</div>
+      <div class="ph-t">${e(p.title)}</div>${p.actions ? `<ul class="bul">${String(p.actions).split('\n').map((x: string) => x.replace(/^\s*[-•]\s*/, '').trim()).filter(Boolean).map((x: string) => `<li>${e(x)}</li>`).join('')}</ul>` : ''}
+      ${p.effect ? `<div class="ph-e"><span>Effekt</span>${e(p.effect)}</div>` : ''}</div>`).join('')}</div>` : '';
+  const dpRoi = roi && roi.has_data ? `<table class="tbl roi"><tbody>
+      ${roi.hours_saved ? `<tr><td>Frigjord tid: ${hrs(roi.hours_saved)}/mån × ${formatMoney(dp.hourly_cost_minor || 0, cur)}/h</td><td class="r nw">${formatMoney(roi.time_value_month, cur)}/mån</td></tr>` : ''}
+      ${(dp.removed_costs || []).map((x: any) => `<tr><td>Kostnad som försvinner: ${e(x.label)}</td><td class="r nw">${formatMoney(x.monthly_minor || 0, cur)}/mån</td></tr>`).join('')}
+      <tr class="sumrow"><td>Bruttobesparing</td><td class="r nw">${formatMoney(roi.gross_saving_month, cur)}/mån</td></tr>
+      ${roi.new_monthly_cost ? `<tr><td>Löpande kostnad enligt offerten</td><td class="r nw">−${formatMoney(roi.new_monthly_cost, cur)}/mån</td></tr>` : ''}
+      <tr class="sumrow"><td>Nettobesparing</td><td class="r nw">${formatMoney(roi.net_saving_month, cur)}/mån</td></tr>
+      <tr><td>Engångsinvestering enligt offerten</td><td class="r nw">${formatMoney(roi.investment, cur)}</td></tr>
+      <tr><td>Återbetalningstid</td><td class="r nw"><strong>${months(roi.payback_months)}</strong></td></tr>
+      <tr><td>Resultat efter första året</td><td class="r nw">${formatMoney(roi.result_year1, cur)}</td></tr>
+      <tr class="sumrow"><td>Resultat efter tre år</td><td class="r nw">${formatMoney(roi.result_year3, cur)}</td></tr>
+    </tbody></table>
+    ${(dp.assumptions || []).length ? `<h3 class="sub">Antaganden</h3><ul class="bul">${dp.assumptions.map((a: string) => `<li>${e(a)}</li>`).join('')}</ul>` : ''}
+    <p class="muted small">Belopp exkl. moms. Kalkylen bygger på uppgifter från ${e(snap.customer?.name || 'er')} och KELA:s bedömning. Den är en uppskattning – inte en garanti.</p>` : '';
   const plan = (c.plan || []).filter((p: any) => p && p.title);
 
   const priceInner = `
@@ -110,7 +145,7 @@ ${o.mode === 'public' && o.expired && !o.acceptance ? '<div class="banner">Offer
   <section class="cover">
     <div class="cv-top"><div class="logo">KELA<i></i></div><div class="cv-no">Offert #${e(snap.quote.number)}${snap.quote.version_no > 1 ? ` · v${e(snap.quote.version_no)}` : ''}</div></div>
     <div class="cv-mid">
-      <div class="cv-kicker">Förslag till ${e(snap.customer?.name || '')}</div>
+      <div class="cv-kicker">${dp ? 'Digitaliseringsplan och offert för' : 'Förslag till'} ${e(snap.customer?.name || '')}</div>
       <h1>${e(c.cover_title || snap.quote.title)}</h1>
       ${c.cover_subtitle ? `<p class="cv-sub">${e(c.cover_subtitle)}</p>` : ''}
     </div>
@@ -122,12 +157,17 @@ ${o.mode === 'public' && o.expired && !o.acceptance ? '<div class="banner">Offer
     </div>
   </section>
   <div class="pages">
+    ${sec('Sammanfattning', dpSummary)}
     ${sec('Inledning', rich(c.intro))}
-    ${sec('Era behov och mål', rich(c.needs))}
+    ${sec('Nuläge', dpCurrent)}
+    ${sec('Mål och nyckeltal', dpGoals)}
+    ${sec('Färdplan', dpPhases)}
+    ${sec(dp ? 'Era behov' : 'Era behov och mål', rich(c.needs))}
     ${sec('Föreslagen lösning', rich(c.solution))}
     ${sec('Det här ingår', includes.length ? `<ul class="checks">${includes.map((x: string) => `<li>${e(x)}</li>`).join('')}</ul>` : '')}
     ${sec('Genomförandeplan', plan.length ? `<ol class="plan">${plan.map((p: any, i: number) => `<li><div class="pn">${i + 1}</div><div><div class="pt">${e(p.title)}${p.duration ? `<span class="pd">${e(p.duration)}</span>` : ''}</div>${p.text ? `<div class="px">${rich(p.text)}</div>` : ''}</div></li>`).join('')}</ol>` : '')}
     ${sec('Investering', priceInner, 'price')}
+    ${sec('Lönsamhet', dpRoi)}
     ${sec('Villkor', rich(c.terms) + (c.special_terms ? `<h3 class="sub">Särskilda villkor</h3>${rich(c.special_terms)}` : ''))}
     ${sec('Godkännande', approveInner, 'approve')}
     <footer class="doc-foot"><span>${e(snap.org?.name || 'KELA Group AB')}${snap.org?.org_number ? ` · Org.nr ${e(snap.org.org_number)}` : ''}</span><span>kelagroup.se · hej@kelagroup.se</span></footer>
@@ -305,11 +345,31 @@ dialog::backdrop{background:rgba(42,20,24,.45);backdrop-filter:blur(3px)}
 @media (max-width:700px){
   .doc{margin:0;border-radius:0}.cover{padding:28px 22px;min-height:540px}.pages{padding:8px 22px 28px}
   .cv-foot{grid-template-columns:1fr 1fr}.checks{grid-template-columns:1fr}
-  .tbl thead{display:none}.tbl tr{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;padding:12px 0;border-bottom:1px solid var(--line)}
-  .tbl td{border:0;padding:0}.tbl td:nth-last-child(2){display:none}.tbl td.nw:nth-child(2),.tbl tr td:nth-child(2):not(.ck){grid-column:span 1}
+  .price-t thead{display:none}.price-t tr{display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;padding:12px 0;border-bottom:1px solid var(--line)}
+  .price-t td{border:0;padding:0}.price-t td:nth-last-child(2){display:none}
+  .tbl.now,.tbl.goals{font-size:13px}.tbl.now td,.tbl.goals td{padding:10px 4px}
   .bar-sum{gap:16px}.bar-sum strong{font-size:15px}.bar-act .ghost{display:none}.bar-in{padding:10px 16px}
   h2{font-size:24px}
 }
+.figs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+.fig{background:var(--pink);border-radius:16px;padding:18px 20px;color:var(--wine);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.fig-v{font-family:var(--display);font-size:26px;letter-spacing:-.02em;line-height:1.1}
+.fig-l{font-size:13px;margin-top:6px;opacity:.8}
+.tbl.now tfoot td{border-top:2px solid var(--wine);border-bottom:0;padding-top:12px}
+.pct{display:inline-block;width:46px;height:6px;border-radius:6px;background:var(--pink-soft);margin-right:8px;vertical-align:middle;overflow:hidden}
+.pct i{display:block;height:100%;background:var(--wine);border-radius:6px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.pct i.w0{width:0%}.pct i.w5{width:5%}.pct i.w10{width:10%}.pct i.w15{width:15%}.pct i.w20{width:20%}.pct i.w25{width:25%}.pct i.w30{width:30%}.pct i.w35{width:35%}.pct i.w40{width:40%}.pct i.w45{width:45%}.pct i.w50{width:50%}.pct i.w55{width:55%}.pct i.w60{width:60%}.pct i.w65{width:65%}.pct i.w70{width:70%}.pct i.w75{width:75%}.pct i.w80{width:80%}.pct i.w85{width:85%}.pct i.w90{width:90%}.pct i.w95{width:95%}.pct i.w100{width:100%}
+.phases{display:grid;gap:12px}
+.phase{border:1px solid var(--line);border-radius:16px;padding:18px 20px;break-inside:avoid;position:relative}
+.phase::before{content:"";position:absolute;left:0;top:18px;bottom:18px;width:3px;border-radius:3px;background:var(--dot)}
+.ph-h{display:flex;gap:10px;align-items:center}
+.ph-n{font:700 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.ph-t{font-weight:700;font-size:17px;margin:6px 0 8px;color:var(--wine)}
+.ph-e{background:var(--pink-soft);border-radius:10px;padding:10px 12px;font-size:14px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ph-e span{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.tbl.roi td{padding:10px 8px}
+.tbl.roi .sumrow td{font-weight:700;color:var(--wine);border-bottom:2px solid var(--wine)}
+@media (max-width:700px){.figs{grid-template-columns:1fr}.tbl.now thead{display:none}}
 @page{size:A4;margin:14mm 0}
 @page:first{margin:0}
 @media print{

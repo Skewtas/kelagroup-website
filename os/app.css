@@ -504,3 +504,17 @@ a.tl{border-radius:10px}a.tl:hover .tl-t{color:var(--accent)}
 .cal-e.project{background:var(--amber-soft);color:var(--amber)}.cal-e.milestone{background:var(--accent-tint);color:var(--accent)}
 @media (max-width:640px){.g-head,.g-row{grid-template-columns:120px minmax(300px,1fr)}}
 .dhead .act .sel{width:auto;min-width:160px}
+/* Digitaliseringsplan i redigeraren */
+.dp-card{border-color:var(--accent-tint)}
+.dp-off{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.dp-off p{margin-top:4px;max-width:60ch}
+.dp-list{display:grid;gap:8px;padding:12px 0;border-top:1px solid var(--border)}
+.dp-row{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) auto;gap:8px;align-items:end;padding:10px;border-radius:var(--r-m);background:var(--surface-2)}
+.dp-row .mini.w2{grid-column:span 2}.dp-row .mini.full{grid-column:1 / -2}
+.dp-row .ta{min-height:64px;font-size:13px}
+.dp-row .dp-rm{align-self:start;margin-top:16px}
+.dp-hour{width:120px;height:30px!important}
+.dp-list .btn[data-add]{justify-self:start}
+.notice.violet{background:var(--violet-soft);border-color:transparent;color:var(--text)}
+.notice.violet .ico{color:var(--violet)}
+@media (max-width:760px){.dp-row{grid-template-columns:1fr 1fr}.dp-row .mini.w2,.dp-row .mini.full{grid-column:1 / -1}}

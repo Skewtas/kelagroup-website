@@ -22,6 +22,22 @@ export const itemShape = v.obj({
   optional: v.bool({ optional: true }),
 });
 
+// Digitaliseringsplan – ligger i versionens innehåll och fryses därför med offerten.
+export const digitalPlanShape = v.obj({
+  enabled: v.bool({ optional: true }),
+  ai_draft: v.bool({ optional: true }),           // true = AI-utkast som inte granskats ännu (blockerar utskick)
+  summary: v.str({ optional: true, max: 4000 }),
+  current: v.list(v.obj({
+    process: v.str({ max: 160 }), today: v.str({ optional: true, max: 1000 }), problem: v.str({ optional: true, max: 1000 }),
+    hours_month: v.num({ optional: true, min: 0, max: 100000 }), automation_pct: v.int({ optional: true, min: 0, max: 100 }),
+  }), { max: 30, optional: true }),
+  hourly_cost_minor: v.int({ optional: true, min: 0, max: 1e8 }),
+  removed_costs: v.list(v.obj({ label: v.str({ max: 160 }), monthly_minor: v.int({ optional: true, min: 0, max: 1e10 }) }), { max: 20, optional: true }),
+  goals: v.list(v.obj({ goal: v.str({ max: 200 }), metric: v.str({ optional: true, max: 200 }), today: v.str({ optional: true, max: 100 }), target: v.str({ optional: true, max: 100 }) }), { max: 20, optional: true }),
+  phases: v.list(v.obj({ title: v.str({ max: 160 }), period: v.str({ optional: true, max: 80 }), actions: v.str({ optional: true, max: 3000 }), effect: v.str({ optional: true, max: 600 }) }), { max: 10, optional: true }),
+  assumptions: v.list(v.str({ max: 400 }), { max: 20, optional: true }),
+}, { optional: true });
+
 const planStep = v.obj({ title: v.str({ max: 160 }), text: v.str({ optional: true, max: 2000 }), duration: v.str({ optional: true, max: 60 }) });
 export const contentShape = v.obj({
   cover_title: v.str({ optional: true, max: 160 }),
@@ -35,6 +51,7 @@ export const contentShape = v.obj({
   payment_terms: v.str({ optional: true, max: 2000 }),
   terms: v.str({ optional: true, max: 8000 }),
   special_terms: v.str({ optional: true, max: 4000 }),
+  digital_plan: digitalPlanShape,
 }, { optional: true });
 
 export const DEFAULT_CONTENT = {
@@ -49,6 +66,7 @@ export const DEFAULT_CONTENT = {
   payment_terms: '',
   terms: '',
   special_terms: '',
+  digital_plan: null as any,
 };
 
 /** Låter statusen spegla verkligheten: skickade offerter vars giltighetstid passerat blir "Utgången". */

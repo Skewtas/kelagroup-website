@@ -8,6 +8,12 @@ export interface Env {
   OS_SECRET_KEY?: string;
   /** "development" tillåter en lokal reservnyckel för OS_SECRET_KEY. */
   OS_ENV?: string;
+  /** Krävs för KELA Intelligence (AI-utkast). Används redan av hemsidans chatt. */
+  ANTHROPIC_API_KEY?: string;
+  /** Valfritt: annan modell än standard (claude-opus-5-5). */
+  ANTHROPIC_MODEL?: string;
+  /** Endast tester: pekar SDK:n mot en lokal testserver. */
+  ANTHROPIC_BASE_URL?: string;
 }
 
 export class HttpError extends Error {

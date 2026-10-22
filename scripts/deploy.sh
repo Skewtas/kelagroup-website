@@ -20,6 +20,8 @@ fi
 OUT="$(mktemp -d)"
 trap 'rm -rf "$OUT"' EXIT
 git archive HEAD | tar -x -C "$OUT"
+# Serverberoenden (t.ex. Anthropic SDK) måste finnas när wrangler bygger functions/. node_modules laddas inte upp som filer.
+(cd "$OUT" && npm ci --omit=dev --no-audit --no-fund --ignore-scripts >/dev/null)
 # Utvecklingsfiler som inte ska ligga publikt (functions/ byggs av wrangler och laddas inte upp som filer).
 rm -rf "$OUT"/{db,tests,docs,scripts,badge,nya-hemsidan,.claude} "$OUT"/package.json "$OUT"/package-lock.json "$OUT"/tsconfig.json "$OUT"/badge-preview.png 2>/dev/null || true
 

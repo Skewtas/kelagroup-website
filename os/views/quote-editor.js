@@ -1,7 +1,7 @@
 // Offertbyggaren. Utkast sparas automatiskt. Skickade versioner är låsta och ändras aldrig.
 import { html, raw, ico, setHTML, $, $$, money, date, dateTime, ago, empty, badge, QUOTE_STATUS, STAGE_LABEL, modal, toast, confirmDialog, withBusy, copy, debounce, pct, formData, showErrors, esc } from '../lib/ui.js';
 import { get, post, patch } from '../lib/api.js';
-import { calcQuote, calcLine, parseMoney, parseQty, parsePercent, moneyInput, qtyInput, percentInput } from '../lib/calc.js';
+import { calcQuote, calcLine, calcPlan, parseMoney, parseQty, parsePercent, moneyInput, qtyInput, percentInput } from '../lib/calc.js';
 
 const VAT = [[2500, '25 %'], [1200, '12 %'], [600, '6 %'], [0, '0 %']];
 const UNITS = ['st', 'tim', 'mån', 'paket', 'sida', 'licens'];
@@ -9,6 +9,13 @@ const WEBSITE_PLAN = [
   ['Kundmöte och behovsanalys', 'Vecka 1'], ['Insamling av material', 'Vecka 1–2'], ['Designförslag', 'Vecka 2–3'], ['Kundens godkännande', ''],
   ['Utveckling', 'Vecka 3–5'], ['SEO-konfiguration', ''], ['Testning', ''], ['Säkerhetskontroll', ''], ['Publicering', ''], ['Överlämning', ''], ['Uppföljning', '30 dagar efter lansering'],
 ];
+const DP_LISTS = {
+  current: { title: 'Nuläge – processer i dag', add: 'Process', fields: [['process', 'Process', 'text', 'w2'], ['today', 'Så görs det i dag', 'text', 'w2'], ['problem', 'Problem / konsekvens', 'text', 'w2'], ['hours_month', 'Tid/mån (h)', 'num', ''], ['automation_pct', 'Kan automatiseras (%)', 'pct', '']] },
+  goals: { title: 'Mål och nyckeltal', add: 'Mål', fields: [['goal', 'Mål', 'text', 'w2'], ['metric', 'Så mäter vi', 'text', 'w2'], ['today', 'I dag', 'text', ''], ['target', 'Mål', 'text', '']] },
+  phases: { title: 'Färdplan i faser', add: 'Fas', fields: [['title', 'Fas', 'text', 'w2'], ['period', 'Period', 'text', ''], ['effect', 'Effekt', 'text', 'w2'], ['actions', 'Åtgärder (en per rad)', 'area', 'full']] },
+  removed_costs: { title: 'Kostnader som försvinner', add: 'Kostnad', fields: [['label', 'Vad', 'text', 'w2'], ['monthly_minor', 'Kr/mån', 'money', '']] },
+};
+
 const EVENT = {
   created: ['Offerten skapades', 'plus', ''], updated: ['Uppdaterad', 'edit', ''], sent: ['Låst och delad med kund', 'send', 'blue'],
   viewed: ['Öppnad i webbläsare', 'eye', 'blue'], accepted: ['Accepterad digitalt', 'checkCircle', 'green'], declined: ['Avböjd', 'xCircle', 'red'],
@@ -100,6 +107,9 @@ export default async function quoteEditor(view, p, app) {
   function renderEditor() {
     const c = model.content;
     setHTML(tabEl, html`<div class="qe"><div class="stack">
+      <section class="card qsec dp-card"><div class="card-h"><span class="n">00</span><h3>Digitaliseringsplan</h3>
+        <div class="act"><label class="flex small"><span class="switch"><input type="checkbox" id="dp-on" ${dpOn() ? 'checked' : ''}><span></span></span>Visa först i offerten</label></div></div>
+        <div class="card-b" id="dp"></div></section>
       <section class="card qsec"><div class="card-h"><span class="n">01</span><h3>Detaljer</h3></div><div class="card-b form">
         <label class="field"><span>Rubrik (internt och i listor)</span><input class="in" data-f="title" value="${model.title}"></label>
         <div class="fr"><label class="field"><span>Kontaktperson</span><select class="sel" data-f="contact_id"><option value="">– Ingen –</option>${data.contacts.map((k) => html`<option value="${k.id}" ${k.id === model.contact_id ? 'selected' : ''}>${k.name}${k.title ? ' · ' + k.title : ''}</option>`)}</select></label>
@@ -129,7 +139,11 @@ export default async function quoteEditor(view, p, app) {
         <label class="field"><span>Särskilda villkor</span><textarea class="ta" data-c="special_terms">${c.special_terms}</textarea></label>
       </div></section>
     </div><aside class="qe-side">${sideHtml()}</aside></div>`);
-    drawItems(); drawPlan(); bindSide();
+    drawItems(); drawPlan(); drawDp(); bindSide();
+    $('#dp-on').addEventListener('change', (e) => {
+      model.content.digital_plan = { ...emptyDp(), ...(model.content.digital_plan || {}), enabled: e.target.checked };
+      drawDp(); drawRoi(); queueSave();
+    });
 
     $$('[data-f]', tabEl).forEach((el) => el.addEventListener(el.tagName === 'SELECT' || el.type === 'date' ? 'change' : 'input', () => { model[el.dataset.f] = el.value; queueSave(); }));
     $$('[data-c]', tabEl).forEach((el) => el.addEventListener('input', () => {
@@ -228,6 +242,7 @@ export default async function quoteEditor(view, p, app) {
   function drawTotals() {
     const el = $('#totals'); if (!el) return;
     setHTML(el, totalsHtml(calcQuote({ items: model.items, discount_bp: model.discount_bp, currency: ver.currency })));
+    drawRoi();
   }
 
   function sideHtml() {
@@ -246,7 +261,7 @@ export default async function quoteEditor(view, p, app) {
         ${['sent', 'viewed', 'expired'].includes(st) && canWrite ? html`<div class="flex wrap"><button class="btn sm" id="newver2">${ico('layers')} Ny version</button><button class="btn sm ghost danger" data-status="declined">Markera avböjd</button></div>` : ''}
         ${st === 'declined' ? html`<div class="notice">${ico('xCircle')}<div>Avböjd ${dateTime(q.declined_at)}${q.decline_reason ? `: ${q.decline_reason}` : ''}</div></div>${canWrite ? html`<button class="btn w100" id="newver3">${ico('layers')} Skapa ny version</button>` : ''}` : ''}
       </div></section>
-      <section class="card"><div class="card-h"><h3>KELA Intelligence</h3><span class="tag ai-tag">${ico('sparkles')} Fas 3</span></div><div class="card-b"><p class="small muted">AI-utkast till introduktion, behov och lösning – alltid markerade och granskade innan de används. Aktiveras i fas 3.</p></div></section>`;
+      <section class="card ${dpOn(true) ? '' : 'hidden'}" id="roi-card"><div class="card-h"><h3>Lönsamhet för kunden</h3></div><div class="card-b" id="roi">${roiHtml(true)}</div></section>`;
   }
 
   function bindSide() {
@@ -272,11 +287,115 @@ export default async function quoteEditor(view, p, app) {
     ['#newver2', '#newver3'].forEach((s) => $(s)?.addEventListener('click', newVersion));
   }
 
+
+  // ---------- Digitaliseringsplan ----------
+  function emptyDp() { return { enabled: true, ai_draft: false, summary: '', current: [], hourly_cost_minor: 45000, removed_costs: [], goals: [], phases: [], assumptions: [] }; }
+  function dpOn(locked = false) { const d = locked && !editable ? ver.content.digital_plan : model.content.digital_plan; return !!d?.enabled; }
+  function roiHtml(locked = false) {
+    const d = locked && !editable ? ver.content.digital_plan : model.content.digital_plan;
+    if (!d?.enabled) return '';
+    const t = locked && !editable ? (data.acceptance?.totals || data.totals) : calcQuote({ items: model.items, discount_bp: model.discount_bp });
+    const r = calcPlan(d, t);
+    if (!r.has_data) return html`<p class="small muted">Fyll i nuläget (timmar per månad och andel som kan automatiseras) så räknas besparing och återbetalningstid ut mot offertens pris.</p>`;
+    const row = (l, v, cls = '') => html`<div class="row ${cls}"><span>${l}</span><span>${v}</span></div>`;
+    return html`<div class="totals">
+      ${row('Tid som frigörs', `${r.hours_saved.toLocaleString('sv-SE')} h/mån`)}
+      ${row('Bruttobesparing', money(r.gross_saving_month) + '/mån')}
+      ${row('Ny månadskostnad', '−' + money(r.new_monthly_cost) + '/mån')}
+      ${row('Nettobesparing', money(r.net_saving_month) + '/mån', 'big')}
+      ${row('Återbetalningstid', r.payback_months == null ? 'Lönar sig inte' : r.payback_months < 1 ? 'Under 1 mån' : `${r.payback_months.toLocaleString('sv-SE')} mån`)}
+      ${row('Resultat efter 3 år', money(r.result_year3))}
+    </div>${r.net_saving_month <= 0 ? html`<p class="small err mt8">Besparingen täcker inte den löpande kostnaden – se över siffrorna innan du skickar.</p>` : ''}`;
+  }
+  function drawRoi() {
+    const card = $('#roi-card'); if (!card) return;
+    card.classList.toggle('hidden', !dpOn());
+    setHTML($('#roi'), roiHtml());
+  }
+  function drawDp() {
+    const box = $('#dp'); if (!box) return;
+    const d = model.content.digital_plan;
+    if (!d?.enabled) {
+      setHTML(box, html`<div class="dp-off"><div><strong>Gör offerten till ett beslutsunderlag.</strong><p class="small muted">Nuläge, mål, färdplan och vad det är värt – före priset. Slå på för att börja, eller låt AI skriva ett utkast från dina mötesanteckningar.</p></div>
+        <button type="button" class="btn" id="dp-ai0">${ico('sparkles')} Skriv utkast med AI</button></div>`);
+      $('#dp-ai0').addEventListener('click', aiDraft);
+      return;
+    }
+    const val = (f, v) => f[2] === 'money' ? moneyInput(v) : v ?? '';
+    setHTML(box, html`
+      ${d.ai_draft ? html`<div class="notice violet mb12">${ico('sparkles')}<div><strong>AI-utkast – granska innan du skickar.</strong> Kontrollera fakta och siffror tillsammans med kundens uppgifter. Offerten kan inte skickas förrän planen är granskad.
+        <div class="mt8"><button type="button" class="btn sm primary" id="dp-ok">${ico('check')} Jag har granskat planen</button></div></div></div>` : ''}
+      <div class="flex mb12"><span class="muted small">Planen visas först i offerten. Lönsamheten räknas mot offertens pris.</span><button type="button" class="btn sm ml-auto" id="dp-ai">${ico('sparkles')} ${d.summary || (d.current || []).length ? 'Nytt AI-utkast' : 'Skriv utkast med AI'}</button></div>
+      <div class="form">
+        <label class="field"><span>Sammanfattning och rekommendation</span><textarea class="ta" data-dp="summary" placeholder="Vad rekommenderar ni och vad ger det kunden?">${d.summary || ''}</textarea></label>
+        ${Object.entries(DP_LISTS).map(([key, cfg]) => html`<div class="dp-list" data-list="${key}">
+          <div class="flex"><span class="lbl">${cfg.title}</span>${key === 'current' ? html`<label class="flex small ml-auto">Timkostnad <div class="in-wrap"><input class="in r has-suf dp-hour" data-dp-money="hourly_cost_minor" value="${moneyInput(d.hourly_cost_minor)}" inputmode="decimal"><span class="in-suf">kr/h</span></div></label>` : ''}</div>
+          ${(d[key] || []).map((row, i) => html`<div class="dp-row" data-i="${i}">${cfg.fields.map((f) => html`<label class="mini ${f[3]}"><span>${f[1]}</span>${f[2] === 'area'
+              ? html`<textarea class="ta" data-f="${f[0]}" rows="3">${row[f[0]] || ''}</textarea>`
+              : html`<input class="in ${['num', 'pct', 'money'].includes(f[2]) ? 'r' : ''}" data-f="${f[0]}" data-t="${f[2]}" value="${val(f, row[f[0]])}" ${['num', 'pct', 'money'].includes(f[2]) ? 'inputmode="decimal"' : ''}>`}</label>`)}
+            <button type="button" class="btn ghost sm icon danger dp-rm" data-rm aria-label="Ta bort">${ico('trash')}</button></div>`)}
+          <button type="button" class="btn sm ghost" data-add>${ico('plus')} ${cfg.add}</button></div>`)}
+        <label class="field"><span>Antaganden <span class="hint">ett per rad – visas i lönsamhetskalkylen</span></span><textarea class="ta" data-dp-lines="assumptions">${(d.assumptions || []).join('\n')}</textarea></label>
+      </div>`);
+    const changed = () => { drawRoi(); queueSave(); };
+    $$('[data-dp]', box).forEach((el) => el.addEventListener('input', () => { d[el.dataset.dp] = el.value; changed(); }));
+    $$('[data-dp-lines]', box).forEach((el) => el.addEventListener('input', () => { d[el.dataset.dpLines] = el.value.split('\n').map((x) => x.trim()).filter(Boolean); changed(); }));
+    $$('[data-dp-money]', box).forEach((el) => el.addEventListener('input', () => { const v = parseMoney(el.value); el.classList.toggle('bad', Number.isNaN(v)); if (!Number.isNaN(v)) { d[el.dataset.dpMoney] = v ?? 0; changed(); } }));
+    $$('.dp-list', box).forEach((listEl) => {
+      const key = listEl.dataset.list; d[key] ||= [];
+      $$('.dp-row', listEl).forEach((rowEl) => {
+        const row = d[key][Number(rowEl.dataset.i)];
+        $$('[data-f]', rowEl).forEach((el) => el.addEventListener('input', () => {
+          const t = el.dataset.t; let v = el.value;
+          if (t === 'num') v = v === '' ? null : Number(v.replace(',', '.'));
+          if (t === 'pct') v = v === '' ? null : Math.round(Number(v.replace(',', '.').replace('%', '')));
+          if (t === 'money') v = parseMoney(v);
+          const bad = typeof v === 'number' && (Number.isNaN(v) || v < 0 || (t === 'pct' && v > 100));
+          el.classList.toggle('bad', bad); if (bad) return;
+          row[el.dataset.f] = v; changed();
+        }));
+        $('[data-rm]', rowEl).addEventListener('click', () => { d[key].splice(Number(rowEl.dataset.i), 1); drawDp(); changed(); });
+      });
+      $('[data-add]', listEl).addEventListener('click', () => {
+        d[key].push(Object.fromEntries(DP_LISTS[key].fields.map((f) => [f[0], ['num', 'pct', 'money'].includes(f[2]) ? null : '']))); drawDp();
+        setTimeout(() => $$(`[data-list="${key}"] .dp-row`).pop()?.querySelector('input,textarea')?.focus(), 0);
+      });
+    });
+    $('#dp-ai')?.addEventListener('click', aiDraft);
+    $('#dp-ok')?.addEventListener('click', () => { d.ai_draft = false; drawDp(); queueSave(); toast('Planen är markerad som granskad'); });
+  }
+
+  async function aiDraft() {
+    const cust = await get(`/customers/${data.customer.id}`).catch(() => null);
+    const prefill = [cust?.customer?.notes, ...(cust?.activities || []).filter((a) => a.type !== 'system' && a.body).slice(0, 5).map((a) => `${a.title}: ${a.body}`)].filter(Boolean).join('\n\n');
+    modal({
+      title: 'Skriv digitaliseringsplan med AI', wide: true,
+      body: html`<div class="form"><p class="muted small">KELA Intelligence (Claude) skriver ett utkast utifrån dina anteckningar och tjänsterna i offerten. Utkastet markeras som AI-genererat och måste granskas innan offerten kan skickas. Skriv inga lösenord eller känsliga personuppgifter.</p>
+        <label class="field"><span>Mötesanteckningar</span><textarea class="ta" name="notes" rows="12" placeholder="Ex: 6 städare, all bokning via telefon och mejl (ca 2 h/dag). Schemat görs i Excel varje söndag. Fakturor manuellt i Fortnox, ca 8 h/mån. Vill växa till 10 anställda utan fler på kontoret…">${prefill}</textarea></label>
+        ${model.content.digital_plan?.summary || (model.content.digital_plan?.current || []).length ? html`<div class="notice amber">${ico('alert')}<div>Utkastet ersätter den plan som finns i offerten nu.</div></div>` : ''}</div>`,
+      footer: html`<button type="button" class="btn" data-close>Avbryt</button><button type="submit" class="btn primary" id="ai-go">${ico('sparkles')} Skriv utkast</button>`,
+      onMount: (dlg, close) => dlg.querySelector('form').addEventListener('submit', async (e) => {
+        e.preventDefault(); const f = e.currentTarget; const btn = $('#ai-go', dlg);
+        btn.classList.add('loading'); btn.lastChild.textContent = ' Skriver… (kan ta en minut)';
+        try {
+          await save.flush?.();
+          const r = await post(`/quotes/${q.id}/plan-draft`, { notes: f.notes.value });
+          model.content.digital_plan = r.plan;
+          close(); $('#dp-on').checked = true; drawDp(); drawRoi(); queueSave();
+          toast('AI-utkastet är klart – granska det innan du skickar');
+        } catch (err) { showErrors(f, err); btn.classList.remove('loading'); btn.lastChild.textContent = ' Skriv utkast'; }
+      }),
+    });
+  }
+
   // ---------- Spara ----------
   let saving = Promise.resolve();
   function markDirty(msg = 'Osparade ändringar') { const s = $('#save'); if (s) { s.className = 'savestate dirty'; s.textContent = msg; } }
   function payload() {
-    return { title: model.title, contact_id: model.contact_id || null, valid_until: model.valid_until || null, discount_bp: model.discount_bp, content: model.content,
+    // Rader där huvudfältet (t.ex. processnamn) är tomt sparas inte ännu.
+    const dp = model.content.digital_plan;
+    const cleanDp = dp ? { ...dp, ...Object.fromEntries(Object.entries(DP_LISTS).map(([k, cfg]) => [k, (dp[k] || []).filter((r) => String(r?.[cfg.fields[0][0]] ?? '').trim())])) } : dp;
+    return { title: model.title, contact_id: model.contact_id || null, valid_until: model.valid_until || null, discount_bp: model.discount_bp, content: { ...model.content, digital_plan: cleanDp },
       items: model.items.map((it) => ({ ...it, description: it.description || null })) };
   }
   const doSave = async () => {

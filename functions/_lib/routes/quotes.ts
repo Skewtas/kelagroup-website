@@ -1,6 +1,7 @@
 // /api/os/quotes – offerter, versioner, utskick, mallar, förhandsgranskning.
 import { Router, Ctx, audit, auditStmt, activityStmt, updateSet } from '../router';
-import { HttpError, newId, now, today, addDays, likeTerm, parseJson, randomToken, sha256hex } from '../core';
+import { HttpError, newId, now, today, addDays, likeTerm, parseJson, randomToken, sha256hex, rateLimit } from '../core';
+import { draftDigitalPlan } from '../ai';
 import { v, validate } from '../validate';
 import { encryptSecret, decryptSecret, can } from '../auth';
 import { calcQuote } from '../../../os/lib/calc.js';
@@ -230,6 +231,9 @@ export function quoteRoutes(r: Router) {
     const ver = await loadVersion(env, s.orgId, q.current_version_id);
     if (!ver.items.length) throw new HttpError(422, 'validation', 'Lägg till minst en rad innan du skickar.');
     if (!q.valid_until || q.valid_until < today()) throw new HttpError(422, 'validation', 'Sätt ett giltighetsdatum framåt i tiden.');
+    // AI-genererat innehåll måste granskas av en människa innan något skickas till kund.
+    if (ver.content.digital_plan?.enabled && ver.content.digital_plan.ai_draft)
+      throw new HttpError(409, 'ai_review_required', 'Digitaliseringsplanen är ett AI-utkast. Granska den och markera den som granskad innan du skickar.');
     const { hash, stmt } = await lockVersionStmts(env, s.orgId, q, ver);
     const t = now();
     const tok = q.share_token_enc ? null : await newShareToken(c);
@@ -333,6 +337,23 @@ export function quoteRoutes(r: Router) {
     }
     return new Response(html.body, { headers: { 'content-type': 'text/html; charset=utf-8', 'content-security-policy': html.csp, 'x-frame-options': 'SAMEORIGIN', 'cache-control': 'no-store' } });
   }, { perm: 'quotes:read' });
+
+
+  // KELA Intelligence: AI-utkast till digitaliseringsplan. Sparas inte – redigeraren visar det som ett utkast att granska.
+  r.post('/quotes/:id/plan-draft', async (c) => {
+    const { env, s } = c;
+    const q = await getQuote(c, c.params.id);
+    const ver = await loadVersion(env, s.orgId, q.current_version_id);
+    if (ver.locked) throw new HttpError(409, 'version_locked', 'Versionen är låst. Skapa en ny version först.');
+    const { notes } = validate({ notes: v.str({ min: 20, max: 20000, msg: 'Skriv minst några meningar.' }) }, await c.body());
+    if (!(await rateLimit(env.DB, `ai:${s.userId}`, 20, 3600))) throw new HttpError(429, 'rate_limited', 'Max 20 AI-utkast per timme.');
+    const cust = await env.DB.prepare('SELECT name, industry FROM customers WHERE id = ? AND org_id = ?').bind(q.customer_id, s.orgId).first<any>();
+    const draft = await draftDigitalPlan(env, { customer: cust.name, industry: cust.industry, title: q.title, items: ver.items.map((i: any) => ({ name: i.name, billing: i.billing })), notes: notes! });
+    // Logga att AI använts – men inte innehållet (dataminimering).
+    await audit(c, 'ai.plan_draft', 'quote', q.id, `AI-utkast till digitaliseringsplan för offert #${q.number}`, { model: draft.model, notes_chars: notes!.length });
+    const { model, ...plan } = draft; void model;
+    return { plan };
+  }, { perm: 'quotes:write' });
 
   // ---------- Mallar ----------
   r.get('/quote-templates', async ({ env, s }) => {

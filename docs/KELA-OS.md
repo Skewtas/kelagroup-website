@@ -75,6 +75,7 @@ Webbläsare ──► Cloudflare Pages
 ### Fas 2 – påbörjad
 - **Projekt** (`db/migrations/0002_fas2_projekt.sql`, `functions/_lib/projects.ts`): projektmallar (Ny hemsida 11 steg, Bokningssystem, AI-chatt, App, Generellt), Kanban, lista, tidslinje och översikt, milstolpar, budget och tid. När en kund godkänner en offert skapas ett projekt automatiskt från den mall som passar offertens innehåll (max ett per offert).
 - **Import av KELA:s produkter** (Tjänster → "Importera KELA-produkter"): Bokis, Chattis, Feedis, Påminnis, Headof, Personalapp, Kundapp, Rekryteringsverktyg, SEO, Meta Ads, Nyhetsbrev, Content. Månadspris enligt bekräftade från-priser, uppstart lämnas tom. Befintliga priser skrivs aldrig över.
+- **Digitaliseringsplan i offerten** (`functions/_lib/ai.ts`, `calcPlan` i `os/lib/calc.js`): nuläge, mål, färdplan i faser och lönsamhet (frigjord tid × timkostnad + borttagna kostnader − ny månadskostnad, återbetalningstid, resultat år 1 och 3). Visas först i offerten; priset kommer sist följt av lönsamhetskalkylen. AI-utkast med Claude (`claude-opus-5-5`, strukturerade svar, `fallbacks: "default"`) via officiella `@anthropic-ai/sdk`. Utkastet sparas inte automatiskt, markeras som AI-utkast och offerten kan inte skickas förrän planen markerats som granskad. Kräver `ANTHROPIC_API_KEY` i Cloudflare.
 - Kvar i fas 2: kundportal, avtal + e-signering, Fortnox/fakturor/abonnemang, automationsbyggare, support.
 
 ## 4. Säkerhet
@@ -104,6 +105,7 @@ Rekommenderas inför produktion (ej gjort):
 | `OS_SECRET_KEY` | Secret | Ja | 32 slumpbyte i base64. Krypterar MFA-hemligheter och offertlänkar. **Byts den blir befintliga MFA-kopplingar och länkar ogiltiga.** Skapa: `openssl rand -base64 32` |
 | `OS_SETUP_TOKEN` | Secret | Bara vid installation | Engångsnyckel för att skapa första superadmin. Ta bort efteråt. Skapa: `openssl rand -hex 24` |
 | `OS_ENV` | Variabel | Nej | Sätts bara lokalt till `development`. |
+| `ANTHROPIC_API_KEY` | Secret | För AI | Krävs för AI-utkast (och gör hemsidans chatt till riktig AI). Utan den visar KELA OS att AI inte är aktiverat. |
 
 Lokalt läses värdena från `.dev.vars` (gitignorerad).
 
@@ -139,7 +141,7 @@ bash scripts/deploy.sh
 npm install
 npm run db:migrate:local
 npm run dev        # http://localhost:8788/os/  (läser .dev.vars)
-npm test           # 27 integrationstester mot en tom, temporär databas
+npm test           # 28 integrationstester mot en tom, temporär databas
 npm run typecheck
 ```
 
