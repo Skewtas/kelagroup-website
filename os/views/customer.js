@@ -18,7 +18,7 @@ export default async function customer(view, p, app) {
   const mrr = accepted.reduce((s, q) => s + (q.totals?.monthly?.net || 0), 0);
 
   const TABS = [['oversikt', 'Översikt'], ['affarer', 'Affärer', r.deals.length], ['offerter', 'Offerter', r.quotes.length], ['aktivitet', 'Aktivitet', r.activities.length], ['uppgifter', 'Uppgifter', r.tasks.filter((t) => t.status === 'open').length],
-    ['projekt', 'Projekt'], ['avtal', 'Avtal'], ['fakturor', 'Fakturor'], ['support', 'Support'], ['dokument', 'Dokument']];
+    ['projekt', 'Projekt', (r.projects || []).length], ['avtal', 'Avtal'], ['fakturor', 'Fakturor'], ['support', 'Support'], ['dokument', 'Dokument']];
 
   setHTML(view, html`
     <div class="dhead">
@@ -92,6 +92,13 @@ export default async function customer(view, p, app) {
       <span class="li-b"><div class="li-t">${t.title}</div><div class="li-s">${t.due_date ? 'Förfaller ' + date(t.due_date) : 'Inget datum'}</div></span>${t.status === 'done' ? html`<span class="badge green">Klar</span>` : ''}</label>`)}</div>`
       : empty({ icon: 'checkSquare', title: 'Inga uppgifter', text: 'Uppgifter kopplade till kunden visas här.' })}</div>`);
     $$('[data-task]', tabEl).forEach((cb) => cb.addEventListener('change', async () => { await patch(`/tasks/${cb.dataset.task}`, { status: cb.checked ? 'done' : 'open' }); toast(cb.checked ? 'Uppgiften är klar' : 'Uppgiften är öppen igen'); }));
+  } else if (tab === 'projekt') {
+    const ps = r.projects || [];
+    setHTML(tabEl, html`<div class="card"><div class="card-h"><h3>Projekt</h3><div class="act">${app.can('projects:write') ? html`<button class="btn sm primary" id="new-prj">${ico('plus')} Nytt projekt</button>` : ''}</div></div>
+      <div class="card-b ${ps.length ? 'flush mt8' : ''}">${ps.length ? html`<div class="list">${ps.map((x) => html`<a class="li" href="#/projekt/${x.id}"><span class="li-ico">${ico('folder')}</span><span class="li-b"><div class="li-t">${x.name}</div>
+        <div class="li-s">P${x.number} · ${x.task_done}/${x.task_count} uppgifter klara${x.due_date ? ' · deadline ' + date(x.due_date) : ''}</div></span><span class="badge ${x.status === 'done' ? 'green' : x.status === 'active' ? 'blue' : x.status === 'waiting_customer' ? 'amber' : ''}">${{ planned: 'Planerat', active: 'Pågår', waiting_customer: 'Väntar på kund', paused: 'Pausat', done: 'Klart', cancelled: 'Avbrutet' }[x.status]}</span></a>`)}</div>`
+        : empty({ icon: 'folder', title: 'Inga projekt', text: 'Projekt skapas automatiskt när kunden godkänner en offert, eller manuellt här.' })}</div></div>`);
+    $('#new-prj')?.addEventListener('click', () => import('./forms.js').then((m) => m.projectForm({ customerId: c.id, onSaved: (id) => app.navigate(`/projekt/${id}`) })));
   } else {
     const L = { projekt: ['folder', 'Projekt', 'Projekthantering med mallar, milstolpar och tidsåtgång byggs i fas 2. Accepterade offerter skapar redan en uppgift "Starta projekt".'],
       avtal: ['signature', 'Avtal', 'Avtal och e-signering via en etablerad e-signeringstjänst byggs i fas 2.'],

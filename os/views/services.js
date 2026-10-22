@@ -15,7 +15,7 @@ export default async function services(view, _p, app) {
 
   setHTML(view, html`
     <div class="page-h"><div><h1>Tjänster och prislista</h1><div class="sub">Tjänstekatalogen som offerterna byggs av</div></div>
-      <div class="act">${w ? html`<button class="btn primary" id="new">${ico('plus')} Ny tjänst</button>` : ''}</div></div>
+      <div class="act">${w ? html`<button class="btn" id="import">${ico('download')} Importera KELA-produkter</button><button class="btn primary" id="new">${ico('plus')} Ny tjänst</button>` : ''}</div></div>
     ${missing ? html`<div class="notice amber mb16">${ico('info')}<div><strong>${missing} tjänster saknar pris.</strong> Inga exempelpriser är inlagda – sätt era egna priser innan de används i offerter.</div></div>` : ''}
     <div class="notice mb16">${ico('history')}<div>Varje prisändring sparas som en ny version. Skickade och accepterade offerter behåller alltid priset de skickades med.</div></div>
     ${r.services.length ? cats.map((cat) => html`<section class="card mb16"><div class="card-h"><h3>${cat}</h3></div><div class="card-b flush mt8"><div class="tbl-wrap"><table class="tbl">
@@ -37,6 +37,15 @@ export default async function services(view, _p, app) {
 
   $$('tr[data-id]', view).forEach((tr) => tr.addEventListener('click', () => edit(r.services.find((s) => s.id === tr.dataset.id))));
   $('#new')?.addEventListener('click', () => edit(null));
+  $('#import')?.addEventListener('click', async (e) => {
+    const b = e.currentTarget;
+    b.classList.add('loading');
+    try {
+      const res = await post('/services/import-kela');
+      toast(res.added.length + res.priced.length ? `${res.added.length} produkter tillagda, ${res.priced.length} befintliga fick pris` : 'Alla KELA-produkter finns redan med pris');
+      services(view, _p, app);
+    } catch (err) { toast(err.message, 'err'); } finally { b.classList.remove('loading'); }
+  });
 
   async function edit(s) {
     const hist = s ? (await get(`/services/${s.id}`)).price_history : [];

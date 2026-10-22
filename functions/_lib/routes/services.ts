@@ -55,12 +55,60 @@ function priceChanged(old: any, d: Record<string, unknown>) {
   return PRICE_COLS.some((k) => k in d && (d[k] ?? null) !== (old?.[k] ?? null));
 }
 
+
+// KELA:s egna färdiga produkter med bekräftade från-priser per månad (Mikaela 2026-10-14/17).
+// Uppstartskostnad offereras per kund och lämnas därför tom. Importen är idempotent: finns namnet redan hoppas det över.
+const KELA_PRODUCTS: { name: string; category: string; monthly: number; description: string; includes: string[] }[] = [
+  { name: 'Bokis – bokningssystem', category: 'KELA-produkter', monthly: 699900, description: 'Bokningssystem som pratar direkt med schemasystemet.', includes: ['Pris och restid räknas automatiskt', 'Automatisk schemaläggning med rätt kompetens', 'Tilläggstjänster och abonnemang', 'Orderbekräftelse, välkomstmejl/sms och påminnelser', 'Skräddarsys efter verksamheten'] },
+  { name: 'Chattis – AI-chattbot', category: 'KELA-produkter', monthly: 1500000, description: 'AI-chattbot kopplad till affärssystemet som sköter bokning, ombokning och kundfrågor.', includes: ['Bokning, ombokning och avbokning', 'Föreslår nya tider och samma städare', 'Svarar på fakturafrågor', 'Tar emot beställningar'] },
+  { name: 'Feedis – feedbacksystem', category: 'KELA-produkter', monthly: 150000, description: 'Sms-betyg efter utfört uppdrag med automatisk uppföljning.', includes: ['Sms-betyg efter uppdraget', 'Bra feedback skickas till personalen', 'Dålig feedback till kontoret med åtgärdsförslag', 'Nöjda kunder får länk till Google/Trustpilot/Reco'] },
+  { name: 'Påminnis – betalningspåminnelser', category: 'KELA-produkter', monthly: 150000, description: 'Automatiska påminnelser om obetalda fakturor via mejl och sms.', includes: ['Automatiska mejl och sms', 'Ökad likviditet'] },
+  { name: 'Headof – live-dashboard', category: 'KELA-produkter', monthly: 99900, description: 'Dashboard live mot affärssystemet.', includes: ['Försäljning, timmar och bokningar', 'Nyckeltal', 'Skräddarsys'] },
+  { name: 'Personalapp', category: 'KELA-produkter', monthly: 199900, description: 'App för personalen med in-/utcheckning och AI-arbetsledare.', includes: ['In- och utcheckning med GPS', 'Kvalitetskontroller', 'AI-arbetsledare som besvarar de flesta frågor', 'Tid- och materialrapportering'] },
+  { name: 'Kundapp', category: 'KELA-produkter', monthly: 99900, description: 'App där kunden ser och ändrar sina bokningar.', includes: ['Se och ändra bokningar', 'Uppgifter och feedback', 'Fakturor'] },
+  { name: 'Rekryteringsverktyg', category: 'KELA-produkter', monthly: 150000, description: 'Rekrytering med kandidatbank och onboarding.', includes: ['Kandidatbank', 'Automatisk återkoppling', 'Onboarding'] },
+  { name: 'Sökmotoroptimering (SEO)', category: 'Marknadsföring', monthly: 350000, description: 'Löpande sökmotoroptimering.', includes: [] },
+  { name: 'Meta Ads', category: 'Marknadsföring', monthly: 150000, description: 'Annonsering på Facebook och Instagram.', includes: [] },
+  { name: 'Nyhetsbrev (mejl och sms)', category: 'Marknadsföring', monthly: 100000, description: 'Segmentering, kundbrev, kampanjer och grattis-sms.', includes: ['Segmentering', 'Kundbrev och kampanjer', 'Grattis-sms till kunder och personal'] },
+  { name: 'Content för Instagram', category: 'Marknadsföring', monthly: 100000, description: 'Innehåll för Instagram.', includes: [] },
+];
+
 export function serviceRoutes(r: Router) {
   r.get('/services', async (c) => {
     const all = c.url.searchParams.get('all') === '1';
     const rows = await c.env.DB.prepare(`${SELECT} WHERE s.org_id = ? ${all ? '' : 'AND s.active = 1'} ORDER BY s.sort, s.name`).bind(c.s.orgId).all();
     return { services: rows.results.map((x) => view(c, x)), costs_visible: can(c.s, 'services:costs'), vat_rates: VAT_RATES };
   }, { perm: 'services:read' });
+
+
+  r.post('/services/import-kela', async (c) => {
+    const existing = await c.env.DB.prepare('SELECT id, name, description, includes_json, current_price_version_id FROM services WHERE org_id = ?').bind(c.s.orgId).all<any>();
+    const byName = new Map(existing.results.map((x) => [x.name.toLowerCase(), x]));
+    const t = now(); const stmts: D1PreparedStatement[] = []; const added: string[] = []; const priced: string[] = [];
+    KELA_PRODUCTS.forEach((p, i) => {
+      const ex = byName.get(p.name.toLowerCase());
+      if (ex && ex.current_price_version_id) return; // har redan pris – rörs aldrig
+      const id = ex ? ex.id : newId('svc'); const pv = newId('prc');
+      if (ex) {
+        // Befintlig tjänst utan pris (t.ex. från startkatalogen): sätt pris och fyll bara i tomma fält.
+        stmts.push(c.env.DB.prepare(`UPDATE services SET current_price_version_id = ?, description = COALESCE(description, ?),
+          includes_json = CASE WHEN includes_json = '[]' THEN ? ELSE includes_json END, updated_at = ? WHERE id = ? AND org_id = ?`)
+          .bind(pv, p.description, JSON.stringify(p.includes), t, id, c.s.orgId));
+        priced.push(p.name);
+      } else {
+        stmts.push(c.env.DB.prepare('INSERT INTO services (id, org_id, name, category, description, includes_json, current_price_version_id, sort, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)')
+          .bind(id, c.s.orgId, p.name, p.category, p.description, JSON.stringify(p.includes), pv, 100 + i, t, t));
+        added.push(p.name);
+      }
+      stmts.push(c.env.DB.prepare('INSERT INTO service_price_versions (id, org_id, service_id, once_price_minor, monthly_price_minor, vat_bp, created_by, created_at) VALUES (?,?,?,NULL,?,2500,?,?)')
+        .bind(pv, c.s.orgId, id, p.monthly, c.s.userId, t));
+    });
+    if (stmts.length) {
+      stmts.push(auditStmt(c.env, c.s.orgId, c.s.userId, c.ip, 'service.imported', 'service', null, `KELA-produkter importerade: ${added.length} nya, ${priced.length} prissatta`, { added, priced }));
+      await c.env.DB.batch(stmts);
+    }
+    return { added, priced, skipped: KELA_PRODUCTS.length - added.length - priced.length };
+  }, { perm: 'services:write' });
 
   r.get('/services/:id', async (c) => {
     const row = await getService(c, c.params.id);

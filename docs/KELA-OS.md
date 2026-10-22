@@ -72,6 +72,11 @@ Webbläsare ──► Cloudflare Pages
 - Roller: Superadmin, Administratör, Säljare, Projektledare, Ekonomi (+ Kund förberedd för portalen).
 - Aktivitetslogg (revisionslogg) över inloggningar och alla ändringar.
 
+### Fas 2 – påbörjad
+- **Projekt** (`db/migrations/0002_fas2_projekt.sql`, `functions/_lib/projects.ts`): projektmallar (Ny hemsida 11 steg, Bokningssystem, AI-chatt, App, Generellt), Kanban, lista, tidslinje och översikt, milstolpar, budget och tid. När en kund godkänner en offert skapas ett projekt automatiskt från den mall som passar offertens innehåll (max ett per offert).
+- **Import av KELA:s produkter** (Tjänster → "Importera KELA-produkter"): Bokis, Chattis, Feedis, Påminnis, Headof, Personalapp, Kundapp, Rekryteringsverktyg, SEO, Meta Ads, Nyhetsbrev, Content. Månadspris enligt bekräftade från-priser, uppstart lämnas tom. Befintliga priser skrivs aldrig över.
+- Kvar i fas 2: kundportal, avtal + e-signering, Fortnox/fakturor/abonnemang, automationsbyggare, support.
+
 ## 4. Säkerhet
 
 Implementerat:
@@ -102,14 +107,20 @@ Rekommenderas inför produktion (ej gjort):
 
 Lokalt läses värdena från `.dev.vars` (gitignorerad).
 
-## 6. Driftsättning (görs av Mikaela – Claude får inte publicera)
+## 6. Driftsättning
+
+**Status 2026-10-22:** produktionsdatabasen `kela-os` (EU-jurisdiktion, id `c598c57c-…`) är skapad och migrerad, kopplad som `DB` i Pages-projektet tillsammans med `OS_SECRET_KEY` och `OS_SETUP_TOKEN`. Installationsnyckeln finns lokalt i den gitignorerade filen `.os-setup-token`. Kvar: skapa första kontot på kelagroup.se/os/ och därefter ta bort `OS_SETUP_TOKEN` i Cloudflare.
+
+Nya migreringar + publicering: `bash scripts/deploy.sh --migrate`.
+
+Ursprungliga steg (för referens):
 
 ```bash
 # 1. Skapa databasen i EU (en gång). Klistra in database_id i db/wrangler.toml.
 npx wrangler@4 d1 create kela-os --jurisdiction eu
 
 # 2. Skapa tabellerna i produktionsdatabasen
-npx wrangler@4 d1 migrations apply kela-os --remote --config db/wrangler.toml
+npx wrangler@4 d1 migrations apply kela-os --remote --env production --config db/wrangler.toml
 
 # 3. I Cloudflare: Pages → kelagroup-website → Settings
 #    - Bindings: D1 database, namn DB → kela-os
@@ -128,7 +139,7 @@ bash scripts/deploy.sh
 npm install
 npm run db:migrate:local
 npm run dev        # http://localhost:8788/os/  (läser .dev.vars)
-npm test           # 25 integrationstester mot en tom, temporär databas
+npm test           # 27 integrationstester mot en tom, temporär databas
 npm run typecheck
 ```
 

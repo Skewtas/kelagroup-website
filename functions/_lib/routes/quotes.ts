@@ -143,6 +143,7 @@ export function quoteRoutes(r: Router) {
       q.deal_id ? env.DB.prepare('SELECT id, title, stage FROM deals WHERE id = ? AND org_id = ?').bind(q.deal_id, s.orgId).first() : null,
       q.owner_user_id ? env.DB.prepare('SELECT id, name FROM users WHERE id = ?').bind(q.owner_user_id).first() : null,
     ]);
+    const project = await env.DB.prepare('SELECT id, number, name, status FROM projects WHERE quote_id = ? AND org_id = ?').bind(q.id, s.orgId).first();
     const { share_token_hash, share_token_enc, ...safe } = q;
     void share_token_hash;
     return {
@@ -153,7 +154,7 @@ export function quoteRoutes(r: Router) {
       versions: versions.results.map((x) => ({ ...x, locked: !!x.locked, totals: parseJson(x.totals_json, null), totals_json: undefined })),
       events: events.results.map((e) => ({ ...e, data: parseJson(e.data_json, {}), data_json: undefined })),
       acceptance: acceptance ? { ...acceptance, selected_optional: parseJson(acceptance.selected_optional_json, []), totals: parseJson(acceptance.totals_json, null) } : null,
-      customer, contacts: contacts.results, deal, owner,
+      customer, contacts: contacts.results, deal, owner, project,
     };
   }, { perm: 'quotes:read' });
 

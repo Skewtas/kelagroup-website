@@ -119,6 +119,9 @@ export function crmRoutes(r: Router) {
   r.get('/customers/:id', async (c) => {
     const { env, s, params } = c;
     const cust = await getCustomer(c, params.id);
+    const projects = can(s, 'projects:read') ? (await env.DB.prepare(`SELECT p.id, p.number, p.name, p.status, p.due_date,
+        (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.id) AS task_count, (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.id AND t.status = 'done') AS task_done
+        FROM projects p WHERE p.customer_id = ? AND p.org_id = ? ORDER BY p.created_at DESC`).bind(cust.id, s.orgId).all()).results : [];
     const [contacts, deals, quotes, activities, tasks, owner] = await Promise.all([
       env.DB.prepare('SELECT * FROM contacts WHERE customer_id = ? AND org_id = ? ORDER BY is_primary DESC, name').bind(cust.id, s.orgId).all(),
       env.DB.prepare('SELECT d.*, u.name AS owner_name FROM deals d LEFT JOIN users u ON u.id = d.owner_user_id WHERE d.customer_id = ? AND d.org_id = ? ORDER BY d.updated_at DESC').bind(cust.id, s.orgId).all(),
@@ -129,7 +132,7 @@ export function crmRoutes(r: Router) {
         : Promise.resolve({ results: [] }),
       env.DB.prepare(`SELECT a.*, u.name AS actor_name FROM activities a LEFT JOIN users u ON u.id = a.actor_user_id
             WHERE a.customer_id = ? AND a.org_id = ? ORDER BY a.created_at DESC LIMIT 100`).bind(cust.id, s.orgId).all(),
-      env.DB.prepare('SELECT * FROM tasks WHERE customer_id = ? AND org_id = ? ORDER BY status, due_date').bind(cust.id, s.orgId).all(),
+      env.DB.prepare('SELECT * FROM tasks WHERE customer_id = ? AND org_id = ? AND project_id IS NULL ORDER BY status, due_date').bind(cust.id, s.orgId).all(),
       cust.owner_user_id ? env.DB.prepare('SELECT id, name FROM users WHERE id = ?').bind(cust.owner_user_id).first() : Promise.resolve(null),
     ]);
     return {
@@ -139,6 +142,7 @@ export function crmRoutes(r: Router) {
       quotes: (quotes.results as any[]).map((q) => ({ ...q, totals: parseJson(q.totals_json, null), totals_json: undefined })),
       activities: activities.results,
       tasks: tasks.results,
+      projects,
     };
   }, { perm: 'customers:read' });
 
@@ -402,9 +406,12 @@ export function crmRoutes(r: Router) {
   r.get('/tasks', async ({ env, s, url }) => {
     const mine = url.searchParams.get('mine') === '1';
     const status = url.searchParams.get('status') === 'done' ? 'done' : 'open';
-    const rows = await env.DB.prepare(`SELECT t.*, c.name AS customer_name, u.name AS assignee_name, q.number AS quote_number
+    const kind = url.searchParams.get('kind'); // 'project' | 'sales' | null
+    const rows = await env.DB.prepare(`SELECT t.*, c.name AS customer_name, u.name AS assignee_name, q.number AS quote_number, p.name AS project_name
         FROM tasks t LEFT JOIN customers c ON c.id = t.customer_id LEFT JOIN users u ON u.id = t.assignee_user_id LEFT JOIN quotes q ON q.id = t.quote_id
-       WHERE t.org_id = ? AND t.status = ? ${mine ? 'AND t.assignee_user_id = ?' : ''} ORDER BY t.due_date IS NULL, t.due_date, t.created_at LIMIT 500`)
+        LEFT JOIN projects p ON p.id = t.project_id
+       WHERE t.org_id = ? AND t.status = ? ${mine ? 'AND t.assignee_user_id = ?' : ''} ${kind === 'project' ? 'AND t.project_id IS NOT NULL' : kind === 'sales' ? 'AND t.project_id IS NULL' : ''}
+       ORDER BY t.due_date IS NULL, t.due_date, t.created_at LIMIT 500`)
       .bind(...[s.orgId, status, ...(mine ? [s.userId] : [])]).all();
     return { tasks: rows.results };
   }, { perm: 'tasks:read' });
@@ -427,11 +434,30 @@ export function crmRoutes(r: Router) {
   r.patch('/tasks/:id', async (c) => {
     const t = await c.env.DB.prepare('SELECT * FROM tasks WHERE id = ? AND org_id = ?').bind(c.params.id, c.s.orgId).first<any>();
     if (!t) throw new HttpError(404, 'not_found', 'Uppgiften finns inte.');
-    const d = validate({ title: v.str({ max: 200 }), due_date: v.date({ optional: true }), status: v.enum(['open', 'done'] as const), assignee_user_id: v.id('usr', { optional: true }) }, await c.body(), true);
+    const d = validate({ title: v.str({ max: 200 }), due_date: v.date({ optional: true }), status: v.enum(['open', 'done'] as const), assignee_user_id: v.id('usr', { optional: true }),
+      stage: v.enum(['todo', 'doing', 'review', 'done'] as const), milestone: v.bool({ optional: true }), sort: v.int({ optional: true, min: 0, max: 100000 }),
+      description: v.str({ optional: true, max: 4000 }), estimated_hours: v.num({ optional: true, min: 0, max: 10000 }) }, await c.body(), true);
     await ownerInOrg(c, d.assignee_user_id);
-    const extra = d.status ? { done_at: d.status === 'done' ? now() : null } : {};
-    const { sql, vals } = updateSet({ ...d, ...extra }, ['title', 'due_date', 'status', 'assignee_user_id', 'done_at']);
-    if (sql) await c.env.DB.prepare(`UPDATE tasks SET ${sql} WHERE id = ? AND org_id = ?`).bind(...vals, t.id, c.s.orgId).run();
+    // Status och kanban-steg hålls i synk.
+    const extra: Record<string, unknown> = {};
+    if (d.stage && !d.status) extra.status = d.stage === 'done' ? 'done' : 'open';
+    if (d.status && !d.stage) extra.stage = d.status === 'done' ? 'done' : t.stage === 'done' ? 'todo' : t.stage;
+    const newStatus = (d.status || extra.status) as string | undefined;
+    if (newStatus && newStatus !== t.status) extra.done_at = newStatus === 'done' ? now() : null;
+    const fields: Record<string, unknown> = { ...d, ...extra };
+    if (d.milestone != null) fields.milestone = d.milestone ? 1 : 0;
+    const { sql, vals } = updateSet(fields, ['title', 'due_date', 'status', 'assignee_user_id', 'done_at', 'stage', 'milestone', 'sort', 'description', 'estimated_hours']);
+    if (sql) {
+      const stmts = [c.env.DB.prepare(`UPDATE tasks SET ${sql} WHERE id = ? AND org_id = ?`).bind(...vals, t.id, c.s.orgId)];
+      if (t.project_id && newStatus && newStatus !== t.status) {
+        stmts.push(auditStmt(c.env, c.s.orgId, c.s.userId, c.ip, newStatus === 'done' ? 'task.completed' : 'task.reopened', 'task', t.id, `${newStatus === 'done' ? 'Klar' : 'Öppnad igen'}: ${t.title}`, { project_id: t.project_id }));
+        // Ett planerat projekt blir aktivt när första uppgiften påbörjas eller blir klar.
+        stmts.push(c.env.DB.prepare("UPDATE projects SET status = 'active', updated_at = ? WHERE id = ? AND org_id = ? AND status = 'planned'").bind(now(), t.project_id, c.s.orgId));
+      } else if (t.project_id && d.stage === 'doing') {
+        stmts.push(c.env.DB.prepare("UPDATE projects SET status = 'active', updated_at = ? WHERE id = ? AND org_id = ? AND status = 'planned'").bind(now(), t.project_id, c.s.orgId));
+      }
+      await c.env.DB.batch(stmts);
+    }
     return { ok: true };
   }, { perm: 'tasks:write' });
 

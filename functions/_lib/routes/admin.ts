@@ -62,8 +62,14 @@ async function dashboard(c: Ctx) {
     const r = await one(`SELECT SUM(CASE WHEN due_date < ? THEN 1 ELSE 0 END) AS overdue, COUNT(*) AS open FROM tasks WHERE org_id = ? AND status = 'open'`, today(), org);
     out.kpis.tasks = { overdue: r?.overdue || 0, open: r?.open || 0 };
   }
-  // Moduler som byggs i fas 2. Visas som "ej kopplat" i stället för påhittade siffror.
-  out.kpis.phase2 = ['projects', 'invoicing', 'support'];
+  if (can(s, 'projects:read')) {
+    const r = await one(`SELECT SUM(CASE WHEN status IN ('planned','active','waiting_customer','paused') THEN 1 ELSE 0 END) AS open,
+      SUM(CASE WHEN status = 'waiting_customer' THEN 1 ELSE 0 END) AS waiting,
+      SUM(CASE WHEN status IN ('planned','active','waiting_customer') AND due_date < ? THEN 1 ELSE 0 END) AS late FROM projects WHERE org_id = ?`, today(), org);
+    out.kpis.projects = { open: r?.open || 0, waiting_customer: r?.waiting || 0, late: r?.late || 0 };
+  }
+  // Moduler som inte är byggda ännu. Visas som "ej kopplat" i stället för påhittade siffror.
+  out.kpis.phase2 = ['invoicing', 'support'];
 
   // Aktivitetsflöde
   out.feed = await all(`SELECT a.id, a.type, a.title, a.created_at, a.customer_id, a.deal_id, a.lead_id, a.quote_id, c.name AS customer_name, u.name AS actor_name
@@ -73,13 +79,13 @@ async function dashboard(c: Ctx) {
   // Smart att-göra-lista: prioriteras efter försening, affärsvärde och status.
   const todo: any[] = [];
   if (can(s, 'tasks:read')) {
-    const tasks = await all(`SELECT t.*, c.name AS customer_name FROM tasks t LEFT JOIN customers c ON c.id = t.customer_id
+    const tasks = await all(`SELECT t.*, COALESCE(p.name, c.name) AS customer_name FROM tasks t LEFT JOIN customers c ON c.id = t.customer_id LEFT JOIN projects p ON p.id = t.project_id
       WHERE t.org_id = ? AND t.status = 'open' AND (t.assignee_user_id = ? OR t.assignee_user_id IS NULL) ORDER BY t.due_date LIMIT 50`, org, s.userId);
     for (const t of tasks) {
       const overdue = t.due_date ? Math.floor((Date.parse(today()) - Date.parse(t.due_date)) / DAY) : -99;
       if (overdue < -7) continue;
       todo.push({ kind: 'task', id: t.id, title: t.title, sub: t.customer_name || '', due: t.due_date,
-        link: t.quote_id ? `#/offerter/${t.quote_id}` : t.customer_id ? `#/kunder/${t.customer_id}` : '#/uppgifter',
+        link: t.project_id ? `#/projekt/${t.project_id}` : t.quote_id ? `#/offerter/${t.quote_id}` : t.customer_id ? `#/kunder/${t.customer_id}` : '#/uppgifter',
         score: 40 + (overdue >= 0 ? 15 + overdue * 6 : overdue * 3), overdue: overdue > 0 });
     }
   }
@@ -141,6 +147,10 @@ export function adminRoutes(r: Router) {
       for (const x of await run(`SELECT q.id, q.number, q.title, c.name AS cname FROM quotes q JOIN customers c ON c.id = q.customer_id WHERE q.org_id = ? AND (q.title LIKE ? ESCAPE '\\' OR q.number = ?) ORDER BY q.number DESC LIMIT 6`, org, t, Number.isInteger(num) ? num : -1))
         res.push({ type: 'quote', id: x.id, title: `#${x.number} ${x.title}`, sub: `Offert · ${x.cname}`, link: `#/offerter/${x.id}` });
     }
+    if (can(s, 'projects:read')) {
+      for (const x of await run(`SELECT p.id, p.name, p.number, c.name AS cname FROM projects p JOIN customers c ON c.id = p.customer_id WHERE p.org_id = ? AND p.name LIKE ? ESCAPE '\\' LIMIT 6`, org, t))
+        res.push({ type: 'project', id: x.id, title: x.name, sub: `Projekt P${x.number} · ${x.cname}`, link: `#/projekt/${x.id}` });
+    }
     if (can(s, 'deals:read')) {
       for (const x of await run(`SELECT id, title FROM deals WHERE org_id = ? AND title LIKE ? ESCAPE '\\' LIMIT 6`, org, t))
         res.push({ type: 'deal', id: x.id, title: x.title, sub: 'Affär', link: `#/affarer/${x.id}` });
@@ -159,10 +169,12 @@ export function adminRoutes(r: Router) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(from) || !/^\d{4}-\d{2}-\d{2}$/.test(to)) throw new HttpError(422, 'validation', 'Ogiltigt datum.');
     const ev: any[] = [];
     const run = (sql: string, ...b: unknown[]) => env.DB.prepare(sql).bind(...b).all<any>().then((r) => r.results);
-    if (can(s, 'tasks:read')) for (const t of await run(`SELECT id, title, due_date, status, customer_id, quote_id FROM tasks WHERE org_id = ? AND due_date BETWEEN ? AND ?`, s.orgId, from, to))
-      ev.push({ kind: 'task', date: t.due_date, title: t.title, done: t.status === 'done', link: t.quote_id ? `#/offerter/${t.quote_id}` : t.customer_id ? `#/kunder/${t.customer_id}` : '#/uppgifter' });
+    if (can(s, 'tasks:read')) for (const t of await run(`SELECT id, title, due_date, status, customer_id, quote_id, project_id, milestone FROM tasks WHERE org_id = ? AND due_date BETWEEN ? AND ?`, s.orgId, from, to))
+      ev.push({ kind: t.milestone ? 'milestone' : 'task', date: t.due_date, title: (t.milestone ? '◆ ' : '') + t.title, done: t.status === 'done', link: t.project_id ? `#/projekt/${t.project_id}` : t.quote_id ? `#/offerter/${t.quote_id}` : t.customer_id ? `#/kunder/${t.customer_id}` : '#/uppgifter' });
     if (can(s, 'quotes:read')) for (const q of await run(`SELECT id, number, valid_until FROM quotes WHERE org_id = ? AND status IN ('sent','viewed') AND valid_until BETWEEN ? AND ?`, s.orgId, from, to))
       ev.push({ kind: 'quote', date: q.valid_until, title: `Offert #${q.number} går ut`, link: `#/offerter/${q.id}` });
+    if (can(s, 'projects:read')) for (const p of await run(`SELECT id, name, due_date FROM projects WHERE org_id = ? AND status NOT IN ('done','cancelled') AND due_date BETWEEN ? AND ?`, s.orgId, from, to))
+      ev.push({ kind: 'project', date: p.due_date, title: `Deadline: ${p.name}`, link: `#/projekt/${p.id}` });
     if (can(s, 'deals:read')) {
       for (const d of await run(`SELECT id, title, next_step, next_step_date FROM deals WHERE org_id = ? AND stage NOT IN ('won','lost') AND next_step_date BETWEEN ? AND ?`, s.orgId, from, to))
         ev.push({ kind: 'deal', date: d.next_step_date, title: d.next_step || d.title, link: `#/affarer/${d.id}` });

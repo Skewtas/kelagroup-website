@@ -221,3 +221,37 @@ export async function newQuoteDialog({ customerId, dealId, onCreated } = {}) {
 }
 
 void ico; void esc; void money; void debounce;
+
+// ---------- Nytt projekt ----------
+export async function projectForm({ customerId, quoteId, onSaved } = {}) {
+  const [us, cr, tr] = await Promise.all([users(), get('/customers'), get('/project-templates')]);
+  modal({
+    drawer: true, title: 'Nytt projekt',
+    body: html`<div class="form">
+      <label class="field"><span>Projektnamn</span><input class="in" name="name" required autofocus placeholder="t.ex. Ny hemsida – Glans Städ"></label>
+      <label class="field"><span>Kund</span><select class="sel" name="customer_id" required>${opt('', '– Välj kund –', !customerId)}${cr.customers.map((c) => opt(c.id, c.name, c.id === customerId))}</select></label>
+      <label class="field"><span>Projektmall</span><select class="sel" name="template_key" id="tpl">${opt('', 'Ingen mall (tomt projekt)', false)}${tr.templates.map((t) => opt(t.key, `${t.name} – ${t.steps.length} steg`, t.key === 'website'))}</select></label>
+      <div class="notice small" id="tpl-steps"></div>
+      <div class="fr"><label class="field"><span>Start</span><input class="in" type="date" name="start_date" value="${new Date().toLocaleDateString('sv-SE')}"></label>
+        <label class="field"><span>Deadline <span class="hint">tom = mallens längd</span></span><input class="in" type="date" name="due_date"></label></div>
+      <div class="fr"><label class="field"><span>Ansvarig</span>${ownerSelect(us, window.__kelaOS?.me?.user?.id)}</label>
+        <label class="field"><span>Intern budget</span><div class="in-wrap"><input class="in r has-suf" name="budget_minor" inputmode="decimal"><span class="in-suf">kr</span></div></label></div>
+      <label class="field"><span>Beskrivning</span><textarea class="ta" name="description"></textarea></label>
+    </div>`,
+    footer: html`<button type="button" class="btn" data-close>Avbryt</button><button type="submit" class="btn primary">Skapa projekt</button>`,
+    onMount: (d, close) => {
+      const show = () => { const t = tr.templates.find((x) => x.key === $('#tpl', d).value);
+        setHTML($('#tpl-steps', d), t ? html`${ico('listChecks')}<div><strong>${t.steps.length} uppgifter skapas:</strong> ${t.steps.map((s) => s.title).join(' · ')}</div>` : html`${ico('info')}<div>Projektet skapas utan uppgifter.</div>`); };
+      $('#tpl', d).addEventListener('change', show); show();
+      d.querySelector('form').addEventListener('submit', async (e) => {
+        e.preventDefault(); const f = e.currentTarget;
+        await submit(f, f.querySelector('[type=submit]'), async () => {
+          const o = moneyFields(formData(f), ['budget_minor']);
+          if (!o.customer_id) throw { details: { customer_id: 'Välj en kund.' } };
+          if (quoteId) o.quote_id = quoteId;
+          const r = await post('/projects', o); toast('Projektet är skapat'); close(); onSaved?.(r.id);
+        });
+      });
+    },
+  });
+}

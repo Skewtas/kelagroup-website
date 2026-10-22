@@ -31,8 +31,8 @@ const NAV = [
     { id: 'tjanster', label: 'Tjänster och prislista', icon: 'tag', href: '#/tjanster', perm: 'services:read' },
   ] },
   { g: 'Leverans', items: [
-    { id: 'projekt', label: 'Projekt', icon: 'folder', phase: 2 },
-    { id: 'projektuppgifter', label: 'Uppgifter', icon: 'listChecks', phase: 2 },
+    { id: 'projekt', label: 'Projekt', icon: 'folder', href: '#/projekt', perm: 'projects:read' },
+    { id: 'projektuppgifter', label: 'Uppgifter', icon: 'listChecks', href: '#/uppgifter?typ=projekt', perm: 'tasks:read' },
     { id: 'feedback', label: 'Kundfeedback', icon: 'message', phase: 2 },
     { id: 'support', label: 'Supportärenden', icon: 'buoy', phase: 2 },
     { id: 'portaler', label: 'Kundportaler', icon: 'layout', phase: 2 },
@@ -82,6 +82,8 @@ const ROUTES = [
   [/^offerter$/, 'offerter', () => import('./views/quotes.js')],
   [/^offerter\/(?<id>quo_[0-9a-z]+)(?:\/(?<tab>[a-z]+))?$/, 'offerter', () => import('./views/quote-editor.js')],
   [/^tjanster$/, 'tjanster', () => import('./views/services.js')],
+  [/^projekt$/, 'projekt', () => import('./views/projects.js')],
+  [/^projekt\/(?<id>prj_[0-9a-z]+)(?:\/(?<tab>[a-z]+))?$/, 'projekt', () => import('./views/project.js')],
   [/^anvandare$/, 'anvandare', () => import('./views/users.js')],
   [/^installningar$/, 'installningar', () => import('./views/settings.js')],
   [/^logg$/, 'logg', () => import('./views/audit.js')],
@@ -310,7 +312,7 @@ function openSearch() {
     { title: 'Ny kund', sub: 'Skapa', link: '#/kunder?ny=1', type: 'action' },
     { title: 'Nytt lead', sub: 'Skapa', link: '#/leads?ny=1', type: 'action' },
   ].filter((q) => app.can(q.link.includes('offert') ? 'quotes:write' : q.link.includes('kund') ? 'customers:write' : 'leads:write'));
-  const TYPE_ICON = { customer: 'building', contact: 'user', quote: 'file', deal: 'target', lead: 'inbox', action: 'plus' };
+  const TYPE_ICON = { customer: 'building', contact: 'user', quote: 'file', deal: 'target', lead: 'inbox', project: 'folder', action: 'plus' };
   const draw = () => {
     setHTML(res, items.length ? html`${items.map((r, i) => html`<a class="cmd-i ${i === idx ? 'on' : ''}" href="${r.link}" data-i="${i}">${ico(TYPE_ICON[r.type] || 'arrowRight')}<span class="li-t">${r.title}</span><span class="li-s">${r.sub}</span></a>`)}`
       : html`<div class="empty sm"><p>${input.value.trim().length < 2 ? 'Skriv minst två tecken.' : 'Inga träffar.'}</p></div>`);
@@ -347,7 +349,8 @@ async function route() {
   const seq = ++renderSeq;
   const view = $('#view');
   const match = ROUTES.map(([re, nav, load]) => ({ m: path.match(re), nav, load })).find((r) => r.m);
-  $$('.nav-i').forEach((a) => a.classList.toggle('on', !!match && (a.dataset.nav === (match.nav || match.m.groups?.key))));
+  const navId = path === 'uppgifter' && query.includes('typ=projekt') ? 'projektuppgifter' : match && (match.nav || match.m.groups?.key);
+  $$('.nav-i').forEach((a) => a.classList.toggle('on', !!match && a.dataset.nav === navId));
   app.setActions('');
   view.classList.remove('wide');
   if (!match) { setHTML(view, html`<div class="empty"><h3>Sidan finns inte</h3><a class="btn" href="#/">Till dashboard</a></div>`); return; }

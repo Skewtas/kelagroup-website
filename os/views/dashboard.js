@@ -4,7 +4,7 @@ import { get } from '../lib/api.js';
 
 const FEED_ICON = (a) => /accepter/i.test(a.title) ? ['checkCircle', 'green'] : /öppnats/i.test(a.title) ? ['eye', 'blue'] : /avböj|förlor/i.test(a.title) ? ['xCircle', 'red']
   : /förfrågan|lead/i.test(a.title) ? ['inbox', 'accent'] : /offert/i.test(a.title) ? ['file', ''] : a.type === 'note' ? ['note', ''] : a.type === 'call' ? ['phone', ''] : a.type === 'meeting' ? ['users', ''] : ['activity', ''];
-const TODO_ICON = { task: 'checkSquare', lead: 'inbox', quote: 'file', deal: 'target', customer: 'building' };
+const TODO_ICON = { project: 'folder', task: 'checkSquare', lead: 'inbox', quote: 'file', deal: 'target', customer: 'building' };
 
 function greeting(name) {
   const h = new Date().getHours();
@@ -47,7 +47,8 @@ export default async function dashboard(view, _p, app) {
       ${ts ? kpi('#/uppgifter', 'clock', 'Försenade uppgifter', ts.overdue, `${ts.open} öppna totalt`, ts.overdue ? 'alert' : '') : ''}
     </div>
     <div class="kpis mini">
-      ${[['folder', 'Aktiva projekt', 'Projektmodulen – fas 2'], ['receipt', 'Kommande fakturering', 'Kopplas mot Fortnox – fas 2'], ['buoy', 'Supportärenden', 'Supportmodulen – fas 2']]
+      ${k.projects ? kpi('#/projekt', 'folder', 'Aktiva projekt', k.projects.open, k.projects.late ? `${k.projects.late} försenade${k.projects.waiting_customer ? ` · ${k.projects.waiting_customer} väntar på kund` : ''}` : k.projects.waiting_customer ? `${k.projects.waiting_customer} väntar på kund` : 'enligt plan', k.projects.late ? 'alert' : '') : ''}
+      ${[['receipt', 'Kommande fakturering', 'Kopplas mot Fortnox'], ['buoy', 'Supportärenden', 'Supportmodulen – fas 2']]
         .map(([i, l, s]) => html`<div class="kpi dim"><div class="kpi-l">${ico(i)}${l}</div><div class="kpi-v">Ej kopplat ännu</div><div class="kpi-s">${s}</div></div>`)}
     </div>
 

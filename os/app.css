@@ -480,3 +480,27 @@ a.tl{border-radius:10px}a.tl:hover .tl-t{color:var(--accent)}
 .filters>.in{width:auto}
 .filters input[type=date]{width:150px;flex:none}
 .filters .in-wrap:has(.has-suf){min-width:0;flex:0 0 150px}
+/* Projekt */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.pcard{display:grid;gap:6px;padding:16px 18px;border:1px solid var(--border);border-radius:var(--r-l);background:var(--surface);transition:border-color .15s,box-shadow .15s,transform .15s}
+.pcard:hover{border-color:var(--border-strong);box-shadow:var(--shadow-2);transform:translateY(-1px)}
+.pcard-t{font-weight:650;font-size:15px;letter-spacing:-.01em;margin-top:4px}
+.pbar{height:6px;border-radius:6px;background:var(--surface-3);overflow:hidden;margin:8px 0 4px}
+.pbar i{display:block;height:100%;width:var(--p,0%);background:var(--accent);border-radius:6px;transition:width .4s var(--ease)}
+.board4{grid-auto-columns:minmax(240px,1fr)}
+.ms{color:var(--dot)}
+.gantt{display:grid;gap:6px;overflow-x:auto}
+.g-head,.g-row{display:grid;grid-template-columns:220px minmax(420px,1fr);gap:12px;align-items:center}
+.g-scale{position:relative;height:20px;border-bottom:1px solid var(--border)}
+.g-scale span{position:absolute;font-size:11px;color:var(--text-3);transform:translateX(-50%)}
+.g-today{position:absolute;top:0;width:2px;height:9999px;background:var(--red);opacity:.5;pointer-events:none}
+.gantt{position:relative;overflow:hidden}
+.g-lbl{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-track{position:relative;height:22px;background:var(--surface-2);border-radius:6px}
+.g-bar{position:absolute;top:5px;height:12px;border-radius:6px;background:var(--accent-tint);border:1px solid var(--accent)}
+.g-bar.done{background:var(--green-soft);border-color:var(--green)}.g-bar.late{background:var(--red-soft);border-color:var(--red)}
+.g-ms{position:absolute;top:4px;width:14px;height:14px;background:var(--dot);transform:translateX(-7px) rotate(45deg);border-radius:2px}
+.g-ms.done{background:var(--green)}
+.cal-e.project{background:var(--amber-soft);color:var(--amber)}.cal-e.milestone{background:var(--accent-tint);color:var(--accent)}
+@media (max-width:640px){.g-head,.g-row{grid-template-columns:120px minmax(300px,1fr)}}
+.dhead .act .sel{width:auto;min-width:160px}

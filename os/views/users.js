@@ -5,7 +5,7 @@ import { get, post, patch, del } from '../lib/api.js';
 const PERM_LABEL = {
   'dashboard:read': 'Dashboard', 'customers:read': 'Se kunder', 'customers:write': 'Ändra kunder', 'customers:export': 'Exportera persondata', 'leads:read': 'Se leads', 'leads:write': 'Ändra leads',
   'deals:read': 'Se affärer', 'deals:write': 'Ändra affärer', 'quotes:read': 'Se offerter', 'quotes:write': 'Skapa/ändra offerter', 'quotes:send': 'Skicka offerter',
-  'services:read': 'Se tjänster', 'services:write': 'Ändra tjänster & priser', 'services:costs': 'Se interna kostnader', 'tasks:read': 'Se uppgifter', 'tasks:write': 'Ändra uppgifter',
+  'services:read': 'Se tjänster', 'services:write': 'Ändra tjänster & priser', 'services:costs': 'Se interna kostnader', 'tasks:read': 'Se uppgifter', 'tasks:write': 'Ändra uppgifter', 'projects:read': 'Se projekt', 'projects:write': 'Skapa/ändra projekt',
   'users:read': 'Se användare', 'users:manage': 'Hantera användare', 'audit:read': 'Aktivitetslogg', 'settings:write': 'Inställningar',
 };
 

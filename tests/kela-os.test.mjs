@@ -324,7 +324,14 @@ test('godkännande: kräver aktuell version, sparas en gång och startar automat
   assert.equal(q.events.filter((e) => e.type === 'accepted').length, 1, 'bara ett godkännande');
   assert.equal(q.deal.stage, 'won');
   const tasks = ok(await admin.get('/api/os/tasks?mine=1'));
-  for (const t of ['Starta projekt: Ny hemsida och drift', `Förbered avtal för offert #${ctx.quoteNo}`, `Förbered fakturering för offert #${ctx.quoteNo}`]) assert.equal(tasks.tasks.filter((x) => x.title === t).length, 1, t);
+  for (const t of [`Förbered avtal för offert #${ctx.quoteNo}`, `Förbered fakturering för offert #${ctx.quoteNo}`]) assert.equal(tasks.tasks.filter((x) => x.title === t).length, 1, t);
+  // Projekt skapas automatiskt från mallen "Ny hemsida" (offerten innehåller en hemsida) – exakt ett, även vid dubbelklick.
+  const prj = ok(await admin.get('/api/os/projects?status=open'));
+  const mine = prj.projects.filter((x) => x.quote_id === ctx.quoteId);
+  assert.equal(mine.length, 1, 'ett projekt per offert');
+  assert.equal(mine[0].template_key, 'website'); assert.equal(mine[0].task_count, 11);
+  ctx.projectId = mine[0].id;
+  assert.equal(q.project?.id, ctx.projectId, 'offerten länkar till projektet');
   assert.equal(tasks.tasks.filter((x) => x.title === `Följ upp offert #${ctx.quoteNo}`).length, 0, 'uppföljning stängd');
   const auto = q.events.find((e) => e.type === 'automation');
   assert.ok(auto.data.skipped.some((s) => /mejl/i.test(s)), 'inget mejl skickas utan integration');
@@ -358,6 +365,44 @@ test('PDF-export: utskriftsversionen blir en riktig PDF', async (t) => {
   assert.ok(pages >= 2, `omslag + innehåll (${pages} sidor)`);
 });
 
+// ---------------------------------------------------------------- Projekt (fas 2) och produktimport
+test('projekt: mallar, kanban-steg, status och idempotent automatisering', async () => {
+  const tpl = ok(await admin.get('/api/os/project-templates'));
+  assert.ok(tpl.templates.find((t) => t.key === 'website').steps.length === 11);
+  const p = ok(await admin.post('/api/os/projects', { name: 'AI-chatt Glans', customer_id: ctx.customerId, template_key: 'ai_chat', start_date: '2026-11-02', due_date: '2026-12-07', budget_minor: 2000000 }));
+  let d = ok(await admin.get(`/api/os/projects/${p.id}`));
+  assert.equal(d.tasks.length, 7); assert.equal(d.project.status, 'planned');
+  assert.ok(d.tasks.every((t) => t.due_date >= '2026-11-02'), 'deadlines utgår från startdatum');
+  assert.ok(d.tasks.filter((t) => t.milestone).length >= 2, 'milstolpar finns');
+  ok(await admin.patch(`/api/os/tasks/${d.tasks[0].id}`, { stage: 'doing' }));
+  d = ok(await admin.get(`/api/os/projects/${p.id}`));
+  assert.equal(d.project.status, 'active', 'projektet blir aktivt när arbete påbörjas');
+  ok(await admin.patch(`/api/os/tasks/${d.tasks[0].id}`, { stage: 'done' }));
+  d = ok(await admin.get(`/api/os/projects/${p.id}`));
+  assert.equal(d.tasks[0].status, 'done', 'kanban-steg och status hålls i synk');
+  ok(await admin.post(`/api/os/projects/${p.id}/tasks`, { title: 'Extra genomgång', milestone: true }));
+  ok(await admin.patch(`/api/os/projects/${p.id}`, { status: 'done', actual_hours: 12.5 }));
+  d = ok(await admin.get(`/api/os/projects/${p.id}`));
+  assert.equal(d.tasks.length, 8); assert.equal(d.project.status, 'done'); assert.ok(d.project.completed_at); assert.equal(d.project.actual_hours, 12.5);
+  assert.equal((await admin.post('/api/os/projects', { name: 'Dubblett', customer_id: ctx.customerId, quote_id: ctx.quoteId })).status, 409, 'max ett projekt per offert');
+  const dash = ok(await admin.get('/api/os/dashboard'));
+  assert.equal(dash.kpis.projects.open, 1);
+  assert.ok(ok(await admin.get('/api/os/search?q=AI-chatt')).results.some((x) => x.type === 'project'));
+});
+
+test('import av KELA:s produktkatalog är idempotent och sätter riktiga månadspriser', async () => {
+  const a = ok(await admin.post('/api/os/services/import-kela'));
+  assert.equal(a.added.length + a.priced.length, 12);
+  assert.ok(a.priced.includes('Personalapp'), 'befintlig tjänst utan pris får pris');
+  const b = ok(await admin.post('/api/os/services/import-kela'));
+  assert.equal(b.added.length + b.priced.length, 0); assert.equal(b.skipped, 12);
+  // En tjänst med eget pris skrivs aldrig över.
+  assert.equal(ok(await admin.get(`/api/os/services/${ctx.serviceId}`)).service.price.once_price_minor, 6990000);
+  const svc = ok(await admin.get('/api/os/services'));
+  const bokis = svc.services.find((x) => x.name.startsWith('Bokis'));
+  assert.equal(bokis.price.monthly_price_minor, 699900); assert.equal(bokis.price.once_price_minor, null, 'uppstart offereras per kund');
+});
+
 // ---------------------------------------------------------------- Roller och behörigheter
 async function invite(role, email) {
   const inv = ok(await admin.post('/api/os/users/invite', { email, name: role + ' Testsson', role }));
@@ -384,6 +429,9 @@ test('roller: säljare och projektledare får bara det rollen tillåter (verkst�
   assert.equal((await pm.post('/api/os/quotes', { customer_id: ctx.customerId, title: 'x' })).status, 403);
   assert.equal((await pm.post('/api/os/customers', { name: 'x' })).status, 403);
   assert.equal((await pm.post(`/api/os/quotes/${ctx.xssQuote}/send`)).status, 403);
+  ok(await pm.post(`/api/os/projects/${ctx.projectId}/tasks`, { title: 'PM-uppgift' }), 'projektledare får arbeta i projekt');
+  assert.equal((await sales.post(`/api/os/projects/${ctx.projectId}/tasks`, { title: 'x' })).status, 403, 'säljare får bara läsa projekt');
+  ok(await sales.get(`/api/os/projects/${ctx.projectId}`));
   ctx.sales = sales;
 });
 
@@ -414,7 +462,8 @@ INSERT INTO memberships (id,org_id,user_id,role,created_at) VALUES ('mem_andrafo
   assert.equal(ok(await b.get('/api/os/quotes')).quotes.length, 0);
   assert.equal(ok(await b.get('/api/os/search?q=glans')).results.length, 0);
   assert.equal(ok(await b.get('/api/os/services')).services.length, 0);
-  for (const p of [`/api/os/customers/${ctx.customerId}`, `/api/os/quotes/${ctx.quoteId}`, `/api/os/deals/${ctx.dealId}`, `/api/os/quotes/${ctx.quoteId}/preview`]) {
+  assert.equal(ok(await b.get('/api/os/projects')).projects.length, 0);
+  for (const p of [`/api/os/customers/${ctx.customerId}`, `/api/os/quotes/${ctx.quoteId}`, `/api/os/deals/${ctx.dealId}`, `/api/os/quotes/${ctx.quoteId}/preview`, `/api/os/projects/${ctx.projectId}`]) {
     assert.equal((await b.get(p)).status, 404, p);
   }
   assert.equal((await b.patch(`/api/os/customers/${ctx.customerId}`, { name: 'Hackad' })).status, 404);
@@ -430,7 +479,8 @@ test('dashboard visar riktiga siffror och håller isär begreppen', async () => 
   assert.equal(d.kpis.quotes.accepted_30d, 1);
   assert.ok(d.kpis.quotes.contracted_mrr_net >= 149500 + 150000, 'avtalad MRR inkl. valt tillägg');
   assert.ok(d.kpis.quotes.won_this_month_once_net > 0);
-  assert.deepEqual(d.kpis.phase2, ['projects', 'invoicing', 'support'], 'fakturering visas inte som påhittade siffror');
+  assert.deepEqual(d.kpis.phase2, ['invoicing', 'support'], 'fakturering visas inte som påhittade siffror');
+  assert.ok(d.kpis.projects.open >= 1);
   assert.ok(d.feed.length > 0);
 });
 

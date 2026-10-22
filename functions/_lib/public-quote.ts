@@ -104,7 +104,7 @@ export async function handlePublicQuoteApi(env: Env, req: Request, parts: string
       if (!first[0].meta.changes) return json({ ok: true, already: true }); // samtidig dubbelklick – redan registrerat
       await env.DB.batch([
         ev('accepted', { signer_name: d.name, signer_email: d.email, selected_optional: selected, snapshot_hash: ver.snapshot_hash }),
-        ...acceptanceAutomationStmts(env, { ...q, status: 'accepted' }, { ip }),
+        ...acceptanceAutomationStmts(env, { ...q, status: 'accepted' }, { ip }, snap.items),
       ]);
       return json({ ok: true });
     }

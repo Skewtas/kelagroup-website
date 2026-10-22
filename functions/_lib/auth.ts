@@ -130,6 +130,7 @@ export const PERMISSIONS = [
   'quotes:read', 'quotes:write', 'quotes:send',
   'services:read', 'services:write', 'services:costs',
   'tasks:read', 'tasks:write',
+  'projects:read', 'projects:write',
   'users:read', 'users:manage',
   'audit:read',
   'settings:write',
@@ -141,10 +142,10 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
   superadmin: ALL,
   admin: ALL,
   sales: ['dashboard:read', 'customers:read', 'customers:write', 'leads:read', 'leads:write', 'deals:read', 'deals:write',
-    'quotes:read', 'quotes:write', 'quotes:send', 'services:read', 'tasks:read', 'tasks:write', 'users:read'],
-  pm: ['dashboard:read', 'customers:read', 'deals:read', 'quotes:read', 'services:read', 'tasks:read', 'tasks:write', 'users:read'],
+    'quotes:read', 'quotes:write', 'quotes:send', 'services:read', 'tasks:read', 'tasks:write', 'projects:read', 'users:read'],
+  pm: ['dashboard:read', 'customers:read', 'deals:read', 'quotes:read', 'services:read', 'tasks:read', 'tasks:write', 'projects:read', 'projects:write', 'users:read'],
   finance: ['dashboard:read', 'customers:read', 'customers:export', 'deals:read', 'quotes:read', 'services:read', 'services:costs',
-    'tasks:read', 'tasks:write', 'users:read'],
+    'tasks:read', 'tasks:write', 'projects:read', 'users:read'],
   customer: [],
 };
 

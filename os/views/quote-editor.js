@@ -38,6 +38,7 @@ export default async function quoteEditor(view, p, app) {
     <div class="dhead"><div class="logo-box">${ico('file', 'lg')}</div>
       <div><h1>#${q.number} ${q.title} ${badge(QUOTE_STATUS, q.status)} <span class="tag">v${ver.version_no}</span></h1>
         <div class="meta"><span>${ico('building')}<a href="#/kunder/${data.customer.id}">${data.customer.name}</a></span>
+          ${data.project ? html`<span>${ico('folder')}<a href="#/projekt/${data.project.id}">Projekt P${data.project.number}</a></span>` : ''}
           ${data.deal ? html`<span>${ico('target')}<a href="#/affarer/${data.deal.id}">${data.deal.title}</a> · ${STAGE_LABEL[data.deal.stage]}</span>` : ''}
           <span>${ico('clock')}Giltig till ${date(q.valid_until)}</span>${data.owner ? html`<span>${ico('user')}${data.owner.name}</span>` : ''}</div></div>
       <div class="act"><a class="btn" href="/api/os/quotes/${q.id}/preview?print=1" target="_blank" rel="noopener">${ico('download')} PDF</a>

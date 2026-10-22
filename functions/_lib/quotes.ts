@@ -3,6 +3,7 @@ import { Env, HttpError, newId, now, today, sha256hex, parseJson, addDays } from
 import { v } from './validate';
 import { calcQuote } from '../../os/lib/calc.js';
 import { activityStmt, auditStmt } from './router';
+import { pickTemplate, projectFromTemplateStmts, PROJECT_TEMPLATES } from './projects';
 
 export const QUOTE_STATUS = ['draft', 'review', 'sent', 'viewed', 'accepted', 'declined', 'expired'] as const;
 export const VAT_RATES = [2500, 1200, 600, 0];
@@ -119,7 +120,7 @@ export async function lockVersionStmts(env: Env, orgId: string, quote: any, vers
  * Åtgärder när en offert accepteras. Idempotent: uppgifter har unika source_key och accept-raden är unik per offert,
  * så en dubbelbehandlad händelse skapar inga dubbletter.
  */
-export function acceptanceAutomationStmts(env: Env, quote: any, actor: { userId?: string | null; ip?: string | null }) {
+export function acceptanceAutomationStmts(env: Env, quote: any, actor: { userId?: string | null; ip?: string | null }, items: { name: string }[] = []) {
   const orgId = quote.org_id; const t = now();
   const stmts: D1PreparedStatement[] = [];
   const dealId = quote.deal_id;
@@ -131,15 +132,20 @@ export function acceptanceAutomationStmts(env: Env, quote: any, actor: { userId?
   const task = (key: string, title: string, days: number) =>
     env.DB.prepare('INSERT OR IGNORE INTO tasks (id, org_id, title, due_date, assignee_user_id, customer_id, deal_id, quote_id, source_key, created_at) VALUES (?,?,?,?,?,?,?,?,?,?)')
       .bind(newId('tsk'), orgId, title, addDays(t, days).slice(0, 10), quote.owner_user_id, quote.customer_id, dealId, quote.id, key, t);
-  stmts.push(task(`accept:${quote.id}:project`, `Starta projekt: ${quote.title}`, 1));
+  // Projekt skapas direkt från mall som passar offertens innehåll (unik per offert → inga dubbletter).
+  const templateKey = pickTemplate(items);
+  stmts.push(...projectFromTemplateStmts(env, orgId, {
+    id: newId('prj'), name: quote.title, customerId: quote.customer_id, quoteId: quote.id, dealId, ownerId: quote.owner_user_id, templateKey,
+    description: `Skapat automatiskt när offert #${quote.number} accepterades.`,
+  }));
   stmts.push(task(`accept:${quote.id}:agreement`, `Förbered avtal för offert #${quote.number}`, 2));
   stmts.push(task(`accept:${quote.id}:invoice`, `Förbered fakturering för offert #${quote.number}`, 3));
   // Uppföljningsuppgifter för offerten stängs.
   stmts.push(env.DB.prepare("UPDATE tasks SET status = 'done', done_at = ? WHERE org_id = ? AND quote_id = ? AND status = 'open' AND source_key LIKE 'quote-followup:%'").bind(t, orgId, quote.id));
   stmts.push(env.DB.prepare("INSERT INTO quote_events (id, org_id, quote_id, version_id, type, actor_kind, data_json, created_at) VALUES (?,?,?,?,'automation','system',?,?)")
     .bind(newId('qev'), orgId, quote.id, quote.sent_version_id, JSON.stringify({
-      done: [dealId ? 'Affären markerad som vunnen' : null, 'Kunden markerad som aktiv', 'Uppgifter skapade: projektstart, avtal, fakturering'].filter(Boolean),
-      skipped: ['Välkomstmejl skickades inte – e-postintegration är inte konfigurerad', 'Projekt skapas i fas 2 (projektmodul)'],
+      done: [dealId ? 'Affären markerad som vunnen' : null, 'Kunden markerad som aktiv', `Projekt skapat från mallen "${PROJECT_TEMPLATES[templateKey].name}" med standarduppgifter`, 'Uppgifter skapade: avtal och fakturering'].filter(Boolean),
+      skipped: ['Välkomstmejl skickades inte – e-postintegration är inte konfigurerad', 'Ansvarig projektledare meddelades inte via mejl – e-postintegration saknas (uppgiften syns i KELA OS)'],
     }), t));
   stmts.push(activityStmt(env, orgId, { customer_id: quote.customer_id, deal_id: dealId, quote_id: quote.id, type: 'system', title: `Offert #${quote.number} accepterad`, actor: actor.userId ?? null }));
   stmts.push(auditStmt(env, orgId, actor.userId ?? null, actor.ip ?? null, 'quote.accepted', 'quote', quote.id, `Offert #${quote.number} accepterad`));
