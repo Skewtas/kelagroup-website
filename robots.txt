@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /os/
+Disallow: /offert/
+Disallow: /api/
 
 Sitemap: https://kelagroup.se/sitemap.xml

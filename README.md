@@ -21,3 +21,14 @@ Vid ändring av `styles.css`/`main.js`: höj versionen (`?v=N`) i alla `.html` (
 - Sätt Formspree-endpoint i `kontakt.html` (formuläret skickar till mikaela.wigert@stodona.se)
 - Fyll i org.nr i footern (platshållare `55XX-XXXX`)
 - Verifiera priser och ev. case-detaljer
+
+## KELA OS (adminpanel)
+Affärssystemet ligger på `/os/` med API under `/api/os/` (Cloudflare Pages Functions + D1).
+Allt om arkitektur, säkerhet, miljövariabler, driftsättning och tester: [docs/KELA-OS.md](docs/KELA-OS.md).
+
+```bash
+npm install && npm run db:migrate:local
+npm run dev      # http://localhost:8788/os/
+npm test
+```
+Publicera alltid med `bash scripts/deploy.sh` (aldrig `wrangler pages deploy .` direkt från arbetskatalogen).

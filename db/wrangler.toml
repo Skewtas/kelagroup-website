@@ -1,0 +1,14 @@
+# Används ENDAST för D1-kommandon (migreringar). Pages-projektet läser inte den här filen
+# eftersom den saknar pages_build_output_dir och ligger i en undermapp.
+#
+# Produktion: skapa databasen i EU och byt database_id nedan:
+#   npx wrangler@4 d1 create kela-os --jurisdiction eu
+# Lokalt används id:t nedan tillsammans med `--d1 DB=<id>` i pages dev.
+name = "kela-os-db"
+compatibility_date = "2026-10-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "kela-os"
+database_id = "00000000-0000-4000-8000-00000000c0de"
+migrations_dir = "migrations"
