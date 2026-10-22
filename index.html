@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="icon" href="assets/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/assets/favicon-v2.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/favicon-v2-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon-v2.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#F3D3D7">
 <title>Kela group – Vi bygger bort onödigt arbete</title>
@@ -25,6 +26,7 @@
 #branscher .bcard:nth-child(6){background:var(--butter)}#branscher .bcard:nth-child(7){background:var(--peach)}
 </style>
 <link rel="stylesheet" href="assets/boka-v2.css">
+<link rel="stylesheet" href="assets/pins-v1.css">
 <link rel="stylesheet" href="assets/nav-v1.css">
 </head>
 <body>
@@ -107,18 +109,18 @@
         </video>
         <button class="vtoggle" id="vtoggle" aria-label="Pausa video">❚❚</button>
       </div>
-      <div class="chipw p1" data-speed="-0.18" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Bokningssystem<small>Automatiska bekräftelser</small></span></div></div>
-      <div class="chipw p2 dark" data-speed="0.12" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><rect x="7" y="7" width="10" height="10" rx="3"/></svg></span><span>AI-chatt<small>Dygnet runt</small></span></div></div>
-      <div class="chipw p3" data-speed="-0.08" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span><span>Fakturapåminnelser<small>Helt automatiskt</small></span></div></div>
-      <div class="chipw p4" data-speed="0.2" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></span><span>Fortnox-integration<small>Allt synkat automatiskt</small></span></div></div>
-      <div class="chipw p5" data-speed="0.1" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span><span>Hemsida<small>Snabb & konverterande</small></span></div></div>
-      <div class="chipw p6" data-speed="-0.14" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 8H6.2"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg></span><span>E-handel<small>Säljer dygnet runt</small></span></div></div>
-      <div class="chipw p7 dark" data-speed="0.16" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><span>Appar<small>iOS & Android</small></span></div></div>
-      <div class="chipw p8" data-speed="-0.1" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span>SEO<small>Syns på Google</small></span></div></div>
-      <div class="chipw p9" data-speed="0.08" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></span><span>Content<small>Texter & inlägg med AI</small></span></div></div>
-      <div class="chipw p10" data-speed="-0.16" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg></span><span>Feedbacksystem<small>Nöjdare kunder</small></span></div></div>
-      <div class="chipw p11 dark" data-speed="0.14" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span>Dashboards<small>Er data i realtid</small></span></div></div>
-      <div class="chipw p12" data-speed="-0.12" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg></span><span>Integrationer & API<small>Allt pratar med allt</small></span></div></div>
+      <a class="chipw p1 pin" href="bokningssystem.html" data-speed="-0.18" aria-label="Bokningssystem – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Bokningssystem<small>Automatiska bekräftelser</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p2 dark pin" href="ai-agenter.html" data-speed="0.12" aria-label="AI-chatt – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><rect x="7" y="7" width="10" height="10" rx="3"/></svg></span><span>AI-chatt<small>Dygnet runt</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p3 pin" href="bygga-automationer.html" data-speed="-0.08" aria-label="Fakturapåminnelser – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span><span>Fakturapåminnelser<small>Helt automatiskt</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p4 pin" href="affarssystem-crm.html" data-speed="0.2" aria-label="Fortnox-integration – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></span><span>Fortnox-integration<small>Allt synkat automatiskt</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p5 pin" href="bygga-hemsida.html" data-speed="0.1" aria-label="Hemsida – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span><span>Hemsida<small>Snabb & konverterande</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p6 pin" href="bygga-hemsida.html" data-speed="-0.14" aria-label="E-handel – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 8H6.2"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg></span><span>E-handel<small>Säljer dygnet runt</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p7 dark pin" href="bygga-app.html" data-speed="0.16" aria-label="Appar – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><span>Appar<small>iOS & Android</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p8 pin" href="tjanster.html" data-speed="-0.1" aria-label="SEO – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span>SEO<small>Syns på Google</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p9 pin" href="tjanster.html" data-speed="0.08" aria-label="Content – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></span><span>Content<small>Texter & inlägg med AI</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p10 pin" href="bygga-system.html" data-speed="-0.16" aria-label="Feedbacksystem – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg></span><span>Feedbacksystem<small>Nöjdare kunder</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p11 dark pin" href="bygga-system.html" data-speed="0.14" aria-label="Dashboards – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span>Dashboards<small>Er data i realtid</small></span><span class="go" aria-hidden="true">→</span></div></a>
+      <a class="chipw p12 pin" href="affarssystem-crm.html" data-speed="-0.12" aria-label="Integrationer & API – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg></span><span>Integrationer & API<small>Allt pratar med allt</small></span><span class="go" aria-hidden="true">→</span></div></a>
     </div>
   </section>
 
@@ -1141,7 +1143,6 @@
   }
 })();
 </script>
-<script src="assets/chip-rail-v2.js"></script>
 <script src="assets/cards-v1.js?v=1" defer></script>
 <script src="assets/boka-v2.js" defer></script>
 </body>
