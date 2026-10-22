@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="assets/cards-v1.css?v=1">
 <link rel="stylesheet" href="assets/cards-v2.css?v=1">
 <link rel="stylesheet" href="assets/cards-v3.css?v=1">
+<link rel="stylesheet" href="assets/cards-v4.css">
 <style>
 /* Branscher: 7 kort */
 @media (min-width:1101px){#branscher .bgrid{grid-template-columns:repeat(4,1fr)}#branscher .bcard:last-child{grid-column:span 2}}
@@ -192,7 +193,14 @@
           <div class="sr"><p>Snabba, konverterande webbplatser och webbshoppar byggda från grunden — gjorda för att synas på Google och sälja.</p><ul><li>One-pager &amp; företagssida</li><li>Webbshop</li><li>SEO från dag ett</li></ul></div></li>
 
         <li class="scard" style="--i:1"><div class="sl"><span class="num">02 — SYSTEM &amp; PORTALER</span><h3>System &amp; portaler</h3></div>
-          <div class="sv" aria-hidden="true"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
+          <div class="sv vb-live" aria-hidden="true"><div class="vb-site">
+            <div class="vb-bar"><i></i><i></i><i></i><span>🔒 vbfast.se</span></div>
+            <div class="vb-hero">
+              <video class="vb-vid" muted loop playsinline preload="none" poster="assets/cases/vbfast/hero-poster.jpg"><source src="assets/cases/vbfast/hero.mp4" type="video/mp4"></video>
+              <div class="vb-top"><img src="assets/clients/vb-fast.svg" alt="" width="96" height="24"><span>Bostäder · Felanmälan · Kontakt</span></div>
+              <div class="vb-copy"><b>Hitta <em>hem.</em></b><small>Bostäder och företagslägenheter i Stockholm</small><span class="vb-btns"><span class="vb-b1">Ansök om bostad →</span><span class="vb-b2">Felanmälan</span></span></div>
+            </div>
+          </div><div class="vb-admin"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
             <defs>
               <filter id="cv-sh2" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000" flood-opacity=".14"/></filter>
               <filter id="vb-wh" x="0" y="0" width="100%" height="100%"><feFlood class="vb-flood" flood-color="#fff"/><feComposite in2="SourceAlpha" operator="in"/></filter>
@@ -317,7 +325,7 @@
               <text class="tm tmu" x="362" y="341" font-size="8">#2418 · Element kallt · lgh 1102</text>
               <circle class="f-k cv-live" cx="503" cy="311" r="3"/>
             </g>
-          </svg></div>
+          </svg></div></div>
           <div class="sr"><span class="sc-ex">Exempel: VB FAST – bostadsportal &amp; admin</span><p>Affärssystem, CRM, bokning och rekrytering — byggt kring exakt hur ni jobbar, inte tvärtom.</p><ul><li>CRM &amp; affärssystem</li><li>Boknings- &amp; rekryteringssystem</li><li>Kund- &amp; personalportaler</li></ul></div></li>
 
         <li class="scard" style="--i:2"><div class="sl"><span class="num">03 — AUTOMATIONER &amp; AI</span><h3>Automationer &amp; AI</h3></div>
@@ -1148,5 +1156,6 @@
 <script src="assets/boka-v2.js" defer></script>
 <script src="assets/bookbtn-v1.js" defer></script>
 <script src="assets/sound-v1.js" defer></script>
+<script id="vb-vid-play">(()=>{const v=document.querySelector('.vb-vid');if(!v||matchMedia('(prefers-reduced-motion:reduce)').matches)return;new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){v.preload='auto';v.play().catch(()=>{})}else v.pause()}),{threshold:.25}).observe(v)})();</script>
 </body>
 </html>

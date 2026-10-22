@@ -1,0 +1,35 @@
+/* ---------- Kort 02: VB FAST:s riktiga sajt (film) bakom adminpanelen ---------- */
+.scard .sv.vb-live{display:block;position:relative;aspect-ratio:520/400;width:100%;max-height:470px}
+.vb-live .vb-site{
+  position:absolute;left:0;top:0;width:74%;border-radius:16px;overflow:hidden;background:var(--white);
+  box-shadow:0 24px 50px -24px rgba(40,10,18,.45),0 0 0 1px rgba(92,26,38,.08);
+  transform:rotate(-2.5deg);transform-origin:20% 10%;
+  transition:transform .8s cubic-bezier(.22,1,.36,1)
+}
+.scard.on .vb-live .vb-site{transform:rotate(-1.5deg)}
+.vb-bar{display:flex;align-items:center;gap:5px;height:24px;padding:0 10px;background:var(--bone,#F6F5F1);border-bottom:1px solid var(--line)}
+.vb-bar i{width:7px;height:7px;border-radius:50%;background:var(--peach)}
+.vb-bar i:first-child{background:var(--lav)}
+.vb-bar span{margin-left:auto;margin-right:auto;font:500 9px/1 var(--mono);color:var(--muted);background:var(--white);border-radius:99px;padding:4px 14px}
+.vb-hero{position:relative;aspect-ratio:16/10;background:#222 url('cases/vbfast/hero-poster.jpg') center/cover;color:#fff}
+.vb-hero .vb-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vb-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,14,20,.55),rgba(10,14,20,.05) 38%,rgba(10,14,20,.6))}
+.vb-top{position:absolute;z-index:2;left:12px;right:12px;top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.vb-top img{width:74px;height:auto;filter:brightness(0) invert(1)}
+.vb-top span{font:600 8px/1 var(--sans);opacity:.85;white-space:nowrap}
+.vb-copy{position:absolute;z-index:2;left:14px;right:14px;bottom:12px;display:flex;flex-direction:column;gap:5px}
+.vb-copy b{font:400 clamp(22px,3.2vw,38px)/.9 var(--display);letter-spacing:-.04em}
+.vb-copy b em{font-style:normal;color:#F3C46B}
+.vb-copy small{font:500 9.5px/1.25 var(--sans);opacity:.9;max-width:30ch}
+.vb-btns{display:flex;gap:6px;margin-top:3px}
+.vb-btns span{font:700 8.5px/1 var(--sans);border-radius:99px;padding:6px 10px}
+.vb-b1{background:#F3C46B;color:#2a1608}
+.vb-b2{background:rgba(255,255,255,.92);color:#2a1608}
+.vb-live .vb-admin{position:absolute;right:-2%;bottom:-4%;width:70%;filter:drop-shadow(0 22px 34px rgba(40,10,18,.35))}
+.vb-live .vb-admin svg{width:100%;height:auto;max-height:none}
+@media (max-width:900px){
+  .scard .sv.vb-live{max-height:none}
+  .vb-live .vb-site{width:82%}
+  .vb-live .vb-admin{width:72%;right:-3%;bottom:-8%}
+}
+@media (prefers-reduced-motion:reduce){.vb-live .vb-site{transition:none}}
