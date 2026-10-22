@@ -1,0 +1,83 @@
+/* ---------- Boka-knappen v1: kalenderbricka + text + pil, lekfull men stilren ---------- */
+html .btn.bb,html a.bk-sticky.bb{
+  --bb-bg:var(--ink);--bb-fg:var(--white);--bb-chip:var(--lav);--bb-chip-fg:var(--ink);
+  display:inline-flex;align-items:center;gap:12px;
+  padding:6px 6px 6px 6px;border:0;border-radius:999px;
+  background:var(--bb-bg);color:var(--bb-fg);text-decoration:none;white-space:nowrap;
+  font:400 1rem/1 var(--display);letter-spacing:-.01em;
+  box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 14px 30px -16px rgba(60,18,28,.7);
+  transform:translateY(0);
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .3s,background .25s
+}
+/* ljus variant (på mörka ytor) */
+html .btn.bb{position:relative}
+html .btn-lav.bb,html .guar .btn.bb,html .statement .btn.bb,html footer .btn.bb{
+  --bb-bg:var(--lav);--bb-fg:var(--ink);--bb-chip:var(--white);--bb-chip-fg:var(--ink)
+}
+html .btn.bb .arr,html .btn.bb .dot{display:none}
+
+.bb .bb-cal{
+  flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;
+  background:var(--bb-chip);color:var(--bb-chip-fg);
+  transform:rotate(-8deg);
+  transition:transform .55s cubic-bezier(.34,1.56,.64,1)
+}
+.bb .bb-cal svg{width:21px;height:21px}
+.bb .bb-day{transform-origin:12px 15px;animation:bb-tick 2.6s ease-in-out infinite}
+.bb .bb-txt{display:flex;flex-direction:column;gap:3px;padding-right:2px}
+.bb .bb-t{font-size:1em}
+.bb .bb-sub{font:600 .7rem/1 var(--sans);letter-spacing:.01em;opacity:.72}
+.bb .bb-go{
+  flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;
+  border:1.5px solid color-mix(in srgb,var(--bb-fg) 35%,transparent);
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1),background .25s,border-color .25s,color .25s
+}
+.bb .bb-go svg{width:17px;height:17px}
+.bb .bb-spark{
+  position:absolute;top:-10px;right:18px;font-size:16px;line-height:1;color:var(--ink);
+  opacity:0;transform:scale(.3) rotate(-40deg);pointer-events:none;
+  transition:opacity .25s,transform .5s cubic-bezier(.34,1.56,.64,1)
+}
+.btn-lav.bb .bb-spark,.guar .bb .bb-spark,.statement .bb .bb-spark,footer .bb .bb-spark{color:var(--lav)}
+
+/* hover: lyfter, brickan snurrar till, pilen skjuter iväg, en stjärna poppar */
+html .btn.bb:hover,html .btn.bb:focus-visible,html a.bk-sticky.bb:hover,html a.bk-sticky.bb:focus-visible{
+  background:var(--bb-bg);transform:translateY(-3px);
+  box-shadow:0 1px 0 rgba(255,255,255,.18) inset,0 22px 38px -16px rgba(60,18,28,.75)
+}
+.bb:hover .bb-cal,.bb:focus-visible .bb-cal{transform:rotate(10deg) scale(1.08)}
+.bb:hover .bb-go,.bb:focus-visible .bb-go{transform:translateX(4px) rotate(-45deg);background:var(--bb-chip);color:var(--bb-chip-fg);border-color:transparent}
+.bb:hover .bb-spark,.bb:focus-visible .bb-spark{opacity:1;transform:scale(1) rotate(0)}
+html .btn.bb:active,html a.bk-sticky.bb:active{transform:translateY(0) scale(.97)}
+.bb:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+
+@keyframes bb-tick{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.6)}90%{transform:scale(.8)}}
+
+/* storlekar */
+html .hero-cta .btn.bb{font-size:1.1rem;padding:7px 7px 7px 7px}
+html .hero-cta .btn.bb .bb-cal{width:50px;height:50px}
+html .hero-cta .btn.bb .bb-go{width:46px;height:46px}
+html .nav-cta .btn.bb{height:auto;padding:4px 4px 4px 4px;gap:9px;font-size:.86rem}
+html .nav-cta .btn.bb .bb-cal{width:36px;height:36px}
+html .nav-cta .btn.bb .bb-cal svg{width:17px;height:17px}
+html .nav-cta .btn.bb .bb-go{width:34px;height:34px;border-width:1.2px}
+html .nav-cta .btn.bb .bb-go svg{width:14px;height:14px}
+html .nav-cta .btn.bb .bb-spark{display:none}
+
+/* flytande knappen (behåller sin position/visa-dölj-logik från boka-v2) */
+html a.bk-sticky.bb{position:fixed;padding:6px 6px 6px 6px;gap:12px;font-size:1rem;box-shadow:0 0 0 1.5px rgba(255,255,255,.5),0 20px 40px -14px rgba(46,12,18,.65)}
+html a.bk-sticky.bb.on{animation:bb-nudge 9s ease-in-out 3s infinite}
+@keyframes bb-nudge{0%,90%,100%{rotate:0deg}92%{rotate:-4deg}94%{rotate:3.5deg}96%{rotate:-2deg}98%{rotate:1deg}}
+@media (max-width:640px){
+  html a.bk-sticky.bb{justify-content:space-between;padding:6px 6px 6px 6px}
+  html a.bk-sticky.bb .bb-txt{flex:1;padding-left:2px}
+  html .btn.bb{text-align:left}
+  html .btn.bb .bb-t{white-space:normal}
+  html .hero-cta .btn.bb .bb-t,html .nav-cta .btn.bb .bb-t{white-space:nowrap}
+  html .nav-cta .btn.bb{display:inline-flex;font-size:.8rem;gap:7px;padding:3px 12px 3px 3px}
+  html .nav-cta .btn.bb .bb-cal{width:32px;height:32px}
+  html .nav-cta .btn.bb .bb-go{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .bb,.bb *{transition:none!important;animation:none!important}
+}
