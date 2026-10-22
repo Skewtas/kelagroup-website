@@ -5,3 +5,4 @@ nya-hemsidan/
 .wrangler/
 .dev.vars
 .os-test-credentials.json
+.os-setup-token

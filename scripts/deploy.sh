@@ -14,7 +14,7 @@ fi
 
 if [[ "${1:-}" == "--migrate" ]]; then
   echo "→ Kör databasmigreringar mot produktionsdatabasen (kela-os)…"
-  npx wrangler@4 d1 migrations apply kela-os --remote --config db/wrangler.toml
+  npx wrangler@4 d1 migrations apply kela-os --remote --env production --config db/wrangler.toml
 fi
 
 OUT="$(mktemp -d)"

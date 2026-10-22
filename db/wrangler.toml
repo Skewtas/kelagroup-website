@@ -12,3 +12,10 @@ binding = "DB"
 database_name = "kela-os"
 database_id = "00000000-0000-4000-8000-00000000c0de"
 migrations_dir = "migrations"
+
+# Produktionsdatabasen (skapad 2026-10-22 med --jurisdiction eu). Används med --env production --remote.
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "kela-os"
+database_id = "c598c57c-e248-4fde-8165-9b7db8ce4f0b"
+migrations_dir = "migrations"

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "wrangler pages dev . --port 8788 --d1 DB=00000000-0000-4000-8000-00000000c0de --persist-to .wrangler/state --binding OS_ENV=development",
     "db:migrate:local": "wrangler d1 migrations apply kela-os --local --config db/wrangler.toml --persist-to .wrangler/state",
-    "db:migrate:remote": "wrangler d1 migrations apply kela-os --remote --config db/wrangler.toml",
+    "db:migrate:remote": "wrangler d1 migrations apply kela-os --remote --env production --config db/wrangler.toml",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --test --test-concurrency=1 tests/kela-os.test.mjs"
   },
