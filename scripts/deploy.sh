@@ -14,7 +14,7 @@ fi
 
 if [[ "${1:-}" == "--migrate" ]]; then
   echo "→ Kör databasmigreringar mot produktionsdatabasen (kela-os)…"
-  npx wrangler@4 d1 migrations apply kela-os --remote --env production --config db/wrangler.toml
+  npx --yes wrangler@4 d1 migrations apply kela-os --remote --env production --config db/wrangler.toml
 fi
 
 OUT="$(mktemp -d)"
@@ -27,4 +27,4 @@ rm -rf "$OUT"/{db,tests,docs,scripts,badge,nya-hemsidan,.claude} "$OUT"/package.
 
 echo "→ Publicerar till Cloudflare Pages (kelagroup-website, main)…"
 cd "$OUT"
-npx wrangler@4 pages deploy . --project-name kelagroup-website --branch main --commit-dirty=true
+npx --yes wrangler@4 pages deploy . --project-name kelagroup-website --branch main --commit-dirty=true
