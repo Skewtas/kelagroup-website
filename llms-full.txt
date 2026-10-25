@@ -14,7 +14,7 @@ Denna fil sammanfattar innehållet på https://kelagroup.se för AI-assistenter 
 - Grundare och kontaktperson: Mikaela Wigert – affär, produkt & automation
 - Svarstid: inom 24 timmar på vardagar
 - Priser: Kela visar inga priser på webbplatsen. Varje kund får en offert efter sina behov. Genomgång, kartläggning och offert är kostnadsfria och utan förpliktelse.
-- Kontaktvägar: kontaktformuläret på https://kelagroup.se/kontakt.html, offertguiden på https://kelagroup.se/priskalkylator.html eller e-post. Möten kan ske som videomöte, fysiskt möte eller telefonsamtal.
+- Kontaktvägar: kontaktformuläret på https://kelagroup.se/kontakt, offertguiden på https://kelagroup.se/priskalkylator eller e-post. Möten kan ske som videomöte, fysiskt möte eller telefonsamtal.
 
 ## Vad Kela gör
 
@@ -27,20 +27,20 @@ Kela bygger:
 3. Automationer & AI – AI-agenter dygnet runt, chattbottar och automatiska flöden för offerter, uppföljning, fakturor och kundtjänst.
 4. Appar för iOS & Android – native appar i App Store och Google Play, kopplade till kundens system och data i realtid.
 5. Integrationer – kopplar ihop allt som har ett API, till exempel Fortnox, Visma och Business Central, så att allt synkas automatiskt.
-6. SEO & synlighet – teknisk SEO, innehåll som rankar och löpande optimering.
+6. SEO & GEO – teknisk SEO, innehåll som rankar och löpande optimering (https://kelagroup.se/sokmotoroptimering), samt GEO (Generative Engine Optimization): att företaget nämns och citeras i ChatGPT, Perplexity, Gemini, Copilot, Claude och Google AI Overviews genom AI-synlighetsanalys, AI-crawlers i robots.txt, llms.txt, strukturerad data, svar-först-innehåll, konsekvent företagsinformation, omnämnanden och löpande mätning (https://kelagroup.se/geo-optimering). Ingen kan garantera placering i AI-svar, men sannolikheten kan ökas kraftigt.
 7. Annonser & content – Meta-annonser på Facebook och Instagram, Google Ads och content till Instagram och TikTok.
 
 ### Tjänstesidor
 
-- Bygga hemsida (https://kelagroup.se/bygga-hemsida.html): Handkodade, snabba och mobilanpassade hemsidor med SEO från start, enkelt CMS och möjlighet att koppla på chatt, offert- eller bokningsflöden. En enklare hemsida kan vara live på 1–2 veckor; större projekt med fler undersidor eller e-handel tar oftast 3–6 veckor.
-- Billig hemsida (https://kelagroup.se/billig-hemsida.html): Prisvärd hemsida genom effektivt bygge – beprövade komponenter, tydliga mallar och en stram process – med samma snabbhet, mobilanpassning och SEO som större projekt.
-- Hemsida för småföretag (https://kelagroup.se/hemsida-smaforetag.html): För enskild firma, småföretag och nystartade. Live på 1–2 veckor, lokal SEO, tydliga knappar för att ringa, mejla eller boka, och hjälp med struktur, texter och bildval.
-- Bygga system (https://kelagroup.se/bygga-system.html): Skräddarsydda affärssystem, portaler och interna verktyg. Modulärt, integrerat via API, säkert och byggt för GDPR med datalagring inom EU. En första fungerande version kan ofta vara i drift på 4–8 veckor. Exempel på system: dashboards, affärssystem & ERP, CRM & säljstöd, bokningssystem, mobilappar, feedbacksystem, medarbetarverktyg, HR-system, rekryteringssystem, kundportaler, intranät, lager & logistik samt integrationer.
-- Affärssystem & CRM (https://kelagroup.se/affarssystem-crm.html): Kunddata, offerter och fakturor, säljpipeline, integrationer, automatiska påminnelser och realtidsrapporter i ett system byggt kring kundens rutiner. Data från kalkylblad eller befintliga system kan migreras.
-- Bokningssystem (https://kelagroup.se/bokningssystem.html): Eget bokningssystem med kalender i realtid, betalning eller deposition vid bokning, automatiska bekräftelser och påminnelser via mejl och sms, självservice för om- och avbokning samt resurshantering. Byggs in direkt i hemsidan.
-- Bygga automationer (https://kelagroup.se/bygga-automationer.html): Automationer för offerter, kundtjänst, fakturering, uppföljning och påminnelser, dataflöden mellan system och automatiska rapporter. En första automation kan ofta vara i drift inom ett par veckor.
-- AI-agenter (https://kelagroup.se/ai-agenter.html): AI-agenter för kundtjänst, sälj, offerter, bokning, support och rapporter. Agenten tränas på företagets eget material och kopplas till dess system. Målet är att avlasta människor, inte ersätta dem.
-- Mobilappar (https://kelagroup.se/bygga-app.html): Native appar för iPhone och Android med push-notiser, offline-stöd, betalningar och löpande underhåll. Kela sköter lanseringen i App Store och Google Play. En enklare app kan vara i butik på några veckor; mer avancerade appar tar oftast 2–4 månader.
+- Bygga hemsida (https://kelagroup.se/bygga-hemsida): Handkodade, snabba och mobilanpassade hemsidor med SEO från start, enkelt CMS och möjlighet att koppla på chatt, offert- eller bokningsflöden. En enklare hemsida kan vara live på 1–2 veckor; större projekt med fler undersidor eller e-handel tar oftast 3–6 veckor.
+- Billig hemsida (https://kelagroup.se/billig-hemsida): Prisvärd hemsida genom effektivt bygge – beprövade komponenter, tydliga mallar och en stram process – med samma snabbhet, mobilanpassning och SEO som större projekt.
+- Hemsida för småföretag (https://kelagroup.se/hemsida-smaforetag): För enskild firma, småföretag och nystartade. Live på 1–2 veckor, lokal SEO, tydliga knappar för att ringa, mejla eller boka, och hjälp med struktur, texter och bildval.
+- Bygga system (https://kelagroup.se/bygga-system): Skräddarsydda affärssystem, portaler och interna verktyg. Modulärt, integrerat via API, säkert och byggt för GDPR med datalagring inom EU. En första fungerande version kan ofta vara i drift på 4–8 veckor. Exempel på system: dashboards, affärssystem & ERP, CRM & säljstöd, bokningssystem, mobilappar, feedbacksystem, medarbetarverktyg, HR-system, rekryteringssystem, kundportaler, intranät, lager & logistik samt integrationer.
+- Affärssystem & CRM (https://kelagroup.se/affarssystem-crm): Kunddata, offerter och fakturor, säljpipeline, integrationer, automatiska påminnelser och realtidsrapporter i ett system byggt kring kundens rutiner. Data från kalkylblad eller befintliga system kan migreras.
+- Bokningssystem (https://kelagroup.se/bokningssystem): Eget bokningssystem med kalender i realtid, betalning eller deposition vid bokning, automatiska bekräftelser och påminnelser via mejl och sms, självservice för om- och avbokning samt resurshantering. Byggs in direkt i hemsidan.
+- Bygga automationer (https://kelagroup.se/bygga-automationer): Automationer för offerter, kundtjänst, fakturering, uppföljning och påminnelser, dataflöden mellan system och automatiska rapporter. En första automation kan ofta vara i drift inom ett par veckor.
+- AI-agenter (https://kelagroup.se/ai-agenter): AI-agenter för kundtjänst, sälj, offerter, bokning, support och rapporter. Agenten tränas på företagets eget material och kopplas till dess system. Målet är att avlasta människor, inte ersätta dem.
+- Mobilappar (https://kelagroup.se/bygga-app): Native appar för iPhone och Android med push-notiser, offline-stöd, betalningar och löpande underhåll. Kela sköter lanseringen i App Store och Google Play. En enklare app kan vara i butik på några veckor; mer avancerade appar tar oftast 2–4 månader.
 
 ## Färdiga moduler (i skarp drift)
 
@@ -61,13 +61,13 @@ Andra färdiga moduler som nämns på startsidan: feedbackhantering, fakturapåm
 
 ## Branscher
 
-- Städ & service (https://kelagroup.se/bransch-stad.html och https://kelagroup.se/stadbolag.html): Bokning, chatt, feedback, påminnelser, dashboard och appar för städbolag, kopplat via API till affärssystemet. Kela erbjuder en digitaliseringsplan i fyra faser: kostnadsfri kartläggning, fas 1 Bokis och Chattis (fler bokningar, färre samtal), fas 2 Personalapp och Feedis (ordning och kvalitet ute i fält), fas 3 Påminnis, Headof och Kundapp (pengarna in och full koll), fas 4 SEO, Marknadsportal och Rekrytering (väx utan mer administration). Ordning och takt anpassas efter kartläggningen.
-- Skönhet & salong (https://kelagroup.se/bransch-skonhet.html): För hudvårdssalonger, nagelstudios, frans- och brynstudios, spa och massage. Onlinebokning, påminnelser, betyg och recensioner, AI-chatt, presentkort, webbshop, kundapp, hemsida och lokal SEO, utskick och content, dashboard, personal och schema samt integrationer. Bokningslänk för Instagram-bion.
-- Frisör & hårstylist (https://kelagroup.se/bransch-harstylist.html): Onlinebokning per stylist och behandling, påminnelser mot no-shows, egna bokningssidor för stolshyrare, AI-chatt, recensioner, återbesöks-sms, webbshop och presentkort, Instagram och annonser, nyhetsbrev och sms, dashboard, kundapp, Fortnox och Visma samt personalapp och schema.
-- Makeupartister (https://kelagroup.se/bransch-makeup.html): Portfolio-hemsida, förfrågan med koll av lediga datum, offert för brudfölje, handpenning och förskott via betallänk, reseavgift och restid, AI-chatt dygnet runt, påminnelser, recensioner, kurser, workshops och presentkort samt synlighet på Google och Instagram.
-- Frilansare & konsulter (https://kelagroup.se/bransch-frilans.html): Hemsida som ger uppdrag, offerter på minuter, fakturor och påminnelser, bokning av möten och sessioner, AI-assistent, dashboard, kundportal, tidrapport, koppling till Fortnox och Visma, SEO samt nyhetsbrev.
-- Bröllop (https://kelagroup.se/bransch-brollop.html): Lösenordsskyddad bröllopssajt på svenska och engelska, OSA med personliga länkar, kost och allergier, bordsplacering, tal och överraskningar, körschema, sms-utskick och roller med inloggning – för brudpar, bröllopskoordinatorer och wedding planners.
-- Rekrytering & personal (https://kelagroup.se/bransch-rekrytering.html): Rekryteringsverktyg, personalapp, onboarding, offboarding, personalundersökningar, interna utbildningar och HR-flöden för företag med många anställda och timanställda. Rekryteringsverktyget och personalappen körs varje dag hos Stodona.
+- Städ & service (https://kelagroup.se/bransch-stad och https://kelagroup.se/stadbolag): Bokning, chatt, feedback, påminnelser, dashboard och appar för städbolag, kopplat via API till affärssystemet. Kela erbjuder en digitaliseringsplan i fyra faser: kostnadsfri kartläggning, fas 1 Bokis och Chattis (fler bokningar, färre samtal), fas 2 Personalapp och Feedis (ordning och kvalitet ute i fält), fas 3 Påminnis, Headof och Kundapp (pengarna in och full koll), fas 4 SEO, Marknadsportal och Rekrytering (väx utan mer administration). Ordning och takt anpassas efter kartläggningen.
+- Skönhet & salong (https://kelagroup.se/bransch-skonhet): För hudvårdssalonger, nagelstudios, frans- och brynstudios, spa och massage. Onlinebokning, påminnelser, betyg och recensioner, AI-chatt, presentkort, webbshop, kundapp, hemsida och lokal SEO, utskick och content, dashboard, personal och schema samt integrationer. Bokningslänk för Instagram-bion.
+- Frisör & hårstylist (https://kelagroup.se/bransch-harstylist): Onlinebokning per stylist och behandling, påminnelser mot no-shows, egna bokningssidor för stolshyrare, AI-chatt, recensioner, återbesöks-sms, webbshop och presentkort, Instagram och annonser, nyhetsbrev och sms, dashboard, kundapp, Fortnox och Visma samt personalapp och schema.
+- Makeupartister (https://kelagroup.se/bransch-makeup): Portfolio-hemsida, förfrågan med koll av lediga datum, offert för brudfölje, handpenning och förskott via betallänk, reseavgift och restid, AI-chatt dygnet runt, påminnelser, recensioner, kurser, workshops och presentkort samt synlighet på Google och Instagram.
+- Frilansare & konsulter (https://kelagroup.se/bransch-frilans): Hemsida som ger uppdrag, offerter på minuter, fakturor och påminnelser, bokning av möten och sessioner, AI-assistent, dashboard, kundportal, tidrapport, koppling till Fortnox och Visma, SEO samt nyhetsbrev.
+- Bröllop (https://kelagroup.se/bransch-brollop): Lösenordsskyddad bröllopssajt på svenska och engelska, OSA med personliga länkar, kost och allergier, bordsplacering, tal och överraskningar, körschema, sms-utskick och roller med inloggning – för brudpar, bröllopskoordinatorer och wedding planners.
+- Rekrytering & personal (https://kelagroup.se/bransch-rekrytering): Rekryteringsverktyg, personalapp, onboarding, offboarding, personalundersökningar, interna utbildningar och HR-flöden för företag med många anställda och timanställda. Rekryteringsverktyget och personalappen körs varje dag hos Stodona.
 
 ## Så jobbar Kela
 
@@ -93,7 +93,7 @@ Resultat (enligt kelagroup.se):
 - 3 heltidstjänster frigjorda
 - Merförsäljning inbyggd i kundflödet
 
-Läs mer: https://kelagroup.se/case.html och https://kelagroup.se/bransch-stad.html
+Läs mer: https://kelagroup.se/case och https://kelagroup.se/bransch-stad
 
 ## Kunder
 
@@ -137,13 +137,21 @@ Nej. Efter en kort genomgång av projektet får du en offert – sedan bestämme
 ## Sidor
 
 - Startsida: https://kelagroup.se/
-- Tjänster: https://kelagroup.se/tjanster.html
-- Case: https://kelagroup.se/case.html
-- Om oss: https://kelagroup.se/om-oss.html
-- Kontakt: https://kelagroup.se/kontakt.html
-- Få en offert: https://kelagroup.se/priskalkylator.html
-- Blogg: https://kelagroup.se/blogg.html
+- Tjänster: https://kelagroup.se/tjanster
+- Case: https://kelagroup.se/case
+- Om oss: https://kelagroup.se/om-oss
+- Kontakt: https://kelagroup.se/kontakt
+- Få en offert: https://kelagroup.se/priskalkylator
+- Blogg: https://kelagroup.se/blogg
 - Kort version av denna fil: https://kelagroup.se/llms.txt
+
+## Fler sidor
+
+- Produkter: https://kelagroup.se/produkter (Bokis, Chattis, Feedis, Påminnis, Headof, Personalapp, Kundapp, Rekryteringsverktyg – varje modul har en egen sida under https://kelagroup.se/produkter/).
+- Integrationer: https://kelagroup.se/integrationer (Fortnox, Visma, Timewave, Tengella). Kela är inte officiell partner till leverantörerna.
+- Marknadsföring: https://kelagroup.se/marknadsforing · Webbyrå i Stockholm: https://kelagroup.se/webbyra-stockholm · Vanliga frågor: https://kelagroup.se/vanliga-fragor
+- Guider: https://kelagroup.se/blogg (bl.a. https://kelagroup.se/blogg/vad-ar-geo)
+- Integritetspolicy: https://kelagroup.se/integritetspolicy · Cookies: https://kelagroup.se/cookies
 
 ## Kanaler
 
