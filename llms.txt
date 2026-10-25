@@ -1,0 +1,49 @@
+# Kela group
+
+> Kela group AB (org.nr 559578-1971) är en teknikdriven byrå i Stockholm som bygger hemsidor, system, appar och AI-automationer som sparar tid, sänker kostnader och hjälper företag att växa – för kunder i Sverige och hela Europa. Allt Kela säljer kör teamet självt i sina egna verksamheter, bland annat städbolaget Stodona. Kela visar inga priser på webbplatsen: varje kund får en kostnadsfri offert efter sina behov. Kontakt: hej@kelagroup.se.
+
+Viktigt att veta:
+
+- Slogan: "Vi bygger bort onödigt arbete".
+- Grundare och kontaktperson: Mikaela Wigert (affär, produkt & automation).
+- Färdiga moduler i skarp drift: Bokis (bokningssystem), Chattis (AI-chattbot), Feedis (feedbacksystem), Påminnis (fakturapåminnelser), Headof (dashboard), Personalapp, Kundapp och Rekryteringsverktyg – kopplade via API till affärssystem som Timewave, Tengella, Fortnox och Visma.
+- Kundcase Stodona AB: ≈ 565 000 kr lägre kostnad per år, 4 → 1 person i administrationen och 3 heltidstjänster frigjorda.
+- Kela svarar inom 24 timmar på vardagar. Genomgång, kartläggning och offert är kostnadsfria och utan förpliktelse.
+
+En utförligare sammanfattning finns i [llms-full.txt](https://kelagroup.se/llms-full.txt).
+
+## Tjänster
+
+- [Tjänster – översikt](https://kelagroup.se/tjanster.html): Hemsidor, system, bokningssystem, automationer med AI och mobilappar – allt digitalt under ett tak.
+- [Bygga hemsida](https://kelagroup.se/bygga-hemsida.html): Snabba, sökoptimerade hemsidor och webbshoppar byggda från grunden; en enklare hemsida kan vara live på 1–2 veckor.
+- [Billig hemsida](https://kelagroup.se/billig-hemsida.html): Prisvärd hemsida med samma snabbhet, mobilanpassning och SEO som större projekt.
+- [Hemsida för småföretag](https://kelagroup.se/hemsida-smaforetag.html): Hemsida för enskild firma, småföretag och nystartade, med lokal SEO och enkel CMS.
+- [Bygga system](https://kelagroup.se/bygga-system.html): Skräddarsydda affärssystem, portaler och interna verktyg; första version ofta i drift på 4–8 veckor, data lagras inom EU.
+- [Affärssystem & CRM](https://kelagroup.se/affarssystem-crm.html): CRM och affärssystem byggt kring kundens rutiner, integrerat med bokföring, e-post, kalender och betalning.
+- [Bokningssystem](https://kelagroup.se/bokningssystem.html): Eget bokningssystem med kalender, betalning och automatiska påminnelser – färre no-shows, noll dubbelbokningar.
+- [Bygga automationer](https://kelagroup.se/bygga-automationer.html): Automationer för offert, kundtjänst, fakturering, uppföljning och rapporter – dygnet runt.
+- [AI-agenter](https://kelagroup.se/ai-agenter.html): AI-agenter som svarar kunder, tar fram offerter och bokar möten, tränade på företagets eget material.
+- [Mobilappar](https://kelagroup.se/bygga-app.html): Native appar för iOS och Android, publicerade i App Store och Google Play.
+
+## Branscher
+
+- [Städ & service](https://kelagroup.se/bransch-stad.html): Så kör Stodona sitt städbolag på Kelas system – Bokis, Chattis, Feedis, Påminnis, Headof, personalapp och kundapp.
+- [System för städbolag – tjänster & moduler](https://kelagroup.se/stadbolag.html): Alla moduler för städbolag och digitaliseringsplanen i fyra faser.
+- [Skönhet & salong](https://kelagroup.se/bransch-skonhet.html): Onlinebokning, sms-påminnelser, AI-chatt, presentkort, recensioner och webbshop för salonger, studios och spa.
+- [Frisör & hårstylist](https://kelagroup.se/bransch-harstylist.html): Bokning per stylist och behandling, påminnelser mot no-shows och egna bokningssidor för stolshyrare.
+- [Makeupartister](https://kelagroup.se/bransch-makeup.html): Portfolio-hemsida, lediga bröllopsdatum, offert för brudfölje, handpenning och påminnelser.
+- [Frilansare & konsulter](https://kelagroup.se/bransch-frilans.html): Hemsida, offerter, fakturaflöden, onlinebokning, kundportal och AI-assistent.
+- [Bröllop](https://kelagroup.se/bransch-brollop.html): Lösenordsskyddad bröllopssajt med OSA, kost och allergier, bordsplacering, körschema och sms-utskick.
+- [Rekrytering & personal](https://kelagroup.se/bransch-rekrytering.html): Rekryteringssystem, onboarding, personalapp, utbildningar, personalundersökningar och offboarding.
+
+## Företaget
+
+- [Om oss](https://kelagroup.se/om-oss.html): Vilka Kela group är, hur de jobbar och deras värderingar (tydlig offert, snabbt, långsiktigt, AI-först).
+- [Case & referenser](https://kelagroup.se/case.html): Kundcaset Stodona AB och exempel på vad Kela levererar.
+- [Kontakt](https://kelagroup.se/kontakt.html): Skicka en förfrågan eller boka ett kostnadsfritt samtal – svar inom 24 timmar.
+- [Få en offert](https://kelagroup.se/priskalkylator.html): Offertguide – välj vad ni vill bygga och få en offert efter era behov.
+
+## Optional
+
+- [Startsida](https://kelagroup.se/): Översikt över allt Kela bygger, färdiga moduler, kundcase och branscher.
+- [Blogg](https://kelagroup.se/blogg.html): Guider om hemsidor, system och automation.
