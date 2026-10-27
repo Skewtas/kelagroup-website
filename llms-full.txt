@@ -26,7 +26,7 @@ Kela bygger:
 2. System & portaler – affärssystem, CRM, boknings- och rekryteringssystem, kund- och personalportaler, byggda kring exakt hur kunden jobbar.
 3. Automationer & AI – AI-agenter dygnet runt, chattbottar och automatiska flöden för offerter, uppföljning, fakturor och kundtjänst.
 4. Appar för iOS & Android – native appar i App Store och Google Play, kopplade till kundens system och data i realtid.
-5. Integrationer – kopplar ihop allt som har ett API, till exempel Fortnox, Visma och Business Central, så att allt synkas automatiskt.
+5. Integrationer – kopplar ihop allt som har ett API, till exempel Fortnox, Visma, Business Central, Shopify och WordPress, så att allt synkas automatiskt.
 6. SEO & GEO – teknisk SEO, innehåll som rankar och löpande optimering (https://kelagroup.se/sokmotoroptimering), samt GEO (Generative Engine Optimization): att företaget nämns och citeras i ChatGPT, Perplexity, Gemini, Copilot, Claude och Google AI Overviews genom AI-synlighetsanalys, AI-crawlers i robots.txt, llms.txt, strukturerad data, svar-först-innehåll, konsekvent företagsinformation, omnämnanden och löpande mätning (https://kelagroup.se/geo-optimering). Ingen kan garantera placering i AI-svar, men sannolikheten kan ökas kraftigt.
 7. Annonser & content – Meta-annonser på Facebook och Instagram, Google Ads och content till Instagram och TikTok.
 
@@ -44,7 +44,7 @@ Kela bygger:
 
 ## Färdiga moduler (i skarp drift)
 
-Kela har färdiga system som används i skarp drift varje dag – inte idéer. De kan kopplas på och anpassas efter verksamheten. Modulerna är byggda för städbranschen men anpassas även för andra branscher, och kopplas via API till kundens affärssystem (till exempel Timewave, Tengella, Fortnox och Visma – "+ allt med API"). Varje modul fungerar på egen hand.
+Kela har färdiga system som används i skarp drift varje dag – inte idéer. De kan kopplas på och anpassas efter verksamheten. Modulerna är byggda för städbranschen men anpassas även för andra branscher, och kopplas via API till kundens affärssystem (till exempel Timewave, Tengella, Fortnox, Visma, Shopify och WordPress – "+ allt med API"). Varje modul fungerar på egen hand.
 
 - Bokis – bokningssystem: onlinebokning som räknar ut pris direkt, beräknar restid mellan uppdrag, automatisk schemaläggning, tilläggstjänster och abonnemang, orderbekräftelse, välkomstmail och sms samt påminnelser före besöket. Rätt person på rätt jobb utifrån beläggning, erfarenhet och företagets egna regler. Används även internt för offerter och bokningar via telefon eller mejl. I drift hos Stodona.
 - Chattis – AI-chattbot: pratar direkt med affärssystemet. Ca 95 % av ett städbolags mejl och kundserviceärenden handlar om bokningar och fakturor – det sköter Chattis själv. Bokning, ombokning, avbokning, sjukdom, fakturafrågor och beställningar. Föreslår nya tider och kunden får samma städare om hen önskar. Svarar direkt, även kvällar och helger.
@@ -117,7 +117,7 @@ En första fungerande version kan ofta vara i drift på 4–8 veckor. Kela lever
 Ja. Kunden äger både lösningen och sin data, som lagras inom EU. Kela lämnar över dokumentation.
 
 **Måste vi byta affärssystem?**
-Nej. Kela integrerar mot det ni redan använder, till exempel Timewave, Tengella, Fortnox och Visma, och allt med API.
+Nej. Kela integrerar mot det ni redan använder, till exempel Timewave, Tengella, Fortnox, Visma, Shopify och WordPress, och allt med API.
 
 **Måste vi ta alla moduler på en gång?**
 Nej. Varje modul fungerar på egen hand. Kela börjar där ni tappar mest tid och pengar idag och bygger vidare steg för steg.
@@ -148,7 +148,7 @@ Nej. Efter en kort genomgång av projektet får du en offert – sedan bestämme
 ## Fler sidor
 
 - Produkter: https://kelagroup.se/produkter (Bokis, Chattis, Feedis, Påminnis, Headof, Personalapp, Kundapp, Rekryteringsverktyg – varje modul har en egen sida under https://kelagroup.se/produkter/).
-- Integrationer: https://kelagroup.se/integrationer (Fortnox, Visma, Timewave, Tengella). Kela är inte officiell partner till leverantörerna.
+- Integrationer: https://kelagroup.se/integrationer (Fortnox, Visma, Timewave, Tengella, Shopify, WordPress). Kela är inte officiell partner till leverantörerna.
 - Marknadsföring: https://kelagroup.se/marknadsforing · Webbyrå i Stockholm: https://kelagroup.se/webbyra-stockholm · Vanliga frågor: https://kelagroup.se/vanliga-fragor
 - Guider: https://kelagroup.se/blogg (bl.a. https://kelagroup.se/blogg/vad-ar-geo)
 - Integritetspolicy: https://kelagroup.se/integritetspolicy · Cookies: https://kelagroup.se/cookies

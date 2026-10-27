@@ -6,7 +6,7 @@ Viktigt att veta:
 
 - Slogan: "Vi bygger bort onödigt arbete".
 - Grundare och kontaktperson: Mikaela Wigert (affär, produkt & automation).
-- Färdiga moduler i skarp drift: Bokis (bokningssystem), Chattis (AI-chattbot), Feedis (feedbacksystem), Påminnis (fakturapåminnelser), Headof (dashboard), Personalapp, Kundapp och Rekryteringsverktyg – kopplade via API till affärssystem som Timewave, Tengella, Fortnox och Visma.
+- Färdiga moduler i skarp drift: Bokis (bokningssystem), Chattis (AI-chattbot), Feedis (feedbacksystem), Påminnis (fakturapåminnelser), Headof (dashboard), Personalapp, Kundapp och Rekryteringsverktyg – kopplade via API till affärssystem som Timewave, Tengella, Fortnox, Visma, Shopify och WordPress.
 - Kundcase Stodona AB: ≈ 565 000 kr lägre kostnad per år, 4 → 1 person i administrationen och 3 heltidstjänster frigjorda.
 - Kela hjälper också företag att synas – i Google (SEO) och i AI-svar från ChatGPT, Perplexity, Gemini, Copilot, Claude och Google AI Overviews (GEO).
 - Kela svarar inom 24 timmar på vardagar. Genomgång, kartläggning och offert är kostnadsfria och utan förpliktelse.
@@ -32,7 +32,7 @@ En utförligare sammanfattning finns i [llms-full.txt](https://kelagroup.se/llms
 
 ## Produkter (färdiga moduler)
 
-- [Alla produkter](https://kelagroup.se/produkter): Kela groups åtta färdiga moduler, i skarp drift hos Stodona och kopplade via API till Timewave, Tengella, Fortnox och Visma.
+- [Alla produkter](https://kelagroup.se/produkter): Kela groups åtta färdiga moduler, i skarp drift hos Stodona och kopplade via API till Timewave, Tengella, Fortnox, Visma, Shopify och WordPress.
 - [Bokis](https://kelagroup.se/produkter/bokis): Bokningssystem kopplat till schemasystemet – pris och restid direkt, automatisk schemaläggning, rätt kompetens på varje bokning, bekräftelser och påminnelser.
 - [Chattis](https://kelagroup.se/produkter/chattis): AI-chattbot kopplad till affärssystemet som själv sköter bokning, ombokning, avbokning, sjukanmälan och fakturafrågor dygnet runt.
 - [Feedis](https://kelagroup.se/produkter/feedis): Feedbacksystem med sms-betyg efter varje uppdrag; bra betyg till personalen, dåliga till kontoret med åtgärdsförslag, nöjda kunder till Google, Trustpilot eller Reco.
@@ -45,7 +45,7 @@ En utförligare sammanfattning finns i [llms-full.txt](https://kelagroup.se/llms
 ## Integrationer
 
 - [Integrationer via API](https://kelagroup.se/integrationer): Kela group kopplar ihop affärssystem, bokföring, schema, betalning, e-post, sms och kalender så att företag slipper dubbelregistrering.
-- [Fortnox](https://kelagroup.se/integrationer/fortnox), [Visma](https://kelagroup.se/integrationer/visma), [Timewave](https://kelagroup.se/integrationer/timewave), [Tengella](https://kelagroup.se/integrationer/tengella): Hur Kelas moduler kopplas till respektive system. Kela är inte officiell partner till någon av leverantörerna.
+- [Fortnox](https://kelagroup.se/integrationer/fortnox), [Visma](https://kelagroup.se/integrationer/visma), [Timewave](https://kelagroup.se/integrationer/timewave), [Tengella](https://kelagroup.se/integrationer/tengella): Hur Kelas moduler kopplas till respektive system. Kelas moduler kopplas även till Shopify-butiker och WordPress-hemsidor via API. Kela är inte officiell partner till någon av leverantörerna.
 
 ## Branscher
 
