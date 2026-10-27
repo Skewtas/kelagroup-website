@@ -82,6 +82,23 @@
 .seq [data-s]{animation:seqin .45s var(--ease)}
 @keyframes seqin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
+/* Det här gör vi – allt i klartext */
+.allt{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;list-style:none;margin:0;padding:0;counter-reset:allt}
+.allt>li{position:relative;display:flex;flex-direction:column;gap:12px;padding:24px 22px 22px;border-radius:var(--r-m);background:var(--lav-soft);color:var(--ink);transition:transform .45s var(--bounce)}
+.allt>li:hover{transform:translateY(-3px)}
+.allt .an{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;opacity:.55}
+.allt h3{font-family:var(--display);font-weight:400;font-size:clamp(22px,1.9vw,27px);letter-spacing:-.035em;line-height:1.05;margin:0}
+.allt .am{align-self:flex-start;background:var(--white);border-radius:999px;padding:.35em .85em;font-weight:700;font-size:.74rem;box-shadow:0 0 0 1px var(--line)}
+.allt .pts{font-size:.9rem}
+.allt .a-hi{background:var(--peach)}
+.allt .a-lav{background:var(--lav);color:var(--on-lav)}
+.allt .a-but{background:var(--butter)}
+.allt .a-cta{background:var(--ink);color:var(--white);justify-content:space-between}
+.allt .a-cta p{margin:0;font-size:.95rem;line-height:1.45;opacity:.8}
+.allt .a-cta .btn{align-self:flex-start;background:var(--white);color:var(--ink)}
+@media (max-width:1100px){.allt{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.allt{grid-template-columns:1fr}.allt>li{padding:22px 20px}}
+
 /* Integrationer */
 .integ{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:20px 32px;padding:clamp(22px,3vw,34px) clamp(22px,3.4vw,44px);border-radius:var(--r-l);background:var(--lav-soft)}
 .integ .it-lead{font-family:var(--display);font-size:clamp(20px,2vw,28px);letter-spacing:-.03em;line-height:1.05;max-width:24ch}
@@ -566,10 +583,10 @@
         <span class="type-line"><span class="type-box"><span id="typer" data-words='["bokningssystem","chattbottar","personalappar","kundappar","påminnelser","dashboards","feedback"]'>bokningssystem</span><span class="type-caret" aria-hidden="true"></span></span></span>
       </h1>
       <p class="hero-sub">…för städbolag som sköter sig själva.</p>
-      <p class="hero-lead">Bokningar, chatt, feedback, påminnelser, dashboard och appar — byggt för städbranschen och kopplat via API direkt till ert affärssystem. Vi kör vårt eget städbolag Stodona på systemen – varje dag.</p>
+      <p class="hero-lead">Bokningssystem, AI-chatt, feedback, fakturapåminnelser, dashboard, personalapp, rekrytering, avtal, marknadsföring och SEO – byggt för städbranschen och kopplat till Fortnox, Visma eller ert affärssystem. Vi kör vårt eget städbolag Stodona på systemen – varje dag.</p>
       <div class="hero-cta">
         <a class="btn btn-dark" href="/kontakt"><span class="dot" aria-hidden="true"></span>Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
-        <a class="btn btn-line" href="#case">Så kör Stodona ↓</a>
+        <a class="btn btn-line" href="#allt">Se allt vi gör ↓</a>
       </div>
     </div>
 
@@ -606,6 +623,54 @@
       <div class="chipw q6" data-speed="-0.14" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/></svg></span><span>Incheckad · GPS ✓<small>Personalappen</small></span></div></div>
       <div class="chipw q7" data-speed="0.14" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><span>Kunden bokade om själv<small>Kundportalen</small></span></div></div>
       <div class="chipw q8 dark" data-speed="-0.12" aria-hidden="true"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></span><span>Ert affärssystem<small>Kopplat via API</small></span></div></div>
+    </div>
+  </section>
+
+  <!-- DET HÄR GÖR VI: ALLT I KLARTEXT -->
+  <section class="sec" id="allt" aria-labelledby="allt-h">
+    <div class="wrap">
+      <div class="head">
+        <div>
+          <span class="kicker">Det här gör vi för städbolag</span>
+          <h2 class="h2 rv" id="allt-h">Allt ni behöver.<br>På ett ställe.</h2>
+        </div>
+        <p class="lead rv">Välj en del eller allt. Allt kopplas ihop med varandra och med ert affärssystem, så att städbolaget kan sköta sig självt.</p>
+      </div>
+      <ul class="allt" role="list">
+        <li class="a-hi rv"><span class="an">01</span><h3>Bokningssystem</h3><span class="am">Bokis</span>
+          <ul class="pts"><li>Kunden ser priset direkt och bokar dygnet runt</li><li>Bokningen hamnar i schemat automatiskt</li><li>Bekräftelse, välkomst-sms och påminnelser skickas själva</li></ul></li>
+        <li class="rv"><span class="an">02</span><h3>Feedbacksystem</h3><span class="am">Feedis</span>
+          <ul class="pts"><li>Sms-betyg efter varje städning</li><li>Bra betyg går direkt till städaren, dåliga till kontoret</li><li>Nöjda kunder skickas vidare till Google, Trustpilot eller Reco</li></ul></li>
+        <li class="a-lav rv"><span class="an">03</span><h3>AI-chatt för kunder</h3><span class="am">Chattis</span>
+          <ul class="pts"><li>Bokar, avbokar, bokar om och ändrar, dygnet runt</li><li>Svarar på frågor om fakturor och tjänster</li><li>Sköter ungefär 95 % av kundtjänsten själv</li></ul></li>
+        <li class="a-but rv"><span class="an">04</span><h3>Automatiska fakturapåminnelser</h3><span class="am">Påminnis</span>
+          <ul class="pts"><li>Obetalda fakturor påminns med mail och sms</li><li>Fungerar med Fortnox, Visma och andra system</li><li>Bättre likviditet, utan att någon jagar pengar</li></ul></li>
+        <li class="rv"><span class="an">05</span><h3>Dashboard och adminpanel</h3><span class="am">Headof</span>
+          <ul class="pts"><li>Försäljning, timmar och bokningar live</li><li>Nyckeltal direkt från affärssystemet</li><li>Styr verksamheten från en och samma panel</li></ul></li>
+        <li class="a-hi rv"><span class="an">06</span><h3>Personalapp</h3><span class="am">För städarna</span>
+          <ul class="pts"><li>In- och utcheckning med GPS</li><li>Kvalitetskontroller efter varje uppdrag</li><li>AI-chatt som svarar på personalens frågor</li><li>Tid- och materialrapport i mobilen</li></ul></li>
+        <li class="rv"><span class="an">07</span><h3>Fortnox- och Visma-integration</h3><span class="am">Integration</span>
+          <ul class="pts"><li>Kunder, tid och fakturaunderlag synkas automatiskt</li><li>Ingen dubbelinmatning</li><li>Ni fortsätter jobba i det system ni har</li></ul></li>
+        <li class="a-lav rv"><span class="an">08</span><h3>API mot ert affärssystem</h3><span class="am">Timewave · Tengella · m.fl.</span>
+          <ul class="pts"><li>Vi kopplar ihop allt med ert befintliga affärssystem</li><li>Fungerar med alla system som har ett API</li><li>Ni byter ingenting, allt börjar bara hänga ihop</li></ul></li>
+        <li class="a-but rv"><span class="an">09</span><h3>Nyhetsbrev och sms</h3><span class="am">Marknadsportal</span>
+          <ul class="pts"><li>Utskick via mail och sms</li><li>Rätt budskap till rätt kundgrupp</li><li>Kampanjer och kundbrev som ger fler bokningar</li></ul></li>
+        <li class="rv"><span class="an">10</span><h3>Automatisk hantering av personalärenden</h3><span class="am">Automation</span>
+          <ul class="pts"><li>Sjukanmälan, ledighet och frånvaro tas emot automatiskt</li><li>Berörda uppdrag flyttas och kunden får besked</li><li>Det som kräver en människa går till rätt person</li></ul></li>
+        <li class="a-hi rv"><span class="an">11</span><h3>Grattis-sms till kunder och personal</h3><span class="am">Automation</span>
+          <ul class="pts"><li>Skickas automatiskt på födelsedagen</li><li>Till både kunder och personal</li><li>Ingen behöver komma ihåg, relationen stärks ändå</li></ul></li>
+        <li class="rv"><span class="an">12</span><h3>Rekryteringssystem</h3><span class="am">Likt Teamtailor</span>
+          <ul class="pts"><li>Ansökningar direkt via er hemsida</li><li>Kandidatbank och automatisk återkoppling</li><li>Från ansökan till första arbetsdagen</li></ul></li>
+        <li class="a-lav rv"><span class="an">13</span><h3>Avtalshantering</h3><span class="am">Anställningsavtal m.m.</span>
+          <ul class="pts"><li>Anställningsavtal och andra avtal skapas automatiskt från mallar</li><li>Skickas för signering digitalt</li><li>Allt samlat och lätt att hitta</li></ul></li>
+        <li class="a-but rv"><span class="an">14</span><h3>Automatisk marknadsavdelning</h3><span class="am">Sociala medier</span>
+          <ul class="pts"><li>Inlägg för sociala medier skapas automatiskt</li><li>Content för Instagram och annonser på Meta</li><li>Syns hela tiden, utan att någon behöver sitta med det</li></ul></li>
+        <li class="rv"><span class="an">15</span><h3>SEO och GEO</h3><span class="am">Google &amp; AI-sök</span>
+          <ul class="pts"><li>Syns när kunder söker städning på Google</li><li>Rekommenderas i AI-tjänster som ChatGPT</li><li>Fler bokningar utan dyra annonser</li></ul></li>
+        <li class="a-cta rv"><span class="an">16</span><h3>Ert städbolag, på autopilot</h3>
+          <p>Vi kartlägger hur ni jobbar idag och föreslår vad som ger mest effekt först. Kostnadsfritt.</p>
+          <a class="btn" href="/kontakt">Boka ett möte <span class="arr" aria-hidden="true">→</span></a></li>
+      </ul>
     </div>
   </section>
 
