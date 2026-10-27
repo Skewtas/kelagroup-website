@@ -54,6 +54,8 @@ Kela har färdiga system som används i skarp drift varje dag – inte idéer. D
 - Personalapp – för fältpersonal: in- och utcheck med GPS, kvalitetskontroller, tid- och materialrapportering och en AI-arbetsledare i chatten som besvarar ca 95 % av alla frågor; kan AI:n inte hjälpa till larmas en riktig arbetsledare direkt. Meddelar kunden automatiskt vid försening. I drift hos Stodona.
 - Kundapp – för kunderna: se alla bokningar, ändra, boka om eller avboka, uppdatera uppgifter, lämna feedback och hämta fakturainformation. I drift hos Stodona.
 - Rekryteringsverktyg – likt Teamtailor: hela rekryteringen från ansökan till första dagen, kandidatbank, automatiska återkopplingar och onboarding av nyanställda. I drift hos Stodona.
+- Avtalshantering – UNDER UTVECKLING, inte lanserad: digital lösning för kundavtal och personalavtal. Skapa avtal digitalt från färdiga mallar, fyll i automatiskt med information från befintliga system, skicka för digital signering, följ status, samla signerade avtal på ett ställe, automatisera steg efter signering (t.ex. välkomstmejl till nyanställda) samt påminnelser och uppföljning. Bygger på flödet Kela redan använder hos Stodona, där anställningsavtal skapas automatiskt i Headof med information från Timewave, signeras digitalt och följs av ett automatiskt välkomstmejl. https://kelagroup.se/produkter/avtalshantering
+- Värva vänner & personal – UNDER UTVECKLING, inte lanserad: rekommendations- och värvningssystem kopplat till Bokis, för både kundtillväxt och rekrytering. Värva en vän: personlig länk eller kod, vännen bokar via Bokis, rekommendationen registreras och följs upp, valfri belöning (t.ex. rabatt, presentkort eller bonus efter godkänd bokning). Värva en kollega: personal rekommenderar nya medarbetare, kandidaten kopplas till Rekryteringsverktyget, uppföljning av vilka rekommendationer som leder till anställning och administration av eventuell värvningsbonus. https://kelagroup.se/produkter/varva
 - SEO – teknisk SEO, innehåll som rankar, lokal synlighet och löpande optimering.
 - Marknadsportal – tilläggstjänster: Meta-annonser, nyhetsbrev via mail och sms samt content för Instagram.
 
@@ -147,7 +149,7 @@ Nej. Efter en kort genomgång av projektet får du en offert – sedan bestämme
 
 ## Fler sidor
 
-- Produkter: https://kelagroup.se/produkter (Bokis, Chattis, Feedis, Påminnis, Headof, Personalapp, Kundapp, Rekryteringsverktyg – varje modul har en egen sida under https://kelagroup.se/produkter/).
+- Produkter: https://kelagroup.se/produkter (Bokis, Chattis, Feedis, Påminnis, Headof, Personalapp, Kundapp, Rekryteringsverktyg – varje modul har en egen sida under https://kelagroup.se/produkter/). Under utveckling, ej lanserade: Avtalshantering (https://kelagroup.se/produkter/avtalshantering) och Värva vänner & personal (https://kelagroup.se/produkter/varva).
 - Integrationer: https://kelagroup.se/integrationer (Fortnox, Visma, Timewave, Tengella, Shopify, WordPress). Kela är inte officiell partner till leverantörerna.
 - Marknadsföring: https://kelagroup.se/marknadsforing · Webbyrå i Stockholm: https://kelagroup.se/webbyra-stockholm · Vanliga frågor: https://kelagroup.se/vanliga-fragor
 - Guider: https://kelagroup.se/blogg (bl.a. https://kelagroup.se/blogg/vad-ar-geo)

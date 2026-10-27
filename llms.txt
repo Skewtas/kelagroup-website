@@ -41,6 +41,8 @@ En utförligare sammanfattning finns i [llms-full.txt](https://kelagroup.se/llms
 - [Personalapp](https://kelagroup.se/produkter/personalapp): App för fältpersonal med GPS-incheckning, kvalitetskontroller, tid- och materialrapport och en AI-arbetsledare som enligt Kela besvarar ca 95 % av frågorna.
 - [Kundapp](https://kelagroup.se/produkter/kundapp): Kunderna ser, ändrar och avbokar bokningar, uppdaterar uppgifter, lämnar feedback och ser fakturor.
 - [Rekryteringsverktyg](https://kelagroup.se/produkter/rekryteringsverktyg): Rekryteringssystem likt Teamtailor men byggt kring kundens företag – kandidatbank, automatisk återkoppling och onboarding.
+- [Avtalshantering](https://kelagroup.se/produkter/avtalshantering) (under utveckling, inte lanserad): Kundavtal och personalavtal digitalt – färdiga mallar som fylls i automatiskt från befintliga system, digital signering, statusuppföljning och automatiska steg efter signering. Bygger på flödet för anställningsavtal som Kela redan använder hos Stodona.
+- [Värva vänner & personal](https://kelagroup.se/produkter/varva) (under utveckling, inte lanserad): Rekommendations- och värvningssystem kopplat till Bokis – kunder värvar vänner som bokar via Bokis, personal rekommenderar kollegor in i Rekryteringsverktyget, valfri belöningsmodell.
 
 ## Integrationer
 
