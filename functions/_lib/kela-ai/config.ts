@@ -29,7 +29,7 @@ export interface TenantConfig {
 export const DEFAULT_CONFIG: TenantConfig = {
   brand: { name: 'KELA AI', tagline: 'Din genväg till smartare business.', wordmark: 'KELA', accent: '#5C1A26', accent_soft: '#F3D3D7', ink: '#2E0C12' },
   status_text: 'AI-assistenten är redo',
-  welcome: 'Hej där! 👋\nJag är Kelas AI. Jag kan visa vad vi bygger, hjälpa dig hitta smartare lösningar för ditt företag eller räkna på hur mycket tid ni skulle kunna spara.\n\nVad vill du utforska?',
+  welcome: 'Hej! 👋\nJag är Kelas AI. Vad vill du utforska?',
   starters: [
     { id: 'surprise', icon: 'spark', title: 'Överraska mig', text: 'Visa något riktigt häftigt som AI kan göra.', prompt: 'Överraska mig – visa något riktigt häftigt som AI kan göra.' },
     { id: 'automate', icon: 'bolt', title: 'Automatisera mitt företag', text: 'Upptäck vad ni skulle kunna slippa göra manuellt.', prompt: 'Jag vill se vad vi skulle kunna automatisera i vårt företag.' },

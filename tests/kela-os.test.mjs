@@ -621,7 +621,7 @@ test('Kela AI: publik konfiguration avslöjar inga instruktioner eller kunskapsb
   for (const k of ['persona', 'knowledge_base', 'knowledge', 'extra_instructions']) assert.equal(c[k], undefined, k);
   assert.equal((await fetch(`${BASE}/api/ai/config?tenant=okand`)).status, 404);
   const page = await (await fetch(BASE + '/bokningssystem.html')).text();
-  assert.match(page, /kela-ai\/loader-v1\.js/); assert.doesNotMatch(page, /sub-v3\.js/, 'gamla chatten är ersatt');
+  assert.match(page, /kela-ai\/loader-v2\.js/); assert.doesNotMatch(page, /sub-v3\.js/, 'gamla chatten är ersatt');
 });
 
 test('Kela AI: säkerhetsheader, främmande ursprung och storleksgränser', async () => {

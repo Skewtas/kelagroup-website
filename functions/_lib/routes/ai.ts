@@ -191,7 +191,8 @@ export function aiRoutes(r: Router) {
     const origins = Array.isArray(b.allowed_origins) ? b.allowed_origins.filter((o: unknown) => typeof o === 'string' && /^https:\/\/[a-z0-9.-]+(:\d+)?$/i.test(o)).slice(0, 20) : parseJson(t.allowed_origins, []);
     const changed = Object.keys(cfg).filter((k) => JSON.stringify((cfg as any)[k]) !== JSON.stringify((before as any)[k]));
     await c.env.DB.batch([
-      c.env.DB.prepare('UPDATE ai_tenants SET config_json = ?, allowed_origins = ?, active = ?, updated_at = ? WHERE id = ?').bind(JSON.stringify(cfg), JSON.stringify(origins), b.active === false ? 0 : 1, now(), t.id),
+      // Återställning sparar en tom konfiguration så att aktuella standardvärden alltid gäller.
+      c.env.DB.prepare('UPDATE ai_tenants SET config_json = ?, allowed_origins = ?, active = ?, updated_at = ? WHERE id = ?').bind(b.reset === true ? '{}' : JSON.stringify(cfg), JSON.stringify(origins), b.active === false ? 0 : 1, now(), t.id),
       auditStmt(c.env, c.s.orgId, c.s.userId, c.ip, b.reset ? 'ai.config_reset' : 'ai.config', 'ai_tenant', t.id, b.reset ? 'Återställde Kela AI till standard' : `Ändrade Kela AI: ${changed.join(', ') || 'inga ändringar'}`, { changed }),
     ]);
     return { ok: true, config: cfg, changed };

@@ -87,7 +87,7 @@ const CARDS = {
   rekrytering: ['users', 'Rekryteringsverktyg', 'Från ansökan till första dagen.', '/produkter/rekryteringsverktyg'],
 };
 export function cards(p, ctx) {
-  const items = (p.items || []).filter((k) => CARDS[k] || k === 'case_stodona');
+  const items = (p.items || []).filter((k) => CARDS[k] || k === 'case_stodona').slice(0, 3);
   return h('div', { class: 'kai-cards' }, items.map((k) => {
     if (k === 'case_stodona') return h('a', { class: 'kai-svc case', href: '/case', onclick: () => ctx.event('demo_start', 'case') },
       h('span', { class: 'kai-ic', html: svg('star', 17) }), h('b', null, 'Kundcase: Stodona'), h('span', null, 'Städbolaget som kör hela verksamheten på Kelas system.'),
@@ -150,10 +150,8 @@ export function bookingDemo(p, ctx) {
       bd.append(h('div', { class: 'kai-success' },
         h('div', null, h('div', { class: 'kai-check', html: checkSvg }), h('p', { class: 'kai-q', style: 'margin:12px 0 4px' }, 'Bokad! (demo)'),
           h('ul', { class: 'kai-tl' },
-            h('li', null, h('i', null, '✓'), h('div', null, 'Inlagd i kalendern', h('span', null, `${st.who}s schema uppdaterat`))),
             h('li', { style: 'animation-delay:.3s' }, h('i', null, '✓'), h('div', null, 'Bekräftelse skickad', h('span', null, 'Sms + mejl direkt'))),
-            h('li', { style: 'animation-delay:.6s' }, h('i', null, '⏰'), h('div', null, 'Påminnelse 24 h innan', h('span', null, 'Färre uteblivna besök'))),
-            h('li', { style: 'animation-delay:.9s' }, h('i', null, '★'), h('div', null, 'Betyg efter besöket', h('span', null, 'Nöjda kunder → Google-recension'))))),
+            h('li', { style: 'animation-delay:.6s' }, h('i', null, '⏰'), h('div', null, 'Påminnelse 24 h innan', h('span', null, 'Färre uteblivna besök'))))),
         h('div', { class: 'kai-phone', 'aria-label': 'Exempel på bekräftelse-sms' }, screen)));
       (async () => {
         await sleep(500); screen.append(h('div', { class: 'kai-sms' }, `Hej! Din bokning är bekräftad: ${st.svc} med ${st.who}, ${when}. Avboka/ändra: länk i mejlet. /${biz}`));
@@ -215,7 +213,7 @@ export function savings(p, ctx) {
     resultEl = h('div', { class: 'kai-result', 'aria-live': 'polite' },
       h('span', { class: 'kai-kick' }, 'Potentiell tidsbesparing'),
       h('div', { class: 'kai-big' }, big, h('span', null, 'timmar per vecka')),
-      h('div', { class: 'kai-trio' }, h('div', null, wk, h('small', null, 'tim / vecka')), h('div', null, mo, h('small', null, 'tim / månad')), h('div', null, yr, h('small', null, 'tim / år'))),
+      h('p', { style: 'margin:2px 0 10px;font-size:13px;color:rgba(255,255,255,.8)' }, '≈ ', mo, ' tim/månad · ', yr, ' tim/år'),
       h('div', { class: 'kai-bars' },
         h('div', { class: 'kai-bar' }, h('span', null, 'Admin i dag'), h('span', { class: 'tr' }, barA), h('span', null, `${fmt(r.hrs, 1)} h`)),
         h('div', { class: 'kai-bar after' }, h('span', null, 'Med automation'), h('span', { class: 'tr' }, barB), h('span', { class: 'after-v' }, `${fmt(r.hrs - r.week, 1)} h`))),
@@ -323,7 +321,7 @@ export function solutionFlow(p, ctx) {
     const [ic, lab] = KIND[s.kind] || KIND.action;
     const li = h('li', { class: `kai-node k-${s.kind}`, style: `animation-delay:${0.15 + i * 0.22}s` },
       h('span', { class: 'kai-ndot', html: svg(ic, 16) }),
-      h('button', { type: 'button', 'aria-expanded': 'false', onclick: (e) => { const o = li.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', String(o)); if (o) ctx.event('flow_step', s.kind); } }, h('b', null, s.title, h('small', null, lab))),
+      h('button', { type: 'button', 'aria-expanded': 'false', onclick: (e) => { const o = li.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', String(o)); if (o) ctx.event('flow_step', s.kind); } }, h('b', null, s.title)),
       h('div', { class: 'det' }, h('div', null, h('p', null, s.detail))));
     return li;
   }));
@@ -333,7 +331,6 @@ export function solutionFlow(p, ctx) {
     h('div', { class: 'kai-flow-hd' }, h('small', null, 'Lösningsskiss · Kela AI'), h('h4', null, p.title), p.problem ? h('q', null, p.problem) : null),
     list,
     h('div', { class: 'kai-flow-ft' },
-      p.systems?.length ? h('div', { class: 'kai-sys', 'aria-label': 'Berörda system' }, p.systems.map((x) => h('span', null, x))) : null,
       p.gains?.length ? h('ul', { class: 'kai-gains' }, p.gains.map((g) => h('li', null, g))) : null,
       h('p', { class: 'kai-q', style: 'margin:6px 0 10px' }, 'Vill du att vi bygger något liknande åt er?'),
       h('div', { class: 'kai-btnrow' }, h('button', { type: 'button', class: 'kai-btn pri', onclick: () => { ctx.event('demo_complete', 'solution_flow'); ctx.send('Ja, vi vill att ni bygger något liknande. Gör en projektbrief.'); } }, 'Ja – gör en projektbrief'), h('button', { type: 'button', class: 'kai-btn', onclick: () => ctx.send('Jag vill boka ett möte om det här.') }, 'Boka möte'))));

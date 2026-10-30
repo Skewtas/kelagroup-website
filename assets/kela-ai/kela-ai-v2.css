@@ -35,18 +35,18 @@
 @keyframes kai-drift{to{transform:translate(40px,30px) scale(1.1)}}
 
 /* Header */
-.kai-hd{position:relative;z-index:3;display:flex;align-items:center;gap:12px;padding:16px 14px 14px 18px;background:rgba(255,251,251,.7);-webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6);border-bottom:1px solid var(--k-line)}
-.kai-hd-orb{width:42px;height:42px;flex:none}
+.kai-hd{position:relative;z-index:3;display:flex;align-items:center;gap:10px;padding:12px 10px 12px 16px;background:rgba(255,251,251,.7);-webkit-backdrop-filter:blur(20px) saturate(1.6);backdrop-filter:blur(20px) saturate(1.6);border-bottom:1px solid var(--k-line)}
+.kai-hd-orb{width:32px;height:32px;flex:none}
 .kai-id{min-width:0;flex:1}
-.kai-id h2{margin:0;font:400 17px/1 var(--k-display);letter-spacing:-.01em;color:var(--k-wine);display:flex;align-items:center;gap:8px}
+.kai-id h2{margin:0;font:400 15px/1 var(--k-display);letter-spacing:-.01em;color:var(--k-wine);display:flex;align-items:center;gap:8px}
 .kai-id h2 em{font:700 9.5px/1 var(--k-sans);font-style:normal;letter-spacing:.14em;color:var(--k-wine);background:var(--k-pink);border-radius:999px;padding:4px 7px 3px}
 .kai-id p{margin:4px 0 0;font-size:12.5px;color:var(--k-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kai-status{display:inline-flex;align-items:center;gap:6px;margin-top:5px;font-size:11.5px;font-weight:600;color:var(--k-muted)}
+.kai-status{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-size:11px;font-weight:600;color:var(--k-muted)}
 .kai-status b{width:7px;height:7px;border-radius:50%;background:var(--k-ok);box-shadow:0 0 0 3px rgba(31,138,91,.15);animation:kai-blink 2.4s ease-in-out infinite}
 .kai-status.demo b{background:var(--k-warn);box-shadow:0 0 0 3px rgba(180,105,26,.15)}
 .kai-status.human b{background:#2E6BE6;box-shadow:0 0 0 3px rgba(46,107,230,.15)}
 @keyframes kai-blink{50%{opacity:.45}}
-.kai-hd-act{display:flex;gap:2px;margin-left:auto;align-self:flex-start}
+.kai-hd-act{display:flex;gap:2px;margin-left:auto}
 .kai-ib{width:36px;height:36px;display:grid;place-items:center;border:0;border-radius:12px;background:transparent;color:var(--k-wine);cursor:pointer;transition:background .2s,transform .3s var(--k-ease)}
 .kai-ib:hover{background:rgba(92,26,38,.07)}
 .kai-ib:active{transform:scale(.92)}
@@ -92,7 +92,7 @@
 .kai-scroll{position:relative;z-index:1;flex:1;overflow-y:auto;overscroll-behavior:contain;padding:18px 18px 8px;scrollbar-width:thin;scrollbar-color:rgba(92,26,38,.2) transparent}
 .kai-msg{display:flex;gap:10px;margin:0 0 16px;animation:kai-rise .55s var(--k-ease) both}
 @keyframes kai-rise{from{opacity:0;transform:translateY(10px) scale(.985)}to{opacity:1;transform:none}}
-.kai-msg .kai-av{width:26px;height:26px;flex:none;margin-top:1px}
+.kai-msg .kai-av{width:22px;height:22px;flex:none;margin-top:2px}
 .kai-msg.bot .kai-body{min-width:0;flex:1}
 .kai-msg.bot .kai-txt{font-size:15px;line-height:1.6;color:var(--k-ink)}
 .kai-txt p{margin:0 0 .6em}
@@ -126,38 +126,18 @@
 
 /* Välkomstvy */
 .kai-welcome{padding:6px 0 4px}
-.kai-hello{display:flex;gap:12px;align-items:flex-start;margin-bottom:18px}
-.kai-hello .kai-av{width:34px;height:34px;flex:none}
+.kai-hello{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px}
+.kai-hello .kai-av{width:28px;height:28px;flex:none}
 .kai-hello .kai-txt{font-size:15.5px}
-.kai-hello .kai-txt p:first-child{font:400 22px/1.15 var(--k-display);color:var(--k-wine);letter-spacing:-.02em;margin-bottom:.45em}
-.kai-starters{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.kai-starter{--px:50%;--py:50%;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:6px;min-height:132px;padding:14px 14px 13px;text-align:left;border:1px solid var(--k-line);border-radius:20px;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);cursor:pointer;
-  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 10px 26px -20px rgba(92,26,38,.55);transition:transform .45s var(--k-ease),box-shadow .35s,border-color .3s;animation:kai-rise .6s var(--k-ease) both}
-.kai-starter:nth-child(2){animation-delay:.06s}.kai-starter:nth-child(3){animation-delay:.12s}.kai-starter:nth-child(4){animation-delay:.18s}
-.kai-starter::before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(260px circle at var(--px) var(--py),rgba(243,211,215,.75),transparent 45%);opacity:0;transition:opacity .35s;pointer-events:none}
-.kai-starter:hover{transform:translateY(-3px);border-color:rgba(92,26,38,.22);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 22px 40px -22px rgba(92,26,38,.6)}
-.kai-starter:hover::before{opacity:1}
-.kai-starter:active{transform:scale(.97)}
-.kai-starter>*{position:relative}
-.kai-starter .kai-n{font:700 10.5px/1 var(--k-mono);color:var(--k-faint);letter-spacing:.06em}
-.kai-st-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px}
-.kai-starter .kai-ic{width:34px;height:34px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(145deg,var(--k-blush),#fff);color:var(--k-wine);box-shadow:0 0 0 1px var(--k-line)}
-.kai-starter .kai-ic svg{width:18px;height:18px;transition:transform .5s var(--k-ease)}
-.kai-starter:hover .kai-ic svg{transform:rotate(-8deg) scale(1.12)}
-.kai-starter b{margin-top:auto;padding-top:2px;font-size:14.5px;line-height:1.2;color:var(--k-ink);letter-spacing:-.01em}
-.kai-starter span{font-size:12.5px;line-height:1.35;color:var(--k-muted)}
-.kai-ripple{position:absolute;border-radius:50%;background:rgba(232,160,174,.45);transform:scale(0);animation:kai-ripple .65s ease-out forwards;pointer-events:none}
-@keyframes kai-ripple{to{transform:scale(1);opacity:0}}
-.kai-challenge{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;width:100%;margin-top:10px;padding:16px 16px;border:0;border-radius:20px;text-align:left;cursor:pointer;color:#fff;
-  background:radial-gradient(120% 140% at 0% 0%,#8A2E43 0,#5C1A26 45%,#2E0C12 100%);box-shadow:0 22px 40px -22px rgba(46,12,18,.85);transition:transform .45s var(--k-ease);animation:kai-rise .6s .24s var(--k-ease) both}
-.kai-challenge::after{content:"";position:absolute;inset:-60%;background:conic-gradient(from 0deg,transparent,rgba(255,200,212,.12),transparent 30%);animation:kai-o-spin 7s linear infinite;pointer-events:none}
-.kai-challenge:hover{transform:translateY(-3px)}
-.kai-challenge>*{position:relative;z-index:1}
-.kai-challenge .kai-av{width:38px;height:38px;flex:none}
-.kai-challenge small{display:block;font:700 10.5px/1 var(--k-sans);letter-spacing:.18em;color:#F3BFC9;margin-bottom:5px}
-.kai-challenge b{display:block;font:400 16px/1.2 var(--k-display);letter-spacing:-.01em;color:#fff}
-.kai-challenge span{display:block;font-size:12.5px;color:rgba(255,255,255,.75);margin-top:4px;line-height:1.35}
-.kai-challenge .kai-go{margin-left:auto;width:32px;height:32px;flex:none;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.14)}
+.kai-hello .kai-txt p:first-child{font:400 18px/1.2 var(--k-display);color:var(--k-wine);letter-spacing:-.015em;margin-bottom:.3em}
+.kai-starters{display:flex;flex-direction:column;border-radius:18px;background:#fff;box-shadow:0 0 0 1px var(--k-line);overflow:hidden;animation:kai-rise .5s var(--k-ease) both}
+.kai-starter{display:flex;align-items:center;gap:12px;width:100%;padding:13px 14px;border:0;border-top:1px solid var(--k-line);background:transparent;text-align:left;cursor:pointer;transition:background .2s}
+.kai-starter:first-child{border-top:0}
+.kai-starter:hover{background:var(--k-blush)}
+.kai-starter .kai-ic{width:28px;height:28px;flex:none;display:grid;place-items:center;border-radius:9px;background:var(--k-blush);color:var(--k-wine)}
+.kai-starter b{flex:1;font-size:14.5px;font-weight:600;color:var(--k-ink)}
+.kai-starter .kai-chev{color:var(--k-faint);opacity:0;transform:translateX(-4px);transition:opacity .2s,transform .3s var(--k-ease)}
+.kai-starter:hover .kai-chev{opacity:1;transform:none}
 
 /* Förslag */
 .kai-sugg{position:relative;z-index:2;display:flex;gap:6px;overflow-x:auto;padding:4px 16px 8px;scrollbar-width:none}

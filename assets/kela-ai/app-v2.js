@@ -1,6 +1,6 @@
-// KELA AI – själva assistenten. Laddas av loader-v1.js först när besökaren visar intresse.
+// KELA AI – själva assistenten. Laddas av loader-v2.js först när besökaren visar intresse.
 // Presentation här; AI-logik, verktyg, affärsregler och data ligger på servern (/api/ai).
-import { h, svg, orbEl, RENDERERS, UI_LABEL } from './ui-v1.js';
+import { h, svg, orbEl, RENDERERS, UI_LABEL } from './ui-v2.js';
 
 const T = {
   sv: { placeholder: 'Fråga vad som helst…', challenge: 'Beskriv ett problem i ert företag…', human: 'Skriv till Kela-teamet…', send: 'Skicka', stop: 'Stoppa', close: 'Stäng', menu: 'Meny', mem: 'Det här vet jag', expand: 'Bredare vy', mic: 'Prata med Kela AI', attach: 'Bifoga bild',
@@ -103,15 +103,14 @@ export function create({ api, tenant, base, config, launcher, onState }) {
   const imgBtn = h('button', { type: 'button', class: 'kai-ib', onclick: () => fileIn.click() });
   const fileIn = h('input', { type: 'file', accept: 'image/png,image/jpeg,image/webp', hidden: true });
   const attachPrev = h('div', { class: 'kai-attach-prev', hidden: true });
-  const composer = h('form', { class: 'kai-composer', novalidate: true }, features.images !== false ? imgBtn : null, fileIn, ta, (features.voice !== false && (window.SpeechRecognition || window.webkitSpeechRecognition)) ? micBtn : null, sendBtn);
+  const composer = h('form', { class: 'kai-composer', novalidate: true }, fileIn, ta, (features.voice !== false && (window.SpeechRecognition || window.webkitSpeechRecognition)) ? micBtn : null, sendBtn);
   const foot = h('div', { class: 'kai-foot' });
   const sheet = h('div', { class: 'kai-sheet', onclick: (e) => { if (e.target === sheet) closeSheet(); } }, h('div', { class: 'kai-sheet-in', role: 'dialog', 'aria-modal': 'true' }));
   const voiceEl = h('div', { class: 'kai-voice', role: 'dialog', 'aria-label': 'Röstläge' });
   const titleId = 'kai-title-' + Math.random().toString(36).slice(2, 7);
   const panel = h('section', { class: 'kai-panel', role: 'dialog', 'aria-labelledby': titleId, 'aria-hidden': 'true' },
-    h('div', { class: 'kai-bg', 'aria-hidden': 'true' }, h('i'), h('i'), h('i')),
-    h('header', { class: 'kai-hd' }, hdOrb, h('div', { class: 'kai-id' }, h('h2', { id: titleId, tabindex: '-1' }, cfg.brand?.name || 'KELA AI'), h('p', null, cfg.brand?.tagline || ''), statusEl), h('div', { class: 'kai-hd-act' }, memBtn, wideBtn, menuBtn, closeBtn)),
-    journey, scroller, live, sugg, attachPrev, composer, foot, sheet, voiceEl);
+    h('header', { class: 'kai-hd' }, hdOrb, h('div', { class: 'kai-id' }, h('h2', { id: titleId, tabindex: '-1' }, cfg.brand?.name || 'KELA AI'), statusEl), h('div', { class: 'kai-hd-act' }, memBtn, menuBtn, closeBtn)),
+    scroller, live, sugg, attachPrev, composer, foot, sheet, voiceEl);
   if (cfg.brand?.accent) { panel.style.setProperty('--k-wine', cfg.brand.accent); panel.style.setProperty('--k-pink', cfg.brand.accent_soft || '#F3D3D7'); panel.style.setProperty('--k-ink', cfg.brand.ink || '#2E0C12'); }
   document.body.append(panel);
 
@@ -229,33 +228,26 @@ export function create({ api, tenant, base, config, launcher, onState }) {
     journey.scrollLeft = journey.scrollWidth;
   }
   const SUGG = {
-    booking_demo: ['Hur kopplas det till vårt system?', 'Räkna på besparingen', 'Boka ett möte'],
-    savings: ['Vad skulle ni automatisera först?', 'Gör en projektbrief', 'Visa ett kundcase'],
-    integration_demo: ['Kan ni koppla det till vårt system?', 'Vad kostar en sådan lösning?', 'Utmana Kela AI'],
-    solution_flow: ['Gör en projektbrief', 'Hur lång tid tar det att bygga?', 'Boka ett möte'],
-    cards: ['Visa en bokningsdemo', 'Räkna på besparingen', 'Utmana Kela AI'],
-    project_brief: ['Vad händer efter att jag skickat?', 'Hur ser första mötet ut?'],
+    // Komponenter med egna knappar får inga extra förslag (mindre brus).
+    booking_demo: ['Hur kopplas det till vårt system?'],
+    cards: ['Visa en bokningsdemo', 'Utmana Kela AI'],
   };
   function suggestFor(type) { chips(SUGG[type] || []); }
   function chips(list, hot) {
-    sugg.replaceChildren(...list.slice(0, 4).map((x, i) => h('button', { type: 'button', class: 'kai-chip' + (hot && i === 0 ? ' hot' : ''), style: `animation-delay:${i * 60}ms`, onclick: () => { if (x === 'Utmana Kela AI') return challenge(); send(x); } }, x)));
+    sugg.replaceChildren(...list.slice(0, 2).map((x, i) => h('button', { type: 'button', class: 'kai-chip' + (hot && i === 0 ? ' hot' : ''), style: `animation-delay:${i * 60}ms`, onclick: () => { if (x === 'Utmana Kela AI') return challenge(); send(x); } }, x)));
   }
 
   // ---------- Välkomst ----------
   function welcome(tipPrompt) {
     const starters = (cfg.starters && cfg.starters.length ? cfg.starters : ['surprise', 'automate', 'build', 'talk'].map((id) => ({ id, icon: { surprise: 'spark', automate: 'bolt', build: 'diamond', talk: 'calendar' }[id], title: EN_STARTERS[id][0], text: EN_STARTERS[id][1], prompt: EN_STARTERS[id][2] })))
       .map((s) => (state.lang === 'en' && EN_STARTERS[s.id] ? { ...s, title: EN_STARTERS[s.id][0], text: EN_STARTERS[s.id][1], prompt: EN_STARTERS[s.id][2] } : s));
-    const wtext = state.lang === 'en' ? "Hi there! 👋\nI'm Kela's AI. I can show you what we build, help you find smarter solutions for your business, or calculate how much time you could save.\n\nWhat would you like to explore?" : (cfg.welcome || 'Hej där! 👋\nJag är Kelas AI. Jag kan visa vad vi bygger, hjälpa dig hitta smartare lösningar för ditt företag eller räkna på hur mycket tid ni skulle kunna spara.\n\nVad vill du utforska?');
+    const wtext = state.lang === 'en' ? "Hi! 👋\nI'm Kela's AI. What would you like to explore?" : (cfg.welcome || 'Hej! 👋\nJag är Kelas AI. Vad vill du utforska?');
     const hello = h('div', { class: 'kai-txt' });
     const wrap = h('div', { class: 'kai-welcome' },
       h('div', { class: 'kai-hello' }, orbEl(), hello),
-      h('div', { class: 'kai-starters' }, starters.map((s, i) => {
-        const b = h('button', { type: 'button', class: 'kai-starter', onpointermove: (e) => { const r = b.getBoundingClientRect(); b.style.setProperty('--px', `${e.clientX - r.left}px`); b.style.setProperty('--py', `${e.clientY - r.top}px`); },
-          onclick: (e) => { ripple(b, e); event('starter', s.id); setTimeout(() => send(s.prompt), reduce ? 0 : 180); } },
-          h('span', { class: 'kai-st-top' }, h('span', { class: 'kai-n' }, String(i + 1).padStart(2, '0')), h('span', { class: 'kai-ic', html: svg(s.icon, 18) })), h('b', null, s.title), h('span', null, s.text));
-        return b;
-      })),
-      h('button', { type: 'button', class: 'kai-challenge', onclick: () => challenge() }, orbEl(), h('div', null, h('small', null, state.lang === 'en' ? 'CHALLENGE OUR AI' : 'UTMANA VÅR AI'), h('b', null, state.lang === 'en' ? 'Give me a problem in your business.' : 'Ge mig ett problem i ditt företag.'), h('span', null, state.lang === 'en' ? "I'll show how we could solve it." : 'Jag visar hur vi skulle kunna lösa det.')), h('span', { class: 'kai-go', html: ic('send', 16) })));
+      h('div', { class: 'kai-starters' }, [...starters.map((s) => h('button', { type: 'button', class: 'kai-starter', onclick: () => { event('starter', s.id); send(s.prompt); } },
+          h('span', { class: 'kai-ic', html: svg(s.icon, 16) }), h('b', null, s.title), h('span', { class: 'kai-chev', html: ic('send', 14) }))),
+        h('button', { type: 'button', class: 'kai-starter', onclick: () => challenge() }, h('span', { class: 'kai-ic', html: svg('flow', 16) }), h('b', null, state.lang === 'en' ? 'Challenge Kela AI' : 'Utmana Kela AI'), h('span', { class: 'kai-chev', html: ic('send', 14) }))]));
     scroller.append(wrap);
     // Välkomsttexten "skrivs" fram – snabbt, och utan att blockera något.
     const paras = wtext;
@@ -436,6 +428,7 @@ export function create({ api, tenant, base, config, launcher, onState }) {
         h('button', { type: 'button', onclick: () => { closeSheet(); reset(); } }, h('span', { html: ic('plus', 18) }), t('newChat')),
         h('button', { type: 'button', onclick: () => { state.lang = state.lang === 'sv' ? 'en' : 'sv'; ss.set('lang', state.lang); closeSheet(); applyLang(); if (!scroller.querySelector('.kai-msg')) { scroller.replaceChildren(); welcome(); } } }, h('span', { html: ic('globe', 18) }), t('lang')),
         Object.keys(state.profile || {}).length ? h('button', { type: 'button', onclick: () => openSheet('mem') }, h('span', { html: ic('brain', 18) }), t('mem')) : null,
+        features.images !== false ? h('button', { type: 'button', onclick: () => { closeSheet(); fileIn.click(); } }, h('span', { html: ic('img', 18) }), t('attach')) : null,
         h('button', { type: 'button', onclick: () => { download(); closeSheet(); } }, h('span', { html: ic('dl', 18) }), t('download')),
         h('button', { type: 'button', onclick: () => openSheet('about') }, h('span', { html: ic('shield', 18) }), t('about')),
         state.conv ? h('button', { type: 'button', class: 'danger', onclick: () => openSheet('delete') }, h('span', { html: ic('trash', 18) }), t('del')) : null));
