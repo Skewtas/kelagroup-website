@@ -12,6 +12,8 @@ export interface Env {
   ANTHROPIC_API_KEY?: string;
   /** Valfritt: annan modell än standard (claude-opus-5-5). */
   ANTHROPIC_MODEL?: string;
+  /** Valfritt: modell för Kela AI på hemsidan (standard claude-opus-5-5). */
+  KELA_AI_MODEL?: string;
   /** Endast tester: pekar SDK:n mot en lokal testserver. */
   ANTHROPIC_BASE_URL?: string;
 }

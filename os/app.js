@@ -53,7 +53,7 @@ const NAV = [
   ] },
   { g: 'KELA Systems', items: [
     { id: 'hemsidor', label: 'Kundernas hemsidor', icon: 'server', phase: 3 },
-    { id: 'ai-chattar', label: 'AI-chattar', icon: 'bot', phase: 3 },
+    { id: 'kela-ai', label: 'Kela AI – chattar', icon: 'bot', href: '#/kela-ai', perm: 'ai:read' },
     { id: 'bokning', label: 'Bokningssystem', icon: 'calCheck', phase: 3 },
     { id: 'integrationer', label: 'Integrationer', icon: 'plug', phase: 3 },
     { id: 'drift', label: 'Driftstatus', icon: 'activity', phase: 3 },
@@ -87,6 +87,7 @@ const ROUTES = [
   [/^anvandare$/, 'anvandare', () => import('./views/users.js')],
   [/^installningar$/, 'installningar', () => import('./views/settings.js')],
   [/^logg$/, 'logg', () => import('./views/audit.js')],
+  [/^kela-ai(?:\/(?<tab>[a-z]+))?$/, 'kela-ai', () => import('./views/ai.js')],
   [/^p\/(?<key>[a-z-]+)$/, null, () => import('./views/planned.js')],
 ];
 

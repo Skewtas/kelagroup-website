@@ -518,3 +518,30 @@ a.tl{border-radius:10px}a.tl:hover .tl-t{color:var(--accent)}
 .notice.violet{background:var(--violet-soft);border-color:transparent;color:var(--text)}
 .notice.violet .ico{color:var(--violet)}
 @media (max-width:760px){.dp-row{grid-template-columns:1fr 1fr}.dp-row .mini.w2,.dp-row .mini.full{grid-column:1 / -1}}
+
+/* ---------- Kela AI ---------- */
+.ai-chart{width:100%;height:auto;display:block}
+.ai-chart rect{fill:var(--accent);opacity:.85}
+.ai-chart rect:hover{opacity:1}
+.ai-chart text{font-size:10px;fill:var(--text-3)}
+.ai-tr{max-height:52vh;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:4px 2px}
+.ai-m{display:flex;flex-direction:column;gap:4px;max-width:88%}
+.ai-m.user{align-self:flex-end;align-items:flex-end}
+.ai-who{font-size:11.5px;font-weight:600;color:var(--text-3)}
+.ai-bubble{padding:9px 12px;border-radius:14px;background:var(--surface-2);border:1px solid var(--border);white-space:pre-wrap;overflow-wrap:anywhere;font-size:13.5px;line-height:1.5}
+.ai-m.user .ai-bubble{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.ai-m.staff .ai-bubble{background:var(--blue-soft);border-color:transparent}
+.ai-uis{display:flex;flex-wrap:wrap;gap:6px}
+.ai-reply{display:grid;gap:10px}
+.ai-row{display:grid;gap:8px;margin-bottom:8px}
+.ai-row.g4{grid-template-columns:110px 1fr 1.3fr 1.6fr}
+.ai-row.g3x{grid-template-columns:1fr auto;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.ai-row.g3x [data-rm]{grid-column:2;grid-row:1}
+.ai-row.g3x [data-k=tip],.ai-row.g3x [data-k=prompt]{grid-column:1/-1}
+.ai-kn{display:grid;gap:6px;margin-bottom:12px}
+.ai-mono{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:12.5px}
+.ai-embed{display:flex;gap:8px;align-items:center;padding:10px 12px;border-radius:var(--r-s);background:var(--surface-2);border:1px solid var(--border)}
+.ai-embed code{flex:1;min-width:0;font-size:11.5px;overflow-wrap:anywhere}
+.ai-save{position:sticky;bottom:0;padding:12px 0;background:linear-gradient(transparent,var(--bg) 35%);z-index:2}
+.w-auto{width:auto}
+@media (max-width:900px){.ai-row.g4{grid-template-columns:1fr}}

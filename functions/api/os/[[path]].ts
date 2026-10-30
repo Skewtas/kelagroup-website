@@ -7,6 +7,7 @@ import { serviceRoutes } from '../../_lib/routes/services';
 import { quoteRoutes } from '../../_lib/routes/quotes';
 import { adminRoutes } from '../../_lib/routes/admin';
 import { projectRoutes } from '../../_lib/routes/projects';
+import { aiRoutes } from '../../_lib/routes/ai';
 
 const router = new Router();
 authRoutes(router);
@@ -15,5 +16,6 @@ serviceRoutes(router);
 quoteRoutes(router);
 adminRoutes(router);
 projectRoutes(router);
+aiRoutes(router);
 
 export const onRequest: PagesFunction<Env> = ({ request, env }) => router.handle(request, env, '/api/os');

@@ -106,6 +106,7 @@ Rekommenderas inför produktion (ej gjort):
 | `OS_SETUP_TOKEN` | Secret | Bara vid installation | Engångsnyckel för att skapa första superadmin. Ta bort efteråt. Skapa: `openssl rand -hex 24` |
 | `OS_ENV` | Variabel | Nej | Sätts bara lokalt till `development`. |
 | `ANTHROPIC_API_KEY` | Secret | För AI | Krävs för AI-utkast (och gör hemsidans chatt till riktig AI). Utan den visar KELA OS att AI inte är aktiverat. |
+| `KELA_AI_MODEL` | Variabel | Nej | Modell för Kela AI på hemsidan (standard `claude-opus-5-5`). Se [KELA-AI.md](KELA-AI.md). |
 
 Lokalt läses värdena från `.dev.vars` (gitignorerad).
 
@@ -113,7 +114,7 @@ Lokalt läses värdena från `.dev.vars` (gitignorerad).
 
 **Status 2026-10-22:** produktionsdatabasen `kela-os` (EU-jurisdiktion, id `c598c57c-…`) är skapad och migrerad, kopplad som `DB` i Pages-projektet tillsammans med `OS_SECRET_KEY` och `OS_SETUP_TOKEN`. Installationsnyckeln finns lokalt i den gitignorerade filen `.os-setup-token`. Kvar: skapa första kontot på kelagroup.se/os/ och därefter ta bort `OS_SETUP_TOKEN` i Cloudflare.
 
-Nya migreringar + publicering: `bash scripts/deploy.sh --migrate`.
+Nya migreringar + publicering: `bash scripts/deploy.sh --migrate`. (Migrering `0003_kela_ai.sql` – Kela AI – väntar på att köras i produktion.)
 
 Ursprungliga steg (för referens):
 

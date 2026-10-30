@@ -31,4 +31,7 @@ npm install && npm run db:migrate:local
 npm run dev      # http://localhost:8788/os/
 npm test
 ```
+## Kela AI (AI-assistenten på hemsidan)
+Orben/chatten på alla sidor: `assets/kela-ai/`, API `/api/ai/*`, admin i KELA OS → Kela AI. Allt om den: [docs/KELA-AI.md](docs/KELA-AI.md).
+
 Publicera alltid med `bash scripts/deploy.sh` (aldrig `wrangler pages deploy .` direkt från arbetskatalogen).
