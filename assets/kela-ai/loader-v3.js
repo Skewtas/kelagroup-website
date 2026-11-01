@@ -1,6 +1,6 @@
 /* KELA AI – laddare (≈ 8 kB). Visar den levande AI-orben direkt och laddar själva assistenten först när
    besökaren visar intresse (hovrar, fokuserar, klickar eller efter en stund i viloläge) – sajten förblir snabb.
-   Inbäddning:  <script src="/assets/kela-ai/loader-v2.js" data-tenant="kela" defer></script>
+   Inbäddning:  <script src="/assets/kela-ai/loader-v3.js" data-tenant="kela" defer></script>
    Tangentbord: orben är en knapp (Enter/Mellanslag). Ctrl/Cmd + K öppnar assistenten. Esc stänger. */
 (function () {
   if (window.KelaAI) return;
@@ -17,12 +17,12 @@
     '.kai-launch.kai-hidden{opacity:0;visibility:hidden;transform:scale(.4);transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .3s,visibility 0s .45s}' +
     '.kai-orb{--mx:30%;--my:28%;position:relative;display:block;width:100%;height:100%;border-radius:50%;isolation:isolate;' +
       'background:radial-gradient(circle at var(--mx) var(--my),#fff 0,#FBE3E7 14%,#EBA9B5 38%,#A8445A 66%,#5C1A26 88%,#3A0E17 100%);' +
-      'box-shadow:0 18px 40px -12px rgba(92,26,38,.65),0 0 0 1.5px rgba(255,255,255,.55),inset 0 -6px 16px rgba(46,12,18,.45),inset 0 4px 10px rgba(255,255,255,.4);animation:kai-breathe 7s ease-in-out infinite}' +
-    '.kai-orb::before{content:"";position:absolute;inset:8%;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 20%,rgba(255,220,228,.85) 32%,transparent 46%,rgba(255,255,255,.55) 64%,transparent 80%);filter:blur(5px);mix-blend-mode:screen;animation:kai-spin 9s linear infinite;z-index:1}' +
+      'box-shadow:0 18px 40px -12px rgba(92,26,38,.65),0 0 0 1.5px rgba(255,255,255,.55),inset 0 -6px 16px rgba(46,12,18,.45),inset 0 4px 10px rgba(255,255,255,.4)}' +
+    '.kai-orb::before{content:"";position:absolute;inset:8%;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 20%,rgba(255,220,228,.85) 32%,transparent 46%,rgba(255,255,255,.55) 64%,transparent 80%);filter:blur(5px);mix-blend-mode:screen;opacity:.45;z-index:1}' +
     '.kai-orb::after{content:"";position:absolute;left:22%;top:14%;width:36%;height:24%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,255,255,0));filter:blur(1px);z-index:2}' +
     '.kai-orb i{position:absolute;inset:-6px;border-radius:50%;border:1.5px solid rgba(232,160,174,.55);opacity:0;z-index:0}' +
         '.kai-launch:hover{transform:scale(1.04)}' +
-        '.kai-launch[data-busy] .kai-orb::before{animation-duration:1.4s}' +
+        '.kai-launch[data-busy] .kai-orb::before{opacity:1;animation:kai-spin 1.4s linear infinite}' +
     '.kai-dot{position:absolute;right:2px;top:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#fff;color:#5C1A26;font:800 11px/18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 2px 8px rgba(46,12,18,.35);z-index:3;display:none}' +
     '.kai-launch[data-unread] .kai-dot{display:block}' +
     '.kai-tip{position:fixed;right:calc(max(20px,env(safe-area-inset-right)) + 68px);bottom:calc(max(20px,env(safe-area-inset-bottom)) + 8px);z-index:2147483000;max-width:min(300px,calc(100vw - 120px));padding:12px 16px;border-radius:18px 18px 6px 18px;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#2E0C12;font:600 14px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 18px 50px -18px rgba(92,26,38,.5),0 0 0 1px rgba(92,26,38,.08);opacity:0;transform:translateX(10px) scale(.96);transform-origin:right bottom;transition:opacity .35s,transform .5s cubic-bezier(.22,1,.36,1);pointer-events:none}' +
@@ -60,21 +60,6 @@
     .then(function (r) { return r.ok ? r.json() : { offline: true }; })
     .catch(function () { return { offline: true }; });
 
-  // ---------- Levande ljus: orben följer muspekaren när den kommer nära ----------
-  var orb = btn.firstChild, raf = 0;
-  if (!reduce) window.addEventListener('pointermove', function (e) {
-    if (raf) return;
-    raf = requestAnimationFrame(function () {
-      raf = 0;
-      var r = btn.getBoundingClientRect(); var cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-      var dx = e.clientX - cx, dy = e.clientY - cy, d = Math.hypot(dx, dy);
-      if (d > 260) { orb.style.removeProperty('--mx'); orb.style.removeProperty('--my'); return; }
-      var k = Math.max(0, 1 - d / 260);
-      orb.style.setProperty('--mx', (50 + (dx / (d || 1)) * 22 * k) + '%');
-      orb.style.setProperty('--my', (50 + (dy / (d || 1)) * 22 * k) + '%');
-    });
-  }, { passive: true });
-
   // ---------- Tips vid hovring + ett kontextuellt tips per session ----------
   var hoverTexts = ['Fråga mig vad som helst. Eller utmana mig.', 'Nyfiken på vad AI kan göra för ditt företag?', 'Jag är mer än en vanlig chatbot.', 'Har ni något som borde automatiseras?'];
   var hi = 0, tipTimer = 0, ctxRule = null;
@@ -97,47 +82,18 @@
   cfgPromise.then(function (cfg) {
     if (cfg && cfg.hover_texts && cfg.hover_texts.length) hoverTexts = cfg.hover_texts;
     if (cfg && cfg.brand && cfg.brand.name) btn.setAttribute('aria-label', 'Öppna ' + cfg.brand.name + ' – AI-assistent');
-    if (ss.get('tipDone') || ss.get('opened')) return;
+    // Sidans sammanhang visas som ett förslag när chatten öppnas – aldrig som en popup på sidan.
     var path = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
     var rules = (cfg && cfg.page_rules) || [];
     for (var i = 0; i < rules.length; i++) if (path === rules[i].match || path.indexOf(rules[i].match + '/') === 0) { ctxRule = rules[i]; break; }
-    if (!ctxRule) return;
-    // Visas en gång per session, först när besökaren faktiskt läst en stund – aldrig som popup.
-    var engaged = 0, shown = false;
-    function bump() { engaged++; if (!shown && engaged > 2) { shown = true; setTimeout(function () { if (!open && !ss.get('tipDone')) { showTip(ctxRule.tip, true); ss.set('tipDone', '1'); hideTip(9000); } }, 600); } }
-    window.addEventListener('scroll', function onS() { bump(); if (shown) window.removeEventListener('scroll', onS); }, { passive: true });
-    setTimeout(bump, 9000); setTimeout(bump, 14000); setTimeout(bump, 18000);
-  });
-
-  // ---------- "Fråga Kela AI" om markerad text på sidan ----------
-  var ask = el('button', 'kai-ask', '<b aria-hidden="true"></b>Fråga Kela AI'); ask.type = 'button';
-  var askText = '';
-  document.addEventListener('mouseup', function (e) {
-    if (ask.contains(e.target)) return;
-    setTimeout(function () {
-      var sel = window.getSelection(); var t = sel ? String(sel).trim() : '';
-      var node = sel && sel.anchorNode && (sel.anchorNode.nodeType === 1 ? sel.anchorNode : sel.anchorNode.parentElement);
-      if (!t || t.length < 12 || t.length > 500 || !node || node.closest('input,textarea,[contenteditable],.kai-panel,nav,.nav')) { ask.classList.remove('kai-on'); return; }
-      var r = sel.getRangeAt(0).getBoundingClientRect();
-      askText = t;
-      if (!ask.parentNode) document.body.appendChild(ask);
-      ask.style.left = Math.max(8, Math.min(window.scrollX + r.left + r.width / 2 - 64, window.scrollX + document.documentElement.clientWidth - 150)) + 'px';
-      ask.style.top = (window.scrollY + r.top - 42) + 'px';
-      requestAnimationFrame(function () { ask.classList.add('kai-on'); });
-    }, 10);
-  });
-  document.addEventListener('mousedown', function (e) { if (!ask.contains(e.target)) ask.classList.remove('kai-on'); });
-  ask.addEventListener('click', function () {
-    ask.classList.remove('kai-on');
-    openAI({ prompt: 'Jag läste det här på er sida: "' + askText.slice(0, 400) + '" – kan du förklara vad det skulle betyda för mitt företag?', source: 'select_ask', send: true });
   });
 
   // ---------- Ladda appen ----------
   var appPromise = null, open = false;
   function warm() {
     if (!appPromise) {
-      var link = el('link'); link.rel = 'stylesheet'; link.href = BASE + 'kela-ai-v2.css'; document.head.appendChild(link);
-      appPromise = Promise.all([import(BASE + 'app-v2.js'), cfgPromise, new Promise(function (res) { link.onload = res; link.onerror = res; })])
+      var link = el('link'); link.rel = 'stylesheet'; link.href = BASE + 'kela-ai-v3.css'; document.head.appendChild(link);
+      appPromise = Promise.all([import(BASE + 'app-v3.js'), cfgPromise, new Promise(function (res) { link.onload = res; link.onerror = res; })])
         .then(function (r) { return r[0].create({ api: API, tenant: TENANT, base: BASE, config: r[1], launcher: btn, onState: onState }); });
       appPromise.catch(function () { appPromise = null; });
     }
@@ -157,7 +113,7 @@
     return warm().then(function (app) { btn.removeAttribute('data-busy'); app.open(opts || {}); return app; })
       .catch(function () { btn.removeAttribute('data-busy'); location.href = '/kontakt'; });
   }
-  btn.addEventListener('click', function () { openAI({ source: 'orb' }); });
+  btn.addEventListener('click', function () { openAI({ source: 'orb', hint: ctxRule && ctxRule.prompt }); });
   document.addEventListener('keydown', function (e) {
     if ((e.metaKey || e.ctrlKey) && !e.altKey && (e.key === 'k' || e.key === 'K')) {
       var t = e.target; if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)) && !(t.closest && t.closest('.kai-panel'))) return;

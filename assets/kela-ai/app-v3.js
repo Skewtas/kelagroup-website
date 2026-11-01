@@ -1,6 +1,6 @@
-// KELA AI – själva assistenten. Laddas av loader-v2.js först när besökaren visar intresse.
+// KELA AI – själva assistenten. Laddas av loader-v3.js först när besökaren visar intresse.
 // Presentation här; AI-logik, verktyg, affärsregler och data ligger på servern (/api/ai).
-import { h, svg, orbEl, RENDERERS, UI_LABEL } from './ui-v2.js';
+import { h, svg, orbEl, RENDERERS, UI_LABEL } from './ui-v3.js';
 
 const T = {
   sv: { placeholder: 'Fråga vad som helst…', challenge: 'Beskriv ett problem i ert företag…', human: 'Skriv till Kela-teamet…', send: 'Skicka', stop: 'Stoppa', close: 'Stäng', menu: 'Meny', mem: 'Det här vet jag', expand: 'Bredare vy', mic: 'Prata med Kela AI', attach: 'Bifoga bild',
@@ -251,9 +251,8 @@ export function create({ api, tenant, base, config, launcher, onState }) {
     scroller.append(wrap);
     // Välkomsttexten "skrivs" fram – snabbt, och utan att blockera något.
     const paras = wtext;
-    if (reduce) hello.innerHTML = md(paras);
-    else { let i = 0; const tick = () => { i = Math.min(paras.length, i + 4); hello.innerHTML = md(paras.slice(0, i)); if (i < paras.length) setTimeout(tick, 16); }; setTimeout(tick, 120); }
-    if (tipPrompt) chips([tipPrompt], true);
+    hello.innerHTML = md(paras);
+    if (tipPrompt) chips([tipPrompt]);
   }
   function ripple(el, e) {
     if (reduce) return;
@@ -363,7 +362,6 @@ export function create({ api, tenant, base, config, launcher, onState }) {
     if (fellBack && !state.toldDemo) { state.toldDemo = true; r.text = '*(Jag kör i demoläge just nu.)* ' + r.text; }
     o.txt.replaceChildren(); setOrb('writing');
     if (reduce) { o.text = r.text; o.txt.innerHTML = md(o.text); }
-    else for (let i = 0; i <= r.text.length; i += 4) { o.text = r.text.slice(0, i); o.txt.innerHTML = md(o.text); scroll(); await new Promise((res) => setTimeout(res, 12)); }
     o.text = r.text; o.txt.innerHTML = md(o.text);
     if (r.ui) renderUi({ ...r.ui, id: 'l' + Date.now() }, o.body, o); else chips(['Överraska mig', 'Visa en bokningsdemo', 'Räkna på besparingen', 'Utmana Kela AI']);
     actions(o); live.textContent = plain(o.text);
@@ -566,7 +564,7 @@ export function create({ api, tenant, base, config, launcher, onState }) {
   vv?.addEventListener('resize', fitViewport); vv?.addEventListener('scroll', fitViewport);
   let booted = false;
   async function open(opts = {}) {
-    if (!booted) { booted = true; applyLang(); const had = await restore(); if (!had) welcome(opts.source === 'tip' ? opts.prompt : null); }
+    if (!booted) { booted = true; applyLang(); const had = await restore(); if (!had) welcome(opts.hint || null); }
     if (!state.open) {
       state.open = true; state.unread = 0;
       panel.setAttribute('aria-hidden', 'false'); placeOrigin(); fitViewport();
@@ -578,9 +576,8 @@ export function create({ api, tenant, base, config, launcher, onState }) {
       setOrb('done');
       if (state.status !== 'ai') poll();
     }
-    if (opts.prompt && opts.source !== 'tip') { if (opts.send) send(opts.prompt); else { ta.value = opts.prompt; autosize(); } }
+    if (opts.prompt) { if (opts.send) send(opts.prompt); else { ta.value = opts.prompt; autosize(); } }
     if (opts.source === 'select_ask') event('select_ask', 'page');
-    if (opts.source === 'tip') event('tip_click', location.pathname.split('/')[1] || 'home');
   }
   function close() {
     if (!state.open) return;

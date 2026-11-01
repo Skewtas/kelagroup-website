@@ -411,6 +411,25 @@
 .kai-panel.wide .kai-cards{grid-template-columns:repeat(4,1fr)}
 .kai-panel.wide .kai-starters{grid-template-columns:repeat(4,1fr)}
 
+
+/* ---------- Lugnt läge: stilla som standard, rörelse bara när AI:n arbetar ---------- */
+.kai-panel{clip-path:none;opacity:0;transform:translateY(8px);transition:opacity .22s ease,transform .3s var(--k-ease),visibility 0s .3s}
+.kai-panel.open{clip-path:none;opacity:1;transform:none;transition:opacity .22s ease,transform .3s var(--k-ease),visibility 0s}
+.kai-o,.kai-o::before{animation:none!important}
+.kai-o::before{opacity:.45}
+.kai-o i{display:none}
+.kai-hd-orb .kai-o[data-s=thinking],.kai-hd-orb .kai-o[data-s=writing],.kai-hd-orb .kai-o[data-s=building]{animation:kai-calm 1.8s ease-in-out infinite!important}
+@keyframes kai-calm{50%{opacity:.55}}
+.kai-voice .kai-o[data-s=listening]{transform:scale(var(--lvl,1))}
+.kai-status b{animation:none}
+@keyframes kai-rise{from{opacity:0}to{opacity:1}}
+@keyframes kai-sms{from{opacity:0}to{opacity:1}}
+.kai-msg,.kai-ui,.kai-starters,.kai-chip,.kai-svc,.kai-opt,.kai-tl li,.kai-node,.kai-chatmock .kai-row,.kai-chatmock .pick,.kai-sms,.kai-done-bar{animation-duration:.2s!important;animation-delay:0s!important}
+.kai-node::before,.kai-steps i.kai-on::after,.kai-check{animation:none}
+.kai-check svg{animation:none;stroke-dashoffset:0}
+.kai-starter .kai-chev{opacity:.45;transform:none}
+.kai-svc:hover,.kai-btn:hover,.kai-chip:hover{transform:none}
+
 /* Mobil: en riktig app-upplevelse i helskärm */
 @media (max-width:640px){
   .kai-starter{min-height:0}

@@ -246,7 +246,7 @@ export function savings(p, ctx) {
       }
       requestAnimationFrame(() => { barA.style.width = '100%'; barB.style.width = r.hrs ? `${Math.max(2, ((r.hrs - r.week) / r.hrs) * 100)}%` : '0'; });
     }
-    paintNums(r, !counted); counted = true;
+    paintNums(r, false); counted = true;
     setTimeout(() => resultEl.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }), 60);
     update = () => { const r2 = calc(); paintNums(r2, false); resultEl.querySelector('.after-v').textContent = `${fmt(r2.hrs - r2.week, 1)} h`; resultEl.lastChild.textContent = `≈ ${fmt(Math.round(r2.value / 1000) * 1000)} kr i frigjord arbetstid per år`; };
     ctx.scroll();
@@ -326,7 +326,6 @@ export function solutionFlow(p, ctx) {
     return li;
   }));
   ctx.event('demo_start', 'solution_flow');
-  setTimeout(() => list.firstChild?.querySelector('button')?.click(), 900 + (p.steps || []).length * 220);
   return h('div', { class: 'kai-card' },
     h('div', { class: 'kai-flow-hd' }, h('small', null, 'Lösningsskiss · Kela AI'), h('h4', null, p.title), p.problem ? h('q', null, p.problem) : null),
     list,
