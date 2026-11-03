@@ -56,7 +56,10 @@ export async function handleTrackingApi(env: Env, req: Request, parts: string[])
       const device = typeof body.device === 'string' && DEVICES.has(body.device) ? body.device : null;
       const ins = await env.DB.prepare('INSERT OR IGNORE INTO tracked_visits (id, org_id, page_id, started_at, last_seen_at, device, ip, ua) VALUES (?,?,?,?,?,?,?,?)')
         .bind(visitId, p.org_id, p.id, t, t, device, ip, userAgent(req)).run();
-      if (ins.meta.changes) await event('open', { device }).run();
+      if (ins.meta.changes) {
+        await event('open', { device }).run();
+        await notifyOpen(env, url, p, visitId, device);
+      }
       return json({ ok: true });
     }
 
@@ -104,5 +107,37 @@ export async function handleTrackingApi(env: Env, req: Request, parts: string[])
     throw new HttpError(404, 'not_found', 'Hittades inte.');
   } catch (e) {
     return errorResponse(e);
+  }
+}
+
+/** Mejlnotis till KELA när kunden öppnar offertsidan. Skickas via Formspree (samma flöde som sajtens formulär).
+ *  Högst en notis per 30 minuter och sida, så att omladdningar inte ger en mejlstorm. Fel stoppar aldrig besöket. */
+async function notifyOpen(env: Env, url: URL, p: any, visitId: string, device: string | null) {
+  try {
+    const target = env.OFFER_NOTIFY_URL || (env.OS_ENV === 'development' ? '' : 'https://formspree.io/f/xojkdewo');
+    if (!target) return;
+    const since = new Date(Date.now() - 30 * 60_000).toISOString();
+    const recent = await env.DB.prepare("SELECT 1 FROM tracked_events WHERE page_id = ? AND type = 'notified' AND created_at > ? LIMIT 1").bind(p.id, since).first();
+    if (recent) return;
+    const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM tracked_visits WHERE page_id = ?').bind(p.id).first<{ n: number }>();
+    const visits = n?.n || 1;
+    const when = new Date().toLocaleString('sv-SE', { timeZone: 'Europe/Stockholm', dateStyle: 'long', timeStyle: 'short' });
+    const who = p.customer_name || p.title;
+    const link = `${url.origin}/os/#/sparning/${p.id}`;
+    await env.DB.prepare("INSERT INTO tracked_events (id, org_id, page_id, visit_id, type, data_json, created_at) VALUES (?,?,?,?,'notified','{}',?)")
+      .bind(newId('tev'), p.org_id, p.id, visitId, now()).run();
+    const res = await fetch(target, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', accept: 'application/json' },
+      body: JSON.stringify({
+        _subject: `${who} har öppnat offerten`,
+        meddelande: `${who} öppnade offerten ${when}${device ? ` (${device})` : ''}. Det är besök nummer ${visits}.\n\nSe lästid, scroll och val i KELA OS:\n${link}`,
+        offert: p.title, kund: who, besok: visits, enhet: device || 'okänd', tid: when, kela_os: link,
+      }),
+      signal: AbortSignal.timeout(4000),
+    });
+    if (!res.ok) console.error('Offertnotis misslyckades', res.status);
+  } catch (e) {
+    console.error('Offertnotis misslyckades', e);
   }
 }

@@ -14,6 +14,8 @@ export interface Env {
   ANTHROPIC_MODEL?: string;
   /** Valfritt: modell för Kela AI på hemsidan (standard claude-opus-5-5). */
   KELA_AI_MODEL?: string;
+  /** Valfritt: var notisen "kunden har öppnat offerten" skickas (standard: sajtens Formspree-formulär). Tester pekar den mot en lokal server. */
+  OFFER_NOTIFY_URL?: string;
   /** Endast tester: pekar SDK:n mot en lokal testserver. */
   ANTHROPIC_BASE_URL?: string;
 }

@@ -43,6 +43,7 @@ async function detail(view, id, app) {
     if (e.type === 'all_yes') return ['check', 'green', 'Tryckte på "Ja på alla"'];
     if (e.type === 'clear') return ['x', '', 'Rensade sina val'];
     if (e.type === 'copy') return ['copy', 'accent', 'Kopierade sina val'];
+    if (e.type === 'notified') return ['mail', '', 'Mejlnotis skickad till KELA'];
     return ['activity', '', e.type];
   };
   setHTML(view, html`<div class="page-h"><div><h1>${pg.customer_name || pg.title}</h1><div class="sub">${pg.title}</div></div>

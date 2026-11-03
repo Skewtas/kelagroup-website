@@ -107,7 +107,7 @@ before(async () => {
   const [cmd, pre] = wranglerCmd;
   execFileSync(cmd, [...pre, 'd1', 'migrations', 'apply', 'kela-os', '--local', '--config', 'db/wrangler.toml', '--persist-to', STATE], { cwd: ROOT, stdio: 'pipe' });
   server = spawn(cmd, [...pre, 'pages', 'dev', '.', '--port', String(PORT), '--d1', `DB=${DB_ID}`, '--persist-to', STATE,
-    '--binding', 'OS_ENV=development', '--binding', 'ANTHROPIC_API_KEY=test-key', '--binding', `ANTHROPIC_BASE_URL=http://localhost:${MOCK_PORT}`, '--binding', `OS_SETUP_TOKEN=${SETUP_TOKEN}`, '--binding', `OS_SECRET_KEY=${randomBytes(32).toString('base64')}`,
+    '--binding', 'OS_ENV=development', '--binding', 'ANTHROPIC_API_KEY=test-key', '--binding', `ANTHROPIC_BASE_URL=http://localhost:${MOCK_PORT}`, '--binding', `OFFER_NOTIFY_URL=http://localhost:${MOCK_PORT}/offertnotis`, '--binding', `OS_SETUP_TOKEN=${SETUP_TOKEN}`, '--binding', `OS_SECRET_KEY=${randomBytes(32).toString('base64')}`,
     '--show-interactive-dev-session=false'], { cwd: ROOT, stdio: 'pipe', detached: true });
   let log = '';
   server.stdout.on('data', (d) => { log += d; }); server.stderr.on('data', (d) => { log += d; });
@@ -756,6 +756,12 @@ test('Offertsidor: besök, lästid, scroll och val sparas – bara för rätt f�
 
   assert.equal((await S('open', { visit_id: visit, device: 'dator' })).status, 200);
   assert.equal((await S('open', { visit_id: visit, device: 'dator' })).status, 200, 'dubbel open räknas inte två gånger');
+  const notes = () => mockCalls.filter((c) => c.url === '/offertnotis');
+  assert.equal(notes().length, 1, 'en mejlnotis när offerten öppnas');
+  assert.match(notes()[0].body._subject, /Testkund AB har öppnat offerten/);
+  assert.match(notes()[0].body.meddelande, /\/os\/#\/sparning\/tpg_testsida000000001/);
+  assert.equal((await S('open', { visit_id: randomBytes(12).toString('base64url'), device: 'mobil' })).status, 200);
+  assert.equal(notes().length, 1, 'ingen ny notis inom 30 minuter');
   assert.equal((await S('ping', { visit_id: visit, active_seconds: 42, max_scroll: 60, sections: ['offert', 'moduler', 'påhittad'] })).status, 200);
   assert.equal((await S('ping', { visit_id: visit, active_seconds: 30, max_scroll: 40, sections: ['offert'] })).status, 200, 'värden sänks aldrig');
   const ch = await S('choices', { visit_id: visit, choices: { bokis: 'ja', chattis: 'kanske', seo: 'nej', hack: 'kanske', 'Bad Key': 'ja', meta: 'kanske<script>' } });
@@ -768,14 +774,16 @@ test('Offertsidor: besök, lästid, scroll och val sparas – bara för rätt f�
 
   const list = ok(await admin.get('/api/os/sparning'));
   const row = list.pages.find((p) => p.id === 'tpg_testsida000000001');
-  assert.equal(row.visits, 1); assert.equal(row.total_seconds, 42);
+  assert.equal(row.visits, 2); assert.equal(row.total_seconds, 42);
   const d = ok(await admin.get('/api/os/sparning/tpg_testsida000000001'));
-  assert.equal(d.visits[0].max_scroll, 60);
-  assert.deepEqual(d.visits[0].sections, ['offert', 'moduler']);
-  assert.equal(d.events.filter((e) => e.type === 'open').length, 1);
+  const v1 = d.visits.find((v) => v.id === visit);
+  assert.equal(v1.max_scroll, 60);
+  assert.deepEqual(v1.sections, ['offert', 'moduler']);
+  assert.equal(d.events.filter((e) => e.type === 'open').length, 2);
+  assert.equal(d.events.filter((e) => e.type === 'notified').length, 1);
   assert.ok(d.events.some((e) => e.type === 'choice' && e.data.changed.bokis === 'ja'));
   assert.ok(d.events.some((e) => e.type === 'copy'));
-  assert.equal(d.visits[0].ip, undefined, 'IP-adress visas inte i översikten');
+  assert.equal(v1.ip, undefined, 'IP-adress visas inte i översikten');
 
   // Inte inloggad, och ett annat företag, ser ingenting
   assert.equal((await new Client().get('/api/os/sparning')).status, 401);
