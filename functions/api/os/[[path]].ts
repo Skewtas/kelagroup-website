@@ -8,6 +8,7 @@ import { quoteRoutes } from '../../_lib/routes/quotes';
 import { adminRoutes } from '../../_lib/routes/admin';
 import { projectRoutes } from '../../_lib/routes/projects';
 import { aiRoutes } from '../../_lib/routes/ai';
+import { trackingRoutes } from '../../_lib/routes/tracking';
 
 const router = new Router();
 authRoutes(router);
@@ -17,5 +18,6 @@ quoteRoutes(router);
 adminRoutes(router);
 projectRoutes(router);
 aiRoutes(router);
+trackingRoutes(router);
 
 export const onRequest: PagesFunction<Env> = ({ request, env }) => router.handle(request, env, '/api/os');

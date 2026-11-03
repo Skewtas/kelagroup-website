@@ -161,3 +161,17 @@ Testerna startar en egen server och täcker: obehörig åtkomst, CSRF, installat
 ## 9. Väg mot SaaS
 
 Redan på plats: `organizations` + `memberships` (en användare kan tillhöra flera företag), `org_id` på all data och i alla frågor, roller per företag, företagsinställningar (`settings_json`, valuta, standardmoms), egna tjänstekataloger och offertnummer per företag. Kvar: val av företag vid inloggning, registrering, logotyp/färger per företag, prenumerationer och modulpaket. Systemhändelser utan företag (t.ex. inloggningsförsök mot okända konton) visas i dag för superadmin – i SaaS-läge ska de bara visas för plattformsägaren.
+
+## Offertsidor med spårning (2026-11-03)
+
+Designade säljsidor (t.ex. Rozen Cleans referenskundserbjudande) som ligger på en hemlig adress: `kelagroup.se/s/<slug>/`.
+
+- **Sidan:** statisk fil `s/<slug>/index.html`. `_headers` sätter noindex, no-referrer och no-store för `/s/*`, och robots.txt spärrar `/s/`.
+- **Spårning:** publikt API `functions/api/s/[[path]].ts` → `functions/_lib/tracking.ts`.
+  - `open`, `ping` (synlig lästid, max scroll, visade delar), `choices` (Ja/Kanske/Nej per modul) och `event` (all_yes, clear, copy).
+  - Besöks-id skapas slumpat i minnet. Inga kakor och ingen lagring i besökarens webbläsare.
+  - Kräver headern `x-kela-s: 1` och samma ursprung. Rate limit per IP.
+- **Data:** migrering `0004_offertsidor.sql` (tracked_pages, tracked_visits, tracked_events). Rozen Cleans sida läggs in av migreringen.
+- **KELA OS:** `#/sparning` (`os/views/tracking.js`, API `functions/_lib/routes/tracking.ts`, behörighet `quotes:read`) visar besök, lästid, scroll, visade delar, val och en händelselogg.
+- **Ny sida:** lägg filen i `s/<namn>-<slumpad del>/index.html` och en rad i `tracked_pages` (ny migrering) med samma slug.
+- **Test:** `npm test` innehåller testet "Offertsidor".

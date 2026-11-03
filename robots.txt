@@ -6,6 +6,7 @@ User-agent: *
 Allow: /
 Disallow: /os/
 Disallow: /offert/
+Disallow: /s/
 Disallow: /api/
 
 # AI-sök och AI-assistenter
@@ -26,6 +27,7 @@ User-agent: Meta-ExternalAgent
 Allow: /
 Disallow: /os/
 Disallow: /offert/
+Disallow: /s/
 Disallow: /api/
 
 # Sökmotorer
@@ -34,6 +36,7 @@ User-agent: Bingbot
 Allow: /
 Disallow: /os/
 Disallow: /offert/
+Disallow: /s/
 Disallow: /api/
 
 Sitemap: https://kelagroup.se/sitemap.xml

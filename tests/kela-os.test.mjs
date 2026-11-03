@@ -735,3 +735,52 @@ test('Kela AI: besökaren kan radera sitt samtal (GDPR)', async () => {
   assert.equal((await admin.get(`/api/os/ai/conversations/${ai.id}`)).status, 404);
   assert.ok(ok(await admin.get(`/api/os/leads/${ai.leadId}`)).lead, 'förfrågan som skickats finns kvar');
 });
+
+// ---------------------------------------------------------------- Offertsidor med spårning
+test('Offertsidor: besök, lästid, scroll och val sparas – bara för rätt företag', async () => {
+  const me = ok(await admin.get('/api/os/auth/me'));
+  const orgId = me.org.id;
+  const slug = 'testkund-' + randomBytes(18).toString('base64url');
+  const [cmd, pre] = wranglerCmd;
+  execFileSync(cmd, [...pre, 'd1', 'execute', 'kela-os', '--local', '--config', 'db/wrangler.toml', '--persist-to', STATE, '--command',
+    `INSERT INTO tracked_pages (id, org_id, slug, title, customer_name, created_at) VALUES ('tpg_testsida000000001','${orgId}','${slug}','Offert – test','Testkund AB','${new Date().toISOString()}');`], { cwd: ROOT, stdio: 'pipe' });
+  const S = (action, body, headers = { 'x-kela-s': '1' }) => fetch(`${BASE}/api/s/${slug}/${action}`, { method: 'POST', headers: { 'content-type': 'application/json', ...headers }, body: JSON.stringify(body) })
+    .then(async (r) => ({ status: r.status, json: await r.json().catch(() => null) }));
+  const visit = randomBytes(12).toString('base64url');
+
+  // Okänd sida, saknad header och ogiltigt besök nekas
+  assert.equal((await fetch(`${BASE}/api/s/okand-${randomBytes(18).toString('base64url')}/choices`)).status, 404);
+  assert.equal((await S('open', { visit_id: visit }, {})).status, 403);
+  assert.equal((await S('open', { visit_id: 'kort' })).status, 422);
+  assert.equal((await S('ping', { visit_id: visit, active_seconds: 5 })).status, 404, 'ping före open');
+
+  assert.equal((await S('open', { visit_id: visit, device: 'dator' })).status, 200);
+  assert.equal((await S('open', { visit_id: visit, device: 'dator' })).status, 200, 'dubbel open räknas inte två gånger');
+  assert.equal((await S('ping', { visit_id: visit, active_seconds: 42, max_scroll: 60, sections: ['offert', 'moduler', 'påhittad'] })).status, 200);
+  assert.equal((await S('ping', { visit_id: visit, active_seconds: 30, max_scroll: 40, sections: ['offert'] })).status, 200, 'värden sänks aldrig');
+  const ch = await S('choices', { visit_id: visit, choices: { bokis: 'ja', chattis: 'kanske', seo: 'nej', hack: 'kanske', 'Bad Key': 'ja', meta: 'kanske<script>' } });
+  assert.deepEqual(ch.json.choices, { bokis: 'ja', chattis: 'kanske', seo: 'nej', hack: 'kanske' });
+  assert.equal((await S('event', { visit_id: visit, type: 'copy' })).status, 200);
+  assert.equal((await S('event', { visit_id: visit, type: 'drop_table' })).status, 422);
+
+  const got = await (await fetch(`${BASE}/api/s/${slug}/choices`)).json();
+  assert.equal(got.choices.bokis, 'ja');
+
+  const list = ok(await admin.get('/api/os/sparning'));
+  const row = list.pages.find((p) => p.id === 'tpg_testsida000000001');
+  assert.equal(row.visits, 1); assert.equal(row.total_seconds, 42);
+  const d = ok(await admin.get('/api/os/sparning/tpg_testsida000000001'));
+  assert.equal(d.visits[0].max_scroll, 60);
+  assert.deepEqual(d.visits[0].sections, ['offert', 'moduler']);
+  assert.equal(d.events.filter((e) => e.type === 'open').length, 1);
+  assert.ok(d.events.some((e) => e.type === 'choice' && e.data.changed.bokis === 'ja'));
+  assert.ok(d.events.some((e) => e.type === 'copy'));
+  assert.equal(d.visits[0].ip, undefined, 'IP-adress visas inte i översikten');
+
+  // Inte inloggad, och ett annat företag, ser ingenting
+  assert.equal((await new Client().get('/api/os/sparning')).status, 401);
+  const b = new Client();
+  ok(await b.post('/api/os/auth/login', { email: 'b@annat.test', password: PW }));
+  assert.equal(ok(await b.get('/api/os/sparning')).pages.length, 0);
+  assert.equal((await b.get('/api/os/sparning/tpg_testsida000000001')).status, 404);
+});

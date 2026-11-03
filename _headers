@@ -7,3 +7,11 @@
   X-Robots-Tag: noindex, nofollow
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Cache-Control: no-cache
+
+# Offertsidor med spårning (hemlig adress per kund) – ska aldrig indexeras eller cachas.
+/s/*
+  X-Robots-Tag: noindex, nofollow
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Cache-Control: no-store
