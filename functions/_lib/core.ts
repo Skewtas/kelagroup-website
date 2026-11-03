@@ -14,6 +14,12 @@ export interface Env {
   ANTHROPIC_MODEL?: string;
   /** Valfritt: modell för Kela AI på hemsidan (standard claude-opus-5-5). */
   KELA_AI_MODEL?: string;
+  /** Resend-nyckel för systemmejl (t.ex. Glömt lösenord). Secret i Cloudflare Pages. */
+  RESEND_API_KEY?: string;
+  /** Avsändare för systemmejl, standard "KELA OS <noreply@kelagroup.se>". Domänen måste vara verifierad i Resend. */
+  MAIL_FROM?: string;
+  /** Endast tester: annan adress för e-post-API:t. */
+  MAIL_API_URL?: string;
   /** Valfritt: var notisen "kunden har öppnat offerten" skickas (standard: sajtens Formspree-formulär). Tester pekar den mot en lokal server. */
   OFFER_NOTIFY_URL?: string;
   /** Endast tester: pekar SDK:n mot en lokal testserver. */

@@ -1,6 +1,7 @@
 // /api/os/auth/* – installation, inloggning, MFA, utloggning, inbjudningar.
 import { Router, audit, auditStmt } from '../router';
-import { HttpError, newId, now, rateLimit, safeEqual, sha256hex, addDays, userAgent } from '../core';
+import { HttpError, newId, now, rateLimit, safeEqual, sha256hex, addDays, userAgent, randomToken } from '../core';
+import { sendMail } from '../mail';
 import { v, validate } from '../validate';
 import {
   hashPassword, verifyPassword, DUMMY_HASH, passwordProblem, createSession, destroySession, clearCookie,
@@ -159,6 +160,69 @@ export function authRoutes(r: Router) {
     await audit(c, 'auth.password_changed', 'user', s.userId, 'Lösenord ändrat, övriga sessioner utloggade');
     return { ok: true };
   });
+
+  // Glömt lösenord: engångslänk via e-post. Svaret är alltid detsamma, så att ingen kan ta reda på vilka konton som finns.
+  // Länken byter bara lösenordet – tvåstegsverifieringen (autentiseringsappen) krävs fortfarande vid inloggning.
+  r.post('/auth/forgot', async (c) => {
+    const { env, ip, url } = c;
+    const d = validate({ email: v.email() }, await c.body());
+    const email = d.email!.toLowerCase();
+    const okResponse = { ok: true, message: 'Om adressen finns hos oss har vi skickat en länk. Kolla din inkorg (och skräpposten).' };
+    if (!(await rateLimit(env.DB, `forgot:ip:${ip}`, 10, 3600)) || !(await rateLimit(env.DB, `forgot:em:${email}`, 3, 3600))) return okResponse;
+    const user = await env.DB.prepare(`SELECT u.id, u.name, u.status, m.org_id FROM users u JOIN memberships m ON m.user_id = u.id
+      WHERE u.email = ? AND m.role IN (${STAFF_ROLES.map(() => '?').join(',')}) ORDER BY m.created_at LIMIT 1`).bind(email, ...STAFF_ROLES).first<any>();
+    if (!user || user.status !== 'active') return okResponse;
+    const token = randomToken(32);
+    const t = now();
+    await env.DB.batch([
+      env.DB.prepare('UPDATE password_resets SET used_at = ? WHERE user_id = ? AND used_at IS NULL').bind(t, user.id),
+      env.DB.prepare('INSERT INTO password_resets (id, user_id, token_hash, expires_at, ip, created_at) VALUES (?,?,?,?,?,?)')
+        .bind(newId('pwr'), user.id, await sha256hex(token), new Date(Date.now() + 30 * 60_000).toISOString(), ip, t),
+    ]);
+    const link = `${url.origin}/os/#/aterstall/${token}`;
+    const sent = await sendMail(env, {
+      to: email,
+      subject: 'Återställ ditt lösenord till KELA OS',
+      text: `Hej ${String(user.name).split(' ')[0]}!\n\nNågon (förhoppningsvis du) har bett om att återställa lösenordet till KELA OS.\n\nVälj ett nytt lösenord här – länken gäller i 30 minuter och kan bara användas en gång:\n${link}\n\nHar du inte bett om det här kan du strunta i mejlet. Ditt lösenord ändras inte förrän någon använder länken, och inloggningen kräver fortfarande koden från din autentiseringsapp.\n\nKELA OS`,
+    });
+    await audit({ env, ip, s: { userId: user.id, orgId: user.org_id } as any }, sent ? 'auth.reset_requested' : 'auth.reset_mail_failed', 'user', user.id,
+      sent ? 'Länk för att återställa lösenord skickad med e-post' : 'Länk för att återställa lösenord kunde inte skickas (e-posttjänsten svarade inte)');
+    return okResponse;
+  }, { public: true });
+
+  async function findReset(env: any, token: string) {
+    if (!/^[A-Za-z0-9_-]{40,60}$/.test(token)) return null;
+    const r = await env.DB.prepare(`SELECT p.*, u.email, u.status, (SELECT org_id FROM memberships WHERE user_id = u.id ORDER BY created_at LIMIT 1) AS org_id
+      FROM password_resets p JOIN users u ON u.id = p.user_id WHERE p.token_hash = ?`).bind(await sha256hex(token)).first();
+    if (!r || r.used_at || Date.parse(r.expires_at) < Date.now() || r.status !== 'active') return null;
+    return r;
+  }
+
+  r.get('/auth/reset/:token', async ({ env, params }) => {
+    const r = await findReset(env, params.token);
+    if (!r) throw new HttpError(404, 'reset_invalid', 'Länken är ogiltig, har redan använts eller har gått ut. Be om en ny.');
+    return { email: r.email };
+  }, { public: true });
+
+  r.post('/auth/reset/:token', async (c) => {
+    const { env, params, ip } = c;
+    if (!(await rateLimit(env.DB, `reset:${ip}`, 10, 3600))) throw new HttpError(429, 'rate_limited', 'För många försök. Vänta en stund.');
+    const r = await findReset(env, params.token);
+    if (!r) throw new HttpError(404, 'reset_invalid', 'Länken är ogiltig, har redan använts eller har gått ut. Be om en ny.');
+    const b = await c.body();
+    const pwErr = passwordProblem(b.password);
+    if (pwErr) throw new HttpError(422, 'validation', pwErr, { password: pwErr });
+    const t = now();
+    const res = await env.DB.batch([
+      env.DB.prepare('UPDATE password_resets SET used_at = ? WHERE id = ? AND used_at IS NULL').bind(t, r.id),
+      env.DB.prepare('UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?').bind(await hashPassword(b.password), t, r.user_id),
+      env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(r.user_id),
+      env.DB.prepare('DELETE FROM rate_limits WHERE key = ?').bind(`login:em:${String(r.email).toLowerCase()}`),
+      auditStmt(env, r.org_id, r.user_id, ip, 'auth.password_reset', 'user', r.user_id, 'Lösenord återställt via e-postlänk, alla sessioner utloggade'),
+    ]);
+    if (!res[0].meta.changes) throw new HttpError(404, 'reset_invalid', 'Länken har redan använts.');
+    return { ok: true };
+  }, { public: true });
 
   // Inbjudningar: användaren sätter eget lösenord via engångslänk.
   r.get('/auth/invite/:token', async ({ env, params }) => {

@@ -107,7 +107,7 @@ before(async () => {
   const [cmd, pre] = wranglerCmd;
   execFileSync(cmd, [...pre, 'd1', 'migrations', 'apply', 'kela-os', '--local', '--config', 'db/wrangler.toml', '--persist-to', STATE], { cwd: ROOT, stdio: 'pipe' });
   server = spawn(cmd, [...pre, 'pages', 'dev', '.', '--port', String(PORT), '--d1', `DB=${DB_ID}`, '--persist-to', STATE,
-    '--binding', 'OS_ENV=development', '--binding', 'ANTHROPIC_API_KEY=test-key', '--binding', `ANTHROPIC_BASE_URL=http://localhost:${MOCK_PORT}`, '--binding', `OFFER_NOTIFY_URL=http://localhost:${MOCK_PORT}/offertnotis`, '--binding', `OS_SETUP_TOKEN=${SETUP_TOKEN}`, '--binding', `OS_SECRET_KEY=${randomBytes(32).toString('base64')}`,
+    '--binding', 'OS_ENV=development', '--binding', 'ANTHROPIC_API_KEY=test-key', '--binding', `ANTHROPIC_BASE_URL=http://localhost:${MOCK_PORT}`, '--binding', `OFFER_NOTIFY_URL=http://localhost:${MOCK_PORT}/offertnotis`, '--binding', 'RESEND_API_KEY=re_test', '--binding', `MAIL_API_URL=http://localhost:${MOCK_PORT}/mail`, '--binding', `OS_SETUP_TOKEN=${SETUP_TOKEN}`, '--binding', `OS_SECRET_KEY=${randomBytes(32).toString('base64')}`,
     '--show-interactive-dev-session=false'], { cwd: ROOT, stdio: 'pipe', detached: true });
   let log = '';
   server.stdout.on('data', (d) => { log += d; }); server.stderr.on('data', (d) => { log += d; });
@@ -792,3 +792,33 @@ test('Offertsidor: besök, lästid, scroll och val sparas – bara för rätt f�
   assert.equal(ok(await b.get('/api/os/sparning')).pages.length, 0);
   assert.equal((await b.get('/api/os/sparning/tpg_testsida000000001')).status, 404);
 });
+
+// ---------------------------------------------------------------- Glömt lösenord (körs sist – byter adminens lösenord)
+test('Glömt lösenord: engångslänk via e-post, avslöjar inga konton och kräver fortfarande MFA', async () => {
+  const mails = () => mockCalls.filter((c) => c.url === '/mail');
+  const before = mails().length;
+  const pub = new Client();
+  const unknown = ok(await pub.post('/api/os/auth/forgot', { email: 'finns-inte@kela.test' }));
+  const known = ok(await pub.post('/api/os/auth/forgot', { email: 'ADMIN@kela.test' }));
+  assert.equal(unknown.message, known.message, 'samma svar oavsett om kontot finns');
+  assert.equal(mails().length, before + 1, 'bara ett mejl – till kontot som finns');
+  const m = mails().at(-1);
+  assert.equal(m.headers.authorization, 'Bearer re_test');
+  assert.deepEqual(m.body.to, ['admin@kela.test']);
+  const token = m.body.text.match(/#\/aterstall\/([A-Za-z0-9_-]+)/)[1];
+
+  assert.equal((await pub.get('/api/os/auth/reset/' + 'x'.repeat(43))).status, 404);
+  assert.equal(ok(await pub.get('/api/os/auth/reset/' + token)).email, 'admin@kela.test');
+  assert.equal((await pub.post('/api/os/auth/reset/' + token, { password: 'kort' })).status, 422);
+  const NEW = 'Nytt-' + randomBytes(9).toString('base64url');
+  ok(await pub.post('/api/os/auth/reset/' + token, { password: NEW }), 'återställ');
+  assert.equal((await pub.post('/api/os/auth/reset/' + token, { password: NEW + 'x' })).status, 404, 'länken går bara att använda en gång');
+  assert.equal((await admin.get('/api/os/auth/me')).status, 401, 'gamla sessioner är utloggade');
+  assert.equal((await new Client().post('/api/os/auth/login', { email: 'admin@kela.test', password: PW })).status, 401, 'gamla lösenordet fungerar inte');
+  const c = new Client();
+  assert.equal(ok(await c.post('/api/os/auth/login', { email: 'admin@kela.test', password: NEW })).mfa, 'verify', 'MFA krävs fortfarande');
+  // Nästa kod (koden för nuvarande 30-sekundersperiod kan redan vara förbrukad – återanvändning nekas med flit).
+  assert.ok(ok(await c.post('/api/os/auth/mfa/verify', { code: totp(adminSecret, Date.now() + 30000) })));
+  assert.ok(ok(await c.get('/api/os/audit')).entries.some((e) => e.action === 'auth.password_reset'));
+});
+

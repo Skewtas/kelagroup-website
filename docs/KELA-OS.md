@@ -175,3 +175,17 @@ Designade säljsidor (t.ex. Rozen Cleans referenskundserbjudande) som ligger på
 - **KELA OS:** `#/sparning` (`os/views/tracking.js`, API `functions/_lib/routes/tracking.ts`, behörighet `quotes:read`) visar besök, lästid, scroll, visade delar, val och en händelselogg.
 - **Ny sida:** lägg filen i `s/<namn>-<slumpad del>/index.html` och en rad i `tracked_pages` (ny migrering) med samma slug.
 - **Test:** `npm test` innehåller testet "Offertsidor".
+
+## Glömt lösenord (2026-11-03)
+
+- **Flöde:** länken "Glömt lösenordet?" på inloggningen leder till `#/glomt`.
+  - Användaren får ett mejl med en engångslänk (`#/aterstall/<token>`) som gäller i 30 minuter.
+  - När länken används väljs ett nytt lösenord och alla sessioner loggas ut. MFA krävs fortfarande vid inloggning.
+- **Skydd:**
+  - Samma svar oavsett om kontot finns.
+  - Max 3 länkar per adress och timme och max 10 per IP och timme.
+  - Bara SHA-256 av token sparas (tabellen `password_resets`, migrering `0005_losenordsaterstallning.sql`).
+- **E-post:** skickas via Resend (`functions/_lib/mail.ts`).
+  - Kräver secret `RESEND_API_KEY` i Cloudflare Pages och en verifierad domän i Resend. Avsändaren är `MAIL_FROM`, standard `KELA OS <noreply@kelagroup.se>`.
+  - Utan nyckel skrivs mejlet bara i serverloggen lokalt. I produktion loggas `auth.reset_mail_failed`.
+- **Nödutväg utan e-post:** `node scripts/reset-os-losenord.mjs <e-post> [--urklipp]`. Skriptet sätter nytt lösenord och nollställer MFA direkt i databasen.

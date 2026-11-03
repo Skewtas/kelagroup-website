@@ -143,6 +143,7 @@ function renderLogin() {
       <label class="field"><span>E-post</span><input class="in" name="email" type="email" autocomplete="username" required autofocus></label>
       <label class="field"><span>Lösenord</span><input class="in" name="password" type="password" autocomplete="current-password" required></label>
       <button class="btn primary" type="submit">Logga in</button>
+      <a class="small" href="#/glomt">Glömt lösenordet?</a>
       <p class="small faint">Endast för behörig personal. Alla inloggningar loggas.</p>
     </form>`));
   $('#login').addEventListener('submit', async (e) => {
@@ -208,6 +209,48 @@ async function renderMfa(me) {
     await withBusy(f.querySelector('button[type=submit]'), async () => {
       try { await post('/auth/mfa/verify', { code: f.code.value }); toast(enroll ? 'Tvåstegsverifiering aktiverad' : 'Verifierad'); boot(); }
       catch (err) { showErrors(f, err); f.code.select(); }
+    });
+  });
+}
+
+function renderForgot() {
+  setHTML(root(), authLayout(html`
+    <h1>Glömt lösenordet?</h1><p class="sub">Skriv din e-post så skickar vi en länk där du väljer ett nytt lösenord. Länken gäller i 30 minuter.</p>
+    <form class="form" id="forgot" novalidate>
+      <label class="field"><span>E-post</span><input class="in" name="email" type="email" autocomplete="username" required autofocus></label>
+      <button class="btn primary" type="submit">Skicka länk</button>
+      <a class="small" href="#/">Tillbaka till inloggningen</a>
+    </form>`));
+  $('#forgot').addEventListener('submit', async (e) => {
+    e.preventDefault(); const f = e.currentTarget;
+    await withBusy(f.querySelector('button'), async () => {
+      try {
+        const r = await post('/auth/forgot', formData(f));
+        setHTML(root(), authLayout(html`<h1>Kolla din inkorg</h1><p class="sub">${r.message}</p><a class="btn" href="#/">Till inloggningen</a>`));
+      } catch (err) { showErrors(f, err); }
+    });
+  });
+}
+
+async function renderReset(token) {
+  let info;
+  try { info = await get('/auth/reset/' + encodeURIComponent(token)); }
+  catch (e) { setHTML(root(), authLayout(html`<h1>Länken fungerar inte</h1><p class="sub">${e.message}</p><a class="btn" href="#/glomt">Be om en ny länk</a>`)); return; }
+  setHTML(root(), authLayout(html`
+    <h1>Välj nytt lösenord</h1><p class="sub">För ${info.email}</p>
+    <form class="form" id="reset" novalidate>
+      <label class="field"><span>Nytt lösenord</span><input class="in" name="password" type="password" autocomplete="new-password" required minlength="12" autofocus><span class="hint">Minst 12 tecken.</span></label>
+      <label class="field"><span>Skriv lösenordet igen</span><input class="in" name="password2" type="password" autocomplete="new-password" required></label>
+      <button class="btn primary" type="submit">Spara lösenord</button>
+    </form>`));
+  $('#reset').addEventListener('submit', async (e) => {
+    e.preventDefault(); const f = e.currentTarget;
+    if (f.password.value !== f.password2.value) { showErrors(f, { message: 'Lösenorden matchar inte.', details: { password2: 'Lösenorden matchar inte.' } }); return; }
+    await withBusy(f.querySelector('button'), async () => {
+      try {
+        await post('/auth/reset/' + encodeURIComponent(token), { password: f.password.value });
+        setHTML(root(), authLayout(html`<h1>Lösenordet är bytt</h1><p class="sub">Logga in med ditt nya lösenord. Du behöver också koden från din autentiseringsapp.</p><a class="btn primary" href="#/">Logga in</a>`));
+      } catch (err) { showErrors(f, err); }
     });
   });
 }
@@ -347,6 +390,9 @@ async function route() {
   const full = location.hash.replace(/^#\/?/, '');
   const [path, query = ''] = full.split('?');
   if (path.startsWith('inbjudan/')) return renderInvite(path.slice(9));
+  if (path.startsWith('aterstall/')) { app.me = null; return renderReset(path.slice(10)); }
+  if (path === 'glomt') { app.me = null; return renderForgot(); }
+  if (!app.me && path === '') return boot();
   if (!app.me || app.me.mfa !== 'ok') return;
   if (!$('#view')) renderShell();
   const seq = ++renderSeq;
@@ -376,6 +422,8 @@ addEventListener('hashchange', route);
 async function boot() {
   const hash = location.hash.replace(/^#\/?/, '');
   if (hash.startsWith('inbjudan/')) { app.me = null; return renderInvite(hash.slice(9)); }
+  if (hash.startsWith('aterstall/')) { app.me = null; return renderReset(hash.slice(10)); }
+  if (hash === 'glomt') { app.me = null; return renderForgot(); }
   try {
     app.me = await api('/auth/me');
   } catch (e) {
