@@ -19,7 +19,7 @@ En utförligare sammanfattning finns i [llms-full.txt](https://kelagroup.se/llms
 - [Bygga hemsida](https://kelagroup.se/bygga-hemsida): Snabba, sökoptimerade hemsidor och webbshoppar byggda från grunden; en enklare hemsida kan vara live på 1–2 veckor.
 - [Billig hemsida](https://kelagroup.se/billig-hemsida): Prisvärd hemsida med samma snabbhet, mobilanpassning och SEO som större projekt.
 - [Hemsida för småföretag](https://kelagroup.se/hemsida-smaforetag): Hemsida för enskild firma, småföretag och nystartade, med lokal SEO och enkel CMS.
-- [Bygga system](https://kelagroup.se/bygga-system): Skräddarsydda affärssystem, portaler och interna verktyg; första version ofta i drift på 4–8 veckor, data lagras inom EU.
+- [Bygga system](https://kelagroup.se/bygga-system): Skräddarsydda affärssystem, portaler och interna verktyg; första version ofta i drift på 4–8 veckor, databasen placeras inom EU när det är möjligt.
 - [Affärssystem & CRM](https://kelagroup.se/affarssystem-crm): CRM och affärssystem byggt kring kundens rutiner, integrerat med bokföring, e-post, kalender och betalning.
 - [Bokningssystem](https://kelagroup.se/bokningssystem): Eget bokningssystem med kalender, betalning och automatiska påminnelser – färre no-shows, noll dubbelbokningar.
 - [Bygga automationer](https://kelagroup.se/bygga-automationer): Automationer för offert, kundtjänst, fakturering, uppföljning och rapporter – dygnet runt.

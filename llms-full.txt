@@ -35,7 +35,7 @@ Kela bygger:
 - Bygga hemsida (https://kelagroup.se/bygga-hemsida): Handkodade, snabba och mobilanpassade hemsidor med SEO från start, enkelt CMS och möjlighet att koppla på chatt, offert- eller bokningsflöden. En enklare hemsida kan vara live på 1–2 veckor; större projekt med fler undersidor eller e-handel tar oftast 3–6 veckor.
 - Billig hemsida (https://kelagroup.se/billig-hemsida): Prisvärd hemsida genom effektivt bygge – beprövade komponenter, tydliga mallar och en stram process – med samma snabbhet, mobilanpassning och SEO som större projekt.
 - Hemsida för småföretag (https://kelagroup.se/hemsida-smaforetag): För enskild firma, småföretag och nystartade. Live på 1–2 veckor, lokal SEO, tydliga knappar för att ringa, mejla eller boka, och hjälp med struktur, texter och bildval.
-- Bygga system (https://kelagroup.se/bygga-system): Skräddarsydda affärssystem, portaler och interna verktyg. Modulärt, integrerat via API, säkert och byggt för GDPR med datalagring inom EU. En första fungerande version kan ofta vara i drift på 4–8 veckor. Exempel på system: dashboards, affärssystem & ERP, CRM & säljstöd, bokningssystem, mobilappar, feedbacksystem, medarbetarverktyg, HR-system, rekryteringssystem, kundportaler, intranät, lager & logistik samt integrationer.
+- Bygga system (https://kelagroup.se/bygga-system): Skräddarsydda affärssystem, portaler och interna verktyg. Modulärt, integrerat via API, säkert och byggt för GDPR. Databasen placeras inom EU när det är möjligt, och personuppgiftsbiträdesavtalet redovisar exakt var varje del lagras. En första fungerande version kan ofta vara i drift på 4–8 veckor. Exempel på system: dashboards, affärssystem & ERP, CRM & säljstöd, bokningssystem, mobilappar, feedbacksystem, medarbetarverktyg, HR-system, rekryteringssystem, kundportaler, intranät, lager & logistik samt integrationer.
 - Affärssystem & CRM (https://kelagroup.se/affarssystem-crm): Kunddata, offerter och fakturor, säljpipeline, integrationer, automatiska påminnelser och realtidsrapporter i ett system byggt kring kundens rutiner. Data från kalkylblad eller befintliga system kan migreras.
 - Bokningssystem (https://kelagroup.se/bokningssystem): Eget bokningssystem med kalender i realtid, betalning eller deposition vid bokning, automatiska bekräftelser och påminnelser via mejl och sms, självservice för om- och avbokning samt resurshantering. Byggs in direkt i hemsidan.
 - Bygga automationer (https://kelagroup.se/bygga-automationer): Automationer för offerter, kundtjänst, fakturering, uppföljning och påminnelser, dataflöden mellan system och automatiska rapporter. En första automation kan ofta vara i drift inom ett par veckor.
@@ -116,7 +116,7 @@ Ja. Grundläggande sökmotoroptimering – teknik, struktur, titlar och meta –
 En första fungerande version kan ofta vara i drift på 4–8 veckor. Kela levererar i moduler.
 
 **Äger vi systemet och vår data?**
-Ja. Kunden äger både lösningen och sin data, som lagras inom EU. Kela lämnar över dokumentation.
+Ja. Kunden äger både lösningen och sin data. Kela placerar databasen inom EU när det är möjligt och redovisar exakt var varje del lagras i personuppgiftsbiträdesavtalet. Kela lämnar över dokumentation.
 
 **Måste vi byta affärssystem?**
 Nej. Kela integrerar mot det ni redan använder, till exempel Timewave, Tengella, Fortnox, Visma, Shopify och WordPress, och allt med API.

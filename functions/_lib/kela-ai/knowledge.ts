@@ -4,7 +4,8 @@ export const KELA_KNOWLEDGE = `# Kela Group AB
 - Teknikdriven byrå i Stockholm (org.nr 559578-1971) som bygger hemsidor, system, appar och AI-automationer åt företag i Sverige och hela Europa. Slogan: "Vi bygger bort onödigt arbete".
 - Allt Kela säljer kör teamet självt varje dag i sina egna verksamheter – bland annat städbolaget Stodona.
 - Grundare och kontaktperson: Mikaela Wigert (affär, produkt & automation). E-post: hej@kelagroup.se. Svar inom 24 timmar på vardagar.
-- Litet, drivet team som kodar från grunden och använder AI i varje steg: korta ledtider, enkla att förvalta. Kunden äger sin lösning och data (lagras inom EU) och blir aldrig inlåst.
+- Litet, drivet team som kodar från grunden och använder AI i varje steg: korta ledtider, enkla att förvalta. Kunden äger sin lösning och data och blir aldrig inlåst.
+- Datalagring: Kela placerar kundens databas inom EU när det är möjligt och redovisar exakt var varje del lagras i personuppgiftsbiträdesavtalet. Lova aldrig att all data lagras inom EU – vissa tjänster (till exempel AI-tjänster och kartor) drivs av amerikanska leverantörer. Hänvisa detaljfrågor till hej@kelagroup.se.
 - Garanti: Kela går igenom kundens system och flöden och visar var tid och pengar läcker. Hittar de inget att spara kostar genomgången ingenting.
 - Arbetssätt: 1) hitta problemet (kostnadsfri kartläggning) 2) bygga lösningen (offert, design, utveckling – kunden ser allt löpande) 3) mäta resultatet i kronor och tid 4) förbättra steg för steg.
 
@@ -13,7 +14,7 @@ Kela visar inga priser. Varje kund får en offert efter behov – genomgång, ka
 
 # Tjänster (sida inom parentes)
 - Hemsidor & e-handel (/bygga-hemsida, /billig-hemsida, /hemsida-smaforetag): handkodade, snabba, mobilanpassade, SEO från start, enkelt CMS, kan få chatt-, offert- eller bokningsflöden. Enklare hemsida live på 1–2 veckor; större projekt/e-handel oftast 3–6 veckor.
-- System & portaler (/bygga-system, /affarssystem-crm): affärssystem, CRM, säljpipeline, offerter och fakturor, rekryterings- och bokningssystem, kund- och personalportaler, dashboards, intranät, lager. Modulärt, integrerat via API, GDPR, data inom EU. Första version ofta i drift på 4–8 veckor.
+- System & portaler (/bygga-system, /affarssystem-crm): affärssystem, CRM, säljpipeline, offerter och fakturor, rekryterings- och bokningssystem, kund- och personalportaler, dashboards, intranät, lager. Modulärt, integrerat via API, byggt för GDPR, databasen inom EU när det är möjligt. Första version ofta i drift på 4–8 veckor.
 - Bokningssystem (/bokningssystem): kalender i realtid, betalning/deposition, automatiska bekräftelser och påminnelser via mejl och sms, självservice för om- och avbokning, resurshantering. Byggs in i hemsidan.
 - Automationer (/bygga-automationer): offerter, kundtjänst, fakturering, uppföljning, påminnelser, dataflöden mellan system, automatiska rapporter. Första automation ofta i drift inom ett par veckor.
 - AI-agenter & AI-chatt (/ai-agenter): kundtjänst, sälj, offerter, bokning, support, rapporter. Tränas på företagets material och kopplas till dess system. Avlastar människor – ersätter dem inte.
