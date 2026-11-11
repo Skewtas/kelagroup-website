@@ -547,3 +547,11 @@ a.tl{border-radius:10px}a.tl:hover .tl-t{color:var(--accent)}
 @media (max-width:900px){.ai-row.g4{grid-template-columns:1fr}}
 
 .demo-tag{margin-top:8px;display:inline-block;font-size:11px;font-weight:650;letter-spacing:.02em;padding:3px 9px;border-radius:999px;background:var(--accent-tint);color:var(--accent)}
+/* Avtal och dokument */
+.li.doc{align-items:flex-start}
+.doc-files{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.doc-file{display:inline-flex;gap:2px}
+.doc-cust{margin-bottom:8px}
+.doc-cust-h{display:inline-flex;align-items:center;gap:8px;font-weight:650;font-size:15px;margin:6px 0 10px}
+.doc-cust-h:hover{color:var(--accent)}
+.file-in{height:auto;padding:8px}

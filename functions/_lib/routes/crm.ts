@@ -122,6 +122,14 @@ export function crmRoutes(r: Router) {
     const projects = can(s, 'projects:read') ? (await env.DB.prepare(`SELECT p.id, p.number, p.name, p.status, p.due_date,
         (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.id) AS task_count, (SELECT COUNT(*) FROM tasks t WHERE t.project_id = p.id AND t.status = 'done') AS task_done
         FROM projects p WHERE p.customer_id = ? AND p.org_id = ? ORDER BY p.created_at DESC`).bind(cust.id, s.orgId).all()).results : [];
+    const documents = (await env.DB.prepare(`SELECT d.*, (SELECT json_group_array(json_object('id', f.id, 'file_name', f.file_name, 'mime', f.mime, 'size', f.size, 'created_at', f.created_at))
+        FROM document_files f WHERE f.document_id = d.id AND f.org_id = d.org_id) AS files_json
+        FROM documents d WHERE d.customer_id = ? AND d.org_id = ? AND d.archived_at IS NULL ORDER BY d.kind, d.sort, d.created_at`).bind(cust.id, s.orgId).all<any>()).results
+      .map((x) => ({ ...x, files: JSON.parse(x.files_json || '[]'), files_json: undefined }));
+    const pages = (await env.DB.prepare(`SELECT p.id, p.slug, p.title, p.kind,
+        (SELECT COUNT(*) FROM tracked_visits v WHERE v.page_id = p.id) AS visits,
+        (SELECT MAX(v.last_seen_at) FROM tracked_visits v WHERE v.page_id = p.id) AS last_seen_at
+        FROM tracked_pages p WHERE p.customer_id = ? AND p.org_id = ?`).bind(cust.id, s.orgId).all()).results;
     const [contacts, deals, quotes, activities, tasks, owner] = await Promise.all([
       env.DB.prepare('SELECT * FROM contacts WHERE customer_id = ? AND org_id = ? ORDER BY is_primary DESC, name').bind(cust.id, s.orgId).all(),
       env.DB.prepare('SELECT d.*, u.name AS owner_name FROM deals d LEFT JOIN users u ON u.id = d.owner_user_id WHERE d.customer_id = ? AND d.org_id = ? ORDER BY d.updated_at DESC').bind(cust.id, s.orgId).all(),
@@ -143,6 +151,8 @@ export function crmRoutes(r: Router) {
       activities: activities.results,
       tasks: tasks.results,
       projects,
+      documents,
+      pages,
     };
   }, { perm: 'customers:read' });
 

@@ -877,5 +877,56 @@ test('Glömt lösenord: engångslänk via e-post, avslöjar inga konton och krä
   // Nästa kod (koden för nuvarande 30-sekundersperiod kan redan vara förbrukad – återanvändning nekas med flit).
   assert.ok(ok(await c.post('/api/os/auth/mfa/verify', { code: totp(adminSecret, Date.now() + 30000) })));
   assert.ok(ok(await c.get('/api/os/audit')).entries.some((e) => e.action === 'auth.password_reset'));
+  ctx.admin2 = c; // admin är inloggad på nytt efter återställningen
 });
 
+
+// ---------------------------------------------------------------- Avtal och dokument
+test('avtal och dokument: uppladdning, oförändrad nedladdning, falska filer nekas, behörighet och företagsseparation', async () => {
+  const A = ctx.admin2 || admin;
+  const form = (meta, files) => {
+    const fd = new FormData();
+    if (meta) fd.append('meta', JSON.stringify(meta));
+    for (const [name, bytes, type] of files) fd.append('file', new Blob([bytes], { type }), name);
+    return fd;
+  };
+  const send = (client, path, fd) => fetch(BASE + path, { method: 'POST', headers: { cookie: client.cookie, 'x-kela-os': '1' }, body: fd })
+    .then(async (r) => ({ status: r.status, json: await r.json().catch(() => null) }));
+  // En "PDF" på 1,2 MB (flera delar) och en Word-fil.
+  const pdf = Buffer.concat([Buffer.from('%PDF-1.7\n'), randomBytes(1_200_000)]);
+  const docx = Buffer.concat([Buffer.from([0x50, 0x4b, 0x03, 0x04]), randomBytes(5000)]);
+  const up = await send(A, '/api/os/documents', form({ customer_id: ctx.customerId, kind: 'avtal', title: 'SaaS-avtal', status: 'sent', notice_months: 3 },
+    [['avtal.pdf', pdf, 'application/pdf'], ['avtal.docx', docx, 'application/octet-stream']]));
+  assert.equal(up.status, 200, JSON.stringify(up.json));
+  const list = ok(await A.get(`/api/os/documents?customer=${ctx.customerId}`));
+  const doc = list.documents.find((d) => d.id === up.json.id);
+  assert.equal(doc.files.length, 2); assert.equal(doc.notice_months, 3);
+  const pf = doc.files.find((f) => f.file_name === 'avtal.pdf');
+  const dl = await fetch(`${BASE}/api/os/documents/${doc.id}/files/${pf.id}`, { headers: { cookie: A.cookie } });
+  const got = Buffer.from(await dl.arrayBuffer());
+  assert.equal(dl.status, 200); assert.match(dl.headers.get('content-disposition'), /attachment/);
+  assert.equal(createHash('sha256').update(got).digest('hex'), createHash('sha256').update(pdf).digest('hex'), 'filen är oförändrad');
+  // Falsk PDF, otillåten typ och dokument utan fil/länk nekas
+  assert.equal((await send(A, '/api/os/documents', form({ customer_id: ctx.customerId, kind: 'avtal', title: 'X' }, [['virus.pdf', Buffer.from('MZ\x90\x00'), 'application/pdf']]))).status, 422);
+  assert.equal((await send(A, '/api/os/documents', form({ customer_id: ctx.customerId, kind: 'avtal', title: 'X' }, [['sida.html', Buffer.from('<script>'), 'text/html']]))).status, 422);
+  assert.equal((await A.post('/api/os/documents', { customer_id: ctx.customerId, kind: 'avtal', title: 'Tomt' })).status, 422);
+  // Länkdokument och statusbyte
+  ok(await A.post('/api/os/documents', { customer_id: ctx.customerId, kind: 'presentation', title: 'Deck', url: 'https://example.com/deck' }));
+  ok(await A.patch(`/api/os/documents/${doc.id}`, { status: 'signed', signed_at: '2026-11-12' }));
+  const cust = ok(await A.get(`/api/os/customers/${ctx.customerId}`));
+  assert.ok(cust.documents.some((d) => d.id === doc.id && d.status === 'signed'), 'syns på kundkortet');
+  assert.ok(cust.activities.some((a) => /signerat/i.test(a.title)), 'signering loggas i kundens historik');
+  // Utan inloggning, andra företag och roller utan skrivrätt
+  assert.equal((await fetch(`${BASE}/api/os/documents/${doc.id}/files/${pf.id}`)).status, 401);
+  const b = new Client(); ok(await b.post('/api/os/auth/login', { email: 'b@annat.test', password: PW }));
+  assert.equal((await fetch(`${BASE}/api/os/documents/${doc.id}/files/${pf.id}`, { headers: { cookie: b.cookie } })).status, 404);
+  assert.equal(ok(await b.get('/api/os/documents')).documents.length, 0);
+  const pm = new Client(); ok(await pm.post('/api/os/auth/login', { email: 'pm@kela.test', password: PW }));
+  ok(await pm.get(`/api/os/documents?customer=${ctx.customerId}`));
+  assert.equal((await pm.patch(`/api/os/documents/${doc.id}`, { status: 'terminated' })).status, 403);
+  // Arkivering döljer utan att radera
+  ok(await A.post(`/api/os/documents/${doc.id}/archive`, { archived: true }));
+  assert.ok(!ok(await A.get(`/api/os/documents?customer=${ctx.customerId}`)).documents.some((d) => d.id === doc.id));
+  assert.ok(ok(await A.get(`/api/os/documents?customer=${ctx.customerId}&archived=1`)).documents.some((d) => d.id === doc.id));
+  assert.ok(ok(await A.get('/api/os/audit?q=Laddade')).entries.some((e) => e.action === 'document.downloaded'), 'nedladdning loggas');
+});

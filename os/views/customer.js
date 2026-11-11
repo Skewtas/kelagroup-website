@@ -2,6 +2,7 @@
 import { html, raw, ico, setHTML, $, $$, money, ago, date, empty, badge, CUSTOMER_STATUS, QUOTE_STATUS, STAGE_LABEL, initials, toast, confirmDialog, modal, formData, showErrors, withBusy, dateTime } from '../lib/ui.js';
 import { get, post, del, patch, api } from '../lib/api.js';
 import { customerForm, contactForm, dealForm, newQuoteDialog } from './forms.js';
+import { docListHtml, bindDocList, docForm } from './documents.js';
 
 const ACT_ICON = { note: 'note', call: 'phone', meeting: 'users', email: 'mail', system: 'activity' };
 const ACT_LABEL = { note: 'Anteckning', call: 'Samtal', meeting: 'Möte', email: 'Mejl' };
@@ -18,7 +19,7 @@ export default async function customer(view, p, app) {
   const mrr = accepted.reduce((s, q) => s + (q.totals?.monthly?.net || 0), 0);
 
   const TABS = [['oversikt', 'Översikt'], ['affarer', 'Affärer', r.deals.length], ['offerter', 'Offerter', r.quotes.length], ['aktivitet', 'Aktivitet', r.activities.length], ['uppgifter', 'Uppgifter', r.tasks.filter((t) => t.status === 'open').length],
-    ['projekt', 'Projekt', (r.projects || []).length], ['avtal', 'Avtal'], ['fakturor', 'Fakturor'], ['support', 'Support'], ['dokument', 'Dokument']];
+    ['projekt', 'Projekt', (r.projects || []).length], ['avtal', 'Avtal och dokument', (r.documents || []).length + (r.pages || []).filter((pg) => !(r.documents || []).some((d) => d.tracked_page_id === pg.id)).length], ['fakturor', 'Fakturor'], ['support', 'Support']];
 
   setHTML(view, html`
     <div class="dhead">
@@ -99,6 +100,16 @@ export default async function customer(view, p, app) {
         <div class="li-s">P${x.number} · ${x.task_done}/${x.task_count} uppgifter klara${x.due_date ? ' · deadline ' + date(x.due_date) : ''}</div></span><span class="badge ${x.status === 'done' ? 'green' : x.status === 'active' ? 'blue' : x.status === 'waiting_customer' ? 'amber' : ''}">${{ planned: 'Planerat', active: 'Pågår', waiting_customer: 'Väntar på kund', paused: 'Pausat', done: 'Klart', cancelled: 'Avbrutet' }[x.status]}</span></a>`)}</div>`
         : empty({ icon: 'folder', title: 'Inga projekt', text: 'Projekt skapas automatiskt när kunden godkänner en offert, eller manuellt här.' })}</div></div>`);
     $('#new-prj')?.addEventListener('click', () => import('./forms.js').then((m) => m.projectForm({ customerId: c.id, onSaved: (id) => app.navigate(`/projekt/${id}`) })));
+  } else if (tab === 'avtal' || tab === 'dokument') {
+    const docs = r.documents || []; const pages = r.pages || [];
+    const unlinkedPages = pages.filter((pg) => !docs.some((d) => d.tracked_page_id === pg.id));
+    setHTML(tabEl, html`<div class="flex mb12"><span class="muted small">Avtal, offerter, bilagor och presentationer för ${c.name}. Filer sparas med kontrollsumma.</span>
+        ${w ? html`<button class="btn primary ml-auto" id="add-doc">${ico('plus')} Lägg till</button>` : ''}</div>
+      ${unlinkedPages.length ? html`<section class="card mb16"><div class="card-h">${ico('eye')}<h3>Offertsidor och checklistor</h3></div><div class="list mt8">${unlinkedPages.map((pg) => html`<a class="li" href="#/sparning/${pg.id}">
+        <span class="li-ico">${ico(pg.kind === 'checklista' ? 'listChecks' : 'file')}</span><span class="li-b"><div class="li-t">${pg.title}</div><div class="li-s">${pg.kind === 'checklista' ? 'Checklista' : `${pg.visits} besök${pg.last_seen_at ? ' · senast ' + ago(pg.last_seen_at) : ''}`}</div></span>${ico('chevRight', 'chev')}</a>`)}</div></section>` : ''}
+      ${docs.length ? docListHtml(docs, { canWrite: w }) : unlinkedPages.length ? '' : html`<div class="card">${empty({ icon: 'signature', title: 'Inga avtal eller dokument än', text: 'Lägg in avtal (PDF och Word), offerter, bilagor eller länkar till presentationer.' })}</div>`}`);
+    bindDocList(tabEl, docs, { reload, customerId: c.id });
+    $('#add-doc')?.addEventListener('click', () => docForm({ customerId: c.id, onSaved: reload }));
   } else {
     const L = { projekt: ['folder', 'Projekt', 'Projekthantering med mallar, milstolpar och tidsåtgång byggs i fas 2. Accepterade offerter skapar redan en uppgift "Starta projekt".'],
       avtal: ['signature', 'Avtal', 'Avtal och e-signering via en etablerad e-signeringstjänst byggs i fas 2.'],

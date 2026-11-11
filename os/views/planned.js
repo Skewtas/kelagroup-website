@@ -2,7 +2,6 @@
 import { html, ico, setHTML } from '../lib/ui.js';
 
 const P = {
-  avtal: [2, 'signature', 'Avtal', 'Avtal skapas från accepterade offerter och signeras via en etablerad e-signeringstjänst.', ['Avtalsmallar per tjänst', 'E-signering med bevarat signeringsbevis', 'Koppling till offertversion och kund'], 'Konto hos e-signeringstjänst (t.ex. Scrive, Oneflow eller Visma Sign) + API-nyckel'],
   feedback: [2, 'message', 'Kundfeedback', 'Feedback på leveranser direkt från kundportalen.', ['Kommentarer på specifik leverans', 'Godkännande av milstolpar'], null],
   support: [2, 'buoy', 'Supportärenden', 'Ärenden per kund med prioritet och ansvarig.', ['Ärenden från kundportal och mejl', 'Notis till ansvarig'], 'E-postintegration för inkommande ärenden'],
   portaler: [2, 'layout', 'Kundportaler', 'En separat portal där kunden bara ser sina egna projekt, offerter, avtal och fakturor.', ['Mina projekt och tidsplan', 'Leveranser och designförslag', 'Feedback och godkännanden', 'Offerter, avtal, fakturor'], null],

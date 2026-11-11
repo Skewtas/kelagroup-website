@@ -28,7 +28,7 @@ const NAV = [
     { id: 'affarer', label: 'Affärsmöjligheter', icon: 'target', href: '#/affarer', perm: 'deals:read' },
     { id: 'offerter', label: 'Offerter', icon: 'file', href: '#/offerter', perm: 'quotes:read' },
     { id: 'sparning', label: 'Offertsidor – spårning', icon: 'eye', href: '#/sparning', perm: 'quotes:read' },
-    { id: 'avtal', label: 'Avtal', icon: 'signature', phase: 2 },
+    { id: 'avtal', label: 'Avtal och dokument', icon: 'signature', href: '#/avtal', perm: 'customers:read' },
     { id: 'tjanster', label: 'Tjänster och prislista', icon: 'tag', href: '#/tjanster', perm: 'services:read' },
   ] },
   { g: 'Leverans', items: [
@@ -84,6 +84,7 @@ const ROUTES = [
   [/^offerter\/(?<id>quo_[0-9a-z]+)(?:\/(?<tab>[a-z]+))?$/, 'offerter', () => import('./views/quote-editor.js')],
   [/^sparning(?:\/(?<id>tpg_[0-9a-z]+))?$/, 'sparning', () => import('./views/tracking.js')],
   [/^tjanster$/, 'tjanster', () => import('./views/services.js')],
+  [/^avtal$/, 'avtal', () => import('./views/documents.js')],
   [/^projekt$/, 'projekt', () => import('./views/projects.js')],
   [/^projekt\/(?<id>prj_[0-9a-z]+)(?:\/(?<tab>[a-z]+))?$/, 'projekt', () => import('./views/project.js')],
   [/^anvandare$/, 'anvandare', () => import('./views/users.js')],
