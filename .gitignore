@@ -6,3 +6,4 @@ nya-hemsidan/
 .dev.vars
 .os-test-credentials.json
 .os-setup-token
+s/demo-*/

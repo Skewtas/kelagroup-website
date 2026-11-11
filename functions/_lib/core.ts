@@ -8,6 +8,8 @@ export interface Env {
   OS_SECRET_KEY?: string;
   /** "development" tillåter en lokal reservnyckel för OS_SECRET_KEY. */
   OS_ENV?: string;
+  /** "1" = demoläge (npm run demo). Gäller bara tillsammans med OS_ENV=development på localhost. */
+  OS_DEMO?: string;
   /** Krävs för KELA Intelligence (AI-utkast). Används redan av hemsidans chatt. */
   ANTHROPIC_API_KEY?: string;
   /** Valfritt: annan modell än standard (claude-opus-5-5). */

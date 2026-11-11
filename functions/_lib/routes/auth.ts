@@ -21,6 +21,12 @@ export function mfaNeeded(role: Role, totpEnabled: boolean) {
   return totpEnabled || MFA_REQUIRED.includes(role);
 }
 
+/** Demoläge (npm run demo): endast lokalt – kräver OS_DEMO=1, OS_ENV=development OCH att anropet går till localhost.
+ *  Då behövs ingen autentiseringsapp för demokontot. Kan aldrig slås på i produktion. */
+export function isDemo(env: { OS_DEMO?: string; OS_ENV?: string }, url: URL) {
+  return env.OS_DEMO === '1' && env.OS_ENV === 'development' && ['localhost', '127.0.0.1'].includes(url.hostname);
+}
+
 function meView(s: { userId: string; orgId: string; email: string; name: string; role: Role; mfaOk: boolean; totpEnabled: boolean }, org: any) {
   return {
     user: { id: s.userId, email: s.email, name: s.name, role: s.role, role_label: ROLE_LABELS[s.role], totp_enabled: s.totpEnabled },
@@ -90,7 +96,7 @@ export function authRoutes(r: Router) {
     const mem = await env.DB.prepare(`SELECT m.org_id, m.role FROM memberships m WHERE m.user_id = ? AND m.role IN (${STAFF_ROLES.map(() => '?').join(',')}) ORDER BY m.created_at LIMIT 1`)
       .bind(user.id, ...STAFF_ROLES).first<any>();
     if (!mem) throw new HttpError(403, 'no_access', 'Kontot har inte åtkomst till KELA OS.');
-    const needMfa = mfaNeeded(mem.role, !!user.totp_enabled);
+    const needMfa = !isDemo(env, c.url) && mfaNeeded(mem.role, !!user.totp_enabled);
     const sess = await createSession(env, c.req, user.id, mem.org_id, !needMfa);
     await env.DB.prepare('UPDATE users SET last_login_at = ? WHERE id = ?').bind(now(), user.id).run();
     await audit({ env, ip, s: { userId: user.id, orgId: mem.org_id } as any }, 'auth.login', 'user', user.id, needMfa ? 'Lösenord godkänt, väntar på MFA' : 'Inloggad');
@@ -104,9 +110,9 @@ export function authRoutes(r: Router) {
     return new Response(JSON.stringify({ ok: true }), { headers: { 'content-type': 'application/json', 'set-cookie': clearCookie(c.req) } });
   }, { preMfa: true });
 
-  r.get('/auth/me', async ({ env, s }) => {
+  r.get('/auth/me', async ({ env, s, url }) => {
     const org = await env.DB.prepare('SELECT id, name, currency, default_vat_bp FROM organizations WHERE id = ?').bind(s.orgId).first();
-    return meView(s, org);
+    return { ...meView(s, org), ...(isDemo(env, url) ? { demo: true } : {}) };
   }, { preMfa: true });
 
   // Påbörja MFA-registrering: skapar en väntande hemlighet.

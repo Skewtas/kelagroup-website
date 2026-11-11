@@ -293,7 +293,7 @@ function renderShell() {
   const me = app.me;
   setHTML(root(), html`<div class="app">
     <aside class="side" id="side">
-      <div class="side-top"><a href="#/" class="brand" aria-label="KELA OS – startsida">${raw(WORDMARK)}<span class="os">OS</span></a><div class="side-org">${me.org?.name || ''}</div></div>
+      <div class="side-top"><a href="#/" class="brand" aria-label="KELA OS – startsida">${raw(WORDMARK)}<span class="os">OS</span></a><div class="side-org">${me.org?.name || ''}</div>${me.demo ? html`<div class="demo-tag">Demo · påhittad exempeldata</div>` : ''}</div>
       <button class="searchbtn" id="open-search" type="button">${ico('search')}<span>Sök…</span><kbd>⌘K</kbd></button>
       <nav class="nav" aria-label="Huvudmeny">${navHtml()}</nav>
       <div class="side-foot"><button class="me" id="me-btn" type="button"><span class="av">${initials(me.user.name)}</span><span><div class="me-n">${me.user.name}</div><div class="me-r">${me.user.role_label}</div></span></button></div>

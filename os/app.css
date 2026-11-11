@@ -545,3 +545,5 @@ a.tl{border-radius:10px}a.tl:hover .tl-t{color:var(--accent)}
 .ai-save{position:sticky;bottom:0;padding:12px 0;background:linear-gradient(transparent,var(--bg) 35%);z-index:2}
 .w-auto{width:auto}
 @media (max-width:900px){.ai-row.g4{grid-template-columns:1fr}}
+
+.demo-tag{margin-top:8px;display:inline-block;font-size:11px;font-weight:650;letter-spacing:.02em;padding:3px 9px;border-radius:999px;background:var(--accent-tint);color:var(--accent)}
