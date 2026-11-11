@@ -93,7 +93,13 @@ textarea::placeholder{color:var(--text-3);opacity:.85}
 textarea:focus{outline:none;border-color:var(--rose);background:var(--surface)}
 textarea:disabled{opacity:.75}
 .meta{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:13px;color:var(--text-3);min-height:24px}
-.meta .who{flex:1;min-width:0}
+.meta .who{flex:1;min-width:0;text-align:right}
+.own{display:inline-flex;align-items:center;gap:8px;flex:0 1 auto;min-width:0}
+.own label{font-size:13px;font-weight:700;color:var(--text-2);white-space:nowrap}
+.own input{width:190px;max-width:100%;min-width:0;font:15px var(--sans);color:var(--vin);background:var(--field);border:1.5px solid var(--rose-pale);border-radius:10px;padding:6px 10px}
+.own input:focus{outline:none;border-color:var(--rose);background:var(--surface)}
+.own input:disabled{opacity:.75}
+.pcard .own label{font-size:15px}.pcard .own input{font-size:16px;width:220px}
 .meta .who.saving{color:var(--rose)}
 .meta .who.err{color:#B4232F}
 .cbtn{font:600 13px var(--sans);color:var(--text-2);background:none;border:1px solid var(--rose-pale);border-radius:999px;padding:4px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
@@ -136,14 +142,21 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
 .talk b{font-family:var(--display);font-weight:400;font-size:34px;line-height:1.1}
 .talk p{font-size:22px;color:var(--text-2);line-height:1.4}
 .snote{align-self:flex-start;background:var(--teal-bg);color:var(--teal);font-weight:700;font-size:21px;padding:11px 22px;border-radius:999px}
-.agenda{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px 22px}
-.agenda li{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:16px;background:var(--surface);border-radius:22px;padding:15px 24px;box-shadow:0 14px 34px var(--shadow);cursor:pointer}
+.agenda{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:14px 22px;flex:1;min-height:0}
+.agenda li{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:18px;background:var(--surface);border-radius:22px;padding:16px 24px;box-shadow:0 14px 34px var(--shadow);cursor:pointer;border-left:8px solid var(--rose-pale)}
+.agenda li.g-c{border-left-color:var(--hot)}.agenda li.g-b{border-left-color:var(--teal)}.agenda li.g-t{border-left-color:var(--rose-soft)}
+.ag-r{display:grid;justify-items:end;gap:6px}
+.ag-r i{font-style:normal;font-size:15px;font-weight:700;color:var(--teal)}
+.ag-key{display:flex;flex-wrap:wrap;align-items:center;gap:10px 22px;font-size:18px;font-weight:700;color:var(--text-2);margin-top:-4px}
+.ag-key span[class^="g-"]{display:inline-flex;align-items:center;gap:8px}
+.ag-key span[class^="g-"]::before{content:"";width:22px;height:8px;border-radius:4px;background:var(--hot)}
+.ag-key .g-b::before{background:var(--teal)}.ag-key .g-t::before{background:var(--rose-soft)}
+.ag-tip{margin-left:auto;font-weight:400;color:var(--text-3)}
 .agenda li:hover{box-shadow:0 0 0 2px var(--rose-soft),0 14px 34px var(--shadow)}
 .agenda .num{font-family:var(--display);font-size:40px;line-height:1;color:var(--rose-soft)}
-.agenda b{display:block;font-family:var(--display);font-weight:400;font-size:26px;line-height:1.08}
-.agenda small{display:block;font-size:17px;color:var(--text-2);margin-top:3px}
+.agenda b{display:block;font-family:var(--display);font-weight:400;font-size:28px;line-height:1.08}
+.agenda small{display:block;font-size:18px;line-height:1.35;color:var(--text-2);margin-top:6px}
 .agenda em{font-style:normal;font-size:15px;font-weight:700;color:var(--teal);background:var(--teal-bg);padding:6px 12px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
-.agenda li.prio{border-left:6px solid var(--hot)}
 .sec-top{display:flex;align-items:baseline;gap:22px}
 .sec-top .big{font-family:var(--display);font-size:64px;line-height:.9;color:var(--rose-soft)}
 .sec-top .cnt{margin-left:auto;font-size:18px;font-weight:700;color:var(--text-3);font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -223,8 +236,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
 
   <div class="how">
     <div><b>Skriv direkt i fälten</b>Allt sparas automatiskt och syns för alla som har sidan.</div>
+    <div><b>Skriv vem som ansvarar</b>Fyll i Ansvarig hos er på varje fråga, så vet vi vem vi ska fråga.</div>
     <div><b>Dela inom företaget</b>Alla som har länken kan läsa och skriva. Skicka den bara till kollegor.</div>
-    <div><b>Börja med 1–3</b>Prata gärna ihop er om punkterna. Allt går att ändra i efterhand.</div>
   </div>
 
   <div class="whoami"><label for="me">Ditt namn</label><input id="me" type="text" maxlength="60" autocomplete="name" placeholder="T.ex. Malin"><small>Så ser vi vem som har svarat. Namnet sparas bara i din webbläsare och skickas med dina svar.</small></div>
@@ -323,19 +336,24 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   function knownEl(t){var k=el('p','known');k.appendChild(el('b',null,'Det vi vet: '));k.appendChild(document.createTextNode(t));return k}
 
   // En punkt kan visas på två ställen (listan och presentationen) – samma data, samma sparande.
-  function bind(id,box,ta,who,cb,card){
-    var e=els[id]||(els[id]={text:'',done:false,tas:[],boxes:[],whos:[],cbs:[],cards:[],timer:null,dirty:false,busy:false});
-    e.tas.push(ta);e.boxes.push(box);e.whos.push(who);e.cbs.push(cb);e.cards.push(card);
-    box.disabled=true;ta.disabled=true;
+  function bind(id,box,ta,who,cb,card,own){
+    var e=els[id]||(els[id]={text:'',done:false,owner:'',tas:[],boxes:[],owns:[],whos:[],cbs:[],cards:[],timer:null,dirty:false,busy:false});
+    e.tas.push(ta);e.boxes.push(box);e.owns.push(own);e.whos.push(who);e.cbs.push(cb);e.cards.push(card);
+    box.disabled=true;ta.disabled=true;own.disabled=true;
+    own.addEventListener('input',function(){e.owner=own.value;e.owns.forEach(function(o){if(o!==own)o.value=e.owner});e.dirty=true;clearTimeout(e.timer);e.timer=setTimeout(function(){save(id)},900)});
+    own.addEventListener('blur',function(){if(e.dirty){clearTimeout(e.timer);save(id)}});
     box.addEventListener('change',function(){e.done=box.checked;paint(id);counts();save(id)});
     ta.addEventListener('input',function(){e.text=ta.value;e.tas.forEach(function(t){if(t!==ta){t.value=e.text;grow(t)}});grow(ta);e.dirty=true;clearTimeout(e.timer);e.timer=setTimeout(function(){save(id)},900)});
     ta.addEventListener('blur',function(){if(e.dirty){clearTimeout(e.timer);save(id)}});
   }
   function paint(id){var e=els[id];e.boxes.forEach(function(b){b.checked=e.done});e.cards.forEach(function(c){c.classList.toggle('is-done',e.done)})}
-  function metaRow(){var meta=el('div','meta');var who=el('span','who');meta.appendChild(who);
+  function metaRow(id){var meta=el('div','meta');
+    var ow=el('span','own');var ol=el('label',null,'Ansvarig hos er');var oi=document.createElement('input');oi.type='text';oi.maxLength=80;oi.placeholder='Namn';oi.id=id;ol.htmlFor=id;
+    ow.appendChild(ol);ow.appendChild(oi);meta.appendChild(ow);
+    var who=el('span','who');meta.appendChild(who);
     var cb=el('button','cbtn');cb.type='button';cb.hidden=true;
     cb.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v10H9l-5 4z"/></svg>';cb.appendChild(document.createTextNode('Kommentera'));
-    meta.appendChild(cb);return {meta:meta,who:who,cb:cb}}
+    meta.appendChild(cb);return {meta:meta,who:who,cb:cb,own:oi}}
 
   /* Listan */
   SECTIONS.forEach(function(s){
@@ -356,10 +374,10 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       if(it[4])body.appendChild(knownEl(it[4]));
       var ta=document.createElement('textarea');ta.id='f-'+id;ta.rows=3;ta.placeholder=it[3]||'Skriv här …';ta.maxLength=20000;
       ta.setAttribute('aria-label',it[1]);
-      var m=metaRow();
+      var m=metaRow('o-'+id);
       body.appendChild(ta);body.appendChild(m.meta);
       li.appendChild(box);li.appendChild(lab);li.appendChild(body);ul.appendChild(li);
-      bind(id,box,ta,m.who,m.cb,li);
+      bind(id,box,ta,m.who,m.cb,li,m.own);
     });
     sec.appendChild(ul);
     if(s.note)sec.appendChild(el('p','note',s.note));
@@ -377,17 +395,27 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     s.innerHTML='<div class="logos">'+KSVG+'<span class="x">×</span><img class="r" alt="Rozen Clean" src="'+RZ+'"></div><div class="bar"></div><h1>Inför er chattbot <span>och bokning.</span></h1><p class="lead">Vi går igenom allt som ska in, punkt för punkt. Svaren skriver vi in direkt.</p><span class="pill">Kartläggning · Rozen Clean</span>';
 
     s=slide('','Så jobbar vi');
-    s.innerHTML='<span class="eyebrow">Så jobbar vi idag</span><h2>Boten vet bara det <span>som står här.</span></h2><div class="talk"><div><span>1</span><b>Vi visar det vi vet</b><p>Det gröna har vi hämtat från er hemsida. Ni bekräftar eller rättar.</p></div><div><span>2</span><b>Ni berättar resten</b><p>Ton, regler och beslut. Vi skriver in svaren medan vi pratar.</p></div><div><span>3</span><b>Allt sparas</b><p>Samma lista finns kvar efter mötet. Ni kan fylla på när ni vill.</p></div></div><p class="snote">Det som inte står i listan får boten inte påstå.</p>';
+    s.innerHTML='<span class="eyebrow">Så jobbar vi idag</span><h2>Vi går igenom checklistan, <span>del för del.</span></h2><div class="talk"><div><span>1</span><b>Vi tar en del i taget</b><p>Jag skriver in era svar direkt i checklistan medan vi pratar. Det gröna har vi hämtat från er hemsida – ni bekräftar eller rättar.</p></div><div><span>2</span><b>Ni får samma länk</b><p>Efter mötet kompletterar ni själva. Ni skriver rakt in i länken, precis som jag gör här. Inget konto behövs.</p></div><div><span>3</span><b>Vem ansvarar?</b><p>Skriv in vem hos er som ansvarar för varje fråga, så vet vi vem vi ska fråga.</p></div></div><p class="snote">Allt sparas direkt. Det som inte står i checklistan får chattboten inte påstå.</p>';
     foot(s);
 
     s=slide('','Agenda');
-    s.innerHTML='<span class="eyebrow">Agenda</span><h2>Det här <span>går vi igenom.</span></h2>';
+    s.innerHTML='<span class="eyebrow">Agenda · ca 90 minuter</span><h2>Åtta delar. <span>En i taget.</span></h2><div class="ag-key"><span class="g-c">Chattboten</span><span class="g-b">Bokningen</span><span class="g-t">Teknik och start</span><span class="ag-tip">Det vi inte hinner fyller ni i efteråt i samma länk.</span></div>';
+    var AG={1:['c','Ton, vad boten aldrig får lova, när en människa tar över och era avbokningsregler',10],
+      2:['c','Tjänster, priser, områden, material, nycklar, försäkring, betalning och kontakt',20],
+      3:['c','Era vanligaste kundfrågor, svåra fall och riktiga mejl som exempel',10],
+      4:['b','Tid per städning, tillval, tider, helger, personal och vad kunden fyller i',20],
+      5:['t','Två nycklar från TimeWave: en för bokningen och en för chattboten',5],
+      6:['c','Vad boten får göra själv, uppföljning av kunder, namn och bild',10],
+      7:['t','Kontaktperson, testpersoner, vem som godkänner och integritetspolicy',5],
+      8:['t','Allt annat vi behöver veta',5]};
     var ol=el('ol','agenda');
     SECTIONS.forEach(function(sec){
-      var li=el('li',sec.prio?'prio':'');li.dataset.sec=sec.n;
-      li.innerHTML='<span class="num">'+sec.n+'</span><span><b></b><small></small></span><em></em>';
+      var ag=AG[sec.n]||['c','',5];
+      var li=el('li','g-'+ag[0]);li.dataset.sec=sec.n;
+      li.innerHTML='<span class="num">'+sec.n+'</span><span><b></b><small></small></span><span class="ag-r"><em></em><i></i></span>';
       li.querySelector('b').textContent=sec.title;
-      li.querySelector('small').textContent=sec.prio?'Viktigast':(sec.isNew?'Bokis':(sec.intro?sec.intro.split('.')[0]:sec.items.map(function(i){return i[1]}).slice(0,2).join(', ')));
+      li.querySelector('small').textContent=ag[1];
+      li.querySelector('em').textContent=sec.items.length+(sec.items.length===1?' fråga':' frågor')+' · '+ag[2]+' min';
       li.addEventListener('click',function(){go(firstOf[sec.n])});
       ol.appendChild(li);
     });
@@ -422,9 +450,9 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
         if(it[4])card.appendChild(knownEl(it[4]));
         var ta=document.createElement('textarea');ta.id='df-'+id;ta.placeholder=it[3]||'Skriv här …';ta.maxLength=20000;ta.setAttribute('aria-label',it[1]);
         card.appendChild(ta);
-        var m=metaRow();card.appendChild(m.meta);
+        var m=metaRow('do-'+id);card.appendChild(m.meta);
         g.appendChild(card);
-        bind(id,box,ta,m.who,m.cb,card);
+        bind(id,box,ta,m.who,m.cb,card,m.own);
       });
       s.appendChild(g);
       if(sec.note&&start+per>=n)s.appendChild(el('p','note pnote',sec.note));
@@ -487,7 +515,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       var d=s.items.filter(function(it){return els[it[0]].done}).length, txt=d+' / '+s.items.length;
       var c=document.querySelector('#sec-'+s.n+' .sec-c');c.textContent=txt;c.classList.toggle('done',d===s.items.length);
       stage.querySelectorAll('.slide[data-sec="'+s.n+'"] .cnt').forEach(function(x){x.textContent=txt+' klara'});
-      var a=stage.querySelector('.agenda li[data-sec="'+s.n+'"] em');if(a)a.textContent=txt;
+      var a=stage.querySelector('.agenda li[data-sec="'+s.n+'"] .ag-r i');if(a)a.textContent=d?(d===s.items.length?'✓ Klar':d+(d===1?' klar':' klara')):'';
     });
     slides.forEach(function(s,k){
       var b=s.querySelectorAll('.pcard input[type=checkbox]');
@@ -518,6 +546,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       e.done=!!d.done;paint(k);
       var focused=e.tas.indexOf(document.activeElement)>=0;
       if(!focused){e.text=typeof d.text==='string'?d.text:'';e.tas.forEach(function(t){if(t.value!==e.text){t.value=e.text;grow(t)}})}
+      if(e.owns.indexOf(document.activeElement)<0){e.owner=d.owner||'';e.owns.forEach(function(o){if(o.value!==e.owner)o.value=e.owner})}
     });
     counts();renderWho();
   }
@@ -525,7 +554,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   /* Sparande till KELA (ingen inloggning – den hemliga adressen är nyckeln) */
   var SLUG=(location.pathname.match(/\/s\/([A-Za-z0-9_-]+)/)||[])[1]||'';
   var API='/api/s/'+SLUG+'/answers';
-  var LBL={};SECTIONS.forEach(function(s){s.items.forEach(function(it){LBL[it[0]]=[it[1],s.n+'. '+s.title]})});
+  var LBL={};SECTIONS.forEach(function(s){s.items.forEach(function(it,ix){LBL[it[0]]=[it[1],s.n+'. '+s.title,ix]})});
   var dsave=document.getElementById('dsave');
   var meEl=document.getElementById('me');
   try{meEl.value=localStorage.getItem('kela-checklista-namn')||''}catch(x){}
@@ -541,10 +570,10 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     var by=meEl.value.trim();
     try{
       var r=await fetch(API,{method:'POST',headers:{'content-type':'application/json','x-kela-s':'1'},
-        body:JSON.stringify({key:id,label:LBL[id][0],section:LBL[id][1],text:e.text,done:e.done,by:by})});
+        body:JSON.stringify({key:id,label:LBL[id][0],section:LBL[id][1],pos:LBL[id][2],text:e.text,done:e.done,owner:e.owner,by:by})});
       if(!r.ok){var j=null;try{j=await r.json()}catch(x){}throw {status:r.status,message:j&&j.message}}
       var res=await r.json();
-      if(res.at)data[id]={text:e.text,done:e.done,by:by,at:res.at};
+      if(res.at)data[id]={text:e.text,done:e.done,owner:e.owner,by:by,at:res.at};
       e.busy=false;setWho(e,'who','');dsave.textContent='Sparat';
       if(!by)hintName();
     }catch(err){
@@ -561,7 +590,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   var hinted=false;
   function hintName(){if(hinted||meEl.value.trim())return;hinted=true;stateEl.hidden=false;stateEl.textContent='Tips: skriv ditt namn överst, så ser vi vem som har svarat.'}
 
-  function each(fn){Object.keys(els).forEach(function(k){var e=els[k];e.tas.forEach(fn);e.boxes.forEach(fn)})}
+  function each(fn){Object.keys(els).forEach(function(k){var e=els[k];e.tas.forEach(fn);e.boxes.forEach(fn);e.owns.forEach(fn)})}
 
   async function load(){
     var r=await fetch(API,{headers:{accept:'application/json'},cache:'no-store'});

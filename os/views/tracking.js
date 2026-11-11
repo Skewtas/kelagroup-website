@@ -80,27 +80,28 @@ async function detail(view, id, app) {
 function checklist(view, d, app) {
   const pg = d.page;
   app.setCrumbs([{ label: 'Offertsidor – spårning', href: '#/sparning' }, { label: pg.customer_name || pg.title }]);
-  const answers = d.answers.filter((a) => a.text || a.done);
+  const answers = d.answers.filter((a) => a.text || a.done || a.owner);
   const done = answers.filter((a) => a.done).length;
   const last = answers.reduce((m, a) => (a.updated_at > m ? a.updated_at : m), '');
   const people = [...new Set(answers.map((a) => a.updated_by).filter(Boolean))];
+  const owners = [...new Set(answers.map((a) => a.owner).filter(Boolean))];
   const sections = [...new Set(answers.map((a) => a.section || 'Övrigt'))];
   const kpi = (icon, label, value, sub) => html`<div class="kpi"><div class="kpi-l">${ico(icon)}${label}</div><div class="kpi-v">${value}</div><div class="kpi-s">${sub}</div></div>`;
   const asText = () => `${pg.customer_name || ''} – ${pg.title}\n\n` + sections.map((s) => `${s.toUpperCase()}\n` + answers.filter((a) => (a.section || 'Övrigt') === s)
-    .map((a) => `${a.done ? '[x]' : '[ ]'} ${a.label || a.item_key}${a.text ? '\n    ' + a.text.replace(/\n/g, '\n    ') : ''}`).join('\n')).join('\n\n');
+    .map((a) => `${a.done ? '[x]' : '[ ]'} ${a.label || a.item_key}${a.owner ? ' (ansvarig: ' + a.owner + ')' : ''}${a.text ? '\n    ' + a.text.replace(/\n/g, '\n    ') : ''}`).join('\n')).join('\n\n');
   setHTML(view, html`<div class="page-h"><div><h1>${pg.customer_name || pg.title}</h1><div class="sub">${pg.title}</div></div>
       <div class="act"><button class="btn" id="cp-all">${ico('copy')} Kopiera alla svar</button><button class="btn" id="cp">${ico('copy')} Kopiera länk</button><a class="btn" href="${pageUrl(pg.slug)}" target="_blank" rel="noopener">${ico('external')} Öppna sidan</a></div></div>
     <div class="notice mb16">${ico('info')}<div>Kunden fyller i utan konto. Alla som har länken kan läsa och skriva, och namnet skriver de in själva. Det du skriver på sidan sparas här också.</div></div>
     <div class="kpis">
-      ${kpi('edit', 'Ifyllda punkter', answers.length, 'Med svar eller bock')}
+      ${kpi('edit', 'Ifyllda punkter', answers.length, people.length ? 'Skrivet av ' + people.join(', ') : 'Med svar, bock eller ansvarig')}
       ${kpi('checkCircle', 'Klara', done, 'Bockade som klara')}
       ${kpi('clock', 'Senast ändrat', last ? ago(last) : '–', last ? dateTime(last) : 'Inga svar än')}
-      ${kpi('users', 'Har skrivit', people.length, people.join(', ') || 'Ingen än')}
+      ${kpi('users', 'Ansvariga hos kunden', owners.length, owners.join(', ') || 'Inte satt än')}
     </div>
     ${answers.length ? sections.map((s) => html`<div class="card mt16"><div class="card-h"><h2>${s}</h2></div><div class="card-b"><div class="timeline">
       ${answers.filter((a) => (a.section || 'Övrigt') === s).map((a) => html`<div class="tl"><span class="tl-dot ${a.done ? 'green' : ''}">${ico(a.done ? 'checkCircle' : 'edit')}</span><div class="tl-b">
         <div class="tl-t">${a.label || a.item_key} ${a.done ? html`<span class="badge green">Klar</span>` : ''}</div>
-        <div class="tl-m">${a.updated_by || 'Okänd'} · ${dateTime(a.updated_at)}</div>
+        <div class="tl-m">${a.owner ? html`Ansvarig: <b>${a.owner}</b> · ` : ''}Senast ändrat av ${a.updated_by || 'okänd'} · ${dateTime(a.updated_at)}</div>
         ${a.text ? html`<div class="tl-body">${a.text}</div>` : ''}</div></div>`)}
     </div></div></div>`) : html`<div class="card mt16">${empty({ icon: 'edit', title: 'Inga svar än', text: 'Svaren dyker upp här när kunden börjar skriva.' })}</div>`}
     ${d.history.length ? html`<div class="card mt16"><div class="card-h"><h2>Historik</h2><div class="act small faint">${d.history.length} sparade versioner</div></div><div class="card-b"><div class="timeline">

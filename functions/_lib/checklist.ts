@@ -1,6 +1,6 @@
 // Checklistor på hemlig adress under /s/<slug>/ – kunden skriver in svar utan konto.
 // GET  /api/s/<slug>/answers  → alla svar
-// POST /api/s/<slug>/answers  → spara ett svar { key, label, section, text, done, by }
+// POST /api/s/<slug>/answers  → spara ett svar { key, label, section, text, done, owner, by }
 // Åtkomst styrs av den hemliga sluggen, precis som offertsidorna. Inga kakor sätts.
 import { Env, HttpError, json, errorResponse, newId, now, clientIp, rateLimit, readJson } from './core';
 import { findPage } from './tracking';
@@ -20,10 +20,10 @@ export async function handleChecklistApi(env: Env, req: Request, slug: string): 
       if (!(await rateLimit(env.DB, `clget:${ip}`, 1200, 3600))) throw new HttpError(429, 'rate_limited', 'För många förfrågningar.');
       const p = await findPage(env, slug);
       if (!p || p.kind !== 'checklista') throw new HttpError(404, 'not_found', 'Hittades inte.');
-      const { results } = await env.DB.prepare('SELECT item_key, text, done, updated_by, updated_at FROM checklist_answers WHERE page_id = ? AND org_id = ?')
+      const { results } = await env.DB.prepare('SELECT item_key, text, done, owner, updated_by, updated_at FROM checklist_answers WHERE page_id = ? AND org_id = ?')
         .bind(p.id, p.org_id).all<any>();
       return json({
-        answers: results.map((a) => ({ key: a.item_key, text: a.text, done: !!a.done, by: a.updated_by || '', at: a.updated_at })),
+        answers: results.map((a) => ({ key: a.item_key, text: a.text, done: !!a.done, owner: a.owner || '', by: a.updated_by || '', at: a.updated_at })),
       }, 200, { 'cache-control': 'no-store' });
     }
 
@@ -42,27 +42,29 @@ export async function handleChecklistApi(env: Env, req: Request, slug: string): 
     const text = str(body.text, MAX_TEXT);
     const done = body.done === true ? 1 : 0;
     const by = str(body.by, 60).trim() || null;
+    const owner = str(body.owner, 80).trim();
+    const pos = Number.isInteger(body.pos) && body.pos >= 0 && body.pos < 1000 ? body.pos : 0;
     const label = str(body.label, 200);
     const section = str(body.section, 120);
     const t = now();
 
-    const prev = await env.DB.prepare('SELECT text, done FROM checklist_answers WHERE page_id = ? AND item_key = ?').bind(p.id, key).first<any>();
-    if (prev && prev.text === text && prev.done === done) return json({ ok: true, at: null });
+    const prev = await env.DB.prepare('SELECT text, done, owner FROM checklist_answers WHERE page_id = ? AND item_key = ?').bind(p.id, key).first<any>();
+    if (prev && prev.text === text && prev.done === done && (prev.owner || '') === owner) return json({ ok: true, at: null });
 
     // Historik: samma person som skriver vidare på samma punkt inom 10 minuter uppdaterar sin senaste rad.
     const last = await env.DB.prepare('SELECT id, updated_by, updated_at FROM checklist_history WHERE page_id = ? AND item_key = ? ORDER BY updated_at DESC LIMIT 1')
       .bind(p.id, key).first<any>();
     const sameRun = last && (last.updated_by || null) === by && Date.now() - Date.parse(last.updated_at) < COALESCE_MS;
     const hist = sameRun
-      ? env.DB.prepare('UPDATE checklist_history SET text = ?, done = ?, updated_at = ? WHERE id = ?').bind(text, done, t, last.id)
-      : env.DB.prepare('INSERT INTO checklist_history (id, org_id, page_id, item_key, text, done, updated_by, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?)')
-        .bind(newId('clh'), p.org_id, p.id, key, text, done, by, t, t);
+      ? env.DB.prepare('UPDATE checklist_history SET text = ?, done = ?, owner = ?, updated_at = ? WHERE id = ?').bind(text, done, owner, t, last.id)
+      : env.DB.prepare('INSERT INTO checklist_history (id, org_id, page_id, item_key, text, done, owner, updated_by, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)')
+        .bind(newId('clh'), p.org_id, p.id, key, text, done, owner, by, t, t);
 
     await env.DB.batch([
-      env.DB.prepare(`INSERT INTO checklist_answers (page_id, org_id, item_key, label, section, text, done, updated_by, updated_at) VALUES (?,?,?,?,?,?,?,?,?)
-        ON CONFLICT(page_id, item_key) DO UPDATE SET label = excluded.label, section = excluded.section, text = excluded.text, done = excluded.done,
-        updated_by = excluded.updated_by, updated_at = excluded.updated_at`)
-        .bind(p.id, p.org_id, key, label, section, text, done, by, t),
+      env.DB.prepare(`INSERT INTO checklist_answers (page_id, org_id, item_key, label, section, pos, text, done, owner, updated_by, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)
+        ON CONFLICT(page_id, item_key) DO UPDATE SET label = excluded.label, section = excluded.section, pos = excluded.pos, text = excluded.text, done = excluded.done,
+        owner = excluded.owner, updated_by = excluded.updated_by, updated_at = excluded.updated_at`)
+        .bind(p.id, p.org_id, key, label, section, pos, text, done, owner, by, t),
       hist,
     ]);
     await notifyAnswers(env, url, p, by);

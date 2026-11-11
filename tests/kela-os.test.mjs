@@ -818,13 +818,15 @@ test('Checklistor: kunden sparar svar utan konto, historiken bevaras och bara r�
   const s1 = await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: '279 kr/tim', done: false, by: 'Malin' });
   assert.equal(s1.status, 200); assert.ok(s1.json.at);
   assert.equal((await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: '279 kr/tim mån–tis', done: true, by: 'Malin' })).status, 200);
-  assert.equal((await save({ key: 'ton', label: 'Ton', section: '1. Hur ni pratar', text: '<script>alert(1)</script>Du', by: 'Fredrik' })).status, 200);
+  assert.equal((await save({ key: 'ton', label: 'Ton', section: '1. Hur ni pratar', text: '<script>alert(1)</script>Du', owner: 'Malin (kundservice)', by: 'Fredrik' })).status, 200);
+  assert.equal((await save({ key: 'kontakt', label: 'Kontakt', section: '7. Praktiskt', text: '', owner: 'Fredrik', by: 'Fredrik' })).status, 200, 'bara ansvarig ifylld');
   assert.equal((await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: '299 kr/tim', done: true, by: 'Fredrik' })).status, 200);
   const same = await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: '299 kr/tim', done: true, by: 'Fredrik' });
   assert.equal(same.json.at, null, 'oförändrat svar sparas inte igen');
   const got = (await (await fetch(A(slug))).json()).answers;
   const pr = got.find((a) => a.key === 'priser');
   assert.equal(pr.text, '299 kr/tim'); assert.equal(pr.done, true); assert.equal(pr.by, 'Fredrik');
+  assert.equal(got.find((a) => a.key === 'ton').owner, 'Malin (kundservice)');
 
   // Notis till KELA högst en gång per timme
   assert.equal(mockCalls.filter((c) => c.url === '/offertnotis' && /checklistan/.test(c.body._subject)).length, 1);
@@ -832,10 +834,11 @@ test('Checklistor: kunden sparar svar utan konto, historiken bevaras och bara r�
   // KELA OS: svar med rubrik, historik och lista
   const list = ok(await admin.get('/api/os/sparning'));
   const row = list.pages.find((p) => p.id === 'tpg_testlista00000001');
-  assert.equal(row.kind, 'checklista'); assert.equal(row.answers, 2);
+  assert.equal(row.kind, 'checklista'); assert.equal(row.answers, 3, 'en punkt med bara ansvarig räknas också');
   const d = ok(await admin.get('/api/os/sparning/tpg_testlista00000001'));
   assert.equal(d.page.kind, 'checklista');
   assert.equal(d.answers.find((a) => a.item_key === 'priser').label, 'Priser');
+  assert.equal(d.answers.find((a) => a.item_key === 'kontakt').owner, 'Fredrik');
   assert.equal(d.answers.find((a) => a.item_key === 'ton').text, '<script>alert(1)</script>Du', 'lagras som text, escapas vid visning');
   const ph = d.history.filter((h) => h.item_key === 'priser');
   assert.equal(ph.length, 2, 'Malins två sparningar blir en rad, Fredriks en egen');
