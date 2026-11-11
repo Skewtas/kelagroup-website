@@ -186,6 +186,34 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
 .pcard textarea{flex:1;min-height:70px;font-size:18px;resize:none}
 .pcard .meta{font-size:14px;min-height:20px}
 .pnote{font-size:18px;margin:0}
+.road{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:0}
+.road li{display:grid;grid-template-columns:34px 1fr;gap:4px 16px;position:relative;padding-bottom:18px}
+.road li::before{content:attr(data-n);grid-row:span 3;width:34px;height:34px;border-radius:50%;background:var(--tint);color:var(--vin);display:grid;place-items:center;font-family:var(--display);font-size:16px;z-index:1}
+.road li:not(:last-child)::after{content:"";position:absolute;left:16px;top:34px;bottom:0;width:2px;background:var(--rose-pale)}
+.road li.now::before{background:var(--hot);color:var(--on-hot)}
+.road .when{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+.road .who{justify-self:start;font-size:12px;font-weight:700;padding:2px 9px;border-radius:999px;margin-left:8px;letter-spacing:0;text-transform:none}
+.who-r{background:var(--tint);color:var(--rose)}.who-k{background:var(--teal-bg);color:var(--teal)}.who-t{background:var(--rose-pale);color:var(--vin)}
+.road b{font-size:17px}
+.road p{font-size:15px;color:var(--text-2)}
+.todo{background:var(--teal-bg);border-radius:18px;padding:18px 22px;margin:4px 0 12px;display:grid;gap:10px}
+.todo h3{font-family:var(--display);font-weight:400;font-size:21px;margin:0}
+.todo ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.todo li{display:grid;grid-template-columns:24px 1fr;gap:8px;font-size:15.5px;color:var(--vin)}
+.todo li::before{content:"✓";width:20px;height:20px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;margin-top:2px}
+.s-road{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 22px;flex:1;min-height:0}
+.s-road>div{background:var(--surface);border-radius:24px;padding:22px 26px;display:grid;gap:8px;align-content:start;box-shadow:0 16px 40px var(--shadow);border-top:6px solid var(--rose-pale)}
+.s-road>div.k{border-top-color:var(--teal)}.s-road>div.r{border-top-color:var(--rose)}.s-road>div.t{border-top-color:var(--hot)}
+.s-road .top{display:flex;align-items:center;gap:12px}
+.s-road .n{font-family:var(--display);font-size:38px;line-height:1;color:var(--rose-soft)}
+.s-road .when{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3)}
+.s-road .who{margin-left:auto;font-size:15px;font-weight:700;padding:4px 12px;border-radius:999px}
+.s-road b{font-family:var(--display);font-weight:400;font-size:27px;line-height:1.08}
+.s-road p{font-size:19px;line-height:1.4;color:var(--text-2)}
+.s-todo{display:grid;grid-template-columns:1fr 1fr;gap:12px 28px;list-style:none;margin:0;padding:0}
+.s-todo li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;background:var(--surface);border-radius:20px;padding:16px 22px;box-shadow:0 12px 30px var(--shadow);font-size:21px;line-height:1.35}
+.s-todo li::before{content:"";width:30px;height:30px;border-radius:50%;border:3px solid var(--rose-soft)}
+.s-todo li b{color:var(--vin)}
 .next{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:10px}
 .next div{border-radius:30px;padding:30px 32px;display:grid;gap:10px;align-content:start;min-height:250px;background:var(--surface);box-shadow:0 22px 54px var(--shadow)}
 .next span{font-family:var(--display);font-size:46px;line-height:1;color:var(--rose-soft)}
@@ -259,6 +287,13 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   <p class="state" id="state">Hämtar det som redan är ifyllt …</p>
 
   <div id="sections"></div>
+
+  <section class="sec road-sec" id="vidare" aria-labelledby="h-vidare">
+    <div class="sec-head"><span class="sec-n">→</span><h2 id="h-vidare">Så går vi vidare</h2><span></span></div>
+    <p class="intro">Så här ser processen ut från kartläggningen till att chattboten och bokningen är live.</p>
+    <ol class="road" id="road"></ol>
+    <div class="todo"><h3>Det här behöver ni göra nu</h3><ul id="todo"></ul></div>
+  </section>
 
   <footer>
     <a class="kela" href="https://kelagroup.se/?utm_source=rozenclean&amp;utm_medium=checklista" target="_blank" rel="noopener"><span>Byggd av</span><svg viewBox="0 -700 3000 840" aria-label="KELA"><path d="M540 -688H814L567 -405L819 0H558L415 -252L295 -154V0H74V-688H295V-394Z M907 -688H1502V-523H1128V-428H1448V-270H1128V-165H1509V0H907Z M1629 -688H1850V-176H2203V0H1629Z M2757 0 2728 -97H2487L2458 0H2232L2483 -688H2740L2991 0ZM2533 -251H2682L2610 -496H2606Z"/><rect y="70" width="3000" height="70" rx="12"/></svg><i></i></a>
@@ -415,6 +450,36 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     root.appendChild(sec);
   });
 
+  /* Så går vi vidare – samma innehåll i listan och presentationen */
+  var WHO={t:'Tillsammans',r:'Rozen',k:'KELA'};
+  var ROAD=[
+    ['Idag','t','Kartläggning','Vi går igenom checklistan del för del och skriver in svaren direkt.'],
+    ['Efter mötet','r','Ni kompletterar','Fyll i det som saknas i samma länk, skriv vem som ansvarar och ladda upp tjänstelistan.'],
+    ['Samtidigt','r','Avtal och API-nycklar','Skriv under sekretessavtalet och personuppgiftsbiträdesavtalet. Be TimeWave om två API-nycklar.'],
+    ['När underlaget är klart','k','Vi bygger','Chattboten och bokningen sätts upp efter era svar och kopplas till TimeWave. Vi hör av oss om något är oklart.'],
+    ['Test','r','Ni testar och godkänner','Testpersonerna provar chattboten och gör testbokningar. Ni godkänner priser och svar.'],
+    ['Lansering','t','Live','Chattboten och bokningen går live på er hemsida. Testmånaden börjar.']
+  ];
+  var TODO=[
+    '<b>Fyll i del 1–3 först</b> – de är viktigast för chattboten.',
+    '<b>Skriv vem som ansvarar</b> för varje fråga.',
+    '<b>Exportera tjänstelistan ur TimeWave</b> och ladda upp den i del 2.',
+    '<b>Be TimeWave om två API-nycklar</b> och skriv i del 5 när ni fått dem. Skicka dem aldrig på mejl.',
+    '<b>Skriv under avtalen:</b> sekretessavtalet och personuppgiftsbiträdesavtalet.',
+    '<b>Utse en kontaktperson</b> och 2–3 testpersoner (del 7).',
+    '<b>Säg till Mikaela</b> när ni är klara, så sätter vi igång.'
+  ];
+  (function(){
+    var ol=document.getElementById('road');
+    ROAD.forEach(function(r,i){
+      var li=el('li',i===0?'now':'');li.dataset.n=String(i+1);
+      var w=el('span','when',r[0]);w.appendChild(el('span','who who-'+r[1],WHO[r[1]]));
+      li.appendChild(w);li.appendChild(el('b',null,r[2]));li.appendChild(el('p',null,r[3]));ol.appendChild(li);
+    });
+    var ul=document.getElementById('todo');
+    TODO.forEach(function(t){var li=el('li');var x=el('span');x.innerHTML=t;li.appendChild(x);ul.appendChild(li)});
+  })();
+
   /* Presentationen */
   var stage=document.getElementById('stage');
   var slides=[];
@@ -492,9 +557,22 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   });
 
   (function(){
-    var s=slide('','Nästa steg');
-    s.innerHTML='<span class="eyebrow">Nästa steg</span><h2>Så går vi <span>vidare.</span></h2><div class="big-meter"><b id="d-done">0 / 0</b><span>punkter klara efter dagens genomgång</span><div class="track"><i id="d-fill"></i></div></div><div class="next"><div><span>1</span><b>Ni fyller på</b><p>Det som saknas skriver ni in i samma lista. Kommentera om något är oklart.</p></div><div><span>2</span><b>Vi bygger</b><p>Chattboten och bokningen sätts upp efter era svar och kopplas till TimeWave.</p></div><div class="hot"><span>3</span><b>Ni testar och godkänner</b><p>Testpersonerna provar. Inget går live förrän ni har sagt ja.</p></div></div>';
-    foot(s);
+    var s=slide('','Vägen framåt');
+    s.innerHTML='<span class="eyebrow">Vägen framåt</span><h2>Från kartläggning <span>till live.</span></h2>';
+    var g=el('div','s-road');
+    ROAD.forEach(function(r,i){
+      var d=el('div',r[1]);
+      d.innerHTML='<div class="top"><span class="n">'+(i+1)+'</span><span class="when"></span><span class="who who-'+r[1]+'"></span></div><b></b><p></p>';
+      d.querySelector('.when').textContent=r[0];d.querySelector('.who').textContent=WHO[r[1]];
+      d.querySelector('b').textContent=r[2];d.querySelector('p').textContent=r[3];g.appendChild(d);
+    });
+    s.appendChild(g);foot(s);
+
+    s=slide('','Det här gör ni nu');
+    s.innerHTML='<span class="eyebrow">Nästa steg för er</span><h2>Det här behöver <span>ni göra nu.</span></h2><div class="big-meter"><b id="d-done">0 / 0</b><span>punkter klara i checklistan – resten fyller ni i via samma länk</span><div class="track"><i id="d-fill"></i></div></div>';
+    var ul=el('ul','s-todo');
+    TODO.forEach(function(t){var li=el('li');var x=el('span');x.innerHTML=t;li.appendChild(x);ul.appendChild(li)});
+    s.appendChild(ul);foot(s);
   })();
 
   /* Bläddring */
