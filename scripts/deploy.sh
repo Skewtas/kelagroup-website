@@ -24,6 +24,8 @@ git archive HEAD | tar -x -C "$OUT"
 (cd "$OUT" && npm ci --omit=dev --no-audit --no-fund --ignore-scripts >/dev/null)
 # Utvecklingsfiler som inte ska ligga publikt (functions/ byggs av wrangler och laddas inte upp som filer).
 rm -rf "$OUT"/{db,tests,docs,scripts,badge,nya-hemsidan,.claude} "$OUT"/package.json "$OUT"/package-lock.json "$OUT"/tsconfig.json "$OUT"/badge-preview.png 2>/dev/null || true
+# Versionsnummer på KELA OS filadresser, så att webbläsare alltid hämtar senaste versionen efter publicering.
+node scripts/version-assets.mjs "$OUT" "$(git rev-parse --short HEAD)"
 
 echo "→ Publicerar till Cloudflare Pages (kelagroup-website, main)…"
 cd "$OUT"
