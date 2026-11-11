@@ -793,6 +793,60 @@ test('Offertsidor: besök, lästid, scroll och val sparas – bara för rätt f�
   assert.equal((await b.get('/api/os/sparning/tpg_testsida000000001')).status, 404);
 });
 
+test('Checklistor: kunden sparar svar utan konto, historiken bevaras och bara rätt företag ser dem', async () => {
+  const me = ok(await admin.get('/api/os/auth/me'));
+  const slug = 'testlista-' + randomBytes(18).toString('base64url');
+  const offerSlug = 'testoffert-' + randomBytes(18).toString('base64url');
+  const [cmd, pre] = wranglerCmd;
+  execFileSync(cmd, [...pre, 'd1', 'execute', 'kela-os', '--local', '--config', 'db/wrangler.toml', '--persist-to', STATE, '--command',
+    `INSERT INTO tracked_pages (id, org_id, slug, title, customer_name, kind, created_at) VALUES ('tpg_testlista00000001','${me.org.id}','${slug}','Checklista – test','Testkund AB','checklista','${new Date().toISOString()}'),
+     ('tpg_testoffert0000001','${me.org.id}','${offerSlug}','Offert – test 2','Testkund AB','offert','${new Date().toISOString()}');`], { cwd: ROOT, stdio: 'pipe' });
+  const A = (s) => `${BASE}/api/s/${s}/answers`;
+  const save = (body, headers = { 'x-kela-s': '1' }, s = slug) => fetch(A(s), { method: 'POST', headers: { 'content-type': 'application/json', ...headers }, body: JSON.stringify(body) })
+    .then(async (r) => ({ status: r.status, json: await r.json().catch(() => null) }));
+
+  // Tom lista, okänd adress och offertsidor nekas
+  assert.deepEqual((await (await fetch(A(slug))).json()).answers, []);
+  assert.equal((await fetch(A('okand-' + randomBytes(18).toString('base64url')))).status, 404);
+  assert.equal((await fetch(A(offerSlug))).status, 404, 'en offertsida är ingen checklista');
+  assert.equal((await save({ key: 'priser', text: 'x' }, {})).status, 403, 'kräver säkerhetsheader');
+  assert.equal((await save({ key: 'priser', text: 'x' }, { 'x-kela-s': '1', origin: 'https://ond.example' })).status, 403, 'främmande ursprung');
+  assert.equal((await save({ key: 'Bad Key', text: 'x' })).status, 422);
+  assert.equal((await save({ key: 'priser', text: 'x'.repeat(20_001) })).status, 422);
+
+  // Spara, läsa tillbaka och skriva över – samma person inom 10 min blir en historikrad, en annan person en ny
+  const s1 = await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: '279 kr/tim', done: false, by: 'Malin' });
+  assert.equal(s1.status, 200); assert.ok(s1.json.at);
+  assert.equal((await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: '279 kr/tim mån–tis', done: true, by: 'Malin' })).status, 200);
+  assert.equal((await save({ key: 'ton', label: 'Ton', section: '1. Hur ni pratar', text: '<script>alert(1)</script>Du', by: 'Fredrik' })).status, 200);
+  assert.equal((await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: '299 kr/tim', done: true, by: 'Fredrik' })).status, 200);
+  const same = await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: '299 kr/tim', done: true, by: 'Fredrik' });
+  assert.equal(same.json.at, null, 'oförändrat svar sparas inte igen');
+  const got = (await (await fetch(A(slug))).json()).answers;
+  const pr = got.find((a) => a.key === 'priser');
+  assert.equal(pr.text, '299 kr/tim'); assert.equal(pr.done, true); assert.equal(pr.by, 'Fredrik');
+
+  // Notis till KELA högst en gång per timme
+  assert.equal(mockCalls.filter((c) => c.url === '/offertnotis' && /checklistan/.test(c.body._subject)).length, 1);
+
+  // KELA OS: svar med rubrik, historik och lista
+  const list = ok(await admin.get('/api/os/sparning'));
+  const row = list.pages.find((p) => p.id === 'tpg_testlista00000001');
+  assert.equal(row.kind, 'checklista'); assert.equal(row.answers, 2);
+  const d = ok(await admin.get('/api/os/sparning/tpg_testlista00000001'));
+  assert.equal(d.page.kind, 'checklista');
+  assert.equal(d.answers.find((a) => a.item_key === 'priser').label, 'Priser');
+  assert.equal(d.answers.find((a) => a.item_key === 'ton').text, '<script>alert(1)</script>Du', 'lagras som text, escapas vid visning');
+  const ph = d.history.filter((h) => h.item_key === 'priser');
+  assert.equal(ph.length, 2, 'Malins två sparningar blir en rad, Fredriks en egen');
+  assert.ok(ph.some((h) => h.updated_by === 'Malin' && h.text === '279 kr/tim mån–tis'), 'det överskrivna svaret finns kvar i historiken');
+
+  // Ett annat företag ser ingenting
+  const b = new Client();
+  ok(await b.post('/api/os/auth/login', { email: 'b@annat.test', password: PW }));
+  assert.equal((await b.get('/api/os/sparning/tpg_testlista00000001')).status, 404);
+});
+
 // ---------------------------------------------------------------- Glömt lösenord (körs sist – byter adminens lösenord)
 test('Glömt lösenord: engångslänk via e-post, avslöjar inga konton och kräver fortfarande MFA', async () => {
   const mails = () => mockCalls.filter((c) => c.url === '/mail');

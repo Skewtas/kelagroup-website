@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Checklista – Rozen Clean × KELA</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+/* Layout: KELA-brevpapper – logor och mätare överst, avsnitt som kort; varje punkt = bock + gemensamt textfält + kommentar.
+   Presentationsläge: samma punkter som 16:9-bilder (1600×900) i säljdeckens stuk, samma sparade svar. */
+:root{
+  --bg:#FFFCFA; --glow:#FFE3EA; --surface:#FFFFFF; --field:#FFF7F9; --vin:#641B2B; --rose:#C0798A; --rose-soft:#DCA5B4; --rose-pale:#F3D3D7;
+  --tint:#FFF0F3; --text-2:#7A4E56; --text-3:#9A6A72; --teal:#4F9192; --teal-bg:#E2EFEF; --shadow:rgba(100,27,43,.08); --on-vin:#FFFCFA;
+  --frame:#2A0D14; --hot:#641B2B; --on-hot:#FFFCFA; --hot-2:#F3D3D7;
+  --display:'Archivo Black','Arial Black',Arial,sans-serif; --sans:'DM Sans',-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#22090F; --glow:#3B1420; --surface:#2E1018; --field:#260C13; --vin:#FBE9EC; --rose:#E09AA6; --rose-soft:#B4707F; --rose-pale:#4A1D28;
+  --tint:#3A1520; --text-2:#E3BDC4; --text-3:#B88F97; --teal:#7CC0C1; --teal-bg:#1D3536; --shadow:rgba(0,0,0,.35); --on-vin:#22090F;
+  --frame:#120407; --hot:#7A2537; --on-hot:#FFF4F6; --hot-2:#F3C9D1; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#22090F; --glow:#3B1420; --surface:#2E1018; --field:#260C13; --vin:#FBE9EC; --rose:#E09AA6; --rose-soft:#B4707F; --rose-pale:#4A1D28;
+  --tint:#3A1520; --text-2:#E3BDC4; --text-3:#B88F97; --teal:#7CC0C1; --teal-bg:#1D3536; --shadow:rgba(0,0,0,.35); --on-vin:#22090F;
+  --frame:#120407; --hot:#7A2537; --on-hot:#FFF4F6; --hot-2:#F3C9D1; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:radial-gradient(circle at 100% 0%,var(--glow) 0,var(--bg) 520px) no-repeat,var(--bg);color:var(--vin);font:17px/1.5 var(--sans);-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:48px 64px}
+body.presenting{overflow:hidden}
+.wrap{max-width:880px;margin:0 auto;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);font-weight:400;margin:0;line-height:1.05;letter-spacing:-.5px;text-wrap:balance}
+h1{font-size:clamp(40px,7vw,64px);letter-spacing:-1.5px}
+h1 span,h2 span{color:var(--rose)}
+p{margin:0}
+
+header{display:grid;gap:22px}
+.logos{display:flex;align-items:center;gap:clamp(16px,4vw,32px)}
+.logos .k{height:clamp(34px,6.5vw,54px);width:auto;color:var(--vin);flex:none}
+.logos .x{font-size:clamp(30px,6vw,52px);line-height:1;color:var(--rose-soft)}
+.logos .r{height:clamp(68px,13vw,108px);width:auto;max-width:none;border-radius:clamp(10px,2vw,16px);box-shadow:0 14px 34px var(--shadow);flex:none}
+.bar{width:72px;height:6px;border-radius:3px;background:var(--rose-soft)}
+.lead{font-size:20px;color:var(--text-2);max-width:62ch}
+.present{justify-self:start;display:inline-flex;align-items:center;gap:10px;font:700 17px var(--sans);color:var(--on-hot);background:var(--hot);border:0;border-radius:999px;padding:12px 24px;cursor:pointer;box-shadow:0 14px 34px var(--shadow)}
+.present svg{width:18px;height:18px;fill:currentColor}
+.present:focus-visible{outline:3px solid var(--rose);outline-offset:3px}
+
+.meter{display:grid;grid-template-columns:auto 1fr;gap:6px 20px;align-items:center;background:var(--vin);color:var(--on-vin);border-radius:24px;padding:20px 26px;box-shadow:0 18px 44px var(--shadow)}
+.meter .num{grid-row:span 2;font-family:var(--display);font-size:46px;line-height:1;font-variant-numeric:tabular-nums}
+.meter .num small{font-size:22px;opacity:.75}
+.meter .lbl{font-size:15px;font-weight:600;opacity:.8}
+.track{height:10px;border-radius:5px;background:color-mix(in srgb,currentColor 18%,transparent);overflow:hidden}
+.track i{display:block;height:100%;width:0;background:var(--rose-soft);border-radius:5px;transition:width .4s cubic-bezier(.22,1,.36,1)}
+
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.how div{background:var(--teal-bg);border-radius:18px;padding:16px 18px;font-size:15px;color:var(--vin);display:grid;gap:4px;align-content:start}
+.how b{color:var(--teal);font-size:16px}
+.state{font-size:14px;color:var(--text-3);background:var(--tint);border-radius:12px;padding:10px 14px}
+.state[hidden]{display:none}
+
+.sec{background:var(--surface);border-radius:26px;padding:26px 28px 14px;box-shadow:0 16px 40px var(--shadow);display:grid;gap:10px;min-width:0}
+.sec-head{display:grid;grid-template-columns:auto 1fr auto;align-items:baseline;gap:14px}
+.sec-n{font-family:var(--display);font-size:34px;line-height:1;color:var(--rose-soft)}
+.sec h2{font-size:clamp(22px,3.4vw,28px)}
+.sec-c{font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--text-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sec-c.done{color:var(--teal)}
+.tag{justify-self:start;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);background:var(--teal-bg);padding:4px 11px;border-radius:999px}
+.tag.new{color:var(--rose);background:var(--tint)}
+.intro{font-size:15px;color:var(--text-2)}
+
+.items{list-style:none;margin:0;padding:0;display:grid}
+.item{border-top:1px solid var(--tint);padding:16px 0;display:grid;grid-template-columns:28px 1fr;gap:6px 14px;min-width:0}
+.item:first-child{border-top:0}
+input[type=checkbox]{appearance:none;-webkit-appearance:none;margin:2px 0 0;width:26px;height:26px;border-radius:50%;border:2px solid var(--rose-soft);background:var(--surface);display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s;flex:none}
+input[type=checkbox]::after{content:"✓";font-size:14px;font-weight:700;color:#fff;opacity:0;transform:scale(.5);transition:opacity .2s,transform .2s}
+input[type=checkbox]:checked{background:var(--teal);border-color:var(--teal)}
+input[type=checkbox]:checked::after{opacity:1;transform:none}
+input[type=checkbox]:focus-visible{outline:3px solid var(--rose);outline-offset:2px}
+input[type=checkbox]:disabled{cursor:default;opacity:.7}
+.t{min-width:0;cursor:pointer}
+.t b{font-weight:600;display:block}
+.t small{display:block;font-size:15px;color:var(--text-2);margin-top:2px}
+.item.is-done .t b,.pcard.is-done .pt b{color:var(--text-3);text-decoration:line-through;text-decoration-color:var(--rose-soft)}
+.body{grid-column:2;display:grid;gap:6px;min-width:0}
+.known{font-size:14px;line-height:1.45;color:var(--teal);background:var(--teal-bg);border-radius:12px;padding:8px 12px}
+.known b{font-weight:700}
+textarea{width:100%;min-height:72px;resize:vertical;font:16px/1.5 var(--sans);color:var(--vin);background:var(--field);border:1.5px solid var(--rose-pale);border-radius:14px;padding:12px 14px;transition:border-color .2s,background .2s}
+textarea::placeholder{color:var(--text-3);opacity:.85}
+textarea:focus{outline:none;border-color:var(--rose);background:var(--surface)}
+textarea:disabled{opacity:.75}
+.meta{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:13px;color:var(--text-3);min-height:24px}
+.meta .who{flex:1;min-width:0}
+.meta .who.saving{color:var(--rose)}
+.meta .who.err{color:#B4232F}
+.cbtn{font:600 13px var(--sans);color:var(--text-2);background:none;border:1px solid var(--rose-pale);border-radius:999px;padding:4px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.cbtn:hover{color:var(--vin);border-color:var(--rose-soft)}
+.cbtn:focus-visible{outline:2px solid var(--rose);outline-offset:2px}
+.cbtn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2}
+.cbtn[hidden]{display:none}
+
+.note{display:flex;gap:10px;background:var(--tint);border-radius:14px;padding:12px 16px;font-size:15px;color:var(--text-2);margin:4px 0 8px}
+.note::before{content:"!";flex:none;width:22px;height:22px;border-radius:50%;background:var(--vin);color:var(--on-vin);display:grid;place-items:center;font-weight:700;font-size:13px}
+
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:center;font-size:13px;color:var(--text-3);padding-top:8px}
+.kela{display:inline-flex;align-items:center;gap:.45em;color:inherit;text-decoration:none}
+.kela svg{height:1em;width:auto;fill:currentColor}
+.kela i{width:.42em;height:.42em;border-radius:50%;background:#E09AA6}
+
+/* ---------- Presentationsläge ---------- */
+.deck{position:fixed;inset:0;z-index:50;background:var(--frame);overflow:hidden}
+.deck[hidden]{display:none}
+.stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:center center}
+.slide{position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,var(--glow) 0%,var(--bg) 45%),var(--bg);padding:62px 96px 84px;display:flex;flex-direction:column;gap:20px;opacity:0;visibility:hidden;transition:opacity .4s ease,transform .4s cubic-bezier(.22,1,.36,1);transform:translateY(10px);border-radius:6px;overflow:hidden;font-size:20px}
+.slide.on{opacity:1;visibility:visible;transform:none}
+.slide.dark{background:var(--hot);color:var(--on-hot)}
+.slide .eyebrow{font-size:21px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--rose)}
+.slide.dark .eyebrow{color:var(--hot-2)}
+.slide h2{font-size:58px;letter-spacing:-1px}
+.slide.dark h2{color:var(--on-hot)}.slide.dark h2 span{color:var(--hot-2)}
+.slide .lead{font-size:28px;line-height:1.4;max-width:1200px}
+.sfoot{position:absolute;right:96px;bottom:26px;display:flex;align-items:center;gap:10px;color:var(--rose-soft)}
+.sfoot svg{height:20px;width:auto;fill:var(--vin)}.sfoot img{height:38px;border-radius:7px}.sfoot span{font-size:20px}
+.dark .sfoot svg{fill:var(--on-hot)}
+.s-title{justify-content:center;gap:34px}
+.s-title .logos .k{height:90px}.s-title .logos .x{font-size:76px}.s-title .logos .r{height:124px;border-radius:18px}
+.s-title h1{font-size:118px;letter-spacing:-4px}
+.s-title .bar{width:120px;height:8px;border-radius:4px}
+.pill{align-self:flex-start;background:var(--hot);color:var(--on-hot);font-weight:700;font-size:24px;padding:10px 24px;border-radius:999px}
+.talk{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:14px}
+.talk div{background:var(--surface);border-radius:30px;padding:34px;display:grid;gap:12px;align-content:start;min-height:290px;box-shadow:0 22px 54px var(--shadow)}
+.talk span{font-family:var(--display);font-size:56px;line-height:1;color:var(--rose-soft)}
+.talk b{font-family:var(--display);font-weight:400;font-size:34px;line-height:1.1}
+.talk p{font-size:22px;color:var(--text-2);line-height:1.4}
+.snote{align-self:flex-start;background:var(--teal-bg);color:var(--teal);font-weight:700;font-size:21px;padding:11px 22px;border-radius:999px}
+.agenda{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px 22px}
+.agenda li{display:grid;grid-template-columns:58px 1fr auto;align-items:center;gap:16px;background:var(--surface);border-radius:22px;padding:15px 24px;box-shadow:0 14px 34px var(--shadow);cursor:pointer}
+.agenda li:hover{box-shadow:0 0 0 2px var(--rose-soft),0 14px 34px var(--shadow)}
+.agenda .num{font-family:var(--display);font-size:40px;line-height:1;color:var(--rose-soft)}
+.agenda b{display:block;font-family:var(--display);font-weight:400;font-size:26px;line-height:1.08}
+.agenda small{display:block;font-size:17px;color:var(--text-2);margin-top:3px}
+.agenda em{font-style:normal;font-size:15px;font-weight:700;color:var(--teal);background:var(--teal-bg);padding:6px 12px;border-radius:999px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.agenda li.prio{border-left:6px solid var(--hot)}
+.sec-top{display:flex;align-items:baseline;gap:22px}
+.sec-top .big{font-family:var(--display);font-size:64px;line-height:.9;color:var(--rose-soft)}
+.sec-top .cnt{margin-left:auto;font-size:18px;font-weight:700;color:var(--text-3);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:20px;flex:1;min-height:0}
+.pgrid.one{grid-template-columns:1fr}
+.pcard{overflow:auto;background:var(--surface);border-radius:26px;padding:22px 26px;box-shadow:0 18px 44px var(--shadow);display:flex;flex-direction:column;gap:10px;min-height:0;min-width:0;border-top:6px solid var(--rose-pale);transition:border-color .3s}
+.pcard.is-done{border-top-color:var(--teal)}
+.pt{display:grid;grid-template-columns:30px 1fr;gap:12px;align-items:start;cursor:pointer}
+.pt input[type=checkbox]{width:30px;height:30px}
+.pt b{font-family:var(--display);font-weight:400;font-size:25px;line-height:1.12;display:block}
+.pt small{display:block;font-size:17px;color:var(--text-2);margin-top:4px;line-height:1.35}
+.pcard .known{font-size:16px;padding:8px 14px}
+.pcard textarea{flex:1;min-height:70px;font-size:18px;resize:none}
+.pcard .meta{font-size:14px;min-height:20px}
+.pnote{font-size:18px;margin:0}
+.next{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:10px}
+.next div{border-radius:30px;padding:30px 32px;display:grid;gap:10px;align-content:start;min-height:250px;background:var(--surface);box-shadow:0 22px 54px var(--shadow)}
+.next span{font-family:var(--display);font-size:46px;line-height:1;color:var(--rose-soft)}
+.next b{font-family:var(--display);font-weight:400;font-size:32px;line-height:1.08}
+.next p{font-size:21px;color:var(--text-2);line-height:1.4}
+.next div.hot{background:var(--hot);color:var(--on-hot)}.next div.hot p{color:var(--hot-2)}
+.big-meter{display:grid;grid-template-columns:auto 1fr;gap:10px 26px;align-items:center;background:var(--hot);color:var(--on-hot);border-radius:28px;padding:24px 32px}
+.big-meter b{font-family:var(--display);font-weight:400;font-size:56px;line-height:1;grid-row:span 2;font-variant-numeric:tabular-nums}
+.big-meter span{font-size:20px;color:var(--hot-2)}
+.big-meter .track{height:12px}
+.dctrl{position:fixed;left:50%;bottom:max(14px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);display:flex;align-items:center;gap:10px;background:rgba(42,13,20,.74);backdrop-filter:blur(8px);padding:8px 10px;border-radius:999px;z-index:60;max-width:calc(100vw - 24px)}
+.dctrl button{font:700 14px var(--sans);color:#fff;background:rgba(255,255,255,.13);border:0;border-radius:999px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+.dctrl button:hover{background:rgba(255,255,255,.24)}
+.dctrl button:focus-visible{outline:2px solid #DCA5B4;outline-offset:2px}
+.dctrl .count{color:#fff;font-size:13px;min-width:48px;text-align:center;font-variant-numeric:tabular-nums}
+.ddots{display:flex;gap:5px}
+.ddots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer}
+.ddots i.done{background:#8FCDCE}
+.ddots i.on{background:#DCA5B4;width:20px;border-radius:4px}
+.dctrl .sv{font-size:12px;font-weight:700;color:#F3D3D7;padding:0 6px;white-space:nowrap}
+
+@media (max-width:640px){
+  body{padding-block:28px 48px}
+  .how{grid-template-columns:1fr}
+  .sec{padding:20px 16px 10px;border-radius:20px}
+  .sec-head{grid-template-columns:auto 1fr}
+  .sec-c{grid-column:2}
+  .item{grid-template-columns:26px 1fr;gap:6px 10px}
+  .body{grid-column:1/-1}
+  .meter{padding:16px 18px}
+  .meter .num{font-size:36px}
+}
+@media (max-width:820px){.ddots,.dctrl .sv{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.whoami{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--surface);border-radius:18px;padding:14px 18px;box-shadow:0 10px 26px var(--shadow)}
+.whoami label{font-weight:700}
+.whoami input{flex:1 1 220px;min-width:0;font:16px var(--sans);color:var(--vin);background:var(--field);border:1.5px solid var(--rose-pale);border-radius:12px;padding:9px 12px}
+.whoami input:focus{outline:none;border-color:var(--rose);background:var(--surface)}
+.whoami small{flex-basis:100%;font-size:13px;color:var(--text-3)}
+</style>
+</head>
+<body>
+
+<div class="wrap" id="listview">
+  <header>
+    <div class="logos">
+      <svg class="k" viewBox="0 -700 3000 840" role="img" aria-label="KELA"><g fill="currentColor"><path d="M540 -688H814L567 -405L819 0H558L415 -252L295 -154V0H74V-688H295V-394Z M907 -688H1502V-523H1128V-428H1448V-270H1128V-165H1509V0H907Z M1629 -688H1850V-176H2203V0H1629Z M2757 0 2728 -97H2487L2458 0H2232L2483 -688H2740L2991 0ZM2533 -251H2682L2610 -496H2606Z"/><rect y="70" width="3000" height="70" rx="12"/></g></svg>
+      <span class="x" aria-hidden="true">×</span>
+      <img class="r" src="data:image/svg+xml;base64,PHN2ZyBjbGFzcz0ibG9nby1zdmciIHdpZHRoPSI2MTciIGhlaWdodD0iNDU5IiB2aWV3Qm94PSIwIDAgNjE3IDQ1OSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgICAgICA8cGF0aCBkPSJNNjE3IDBIMFY0NTlINjE3VjBaIiBmaWxsPSIjNEY5MTkyIiBjbGFzcz0ic3ZnLWJnIj48L3BhdGg+CiAgICAgICAgPHBhdGggZD0iTTc2LjE0NzkgMTQ4LjgwM1YxOTkuMzlINjkuODQ5NlY3Ny4yODM3SDExMy42NzJDMTM3LjkxNiA3Ny4yODM3IDE0OS45ODEgODcuNzUgMTQ5Ljk4MSAxMTIuMTcxQzE0OS45ODEgMTMxLjAxOCAxNDIuODExIDE0NC40NDIgMTI0LjY3NSAxNDcuOTMxTDE1Mi4yNTggMTk5LjM5SDE0NS4wODdMMTE3Ljg0NSAxNDguODAzSDc2LjEwOTlINzYuMTQ3OVpNMTEzLjY3MiA4My4xOTk0SDc2LjE0NzlWMTQyLjg1SDExMy42NzJDMTM1LjgyOSAxNDIuODUgMTQzLjM0MiAxMzAuMjk4IDE0My4zNDIgMTEyLjEzM0MxNDMuMzQyIDkxLjg4MzQgMTM0LjA4NCA4My4xNjE1IDExMy42NzIgODMuMTYxNVY4My4xOTk0WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNMTcwLjI0MiAxMzguODY4QzE3MC4yNDIgOTkuMDg4NCAxNzkuNjUyIDc1LjcyODkgMjE3LjAyNCA3NS43Mjg5QzI1NC4zOTYgNzUuNzI4OSAyNjMuODA1IDk4Ljc0NzEgMjYzLjgwNSAxMzguODY4QzI2My44MDUgMTgxLjA3NCAyNTQuNTQ4IDIwMC45ODMgMjE3LjAyNCAyMDAuOTgzQzE3OS41IDIwMC45ODMgMTcwLjI0MiAxNzkuMzMgMTcwLjI0MiAxMzguODY4Wk0yNTcuMTY2IDEzOC44NjhDMjU3LjE2NiAxMDIuNzY3IDI0OS44NDMgODEuNjQ0NiAyMTcuMDI0IDgxLjY0NDZDMTg0LjIwNSA4MS42NDQ2IDE3Ni44ODIgMTAyLjM4OCAxNzYuODgyIDEzOC44NjhDMTc2Ljg4MiAxNzUuMzQ4IDE4My4zMzIgMTk1LjAyOSAyMTcuMDI0IDE5NS4wMjlDMjUwLjcxNiAxOTUuMDI5IDI1Ny4xNjYgMTc3LjI0NCAyNTcuMTY2IDEzOC44NjhaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgogICAgICAgIDxwYXRoIGQ9Ik0yNzkuNDc1IDc3LjI4MzdIMzU4LjAxM1Y4OS40OTQ0TDI4NS45MjUgMTg5Ljc5NlYxOTMuNjI2SDM1OC4wMTNWMTk5LjU0MkgyNzkuNDc1VjE4Ny41MjFMMzUxLjU2MyA4Ny4zNzA4VjgzLjE5OTRIMjc5LjQ3NVY3Ny4yODM3WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNMzgwLjAxOSA3Ny4yODM3SDQ1MS40MjRWODMuMTk5NEgzODYuMzE3VjEzMy45NzZINDQwLjk1M1YxMzkuODkySDM4Ni4zMTdWMTkzLjQzN0g0NTEuNDI0VjE5OS4zNTNIMzgwLjAxOVY3Ny4yODM3WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNNDc0LjQxNyA3Ny4yODM3SDQ4OS4yNTJMNTQ3LjM3OCAxOTMuNDc1SDU1Mi4wODJWNzcuMjgzN0g1NTguMzgxVjE5OS4zOUg1NDMuNTQ2TDQ4NS4yMyA4My4xOTk0SDQ4MC42NzdWMTk5LjM5SDQ3NC4zNzlWNzcuMjgzN0g0NzQuNDE3WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNMTQ2Ljk0NiAzNDkuMDI4QzEzNy42NTEgMzUwLjg4NiAxMjUuMjA2IDM1Mi43NDQgMTEyLjU3MSAzNTIuNzQ0Qzc0LjI4ODggMzUyLjc0NCA2Ni4yODMyIDMyNy44MyA2Ni4yODMyIDI4Ni42MUM2Ni4yODMyIDI0NS4zODkgNzIuOTYwOSAyMTkuMzM3IDExMi41NzEgMjE5LjMzN0MxMjUuNTg1IDIxOS4zMzcgMTM4LjQwOSAyMjEuMTk1IDE0Ni45NDYgMjIyLjg2NEwxNDYuMzc3IDIyOS4zNDhDMTM4LjM3MiAyMjcuNjggMTIzLjY4OCAyMjUuNjMyIDExMi41MzQgMjI1LjYzMkM3Ny41ODk3IDIyNS42MzIgNzMuMzAyMyAyNDkuNTk4IDczLjMwMjMgMjg2LjU3MkM3My4zMDIzIDMyMy41NDUgNzguMzEwNiAzNDYuNDExIDExMi41MzQgMzQ2LjQxMUMxMjQuMjU3IDM0Ni40MTEgMTM2LjcwMiAzNDQuNTUzIDE0Ni4zNzcgMzQyLjY5NUwxNDYuOTQ2IDM0OS4wMjhaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgogICAgICAgIDxwYXRoIGQ9Ik0xNzAuMjA0IDM1MS4wNzZWMjIxLjAwNkgxNzYuODgyVjM0NC43NDNIMjQwLjI4MlYzNTEuMDc2SDE3MC4yMDRaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgogICAgICAgIDxwYXRoIGQ9Ik0yNTcuOTI0IDIyMS4wMDZIMzMzLjk1OFYyMjcuMzM4SDI2NC42MDJWMjgxLjQxNEgzMjIuODA0VjI4Ny43NDdIMjY0LjYwMlYzNDQuNzgxSDMzMy45NThWMzUxLjExNEgyNTcuOTI0VjIyMS4wNDRWMjIxLjAwNloiIGZpbGw9IndoaXRlIj48L3BhdGg+CiAgICAgICAgPHBhdGggZD0iTTM4Ni41ODMgMjIxLjAwNkg0MDYuMjc0TDQ0Ni4yMjcgMzUxLjA3Nkg0MzkuNTQ5TDQyNy40NDYgMzExLjE0NUgzNjUuMzc0TDM1My4zMDkgMzUxLjA3NkgzNDYuNjMxTDM4Ni41ODMgMjIxLjAwNlpNMzY3LjQyMyAzMDQuODEySDQyNS40MzVMNDAxLjY0NiAyMjcuMzM4SDM5MS4yNUwzNjcuNDYxIDMwNC44MTJIMzY3LjQyM1oiIGZpbGw9IndoaXRlIj48L3BhdGg+CiAgICAgICAgPHBhdGggZD0iTTQ2Ni41MjUgMjIxLjAwNkg0ODIuMzA5TDU0NC4yMjkgMzQ0Ljc0M0g1NDkuMjM3VjIyMS4wMDZINTU1LjkxNVYzNTEuMDc2SDU0MC4xMzFMNDc4LjA1OSAyMjcuMzM4SDQ3My4yNDFWMzUxLjA3Nkg0NjYuNTYzVjIyMS4wMDZINDY2LjUyNVoiIGZpbGw9IndoaXRlIj48L3BhdGg+CiAgICA8L3N2Zz4=" alt="Rozen Clean">
+    </div>
+    <div class="bar"></div>
+    <h1>Inför er chattbot <span>och bokning.</span></h1>
+    <p class="lead">Här samlar vi allt som ska in i chattboten och bokningen: fakta, texter och beslut. Boten svarar bara utifrån det som står här, så det som inte står här får den inte påstå. Ni behöver inget konto – skriv direkt, allt sparas automatiskt.</p>
+    <button type="button" class="present" id="open-deck"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Visa som presentation</button>
+  </header>
+
+  <div class="meter" aria-live="polite">
+    <span class="num"><span id="done">0</span><small> / <span id="total">0</span></small></span>
+    <span class="lbl" id="meter-lbl">punkter klara</span>
+    <div class="track"><i id="fill"></i></div>
+  </div>
+
+  <div class="how">
+    <div><b>Skriv direkt i fälten</b>Allt sparas automatiskt och syns för alla som har sidan.</div>
+    <div><b>Dela inom företaget</b>Alla som har länken kan läsa och skriva. Skicka den bara till kollegor.</div>
+    <div><b>Börja med 1–3</b>Prata gärna ihop er om punkterna. Allt går att ändra i efterhand.</div>
+  </div>
+
+  <div class="whoami"><label for="me">Ditt namn</label><input id="me" type="text" maxlength="60" autocomplete="name" placeholder="T.ex. Malin"><small>Så ser vi vem som har svarat. Namnet sparas bara i din webbläsare och skickas med dina svar.</small></div>
+
+  <p class="state" id="state">Hämtar det som redan är ifyllt …</p>
+
+  <div id="sections"></div>
+
+  <footer>
+    <a class="kela" href="https://kelagroup.se/?utm_source=rozenclean&amp;utm_medium=checklista" target="_blank" rel="noopener"><span>Byggd av</span><svg viewBox="0 -700 3000 840" aria-label="KELA"><path d="M540 -688H814L567 -405L819 0H558L415 -252L295 -154V0H74V-688H295V-394Z M907 -688H1502V-523H1128V-428H1448V-270H1128V-165H1509V0H907Z M1629 -688H1850V-176H2203V0H1629Z M2757 0 2728 -97H2487L2458 0H2232L2483 -688H2740L2991 0ZM2533 -251H2682L2610 -496H2606Z"/><rect y="70" width="3000" height="70" rx="12"/></svg><i></i></a>
+    <span>Allt ni skriver sparas hos KELA och syns för alla som har länken. Klistra aldrig in lösenord eller API-nycklar. Uppgifterna i grönt kommer från rozenclean.se och ska bekräftas.</span>
+  </footer>
+</div>
+
+<div class="deck" id="deck" hidden role="region" aria-label="Presentation">
+  <div class="stage" id="stage"></div>
+  <nav class="dctrl" aria-label="Bläddra i presentationen">
+    <button type="button" id="d-prev" aria-label="Föregående bild">←</button>
+    <div class="ddots" id="ddots"></div>
+    <span class="count" id="dcount">1</span>
+    <button type="button" id="d-next" aria-label="Nästa bild">→</button>
+    <span class="sv" id="dsave" aria-live="polite"></span>
+    <button type="button" id="d-fs">Helskärm</button>
+    <button type="button" id="d-close">Till listan</button>
+  </nav>
+</div>
+
+<script>
+(function(){
+  var KSVG='<svg class="k" viewBox="0 -700 3000 840" role="img" aria-label="KELA"><g fill="currentColor"><path d="M540 -688H814L567 -405L819 0H558L415 -252L295 -154V0H74V-688H295V-394Z M907 -688H1502V-523H1128V-428H1448V-270H1128V-165H1509V0H907Z M1629 -688H1850V-176H2203V0H1629Z M2757 0 2728 -97H2487L2458 0H2232L2483 -688H2740L2991 0ZM2533 -251H2682L2610 -496H2606Z"/><rect y="70" width="3000" height="70" rx="12"/></g></svg>';
+  var RZ='data:image/svg+xml;base64,PHN2ZyBjbGFzcz0ibG9nby1zdmciIHdpZHRoPSI2MTciIGhlaWdodD0iNDU5IiB2aWV3Qm94PSIwIDAgNjE3IDQ1OSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgICAgICA8cGF0aCBkPSJNNjE3IDBIMFY0NTlINjE3VjBaIiBmaWxsPSIjNEY5MTkyIiBjbGFzcz0ic3ZnLWJnIj48L3BhdGg+CiAgICAgICAgPHBhdGggZD0iTTc2LjE0NzkgMTQ4LjgwM1YxOTkuMzlINjkuODQ5NlY3Ny4yODM3SDExMy42NzJDMTM3LjkxNiA3Ny4yODM3IDE0OS45ODEgODcuNzUgMTQ5Ljk4MSAxMTIuMTcxQzE0OS45ODEgMTMxLjAxOCAxNDIuODExIDE0NC40NDIgMTI0LjY3NSAxNDcuOTMxTDE1Mi4yNTggMTk5LjM5SDE0NS4wODdMMTE3Ljg0NSAxNDguODAzSDc2LjEwOTlINzYuMTQ3OVpNMTEzLjY3MiA4My4xOTk0SDc2LjE0NzlWMTQyLjg1SDExMy42NzJDMTM1LjgyOSAxNDIuODUgMTQzLjM0MiAxMzAuMjk4IDE0My4zNDIgMTEyLjEzM0MxNDMuMzQyIDkxLjg4MzQgMTM0LjA4NCA4My4xNjE1IDExMy42NzIgODMuMTYxNVY4My4xOTk0WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNMTcwLjI0MiAxMzguODY4QzE3MC4yNDIgOTkuMDg4NCAxNzkuNjUyIDc1LjcyODkgMjE3LjAyNCA3NS43Mjg5QzI1NC4zOTYgNzUuNzI4OSAyNjMuODA1IDk4Ljc0NzEgMjYzLjgwNSAxMzguODY4QzI2My44MDUgMTgxLjA3NCAyNTQuNTQ4IDIwMC45ODMgMjE3LjAyNCAyMDAuOTgzQzE3OS41IDIwMC45ODMgMTcwLjI0MiAxNzkuMzMgMTcwLjI0MiAxMzguODY4Wk0yNTcuMTY2IDEzOC44NjhDMjU3LjE2NiAxMDIuNzY3IDI0OS44NDMgODEuNjQ0NiAyMTcuMDI0IDgxLjY0NDZDMTg0LjIwNSA4MS42NDQ2IDE3Ni44ODIgMTAyLjM4OCAxNzYuODgyIDEzOC44NjhDMTc2Ljg4MiAxNzUuMzQ4IDE4My4zMzIgMTk1LjAyOSAyMTcuMDI0IDE5NS4wMjlDMjUwLjcxNiAxOTUuMDI5IDI1Ny4xNjYgMTc3LjI0NCAyNTcuMTY2IDEzOC44NjhaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgogICAgICAgIDxwYXRoIGQ9Ik0yNzkuNDc1IDc3LjI4MzdIMzU4LjAxM1Y4OS40OTQ0TDI4NS45MjUgMTg5Ljc5NlYxOTMuNjI2SDM1OC4wMTNWMTk5LjU0MkgyNzkuNDc1VjE4Ny41MjFMMzUxLjU2MyA4Ny4zNzA4VjgzLjE5OTRIMjc5LjQ3NVY3Ny4yODM3WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNMzgwLjAxOSA3Ny4yODM3SDQ1MS40MjRWODMuMTk5NEgzODYuMzE3VjEzMy45NzZINDQwLjk1M1YxMzkuODkySDM4Ni4zMTdWMTkzLjQzN0g0NTEuNDI0VjE5OS4zNTNIMzgwLjAxOVY3Ny4yODM3WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNNDc0LjQxNyA3Ny4yODM3SDQ4OS4yNTJMNTQ3LjM3OCAxOTMuNDc1SDU1Mi4wODJWNzcuMjgzN0g1NTguMzgxVjE5OS4zOUg1NDMuNTQ2TDQ4NS4yMyA4My4xOTk0SDQ4MC42NzdWMTk5LjM5SDQ3NC4zNzlWNzcuMjgzN0g0NzQuNDE3WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNMTQ2Ljk0NiAzNDkuMDI4QzEzNy42NTEgMzUwLjg4NiAxMjUuMjA2IDM1Mi43NDQgMTEyLjU3MSAzNTIuNzQ0Qzc0LjI4ODggMzUyLjc0NCA2Ni4yODMyIDMyNy44MyA2Ni4yODMyIDI4Ni42MUM2Ni4yODMyIDI0NS4zODkgNzIuOTYwOSAyMTkuMzM3IDExMi41NzEgMjE5LjMzN0MxMjUuNTg1IDIxOS4zMzcgMTM4LjQwOSAyMjEuMTk1IDE0Ni45NDYgMjIyLjg2NEwxNDYuMzc3IDIyOS4zNDhDMTM4LjM3MiAyMjcuNjggMTIzLjY4OCAyMjUuNjMyIDExMi41MzQgMjI1LjYzMkM3Ny41ODk3IDIyNS42MzIgNzMuMzAyMyAyNDkuNTk4IDczLjMwMjMgMjg2LjU3MkM3My4zMDIzIDMyMy41NDUgNzguMzEwNiAzNDYuNDExIDExMi41MzQgMzQ2LjQxMUMxMjQuMjU3IDM0Ni40MTEgMTM2LjcwMiAzNDQuNTUzIDE0Ni4zNzcgMzQyLjY5NUwxNDYuOTQ2IDM0OS4wMjhaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgogICAgICAgIDxwYXRoIGQ9Ik0xNzAuMjA0IDM1MS4wNzZWMjIxLjAwNkgxNzYuODgyVjM0NC43NDNIMjQwLjI4MlYzNTEuMDc2SDE3MC4yMDRaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgogICAgICAgIDxwYXRoIGQ9Ik0yNTcuOTI0IDIyMS4wMDZIMzMzLjk1OFYyMjcuMzM4SDI2NC42MDJWMjgxLjQxNEgzMjIuODA0VjI4Ny43NDdIMjY0LjYwMlYzNDQuNzgxSDMzMy45NThWMzUxLjExNEgyNTcuOTI0VjIyMS4wNDRWMjIxLjAwNloiIGZpbGw9IndoaXRlIj48L3BhdGg+CiAgICAgICAgPHBhdGggZD0iTTM4Ni41ODMgMjIxLjAwNkg0MDYuMjc0TDQ0Ni4yMjcgMzUxLjA3Nkg0MzkuNTQ5TDQyNy40NDYgMzExLjE0NUgzNjUuMzc0TDM1My4zMDkgMzUxLjA3NkgzNDYuNjMxTDM4Ni41ODMgMjIxLjAwNlpNMzY3LjQyMyAzMDQuODEySDQyNS40MzVMNDAxLjY0NiAyMjcuMzM4SDM5MS4yNUwzNjcuNDYxIDMwNC44MTJIMzY3LjQyM1oiIGZpbGw9IndoaXRlIj48L3BhdGg+CiAgICAgICAgPHBhdGggZD0iTTQ2Ni41MjUgMjIxLjAwNkg0ODIuMzA5TDU0NC4yMjkgMzQ0Ljc0M0g1NDkuMjM3VjIyMS4wMDZINTU1LjkxNVYzNTEuMDc2SDU0MC4xMzFMNDc4LjA1OSAyMjcuMzM4SDQ3My4yNDFWMzUxLjA3Nkg0NjYuNTYzVjIyMS4wMDZINDY2LjUyNVoiIGZpbGw9IndoaXRlIj48L3BhdGg+CiAgICA8L3N2Zz4=';
+  // [id, rubrik, förklaring, platshållare, det vi vet]
+  var SECTIONS=[
+    {n:1,title:'Hur ni pratar med kunder',prio:true,items:[
+      ['ton','Vilken ton ni vill ha','Du eller ni, formell eller personlig, kort eller utförlig.','T.ex. Vi säger du, är personliga men korta …'],
+      ['lova','Vad boten aldrig får lova','Till exempel ersättning vid skada, samma städare varje gång eller exakta tider.','Skriv en sak per rad …'],
+      ['overlamning','När den ska lämna över till en människa','Klagomål, skador, prisförhandling, sådant den inte vet svaret på.','T.ex. Vid klagomål: be om namn och telefon, så ringer vi upp …'],
+      ['avbokning','Era regler för avbokning och ombokning','Plus garantier och vad som händer om kunden inte är nöjd.','T.ex. Avbokning senast 24 timmar innan …','Av- och ombokning senast 24 timmar före, annars debiteras hela städningen. Flyttstädning: 48 timmars garanti.']
+    ]},
+    {n:2,title:'Fakta om företaget',prio:true,items:[
+      ['tjanster','Utdrag över era tjänster från TimeWave','Så ser vi vilka tjänster ni har och hur de är upplagda.','Klistra in utdraget här, eller skriv var vi hittar det …','Bokas direkt: hemstädning, storstädning, flyttstädning, fönsterputs, visningsstädning. Offert: företagsstädning och trappstädning.'],
+      ['priser','Priser eller hur priset räknas ut','Per timme, per kvadratmeter, påslag för abonnemang. Berätta också hur RUT hanteras.','T.ex. Hemstädning 450 kr/tim före RUT …','Hemstädning varje/varannan vecka 279 kr/tim mån–tis, 299 kr/tim ons–fre · var fjärde vecka 319 kr/tim · stor-, flytt- och fönsterputs 359 kr/tim · helg och röd dag +15 % · minst 2 timmar. Inkl. moms, efter RUT.'],
+      ['omraden','Vilka områden ni täcker','Och vilka områden ni inte täcker.','Täcker: …\nTäcker inte: …','Stockholm, Uppsala och Nyköping.'],
+      ['material','Material och utrustning','Vem tar med vad?','','Hemstädning: kunden har eget material. Flyttstädning: ni tar alltid med. Stor och fönster: kan tas med, 395 kr för material och framkörning.'],
+      ['nycklar','Nycklar och tillträde','Hur gör kunden?','','Nyckeln märks med en bricka som inte kan kopplas till kunden, och kunden får kvittens via mejl.'],
+      ['forsakring','Försäkring och hur ni anställer','Ta bara med det som stämmer.','','Ansvarsförsäkring som täcker skador orsakade av er personal.'],
+      ['betalning','Betalning och fakturering','','','Faktura en gång i månaden i efterskott. E-faktura, autogiro, PDF eller Kivra/papper (+30 kr).'],
+      ['kontakt','Kontaktuppgifter och öppettider','För kundservice.','Telefon, mejl, öppettider …','Vardagar 07.30–16.15 · 010-330 81 80 · kundservice@rozenclean.se']
+    ]},
+    {n:3,title:'Exempel på hur ni svarar',prio:true,items:[
+      ['fragor','De 20–30 vanligaste kundfrågorna','Och hur ni brukar svara på dem.','Fråga: …\nSvar: …'],
+      ['svara-fall','Några svåra fall och hur ni hanterade dem','Ett klagomål, en kund som pressar priset, en avbokning i sista minuten.',''],
+      ['mejl','Riktiga mejl som exempel','Ta bort namn, adresser och telefonnummer först.','Klistra in mejlet utan personuppgifter …']
+    ]},
+    {n:4,title:'Bokningen',isNew:true,intro:'Det här behöver bokningssystemet för att visa rätt pris och rätt tider.',items:[
+      ['b-tid','Hur lång tid en städning tar','Timmar per tjänst för olika storlekar. Behövs för att kunden ska se priset direkt.','Upp till 50 kvm: hem 3 h, stor 5 h …\n51–70 kvm: …'],
+      ['b-tillval','Tillval och deras priser','Ugn, kyl och frys, balkong, vika tvätt, extra timme …',''],
+      ['b-erbjud','Provstädning, rabatter och presentkort','Vad ska gå att använda i bokningen?','','Provstädning 199 kr/tim.'],
+      ['b-tider','Starttider och framförhållning','Fasta tider eller fritt? Hur snart och hur långt fram kan man boka?','T.ex. 08, 09, 12, 13 · tidigast om två dagar …'],
+      ['b-helg','Helger, röda dagar och uppehåll','Ska helger gå att boka? Ska bokningen stänga semesterveckorna?','','Stängt röda dagar samt midsommar-, jul- och nyårsafton. Semester oftast v. 28–31 och två veckor över jul.'],
+      ['b-personal','Vem gör vilken tjänst','Kompetenser, vem som kör bil och hur lång tid som behövs mellan två jobb.','','De flesta städare åker kollektivt.'],
+      ['b-krock','När det krockar','Får ett engångsjobb flyttas till en kollega för att ge plats åt en återkommande kund? Automatiskt eller med ert ok?','','Samma städare varje gång. Ersättare vid sjukdom och semester, kunden tillfrågas först.'],
+      ['b-formular','Vad kunden fyller i','Antal fönster, husdjur, portkod, parkering, personnummer för RUT …','','I dag frågar ni efter tjänst, postnummer och kvm.'],
+      ['b-utskick','Mejl och sms till kunden','Avsändare, och vem hos er som får besked om nya bokningar och offerter.','T.ex. kundservice@rozenclean.se …'],
+      ['b-adress','Var bokningen ska ligga','På en egen adress som boka.rozenclean.se, eller direkt på hemsidan?','']
+    ]},
+    {n:5,title:'API-nycklar från TimeWave',intro:'Be TimeWave om två API-nycklar och skriv kort vad varje nyckel ska användas för.',
+     note:'Nycklarna får inte skickas på mejl eller läggas in någonstans, inte heller här.',items:[
+      ['nyckel-bokis','En nyckel för Bokis','Skriv till exempel: ”API-nyckeln ska användas för bokningssystem.”','Skriv när ni bad om den och vad som hänt. Klistra aldrig in nyckeln.'],
+      ['nyckel-chattis','En nyckel för Chattis','Skriv till exempel: ”API-nyckeln ska användas för chattbot på hemsidan.”','Skriv när ni bad om den och vad som hänt. Klistra aldrig in nyckeln.'],
+      ['nyckel-klar','Meddela oss när ni har fått nycklarna','Så hämtar vi dem på ett säkert sätt.','T.ex. Båda nycklarna mottagna den …']
+    ]},
+    {n:6,title:'Beslut ni behöver fatta',items:[
+      ['far-gora','Vad boten får göra själv','Bara svara på frågor, eller också boka, boka om, avboka och visa fakturor?',''],
+      ['uppfoljning','Uppföljning av intresserade kunder','Ska den samla in dem och följa upp, till exempel via SMS?',''],
+      ['namn','Namn, personlighet och bild','Vad boten ska heta, hur den ska vara och vilken bild den ska ha: ett riktigt foto eller en AI-genererad bild?','Förslag på namn, personlighet och bild …']
+    ]},
+    {n:7,title:'Praktiskt',items:[
+      ['kontaktperson','En kontaktperson hos er','Som kan svara på frågor och godkänna texter.','Namn och telefon …'],
+      ['testare','Några testpersoner','Som provar boten och bokningen innan de går live.',''],
+      ['godkann','Vem som godkänner innan lansering','Priser i bokningen och svaren i chatten.','Namn …'],
+      ['integritet','Er integritetspolicy','Boten hanterar personuppgifter.','Länk eller text …']
+    ]},
+    {n:8,title:'Övrigt',intro:'Allt annat som boten borde veta, eller som vi behöver prata om.',items:[
+      ['ovrigt','Fria anteckningar','','Skriv fritt …']
+    ]}
+  ];
+
+  var root=document.getElementById('sections');
+  var stateEl=document.getElementById('state');
+  var els={}; // id -> {text, done, tas[], boxes[], whos[], cbs[], cards[]}
+  var data={};
+
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function grow(ta){if(ta.closest('.pcard'))return;ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight+3,640)+'px'}
+  function knownEl(t){var k=el('p','known');k.appendChild(el('b',null,'Det vi vet: '));k.appendChild(document.createTextNode(t));return k}
+
+  // En punkt kan visas på två ställen (listan och presentationen) – samma data, samma sparande.
+  function bind(id,box,ta,who,cb,card){
+    var e=els[id]||(els[id]={text:'',done:false,tas:[],boxes:[],whos:[],cbs:[],cards:[],timer:null,dirty:false,busy:false});
+    e.tas.push(ta);e.boxes.push(box);e.whos.push(who);e.cbs.push(cb);e.cards.push(card);
+    box.disabled=true;ta.disabled=true;
+    box.addEventListener('change',function(){e.done=box.checked;paint(id);counts();save(id)});
+    ta.addEventListener('input',function(){e.text=ta.value;e.tas.forEach(function(t){if(t!==ta){t.value=e.text;grow(t)}});grow(ta);e.dirty=true;clearTimeout(e.timer);e.timer=setTimeout(function(){save(id)},900)});
+    ta.addEventListener('blur',function(){if(e.dirty){clearTimeout(e.timer);save(id)}});
+  }
+  function paint(id){var e=els[id];e.boxes.forEach(function(b){b.checked=e.done});e.cards.forEach(function(c){c.classList.toggle('is-done',e.done)})}
+  function metaRow(){var meta=el('div','meta');var who=el('span','who');meta.appendChild(who);
+    var cb=el('button','cbtn');cb.type='button';cb.hidden=true;
+    cb.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v10H9l-5 4z"/></svg>';cb.appendChild(document.createTextNode('Kommentera'));
+    meta.appendChild(cb);return {meta:meta,who:who,cb:cb}}
+
+  /* Listan */
+  SECTIONS.forEach(function(s){
+    var sec=el('section','sec');sec.setAttribute('aria-labelledby','h-'+s.n);sec.id='sec-'+s.n;
+    var head=el('div','sec-head');head.appendChild(el('span','sec-n',String(s.n)));
+    var h=el('h2',null,s.title);h.id='h-'+s.n;head.appendChild(h);
+    var c=el('span','sec-c');head.appendChild(c);sec.appendChild(head);
+    if(s.prio)sec.appendChild(el('span','tag','Viktigast'));
+    if(s.isNew)sec.appendChild(el('span','tag new','Bokis'));
+    if(s.intro)sec.appendChild(el('p','intro',s.intro));
+    var ul=el('ul','items');
+    s.items.forEach(function(it){
+      var id=it[0];
+      var li=el('li','item');li.setAttribute('data-comment-target','');li.id='p-'+id;
+      var box=document.createElement('input');box.type='checkbox';box.id='c-'+id;
+      var lab=el('label','t');lab.htmlFor='c-'+id;lab.appendChild(el('b',null,it[1]));if(it[2])lab.appendChild(el('small',null,it[2]));
+      var body=el('div','body');
+      if(it[4])body.appendChild(knownEl(it[4]));
+      var ta=document.createElement('textarea');ta.id='f-'+id;ta.rows=3;ta.placeholder=it[3]||'Skriv här …';ta.maxLength=20000;
+      ta.setAttribute('aria-label',it[1]);
+      var m=metaRow();
+      body.appendChild(ta);body.appendChild(m.meta);
+      li.appendChild(box);li.appendChild(lab);li.appendChild(body);ul.appendChild(li);
+      bind(id,box,ta,m.who,m.cb,li);
+    });
+    sec.appendChild(ul);
+    if(s.note)sec.appendChild(el('p','note',s.note));
+    root.appendChild(sec);
+  });
+
+  /* Presentationen */
+  var stage=document.getElementById('stage');
+  var slides=[];
+  function foot(s){var f=el('div','sfoot');f.innerHTML=KSVG+'<span>×</span><img alt="" src="'+RZ+'">';s.appendChild(f)}
+  function slide(cls,label){var s=el('section','slide'+(cls?' '+cls:''));s.setAttribute('aria-label',label);stage.appendChild(s);slides.push(s);return s}
+
+  (function(){
+    var s=slide('s-title','Titel');
+    s.innerHTML='<div class="logos">'+KSVG+'<span class="x">×</span><img class="r" alt="Rozen Clean" src="'+RZ+'"></div><div class="bar"></div><h1>Inför er chattbot <span>och bokning.</span></h1><p class="lead">Vi går igenom allt som ska in, punkt för punkt. Svaren skriver vi in direkt.</p><span class="pill">Kartläggning · Rozen Clean</span>';
+
+    s=slide('','Så jobbar vi');
+    s.innerHTML='<span class="eyebrow">Så jobbar vi idag</span><h2>Boten vet bara det <span>som står här.</span></h2><div class="talk"><div><span>1</span><b>Vi visar det vi vet</b><p>Det gröna har vi hämtat från er hemsida. Ni bekräftar eller rättar.</p></div><div><span>2</span><b>Ni berättar resten</b><p>Ton, regler och beslut. Vi skriver in svaren medan vi pratar.</p></div><div><span>3</span><b>Allt sparas</b><p>Samma lista finns kvar efter mötet. Ni kan fylla på när ni vill.</p></div></div><p class="snote">Det som inte står i listan får boten inte påstå.</p>';
+    foot(s);
+
+    s=slide('','Agenda');
+    s.innerHTML='<span class="eyebrow">Agenda</span><h2>Det här <span>går vi igenom.</span></h2>';
+    var ol=el('ol','agenda');
+    SECTIONS.forEach(function(sec){
+      var li=el('li',sec.prio?'prio':'');li.dataset.sec=sec.n;
+      li.innerHTML='<span class="num">'+sec.n+'</span><span><b></b><small></small></span><em></em>';
+      li.querySelector('b').textContent=sec.title;
+      li.querySelector('small').textContent=sec.prio?'Viktigast':(sec.isNew?'Bokis':(sec.intro?sec.intro.split('.')[0]:sec.items.map(function(i){return i[1]}).slice(0,2).join(', ')));
+      li.addEventListener('click',function(){go(firstOf[sec.n])});
+      ol.appendChild(li);
+    });
+    s.appendChild(ol);foot(s);
+  })();
+
+  var firstOf={};
+  SECTIONS.forEach(function(sec){
+    // Max fyra punkter per bild, tre om avsnittet har mycket förifylld text; jämnt fördelat.
+    var n=sec.items.length, max=sec.items.filter(function(it){return it[4]}).length>=2?3:4;
+    var parts=Math.ceil(n/max), sizes=[];
+    for(var q=0;q<parts;q++)sizes.push(Math.floor(n/parts)+(q<n%parts?1:0));
+    for(var start=0,part=1;part<=parts;start+=sizes[part-1],part++){
+      var per=sizes[part-1];
+      var chunk=sec.items.slice(start,start+per);
+      var s=slide('','Del '+sec.n+' '+sec.title);
+      if(firstOf[sec.n]==null)firstOf[sec.n]=slides.length-1;
+      s.dataset.sec=sec.n;
+      var top=el('div','sec-top');top.appendChild(el('span','big',String(sec.n)));
+      var hh=el('div');hh.appendChild(el('span','eyebrow',(sec.prio?'Viktigast · ':'')+(sec.isNew?'Bokis · ':'')+'Del '+sec.n+(parts>1?' · '+part+' av '+parts:'')));
+      var h2=el('h2',null,sec.title);hh.appendChild(h2);top.appendChild(hh);
+      top.appendChild(el('span','cnt'));s.appendChild(top);
+      if(sec.intro&&part===1&&chunk.length<4)s.appendChild(el('p','intro pnote',sec.intro));
+      var g=el('div','pgrid'+(chunk.length===1?' one':''));
+      g.style.gridTemplateColumns=['1fr','1fr 1fr','1fr 1fr 1fr','1fr 1fr'][chunk.length-1];
+      chunk.forEach(function(it){
+        var id=it[0];
+        var card=el('div','pcard');card.setAttribute('data-comment-target','');
+        var pt=el('label','pt');var box=document.createElement('input');box.type='checkbox';box.id='dc-'+id;pt.htmlFor='dc-'+id;
+        var tt=el('span');tt.appendChild(el('b',null,it[1]));if(it[2])tt.appendChild(el('small',null,it[2]));
+        pt.appendChild(box);pt.appendChild(tt);card.appendChild(pt);
+        if(it[4])card.appendChild(knownEl(it[4]));
+        var ta=document.createElement('textarea');ta.id='df-'+id;ta.placeholder=it[3]||'Skriv här …';ta.maxLength=20000;ta.setAttribute('aria-label',it[1]);
+        card.appendChild(ta);
+        var m=metaRow();card.appendChild(m.meta);
+        g.appendChild(card);
+        bind(id,box,ta,m.who,m.cb,card);
+      });
+      s.appendChild(g);
+      if(sec.note&&start+per>=n)s.appendChild(el('p','note pnote',sec.note));
+      foot(s);
+    }
+  });
+
+  (function(){
+    var s=slide('','Nästa steg');
+    s.innerHTML='<span class="eyebrow">Nästa steg</span><h2>Så går vi <span>vidare.</span></h2><div class="big-meter"><b id="d-done">0 / 0</b><span>punkter klara efter dagens genomgång</span><div class="track"><i id="d-fill"></i></div></div><div class="next"><div><span>1</span><b>Ni fyller på</b><p>Det som saknas skriver ni in i samma lista. Kommentera om något är oklart.</p></div><div><span>2</span><b>Vi bygger</b><p>Chattboten och bokningen sätts upp efter era svar och kopplas till TimeWave.</p></div><div class="hot"><span>3</span><b>Ni testar och godkänner</b><p>Testpersonerna provar. Inget går live förrän ni har sagt ja.</p></div></div>';
+    foot(s);
+  })();
+
+  /* Bläddring */
+  var deck=document.getElementById('deck'), dots=document.getElementById('ddots');
+  var i=0;
+  slides.forEach(function(s,k){var d=el('i');d.title=s.getAttribute('aria-label');d.addEventListener('click',function(){go(k)});dots.appendChild(d);s.inert=true});
+  function fit(){var sc=Math.min(innerWidth/1600,innerHeight/900);stage.style.transform='translate(-50%,-50%) scale('+sc+')'}
+  function go(n){
+    if(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('.slide'))document.activeElement.blur();
+    i=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach(function(s,k){s.classList.toggle('on',k===i);s.inert=k!==i});
+    [].forEach.call(dots.children,function(d,k){d.classList.toggle('on',k===i)});
+    document.getElementById('dcount').textContent=(i+1)+' / '+slides.length;
+  }
+  function openDeck(){deck.hidden=false;document.body.classList.add('presenting');fit();go(i);document.getElementById('d-next').focus()}
+  function closeDeck(){deck.hidden=true;document.body.classList.remove('presenting');try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}document.getElementById('open-deck').focus()}
+  document.getElementById('open-deck').addEventListener('click',openDeck);
+  document.getElementById('d-close').addEventListener('click',closeDeck);
+  document.getElementById('d-next').addEventListener('click',function(){go(i+1)});
+  document.getElementById('d-prev').addEventListener('click',function(){go(i-1)});
+  document.getElementById('d-fs').addEventListener('click',function(){try{var p=document.fullscreenElement?document.exitFullscreen():deck.requestFullscreen();if(p&&p.catch)p.catch(function(){})}catch(e){}});
+  addEventListener('resize',function(){fit();Object.keys(els).forEach(function(k){els[k].tas.forEach(grow)})});
+  addEventListener('keydown',function(e){
+    if(deck.hidden)return;
+    var t=e.target;
+    if(t&&t.closest&&t.closest('textarea,input[type=text]')){if(e.key==='Escape')t.blur();return}
+    if(e.key==='Escape'){closeDeck();return}
+    if(t&&t.closest&&t.closest('button,input')&&(e.key===' '||e.key==='Enter'))return;
+    if(['ArrowRight','PageDown',' ','Enter','ArrowDown'].indexOf(e.key)>=0){e.preventDefault();go(i+1)}
+    if(['ArrowLeft','PageUp','ArrowUp'].indexOf(e.key)>=0){e.preventDefault();go(i-1)}
+    if(e.key==='Home')go(0);if(e.key==='End')go(slides.length-1);
+  });
+  var tx=null;
+  deck.addEventListener('touchstart',function(e){tx=e.target.closest('textarea,.dctrl,.pcard')?null:e.touches[0].clientX},{passive:true});
+  deck.addEventListener('touchend',function(e){if(tx===null)return;var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)go(i+(dx<0?1:-1));tx=null});
+  if(location.hash==='#presentation')openDeck();
+
+  /* Räknare */
+  function counts(){
+    var ids=Object.keys(els),done=0;
+    ids.forEach(function(k){if(els[k].done)done++});
+    document.getElementById('done').textContent=done;
+    document.getElementById('total').textContent=ids.length;
+    document.getElementById('fill').style.width=(done/ids.length*100)+'%';
+    document.getElementById('meter-lbl').textContent=done===ids.length?'Allt klart – hör av er så kör vi!':'punkter klara';
+    var dd=document.getElementById('d-done');if(dd)dd.textContent=done+' / '+ids.length;
+    var df=document.getElementById('d-fill');if(df)df.style.width=(done/ids.length*100)+'%';
+    SECTIONS.forEach(function(s){
+      var d=s.items.filter(function(it){return els[it[0]].done}).length, txt=d+' / '+s.items.length;
+      var c=document.querySelector('#sec-'+s.n+' .sec-c');c.textContent=txt;c.classList.toggle('done',d===s.items.length);
+      stage.querySelectorAll('.slide[data-sec="'+s.n+'"] .cnt').forEach(function(x){x.textContent=txt+' klara'});
+      var a=stage.querySelector('.agenda li[data-sec="'+s.n+'"] em');if(a)a.textContent=txt;
+    });
+    slides.forEach(function(s,k){
+      var b=s.querySelectorAll('.pcard input[type=checkbox]');
+      dots.children[k].classList.toggle('done',b.length>0&&[].every.call(b,function(x){return x.checked}));
+    });
+  }
+  counts();
+
+  function fmt(iso){
+    var d=new Date(iso),now=new Date();
+    var t=d.toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'});
+    if(d.toDateString()===now.toDateString())return 'i dag '+t;
+    return d.toLocaleDateString('sv-SE',{day:'numeric',month:'short'})+' '+t;
+  }
+  function setWho(e,cls,txt){e.whos.forEach(function(w){w.className=cls;w.textContent=txt})}
+  function renderWho(){
+    Object.keys(els).forEach(function(k){
+      var e=els[k],d=data[k];
+      if(e.busy||e.whos[0].classList.contains('err'))return;
+      if(d&&d.at)setWho(e,'who','Senast ändrat av '+(d.by||'någon')+', '+fmt(d.at));
+      else setWho(e,'who','');
+    });
+  }
+  function apply(){
+    Object.keys(els).forEach(function(k){
+      var e=els[k],d=data[k]||{};
+      if(e.busy||e.dirty)return;
+      e.done=!!d.done;paint(k);
+      var focused=e.tas.indexOf(document.activeElement)>=0;
+      if(!focused){e.text=typeof d.text==='string'?d.text:'';e.tas.forEach(function(t){if(t.value!==e.text){t.value=e.text;grow(t)}})}
+    });
+    counts();renderWho();
+  }
+
+  /* Sparande till KELA (ingen inloggning – den hemliga adressen är nyckeln) */
+  var SLUG=(location.pathname.match(/\/s\/([A-Za-z0-9_-]+)/)||[])[1]||'';
+  var API='/api/s/'+SLUG+'/answers';
+  var LBL={};SECTIONS.forEach(function(s){s.items.forEach(function(it){LBL[it[0]]=[it[1],s.n+'. '+s.title]})});
+  var dsave=document.getElementById('dsave');
+  var meEl=document.getElementById('me');
+  try{meEl.value=localStorage.getItem('kela-checklista-namn')||''}catch(x){}
+  meEl.addEventListener('input',function(){try{localStorage.setItem('kela-checklista-namn',meEl.value.trim())}catch(x){}});
+  var ready=false;
+
+  async function save(id){
+    if(!ready)return;
+    var e=els[id];
+    if(e.busy){e.again=true;return}
+    e.busy=true;e.dirty=false;e.again=false;clearTimeout(e.retry);
+    setWho(e,'who saving','Sparar …');dsave.textContent='Sparar …';
+    var by=meEl.value.trim();
+    try{
+      var r=await fetch(API,{method:'POST',headers:{'content-type':'application/json','x-kela-s':'1'},
+        body:JSON.stringify({key:id,label:LBL[id][0],section:LBL[id][1],text:e.text,done:e.done,by:by})});
+      if(!r.ok){var j=null;try{j=await r.json()}catch(x){}throw {status:r.status,message:j&&j.message}}
+      var res=await r.json();
+      if(res.at)data[id]={text:e.text,done:e.done,by:by,at:res.at};
+      e.busy=false;setWho(e,'who','');dsave.textContent='Sparat';
+      if(!by)hintName();
+    }catch(err){
+      e.busy=false;e.dirty=true;dsave.textContent='Inte sparat';
+      var msg=err&&err.status===422&&err.message?'Inte sparat: '+err.message
+        :err&&err.status===429?'Inte sparat: för många sparningar just nu. Vi försöker igen strax.'
+        :'Inte sparat än – vi försöker igen strax. Stäng inte sidan.';
+      setWho(e,'who err',msg);
+      if(!(err&&err.status===422))e.retry=setTimeout(function(){e.whos.forEach(function(w){w.classList.remove('err')});save(id)},8000);
+      return;
+    }
+    if(e.again||e.dirty)save(id);else renderWho();
+  }
+  var hinted=false;
+  function hintName(){if(hinted||meEl.value.trim())return;hinted=true;stateEl.hidden=false;stateEl.textContent='Tips: skriv ditt namn överst, så ser vi vem som har svarat.'}
+
+  function each(fn){Object.keys(els).forEach(function(k){var e=els[k];e.tas.forEach(fn);e.boxes.forEach(fn)})}
+
+  async function load(){
+    var r=await fetch(API,{headers:{accept:'application/json'},cache:'no-store'});
+    if(!r.ok)throw {status:r.status};
+    var j=await r.json();data={};
+    (j.answers||[]).forEach(function(a){data[a.key]=a});
+    apply();
+  }
+  (async function start(){
+    if(!SLUG){stateEl.textContent='Öppna checklistan via länken ni har fått.';dsave.textContent='Sparas inte här';return}
+    for(var tries=0;;tries++){
+      try{await load();break}
+      catch(e){
+        if(e&&e.status===404){stateEl.textContent='Checklistan finns inte längre. Kontakta KELA.';dsave.textContent='Sparas inte';return}
+        stateEl.textContent='Kunde inte hämta det som är ifyllt. Försöker igen …';
+        await new Promise(function(r){setTimeout(r,Math.min(30000,3000*(tries+1)))});
+      }
+    }
+    ready=true;each(function(x){x.disabled=false});stateEl.hidden=true;dsave.textContent='Svaren sparas';
+    // Hämta andras ändringar med jämna mellanrum
+    setInterval(function(){if(document.visibilityState==='visible')load().catch(function(){})},15000);
+    document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')load().catch(function(){})});
+  })();
+  addEventListener('beforeunload',function(ev){
+    var pending=Object.keys(els).some(function(k){return els[k].dirty||els[k].busy});
+    if(pending){ev.preventDefault();ev.returnValue=''}
+  });
+})();
+</script>
+</body>
+</html>

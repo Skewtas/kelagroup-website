@@ -176,6 +176,16 @@ Designade säljsidor (t.ex. Rozen Cleans referenskundserbjudande) som ligger på
 - **Ny sida:** lägg filen i `s/<namn>-<slumpad del>/index.html` och en rad i `tracked_pages` (ny migrering) med samma slug.
 - **Test:** `npm test` innehåller testet "Offertsidor".
 
+## Checklistor för kunder (2026-11-11)
+
+- **Vad:** kunden fyller i en checklista på hemlig adress utan konto, t.ex. Rozen Cleans checklista inför chattbot och bokning: `/s/rozen-clean-checklista-vKiT4qIE-sznJg-dwr-mOm82-hTd/`. Samma sida har ett presentationsläge ("Visa som presentation") för workshoppen.
+- **Lagring:** migrering `0006_checklistor.sql` – `tracked_pages.kind = 'checklista'`, svar i `checklist_answers` (en rad per punkt), tidigare versioner i `checklist_history` (samma namn inom 10 min slås ihop).
+- **API:** `GET/POST /api/s/<slug>/answers` (`functions/_lib/checklist.ts`). Kräver header `x-kela-s: 1` och samma ursprung vid POST, rate limit per IP, max 20 000 tecken per svar. Namnet skriver besökaren själv – det är inte verifierat.
+- **Notis:** mejl till KELA (Formspree) när kunden skriver, högst en gång per timme och sida.
+- **KELA OS:** Offertsidor – spårning visar checklistan med alla svar, vem och när, historik och "Kopiera alla svar".
+- **Driftsättning:** kräver `bash scripts/deploy.sh --migrate` första gången.
+- **Test:** `npm test` innehåller testet "Checklistor".
+
 ## Glömt lösenord (2026-11-03)
 
 - **Flöde:** länken "Glömt lösenordet?" på inloggningen leder till `#/glomt`.
