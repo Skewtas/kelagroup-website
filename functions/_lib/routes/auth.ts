@@ -1,3 +1,4 @@
+import qrcode from 'qrcode-generator';
 // /api/os/auth/* – installation, inloggning, MFA, utloggning, inbjudningar.
 import { Router, audit, auditStmt } from '../router';
 import { HttpError, newId, now, rateLimit, safeEqual, sha256hex, addDays, userAgent, randomToken } from '../core';
@@ -16,6 +17,17 @@ const STARTER_SERVICES: [string, string][] = [
   ['SEO-paket', 'Marknadsföring'], ['Google Ads', 'Marknadsföring'], ['Meta Ads', 'Marknadsföring'],
   ['Automatisering', 'Automation'], ['Supportavtal', 'Drift'], ['Drift och hosting', 'Drift'],
 ];
+
+/** QR-kod som SVG (ritas på servern, inga externa tjänster – nyckeln lämnar aldrig KELA OS). */
+function qrSvg(text: string): string {
+  const qr = qrcode(0, 'M');
+  qr.addData(text);
+  qr.make();
+  const n = qr.getModuleCount(), m = 4;
+  let d = '';
+  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (qr.isDark(y, x)) d += `M${x + m} ${y + m}h1v1h-1z`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${n + 2 * m} ${n + 2 * m}" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="${d}" fill="#24161A"/></svg>`;
+}
 
 export function mfaNeeded(role: Role, totpEnabled: boolean) {
   return totpEnabled || MFA_REQUIRED.includes(role);
@@ -122,7 +134,8 @@ export function authRoutes(r: Router) {
     if (s.totpEnabled) throw new HttpError(409, 'mfa_enabled', 'MFA är redan aktiverat.');
     const secret = newTotpSecret();
     await env.DB.prepare('UPDATE users SET totp_pending_enc = ?, updated_at = ? WHERE id = ?').bind(await encryptSecret(env, secret), now(), s.userId).run();
-    return { secret, uri: totpUri(secret, s.email) };
+    const uri = totpUri(secret, s.email);
+    return { secret, uri, qr_svg: qrSvg(uri) };
   }, { preMfa: true });
 
   r.post('/auth/mfa/verify', async (c) => {

@@ -162,6 +162,7 @@ test('admin måste aktivera MFA innan data kan läsas', async () => {
   const s = ok(await admin.post('/api/os/auth/mfa/setup'), 'mfa setup');
   adminSecret = s.secret;
   assert.match(s.uri, /^otpauth:\/\/totp\//);
+  assert.match(s.qr_svg, /^<svg[^>]+viewBox="0 0 \d+ \d+"[\s\S]*<path d="M/, 'QR-kod ritas som SVG på servern');
   assert.equal((await admin.post('/api/os/auth/mfa/verify', { code: '000000' })).status, 401);
   ok(await admin.post('/api/os/auth/mfa/verify', { code: totp(adminSecret) }), 'mfa verify');
   const me = ok(await admin.get('/api/os/auth/me'));

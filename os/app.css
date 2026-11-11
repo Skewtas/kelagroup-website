@@ -566,3 +566,7 @@ a.tl{border-radius:10px}a.tl:hover .tl-t{color:var(--accent)}
 .fc-choices{display:grid;gap:6px;font-size:13px}
 .fc-ans{padding:8px 0;border-top:1px solid var(--border)}
 .fc-txt{font-size:13px;color:var(--text-2);margin-top:4px;white-space:pre-wrap}
+/* QR-kod för tvåstegsverifiering */
+.mfa-qr{display:block;width:200px;height:200px;margin:12px 0 4px;border-radius:12px;border:1px solid var(--border);background:#fff;padding:6px;image-rendering:pixelated}
+.mfa-alt{margin:-6px 0 18px;font-size:13px}
+.mfa-alt summary{cursor:pointer;color:var(--accent);font-weight:600}

@@ -190,12 +190,17 @@ async function renderMfa(me) {
   }
   setHTML(root(), authLayout(html`
     <h1>${enroll ? 'Aktivera tvåstegsverifiering' : 'Tvåstegsverifiering'}</h1>
-    <p class="sub">${enroll ? 'Krävs för administratörer. Använd en app som Google Authenticator, 1Password eller Microsoft Authenticator.' : `Ange koden från din autentiseringsapp för ${me.user.email}.`}</p>
+    <p class="sub">${enroll ? 'Skanna QR-koden med mobilen – det tar en halv minut.' : `Ange koden från din autentiseringsapp för ${me.user.email}.`}</p>
     ${enroll ? html`<ol class="steps">
-      <li>Öppna din autentiseringsapp och välj att lägga till konto med nyckel.</li>
-      <li><div>Ange kontonamn <strong>KELA OS</strong> och nyckeln:<div class="secret" id="secret">${setup.secret.replace(/(.{4})/g, '$1 ').trim()}</div>
-        <div class="pill-row mt8"><button type="button" class="btn sm" id="cp">${ico('copy')} Kopiera nyckel</button><a class="btn sm" href="${setup.uri}">${ico('external')} Öppna i app</a></div></div></li>
-      <li>Skriv in den sexsiffriga koden som visas.</li></ol>` : ''}
+      <li><div>Öppna <strong>Google Authenticator</strong>, <strong>Microsoft Authenticator</strong> eller <strong>1Password</strong> i mobilen (ladda ner en av dem om du inte har någon).</div></li>
+      <li><div>Tryck på <strong>+</strong> och välj <strong>Skanna QR-kod</strong>. Rikta kameran mot koden:
+        ${setup.qr_svg ? html`<img class="mfa-qr" alt="QR-kod för KELA OS" src="data:image/svg+xml;base64,${btoa(setup.qr_svg)}">` : ''}</div></li>
+      <li><div>Skriv in den sexsiffriga koden som appen visar för KELA OS.</div></li></ol>
+      <details class="mfa-alt"><summary>Går det inte att skanna?</summary>
+        <p class="small muted mt8">Är du på mobilen: tryck <strong>Öppna i app</strong>. Annars kan du lägga till kontot med nyckeln nedan (välj "Ange nyckel" i appen, kontonamn <strong>KELA OS</strong>).</p>
+        <div class="secret mt8" id="secret">${setup.secret.replace(/(.{4})/g, '$1 ').trim()}</div>
+        <div class="pill-row mt8"><button type="button" class="btn sm" id="cp">${ico('copy')} Kopiera nyckel</button><a class="btn sm" href="${setup.uri}">${ico('external')} Öppna i app</a></div>
+      </details>` : ''}
     <form class="form" id="mfa" novalidate>
       <label class="field"><span>Kod</span><input class="in code-in" name="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" required autofocus></label>
       <button class="btn primary" type="submit">${enroll ? 'Aktivera och fortsätt' : 'Verifiera'}</button>
