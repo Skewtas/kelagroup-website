@@ -12,7 +12,7 @@ const STATUS_DOC = { draft: ['Utkast', ''], sent: ['Skickat', 'blue'], final: ['
 const statusMap = (kind) => (kind === 'avtal' ? STATUS_AVTAL : STATUS_DOC);
 const kb = (n) => (n > 1024 * 1024 ? `${(n / 1024 / 1024).toLocaleString('sv-SE', { maximumFractionDigits: 1 })} MB` : `${Math.max(1, Math.round(n / 1024))} kB`);
 const ext = (name) => (name.split('.').pop() || '').toUpperCase();
-const extLabel = (name) => ({ DOCX: 'Word', DOC: 'Word', XLSX: 'Excel', PPTX: 'PowerPoint' }[ext(name)] || ext(name));
+const extLabel = (name) => ({ DOCX: 'Word', DOC: 'Word', XLSX: 'Excel', XLS: 'Excel', PPTX: 'PowerPoint' }[ext(name)] || ext(name));
 
 /** Lista med dokument grupperade per typ. */
 export function docListHtml(docs, { showCustomer = false, canWrite = false } = {}) {
@@ -51,7 +51,7 @@ export async function docForm({ doc = null, customerId = null, kind = 'avtal', o
       <div class="fr"><label class="field"><span>Typ</span><select class="sel" name="kind" id="d-kind">${Object.entries(KIND_ONE).map(([k, l]) => html`<option value="${k}" ${k === k0 ? 'selected' : ''}>${l}</option>`)}</select></label>
         <label class="field"><span>Status</span><select class="sel" name="status" id="d-status">${statusOpts(k0).map(([s, [l]]) => html`<option value="${s}" ${s === (doc?.status || 'draft') ? 'selected' : ''}>${l}</option>`)}</select></label></div>
       <label class="field"><span>Rubrik</span><input class="in" name="title" value="${doc?.title || ''}" required placeholder="t.ex. SaaS- och leveransavtal"></label>
-      ${doc ? '' : html`<label class="field"><span>Filer <span class="hint">PDF, Word, Excel, bild – högst 15 MB per fil. Lägg gärna PDF och Word tillsammans.</span></span><input class="in file-in" type="file" name="file" multiple accept=".pdf,.docx,.doc,.xlsx,.pptx,.png,.jpg,.jpeg,.txt,.csv"></label>`}
+      ${doc ? '' : html`<label class="field"><span>Filer <span class="hint">PDF, Word, Excel, bild – högst 15 MB per fil. Lägg gärna PDF och Word tillsammans.</span></span><input class="in file-in" type="file" name="file" multiple accept=".pdf,.docx,.doc,.xlsx,.xls,.pptx,.png,.jpg,.jpeg,.txt,.csv"></label>`}
       <label class="field"><span>Länk <span class="hint">valfritt – t.ex. offertsida eller presentation</span></span><input class="in" name="url" value="${doc?.url || ''}" placeholder="https://"></label>
       <div class="fr"><label class="field"><span>Skickat</span><input class="in" type="date" name="sent_at" value="${doc?.sent_at || ''}"></label>
         <label class="field"><span>Signerat</span><input class="in" type="date" name="signed_at" value="${doc?.signed_at || ''}"></label></div>
@@ -60,7 +60,7 @@ export async function docForm({ doc = null, customerId = null, kind = 'avtal', o
         <label class="field"><span>Uppsägning (mån)</span><input class="in r" name="notice_months" value="${doc?.notice_months ?? ''}" inputmode="numeric"></label></div>
       <label class="field"><span>Anteckning</span><textarea class="ta" name="description">${doc?.description || ''}</textarea></label>
       ${doc?.files?.length ? html`<div class="notice small">${ico('lock')}<div>${doc.files.length} fil(er) sparade med kontrollsumma. Filer ändras aldrig – ladda upp en ny version i stället.</div></div>` : ''}
-      ${doc ? html`<label class="field"><span>Lägg till fil</span><input class="in file-in" type="file" name="file" multiple accept=".pdf,.docx,.doc,.xlsx,.pptx,.png,.jpg,.jpeg,.txt,.csv"></label>` : ''}
+      ${doc ? html`<label class="field"><span>Lägg till fil</span><input class="in file-in" type="file" name="file" multiple accept=".pdf,.docx,.doc,.xlsx,.xls,.pptx,.png,.jpg,.jpeg,.txt,.csv"></label>` : ''}
     </div>`,
     footer: html`${doc ? html`<button type="button" class="btn ghost danger" id="d-arch">${ico('archive')} Arkivera</button>` : ''}<button type="button" class="btn ml-auto" data-close>Avbryt</button><button type="submit" class="btn primary">${doc ? 'Spara' : 'Lägg till'}</button>`,
     onMount: (d, close) => {

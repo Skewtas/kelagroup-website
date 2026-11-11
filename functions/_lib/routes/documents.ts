@@ -17,6 +17,7 @@ const TYPES: Record<string, string> = {
   docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   doc: 'application/msword',
   xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  xls: 'application/vnd.ms-excel',
   pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', txt: 'text/plain', csv: 'text/csv',
 };
@@ -55,7 +56,7 @@ function magicOk(ext: string, b: Uint8Array) {
   const starts = (...sig: number[]) => sig.every((x, i) => b[i] === x);
   if (ext === 'pdf') return starts(0x25, 0x50, 0x44, 0x46);
   if (['docx', 'xlsx', 'pptx'].includes(ext)) return starts(0x50, 0x4b, 0x03, 0x04);
-  if (ext === 'doc') return starts(0xd0, 0xcf, 0x11, 0xe0);
+  if (ext === 'doc' || ext === 'xls') return starts(0xd0, 0xcf, 0x11, 0xe0);
   if (ext === 'png') return starts(0x89, 0x50, 0x4e, 0x47);
   if (ext === 'jpg' || ext === 'jpeg') return starts(0xff, 0xd8, 0xff);
   return true; // txt/csv

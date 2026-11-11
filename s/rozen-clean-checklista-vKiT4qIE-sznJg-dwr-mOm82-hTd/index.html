@@ -248,6 +248,12 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
 }
 @media (max-width:820px){.ddots,.dctrl .sv{display:none}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+.upbox{background:var(--hot);color:var(--on-hot);border-radius:24px;padding:22px 26px;display:grid;gap:14px;box-shadow:0 18px 44px var(--shadow)}
+.upbox h2{font-family:var(--display);font-weight:400;font-size:clamp(24px,3.4vw,30px);margin:0;color:var(--on-hot)}
+.upbox p{font-size:16px;color:var(--hot-2);margin-top:6px;max-width:62ch}
+.upbox .up-btn{background:var(--on-hot);color:var(--hot);font-size:16px;padding:11px 22px}
+.upbox .up-msg{color:var(--hot-2)}.upbox .up-msg.ok{color:var(--on-hot)}.upbox .up-msg.err{color:#FFD0D6}
+.upbox .up-list li{background:rgba(255,255,255,.12);color:var(--on-hot)}.upbox .up-list li span{color:var(--hot-2)}.upbox .up-list li::before{color:var(--on-hot)}
 .whoami{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--surface);border-radius:18px;padding:14px 18px;box-shadow:0 10px 26px var(--shadow)}
 .whoami label{font-weight:700}
 .whoami input{flex:1 1 220px;min-width:0;font:16px var(--sans);color:var(--vin);background:var(--field);border:1.5px solid var(--rose-pale);border-radius:12px;padding:9px 12px}
@@ -283,6 +289,11 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   </div>
 
   <div class="whoami"><label for="me">Ditt namn</label><input id="me" type="text" maxlength="60" autocomplete="name" placeholder="T.ex. Malin"><small>Så ser vi vem som har svarat. Namnet sparas bara i din webbläsare och skickas med dina svar.</small></div>
+
+  <section class="upbox" aria-labelledby="h-upbox">
+    <div class="upbox-t"><h2 id="h-upbox">Ladda upp filer</h2><p>Tjänstelistan från TimeWave, prislistor, policyer och annat ni vill skicka. Excel, PDF, Word eller bild – högst 15 MB per fil. Alla filer hamnar direkt hos KELA.</p></div>
+    <div id="upbox-slot"></div>
+  </section>
 
   <p class="state" id="state">Hämtar det som redan är ifyllt …</p>
 
@@ -368,10 +379,10 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       ['kontaktperson','En kontaktperson hos er','Som kan svara på frågor och godkänna texter.','Namn och telefon …'],
       ['testare','Några testpersoner','Som provar boten och bokningen innan de går live.',''],
       ['godkann','Vem som godkänner innan lansering','Priser i bokningen och svaren i chatten.','Namn …'],
-      ['integritet','Er integritetspolicy','Boten hanterar personuppgifter.','Länk eller text …']
+      ['integritet','Er integritetspolicy','Boten hanterar personuppgifter. Klistra in en länk eller ladda upp filen.','Länk eller text …']
     ]},
     {n:8,title:'Övrigt',intro:'Allt annat som boten borde veta, eller som vi behöver prata om.',items:[
-      ['ovrigt','Fria anteckningar','','Skriv fritt …']
+      ['ovrigt','Fria anteckningar','Skriv fritt, eller ladda upp filer ni vill att vi ska ha.','Skriv fritt …']
     ]}
   ];
 
@@ -383,7 +394,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
   function grow(ta){if(ta.closest('.pcard'))return;ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight+3,640)+'px'}
   // Punkter där kunden kan ladda upp en fil (sparas hos KELA som bilaga på kunden)
-  var UPLOAD={tjanster:true};
+  var UPLOAD={tjanster:true,priser:true,integritet:true,ovrigt:true};
   var UPS={}; // id -> [{inp, msg, list}]
   function upRow(id,uid){
     var w=el('div','up');
@@ -391,7 +402,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     lab.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>';
     lab.appendChild(document.createTextNode('Ladda upp fil'));
     var inp=document.createElement('input');inp.type='file';inp.id=uid;inp.className='up-in';inp.disabled=true;
-    inp.accept='.xlsx,.csv,.pdf,.docx,.txt';
+    inp.accept='.xlsx,.xls,.csv,.pdf,.docx,.doc,.pptx,.png,.jpg,.jpeg,.txt';
     var msg=el('span','up-msg');msg.setAttribute('aria-live','polite');
     var list=el('ul','up-list');
     w.appendChild(inp);w.appendChild(lab);w.appendChild(msg);w.appendChild(list);
@@ -664,6 +675,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   var SLUG=(location.pathname.match(/\/s\/([A-Za-z0-9_-]+)/)||[])[1]||'';
   var API='/api/s/'+SLUG+'/answers';
   var LBL={};SECTIONS.forEach(function(s){s.items.forEach(function(it,ix){LBL[it[0]]=[it[1],s.n+'. '+s.title,ix]})});
+  LBL.filer=['Filer från Rozen','Filer',0];
+  document.getElementById('upbox-slot').appendChild(upRow('filer','u-filer'));
   var dsave=document.getElementById('dsave');
   var meEl=document.getElementById('me');
   try{meEl.value=localStorage.getItem('kela-checklista-namn')||''}catch(x){}
@@ -705,7 +718,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   function kb(n){return n<1024*1024?Math.max(1,Math.round(n/1024))+' kB':(n/1024/1024).toFixed(1).replace('.',',')+' MB'}
   function renderFiles(files){
     Object.keys(UPS).forEach(function(id){
-      var mine=files.filter(function(f){return f.key===id});
+      var mine=id==='filer'?files:files.filter(function(f){return f.key===id});
       UPS[id].forEach(function(u){
         u.list.textContent='';
         mine.forEach(function(f){var li=el('li');li.appendChild(el('b',null,f.name));li.appendChild(el('span',null,kb(f.size)+' · '+(f.by?f.by+', ':'')+fmt(f.at)));u.list.appendChild(li)});
