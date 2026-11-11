@@ -70,6 +70,10 @@ header{display:grid;gap:22px}
 .sec-c.done{color:var(--teal)}
 .tag{justify-self:start;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);background:var(--teal-bg);padding:4px 11px;border-radius:999px}
 .tag.new{color:var(--rose);background:var(--tint)}
+.tag.prod{color:#fff;background:var(--teal)}
+.prod-note{align-self:center;margin-left:auto;font-size:22px;font-weight:700;color:#fff;background:var(--teal);padding:10px 22px;border-radius:999px;white-space:nowrap}
+.prod-note+.cnt{margin-left:0}
+.prod-note.b{background:var(--rose)}
 .intro{font-size:15px;color:var(--text-2)}
 
 .items{list-style:none;margin:0;padding:0;display:grid}
@@ -331,13 +335,13 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   var RZ='data:image/svg+xml;base64,PHN2ZyBjbGFzcz0ibG9nby1zdmciIHdpZHRoPSI2MTciIGhlaWdodD0iNDU5IiB2aWV3Qm94PSIwIDAgNjE3IDQ1OSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgICAgICA8cGF0aCBkPSJNNjE3IDBIMFY0NTlINjE3VjBaIiBmaWxsPSIjNEY5MTkyIiBjbGFzcz0ic3ZnLWJnIj48L3BhdGg+CiAgICAgICAgPHBhdGggZD0iTTc2LjE0NzkgMTQ4LjgwM1YxOTkuMzlINjkuODQ5NlY3Ny4yODM3SDExMy42NzJDMTM3LjkxNiA3Ny4yODM3IDE0OS45ODEgODcuNzUgMTQ5Ljk4MSAxMTIuMTcxQzE0OS45ODEgMTMxLjAxOCAxNDIuODExIDE0NC40NDIgMTI0LjY3NSAxNDcuOTMxTDE1Mi4yNTggMTk5LjM5SDE0NS4wODdMMTE3Ljg0NSAxNDguODAzSDc2LjEwOTlINzYuMTQ3OVpNMTEzLjY3MiA4My4xOTk0SDc2LjE0NzlWMTQyLjg1SDExMy42NzJDMTM1LjgyOSAxNDIuODUgMTQzLjM0MiAxMzAuMjk4IDE0My4zNDIgMTEyLjEzM0MxNDMuMzQyIDkxLjg4MzQgMTM0LjA4NCA4My4xNjE1IDExMy42NzIgODMuMTYxNVY4My4xOTk0WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNMTcwLjI0MiAxMzguODY4QzE3MC4yNDIgOTkuMDg4NCAxNzkuNjUyIDc1LjcyODkgMjE3LjAyNCA3NS43Mjg5QzI1NC4zOTYgNzUuNzI4OSAyNjMuODA1IDk4Ljc0NzEgMjYzLjgwNSAxMzguODY4QzI2My44MDUgMTgxLjA3NCAyNTQuNTQ4IDIwMC45ODMgMjE3LjAyNCAyMDAuOTgzQzE3OS41IDIwMC45ODMgMTcwLjI0MiAxNzkuMzMgMTcwLjI0MiAxMzguODY4Wk0yNTcuMTY2IDEzOC44NjhDMjU3LjE2NiAxMDIuNzY3IDI0OS44NDMgODEuNjQ0NiAyMTcuMDI0IDgxLjY0NDZDMTg0LjIwNSA4MS42NDQ2IDE3Ni44ODIgMTAyLjM4OCAxNzYuODgyIDEzOC44NjhDMTc2Ljg4MiAxNzUuMzQ4IDE4My4zMzIgMTk1LjAyOSAyMTcuMDI0IDE5NS4wMjlDMjUwLjcxNiAxOTUuMDI5IDI1Ny4xNjYgMTc3LjI0NCAyNTcuMTY2IDEzOC44NjhaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgogICAgICAgIDxwYXRoIGQ9Ik0yNzkuNDc1IDc3LjI4MzdIMzU4LjAxM1Y4OS40OTQ0TDI4NS45MjUgMTg5Ljc5NlYxOTMuNjI2SDM1OC4wMTNWMTk5LjU0MkgyNzkuNDc1VjE4Ny41MjFMMzUxLjU2MyA4Ny4zNzA4VjgzLjE5OTRIMjc5LjQ3NVY3Ny4yODM3WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNMzgwLjAxOSA3Ny4yODM3SDQ1MS40MjRWODMuMTk5NEgzODYuMzE3VjEzMy45NzZINDQwLjk1M1YxMzkuODkySDM4Ni4zMTdWMTkzLjQzN0g0NTEuNDI0VjE5OS4zNTNIMzgwLjAxOVY3Ny4yODM3WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNNDc0LjQxNyA3Ny4yODM3SDQ4OS4yNTJMNTQ3LjM3OCAxOTMuNDc1SDU1Mi4wODJWNzcuMjgzN0g1NTguMzgxVjE5OS4zOUg1NDMuNTQ2TDQ4NS4yMyA4My4xOTk0SDQ4MC42NzdWMTk5LjM5SDQ3NC4zNzlWNzcuMjgzN0g0NzQuNDE3WiIgZmlsbD0id2hpdGUiPjwvcGF0aD4KICAgICAgICA8cGF0aCBkPSJNMTQ2Ljk0NiAzNDkuMDI4QzEzNy42NTEgMzUwLjg4NiAxMjUuMjA2IDM1Mi43NDQgMTEyLjU3MSAzNTIuNzQ0Qzc0LjI4ODggMzUyLjc0NCA2Ni4yODMyIDMyNy44MyA2Ni4yODMyIDI4Ni42MUM2Ni4yODMyIDI0NS4zODkgNzIuOTYwOSAyMTkuMzM3IDExMi41NzEgMjE5LjMzN0MxMjUuNTg1IDIxOS4zMzcgMTM4LjQwOSAyMjEuMTk1IDE0Ni45NDYgMjIyLjg2NEwxNDYuMzc3IDIyOS4zNDhDMTM4LjM3MiAyMjcuNjggMTIzLjY4OCAyMjUuNjMyIDExMi41MzQgMjI1LjYzMkM3Ny41ODk3IDIyNS42MzIgNzMuMzAyMyAyNDkuNTk4IDczLjMwMjMgMjg2LjU3MkM3My4zMDIzIDMyMy41NDUgNzguMzEwNiAzNDYuNDExIDExMi41MzQgMzQ2LjQxMUMxMjQuMjU3IDM0Ni40MTEgMTM2LjcwMiAzNDQuNTUzIDE0Ni4zNzcgMzQyLjY5NUwxNDYuOTQ2IDM0OS4wMjhaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgogICAgICAgIDxwYXRoIGQ9Ik0xNzAuMjA0IDM1MS4wNzZWMjIxLjAwNkgxNzYuODgyVjM0NC43NDNIMjQwLjI4MlYzNTEuMDc2SDE3MC4yMDRaIiBmaWxsPSJ3aGl0ZSI+PC9wYXRoPgogICAgICAgIDxwYXRoIGQ9Ik0yNTcuOTI0IDIyMS4wMDZIMzMzLjk1OFYyMjcuMzM4SDI2NC42MDJWMjgxLjQxNEgzMjIuODA0VjI4Ny43NDdIMjY0LjYwMlYzNDQuNzgxSDMzMy45NThWMzUxLjExNEgyNTcuOTI0VjIyMS4wNDRWMjIxLjAwNloiIGZpbGw9IndoaXRlIj48L3BhdGg+CiAgICAgICAgPHBhdGggZD0iTTM4Ni41ODMgMjIxLjAwNkg0MDYuMjc0TDQ0Ni4yMjcgMzUxLjA3Nkg0MzkuNTQ5TDQyNy40NDYgMzExLjE0NUgzNjUuMzc0TDM1My4zMDkgMzUxLjA3NkgzNDYuNjMxTDM4Ni41ODMgMjIxLjAwNlpNMzY3LjQyMyAzMDQuODEySDQyNS40MzVMNDAxLjY0NiAyMjcuMzM4SDM5MS4yNUwzNjcuNDYxIDMwNC44MTJIMzY3LjQyM1oiIGZpbGw9IndoaXRlIj48L3BhdGg+CiAgICAgICAgPHBhdGggZD0iTTQ2Ni41MjUgMjIxLjAwNkg0ODIuMzA5TDU0NC4yMjkgMzQ0Ljc0M0g1NDkuMjM3VjIyMS4wMDZINTU1LjkxNVYzNTEuMDc2SDU0MC4xMzFMNDc4LjA1OSAyMjcuMzM4SDQ3My4yNDFWMzUxLjA3Nkg0NjYuNTYzVjIyMS4wMDZINDY2LjUyNVoiIGZpbGw9IndoaXRlIj48L3BhdGg+CiAgICA8L3N2Zz4=';
   // [id, rubrik, förklaring, platshållare, det vi vet]
   var SECTIONS=[
-    {n:1,title:'Hur ni pratar med kunder',prio:true,items:[
+    {n:1,title:'Hur ni pratar med kunder',prio:true,chat:true,items:[
       ['ton','Vilken ton ni vill ha','Du eller ni, formell eller personlig, kort eller utförlig.','T.ex. Vi säger du, är personliga men korta …'],
       ['lova','Vad boten aldrig får lova','Till exempel ersättning vid skada, samma städare varje gång eller exakta tider.','Skriv en sak per rad …'],
       ['overlamning','När den ska lämna över till en människa','Klagomål, skador, prisförhandling, sådant den inte vet svaret på.','T.ex. Vid klagomål: be om namn och telefon, så ringer vi upp …'],
       ['avbokning','Era regler för avbokning och ombokning','Plus garantier och vad som händer om kunden inte är nöjd.','T.ex. Avbokning senast 24 timmar innan …','Av- och ombokning senast 24 timmar före, annars debiteras hela städningen. Flyttstädning: 48 timmars garanti.']
     ]},
-    {n:2,title:'Fakta om företaget',prio:true,items:[
+    {n:2,title:'Fakta om företaget',prio:true,chat:true,items:[
       ['tjanster','Tjänstelistan från TimeWave','Exportera tjänstelistan ur TimeWave så att pris, tjänstenummer, tjänst och RUT syns, och ladda upp filen här. Excel, CSV eller PDF.','Kommentarer till listan, eller skriv var vi hittar den …','Bokas direkt: hemstädning, storstädning, flyttstädning, fönsterputs, visningsstädning. Offert: företagsstädning och trappstädning.'],
       ['priser','Priser eller hur priset räknas ut','Per timme, per kvadratmeter, påslag för abonnemang. Berätta också hur RUT hanteras.','T.ex. Hemstädning 450 kr/tim före RUT …','Hemstädning varje/varannan vecka 279 kr/tim mån–tis, 299 kr/tim ons–fre · var fjärde vecka 319 kr/tim · stor-, flytt- och fönsterputs 359 kr/tim · helg och röd dag +15 % · minst 2 timmar. Inkl. moms, efter RUT.'],
       ['omraden','Vilka områden ni täcker','Och vilka områden ni inte täcker.','Täcker: …\nTäcker inte: …','Stockholm, Uppsala och Nyköping.'],
@@ -347,7 +351,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       ['betalning','Betalning och fakturering','','','Faktura en gång i månaden i efterskott. E-faktura, autogiro, PDF eller Kivra/papper (+30 kr).'],
       ['kontakt','Kontaktuppgifter och öppettider','För kundservice.','Telefon, mejl, öppettider …','Vardagar 07.30–16.15 · 010-330 81 80 · kundservice@rozenclean.se']
     ]},
-    {n:3,title:'Exempel på hur ni svarar',prio:true,items:[
+    {n:3,title:'Exempel på hur ni svarar',prio:true,chat:true,items:[
       ['fragor','De 20–30 vanligaste kundfrågorna','Och hur ni brukar svara på dem.','Fråga: …\nSvar: …'],
       ['svara-fall','Några svåra fall och hur ni hanterade dem','Ett klagomål, en kund som pressar priset, en avbokning i sista minuten.',''],
       ['mejl','Riktiga mejl som exempel','Ta bort namn, adresser och telefonnummer först.','Klistra in mejlet utan personuppgifter …']
@@ -370,7 +374,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       ['nyckel-chattis','En nyckel för Chattis','Skriv till exempel: ”API-nyckeln ska användas för chattbot på hemsidan.”','Skriv när ni bad om den och vad som hänt. Klistra aldrig in nyckeln.'],
       ['nyckel-klar','Meddela oss när ni har fått nycklarna','Så hämtar vi dem på ett säkert sätt.','T.ex. Båda nycklarna mottagna den …']
     ]},
-    {n:6,title:'Beslut ni behöver fatta',items:[
+    {n:6,title:'Beslut ni behöver fatta',chat:true,items:[
       ['far-gora','Vad boten får göra själv','Bara svara på frågor, eller också boka, boka om, avboka och visa fakturor?',''],
       ['uppfoljning','Uppföljning av intresserade kunder','Ska den samla in dem och följa upp, till exempel via SMS?',''],
       ['namn','Namn, personlighet och bild','Vad boten ska heta, hur den ska vara och vilken bild den ska ha: ett riktigt foto eller en AI-genererad bild?','Förslag på namn, personlighet och bild …']
@@ -439,7 +443,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     var h=el('h2',null,s.title);h.id='h-'+s.n;head.appendChild(h);
     var c=el('span','sec-c');head.appendChild(c);sec.appendChild(head);
     if(s.prio)sec.appendChild(el('span','tag','Viktigast'));
-    if(s.isNew)sec.appendChild(el('span','tag new','Bokis'));
+    if(s.chat)sec.appendChild(el('span','tag prod','Gäller Chattis – AI-chatten'));
+    if(s.isNew)sec.appendChild(el('span','tag new','Gäller Bokis – bokningen'));
     if(s.intro)sec.appendChild(el('p','intro',s.intro));
     var ul=el('ul','items');
     s.items.forEach(function(it){
@@ -502,7 +507,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     s.innerHTML='<div class="logos">'+KSVG+'<span class="x">×</span><img class="r" alt="Rozen Clean" src="'+RZ+'"></div><div class="bar"></div><h1>Inför er chattbot <span>och bokning.</span></h1><p class="lead">Vi går igenom allt som ska in, punkt för punkt. Svaren skriver vi in direkt.</p><span class="pill">Kartläggning · Rozen Clean</span>';
 
     s=slide('','Så jobbar vi');
-    s.innerHTML='<span class="eyebrow">Så jobbar vi idag</span><h2>Vi går igenom checklistan, <span>del för del.</span></h2><div class="talk"><div><span>1</span><b>Vi tar en del i taget</b><p>Jag skriver in era svar direkt i checklistan medan vi pratar. Det gröna har vi hämtat från er hemsida – ni bekräftar eller rättar.</p></div><div><span>2</span><b>Ni får samma länk</b><p>Efter mötet kompletterar ni själva. Ni skriver rakt in i länken, precis som jag gör här. Inget konto behövs.</p></div><div><span>3</span><b>Vem ansvarar?</b><p>Skriv in vem hos er som ansvarar för varje fråga, så vet vi vem vi ska fråga.</p></div></div><p class="snote">Allt sparas direkt. Det som inte står i checklistan får chattboten inte påstå.</p>';
+    s.innerHTML='<span class="eyebrow">Så jobbar vi idag</span><h2>En checklista för <span>bokningen och chatten.</span></h2><div class="talk"><div><span>1</span><b>Vi påbörjar checklistan</b><p>Här samlar vi all information som ska finnas i bokningssystemet (Bokis) och chatten (Chattis). Vi går igenom allt tillsammans idag.</p></div><div><span>2</span><b>Komplettera i efterhand</b><p>Ni har kvar länken efter mötet och fyller i det som saknas. Ni skriver rakt in i den, precis som jag gör här. Inget konto behövs.</p></div><div><span>3</span><b>Vem svarar för vad?</b><p>Skriv in vem hos er som ansvarar för informationen i varje punkt, så vet vi vem vi ska fråga.</p></div></div><p class="snote">Allt sparas direkt. Det som inte står i checklistan får chattboten inte påstå.</p>';
     foot(s);
 
     s=slide('','Agenda');
@@ -542,8 +547,10 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       if(firstOf[sec.n]==null)firstOf[sec.n]=slides.length-1;
       s.dataset.sec=sec.n;
       var top=el('div','sec-top');top.appendChild(el('span','big',String(sec.n)));
-      var hh=el('div');hh.appendChild(el('span','eyebrow',(sec.prio?'Viktigast · ':'')+(sec.isNew?'Bokis · ':'')+'Del '+sec.n+(parts>1?' · '+part+' av '+parts:'')));
+      var hh=el('div');hh.appendChild(el('span','eyebrow',(sec.chat?'Chattis · ':'')+(sec.isNew?'Bokis · ':'')+(sec.prio?'Viktigast · ':'')+'Del '+sec.n+(parts>1?' · '+part+' av '+parts:'')));
       var h2=el('h2',null,sec.title);hh.appendChild(h2);top.appendChild(hh);
+      if(sec.chat)top.appendChild(el('span','prod-note','Gäller Chattis · AI-chatten'));
+      if(sec.isNew)top.appendChild(el('span','prod-note b','Gäller Bokis · bokningen'));
       top.appendChild(el('span','cnt'));s.appendChild(top);
       if(sec.intro&&part===1&&chunk.length<4)s.appendChild(el('p','intro pnote',sec.intro));
       var g=el('div','pgrid'+(chunk.length===1?' one':''));
