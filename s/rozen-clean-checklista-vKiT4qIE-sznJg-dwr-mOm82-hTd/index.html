@@ -99,6 +99,20 @@ textarea:disabled{opacity:.75}
 .own input{width:190px;max-width:100%;min-width:0;font:15px var(--sans);color:var(--vin);background:var(--field);border:1.5px solid var(--rose-pale);border-radius:10px;padding:6px 10px}
 .own input:focus{outline:none;border-color:var(--rose);background:var(--surface)}
 .own input:disabled{opacity:.75}
+.up{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.up-in{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.up-btn{display:inline-flex;align-items:center;gap:8px;font:700 14px var(--sans);color:var(--on-hot);background:var(--hot);border-radius:999px;padding:8px 16px;cursor:pointer}
+.up-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.up-in:focus-visible+.up-btn{outline:3px solid var(--rose);outline-offset:2px}
+.up-in:disabled+.up-btn{opacity:.5;cursor:default}
+.up-msg{font-size:14px;color:var(--text-2)}
+.up-msg.err{color:#B4232F}.up-msg.ok{color:var(--teal);font-weight:700}
+.up-list{list-style:none;margin:0;padding:0;flex-basis:100%;display:grid;gap:6px}
+.up-list li{display:flex;align-items:center;gap:10px;font-size:14px;background:var(--teal-bg);color:var(--vin);border-radius:10px;padding:7px 12px;min-width:0}
+.up-list li b{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.up-list li span{color:var(--text-3);white-space:nowrap;margin-left:auto}
+.up-list li::before{content:"✓";color:var(--teal);font-weight:700}
+.pcard .up-btn{font-size:16px}
 .pcard .own label{font-size:15px}.pcard .own input{font-size:16px;width:220px}
 .meta .who.saving{color:var(--rose)}
 .meta .who.err{color:#B4232F}
@@ -278,7 +292,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       ['avbokning','Era regler för avbokning och ombokning','Plus garantier och vad som händer om kunden inte är nöjd.','T.ex. Avbokning senast 24 timmar innan …','Av- och ombokning senast 24 timmar före, annars debiteras hela städningen. Flyttstädning: 48 timmars garanti.']
     ]},
     {n:2,title:'Fakta om företaget',prio:true,items:[
-      ['tjanster','Utdrag över era tjänster från TimeWave','Så ser vi vilka tjänster ni har och hur de är upplagda.','Klistra in utdraget här, eller skriv var vi hittar det …','Bokas direkt: hemstädning, storstädning, flyttstädning, fönsterputs, visningsstädning. Offert: företagsstädning och trappstädning.'],
+      ['tjanster','Tjänstelistan från TimeWave','Exportera tjänstelistan ur TimeWave så att pris, tjänstenummer, tjänst och RUT syns, och ladda upp filen här. Excel, CSV eller PDF.','Kommentarer till listan, eller skriv var vi hittar den …','Bokas direkt: hemstädning, storstädning, flyttstädning, fönsterputs, visningsstädning. Offert: företagsstädning och trappstädning.'],
       ['priser','Priser eller hur priset räknas ut','Per timme, per kvadratmeter, påslag för abonnemang. Berätta också hur RUT hanteras.','T.ex. Hemstädning 450 kr/tim före RUT …','Hemstädning varje/varannan vecka 279 kr/tim mån–tis, 299 kr/tim ons–fre · var fjärde vecka 319 kr/tim · stor-, flytt- och fönsterputs 359 kr/tim · helg och röd dag +15 % · minst 2 timmar. Inkl. moms, efter RUT.'],
       ['omraden','Vilka områden ni täcker','Och vilka områden ni inte täcker.','Täcker: …\nTäcker inte: …','Stockholm, Uppsala och Nyköping.'],
       ['material','Material och utrustning','Vem tar med vad?','','Hemstädning: kunden har eget material. Flyttstädning: ni tar alltid med. Stor och fönster: kan tas med, 395 kr för material och framkörning.'],
@@ -333,6 +347,23 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
 
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
   function grow(ta){if(ta.closest('.pcard'))return;ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight+3,640)+'px'}
+  // Punkter där kunden kan ladda upp en fil (sparas hos KELA som bilaga på kunden)
+  var UPLOAD={tjanster:true};
+  var UPS={}; // id -> [{inp, msg, list}]
+  function upRow(id,uid){
+    var w=el('div','up');
+    var lab=el('label','up-btn');lab.htmlFor=uid;
+    lab.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>';
+    lab.appendChild(document.createTextNode('Ladda upp fil'));
+    var inp=document.createElement('input');inp.type='file';inp.id=uid;inp.className='up-in';inp.disabled=true;
+    inp.accept='.xlsx,.csv,.pdf,.docx,.txt';
+    var msg=el('span','up-msg');msg.setAttribute('aria-live','polite');
+    var list=el('ul','up-list');
+    w.appendChild(inp);w.appendChild(lab);w.appendChild(msg);w.appendChild(list);
+    (UPS[id]=UPS[id]||[]).push({inp:inp,msg:msg,list:list,lab:lab});
+    inp.addEventListener('change',function(){if(inp.files&&inp.files[0])uploadFile(id,inp.files[0]);inp.value=''});
+    return w;
+  }
   function knownEl(t){var k=el('p','known');k.appendChild(el('b',null,'Det vi vet: '));k.appendChild(document.createTextNode(t));return k}
 
   // En punkt kan visas på två ställen (listan och presentationen) – samma data, samma sparande.
@@ -375,7 +406,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       var ta=document.createElement('textarea');ta.id='f-'+id;ta.rows=3;ta.placeholder=it[3]||'Skriv här …';ta.maxLength=20000;
       ta.setAttribute('aria-label',it[1]);
       var m=metaRow('o-'+id);
-      body.appendChild(ta);body.appendChild(m.meta);
+      body.appendChild(ta);if(UPLOAD[id])body.appendChild(upRow(id,'u-'+id));body.appendChild(m.meta);
       li.appendChild(box);li.appendChild(lab);li.appendChild(body);ul.appendChild(li);
       bind(id,box,ta,m.who,m.cb,li,m.own);
     });
@@ -449,7 +480,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
         pt.appendChild(box);pt.appendChild(tt);card.appendChild(pt);
         if(it[4])card.appendChild(knownEl(it[4]));
         var ta=document.createElement('textarea');ta.id='df-'+id;ta.placeholder=it[3]||'Skriv här …';ta.maxLength=20000;ta.setAttribute('aria-label',it[1]);
-        card.appendChild(ta);
+        card.appendChild(ta);if(UPLOAD[id])card.appendChild(upRow(id,'du-'+id));
         var m=metaRow('do-'+id);card.appendChild(m.meta);
         g.appendChild(card);
         bind(id,box,ta,m.who,m.cb,card,m.own);
@@ -592,6 +623,40 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
 
   function each(fn){Object.keys(els).forEach(function(k){var e=els[k];e.tas.forEach(fn);e.boxes.forEach(fn);e.owns.forEach(fn)})}
 
+  var FILES_API='/api/s/'+SLUG+'/files', upEnabled=false;
+  function kb(n){return n<1024*1024?Math.max(1,Math.round(n/1024))+' kB':(n/1024/1024).toFixed(1).replace('.',',')+' MB'}
+  function renderFiles(files){
+    Object.keys(UPS).forEach(function(id){
+      var mine=files.filter(function(f){return f.key===id});
+      UPS[id].forEach(function(u){
+        u.list.textContent='';
+        mine.forEach(function(f){var li=el('li');li.appendChild(el('b',null,f.name));li.appendChild(el('span',null,kb(f.size)+' · '+(f.by?f.by+', ':'')+fmt(f.at)));u.list.appendChild(li)});
+        u.inp.disabled=!ready||!upEnabled;
+        if(!upEnabled&&ready){u.msg.className='up-msg';u.msg.textContent='Uppladdning öppnas snart. Mejla filen till KELA så länge.'}
+      });
+    });
+  }
+  async function loadFiles(){
+    var r=await fetch(FILES_API,{headers:{accept:'application/json'},cache:'no-store'});
+    if(!r.ok)return;
+    var j=await r.json();upEnabled=!!j.enabled;renderFiles(j.files||[]);
+  }
+  async function uploadFile(id,file){
+    var us=UPS[id]||[];
+    var say=function(t,c){us.forEach(function(u){u.msg.className='up-msg'+(c?' '+c:'');u.msg.textContent=t})};
+    if(file.size>15*1024*1024){say('Filen är större än 15 MB. Mejla den till KELA i stället.','err');return}
+    us.forEach(function(u){u.inp.disabled=true});say('Laddar upp '+file.name+' …');
+    var fd=new FormData();fd.append('file',file);fd.append('key',id);fd.append('label',LBL[id][0]);fd.append('by',meEl.value.trim());
+    try{
+      var r=await fetch(FILES_API,{method:'POST',headers:{'x-kela-s':'1'},body:fd});
+      var j=null;try{j=await r.json()}catch(x){}
+      if(!r.ok)throw new Error(j&&j.message?j.message:'Uppladdningen misslyckades. Försök igen.');
+      say('Uppladdad! KELA har fått filen.','ok');
+      await loadFiles();
+    }catch(e){say(e.message||'Uppladdningen misslyckades. Försök igen.','err')}
+    us.forEach(function(u){u.inp.disabled=!upEnabled});
+  }
+
   async function load(){
     var r=await fetch(API,{headers:{accept:'application/json'},cache:'no-store'});
     if(!r.ok)throw {status:r.status};
@@ -610,6 +675,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       }
     }
     ready=true;each(function(x){x.disabled=false});stateEl.hidden=true;dsave.textContent='Svaren sparas';
+    loadFiles().catch(function(){});
     // Hämta andras ändringar med jämna mellanrum
     setInterval(function(){if(document.visibilityState==='visible')load().catch(function(){})},15000);
     document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')load().catch(function(){})});

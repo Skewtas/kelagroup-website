@@ -98,6 +98,11 @@ function checklist(view, d, app) {
       ${kpi('clock', 'Senast ändrat', last ? ago(last) : '–', last ? dateTime(last) : 'Inga svar än')}
       ${kpi('users', 'Ansvariga hos kunden', owners.length, owners.join(', ') || 'Inte satt än')}
     </div>
+    ${(d.files || []).length ? html`<div class="card mt16"><div class="card-h"><h2>Uppladdade filer</h2><div class="act small faint">Finns även under Avtal och dokument på kunden</div></div><div class="card-b"><div class="timeline">
+      ${d.files.map((f) => { const a = d.answers.find((x) => x.item_key === f.item_key); return html`<div class="tl"><span class="tl-dot accent">${ico('file')}</span><div class="tl-b">
+        <div class="tl-t"><a href="/api/os/documents/${f.document_id}/files/${f.file_id}">${f.file_name}</a></div>
+        <div class="tl-m">${a?.label || f.label || 'Checklistan'} · ${Math.max(1, Math.round(f.size / 1024))} kB · ${f.by || 'okänd'} · ${dateTime(f.created_at)}</div></div></div>`; })}
+    </div></div></div>` : ''}
     ${answers.length ? sections.map((s) => html`<div class="card mt16"><div class="card-h"><h2>${s}</h2></div><div class="card-b"><div class="timeline">
       ${answers.filter((a) => (a.section || 'Övrigt') === s).map((a) => html`<div class="tl"><span class="tl-dot ${a.done ? 'green' : ''}">${ico(a.done ? 'checkCircle' : 'edit')}</span><div class="tl-b">
         <div class="tl-t">${a.label || a.item_key} ${a.done ? html`<span class="badge green">Klar</span>` : ''}</div>

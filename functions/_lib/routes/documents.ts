@@ -72,7 +72,7 @@ export function fileStmts(c: { env: any }, orgId: string, docId: string, userId:
   return { fileId, stmts };
 }
 
-async function readUpload(file: File) {
+export async function readUpload(file: File) {
   const name = file.name.replace(/[\\/:*?"<>|\u0000-\u001f]+/g, '_').slice(0, 180) || 'fil';
   const ext = (name.split('.').pop() || '').toLowerCase();
   if (!TYPES[ext]) throw new HttpError(422, 'validation', 'Filtypen stöds inte. Använd PDF, Word, Excel, PowerPoint, bild eller text.', { file: 'Filtypen stöds inte.' });

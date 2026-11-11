@@ -182,6 +182,8 @@ Designade säljsidor (t.ex. Rozen Cleans referenskundserbjudande) som ligger på
 - **Lagring:** migrering `0006_checklistor.sql` – `tracked_pages.kind = 'checklista'`, svar i `checklist_answers` (en rad per punkt), tidigare versioner i `checklist_history` (samma namn inom 10 min slås ihop).
 - **API:** `GET/POST /api/s/<slug>/answers` (`functions/_lib/checklist.ts`). Kräver header `x-kela-s: 1` och samma ursprung vid POST, rate limit per IP, max 20 000 tecken per svar. Namnet skriver besökaren själv – det är inte verifierat.
 - **Notis:** mejl till KELA (Formspree) när kunden skriver, högst en gång per timme och sida.
+- **Uppladdning (2026-11-11):** `GET/POST /api/s/<slug>/files` – kunden laddar upp t.ex. tjänstelistan från TimeWave på punkten `tjanster`. Filen sparas i dokumentmodulen som bilaga på kunden som checklistan är kopplad till (`tracked_pages.customer_id`, annars 409). Filtyp kontrolleras mot innehållet, max 15 MB, 30 uppladdningar/timme per IP, 50 filer per checklista. Sidan visar bara filnamn – nedladdning sker endast i KELA OS. Punktinfo ligger i `tracked_events` (type `file_upload`).
+- **Ansvarig per fråga:** migrering `0007` (`owner`, `pos`).
 - **KELA OS:** Offertsidor – spårning visar checklistan med alla svar, vem och när, historik och "Kopiera alla svar".
 - **Driftsättning:** kräver `bash scripts/deploy.sh --migrate` första gången.
 - **Test:** `npm test` innehåller testet "Checklistor".

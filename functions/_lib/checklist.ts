@@ -1,9 +1,13 @@
 // Checklistor på hemlig adress under /s/<slug>/ – kunden skriver in svar utan konto.
 // GET  /api/s/<slug>/answers  → alla svar
 // POST /api/s/<slug>/answers  → spara ett svar { key, label, section, text, done, owner, by }
+// GET  /api/s/<slug>/files    → filer som laddats upp i checklistan (namn och storlek – aldrig innehållet)
+// POST /api/s/<slug>/files    → ladda upp en fil (multipart: file, key, label, by). Hamnar som bilaga under
+//                               Avtal och dokument på kunden som checklistan är kopplad till.
 // Åtkomst styrs av den hemliga sluggen, precis som offertsidorna. Inga kakor sätts.
 import { Env, HttpError, json, errorResponse, newId, now, clientIp, rateLimit, readJson } from './core';
 import { findPage } from './tracking';
+import { readUpload, fileStmts } from './routes/documents';
 
 const KEY_RE = /^[a-z0-9-]{1,40}$/;
 const MAX_TEXT = 20_000;
@@ -99,5 +103,64 @@ async function notifyAnswers(env: Env, url: URL, p: any, by: string | null) {
     if (!res.ok) console.error('Checklistnotis misslyckades', res.status);
   } catch (e) {
     console.error('Checklistnotis misslyckades', e);
+  }
+}
+
+/** Filer från checklistan: kunden laddar upp t.ex. sin tjänstelista från TimeWave. Lagras i dokumentmodulen. */
+export async function handleChecklistFiles(env: Env, req: Request, slug: string): Promise<Response> {
+  try {
+    const url = new URL(req.url);
+    const ip = clientIp(req);
+    if (req.method === 'GET') {
+      if (!(await rateLimit(env.DB, `clget:${ip}`, 1200, 3600))) throw new HttpError(429, 'rate_limited', 'För många förfrågningar.');
+      const p = await findPage(env, slug);
+      if (!p || p.kind !== 'checklista') throw new HttpError(404, 'not_found', 'Hittades inte.');
+      const { results } = await env.DB.prepare(`SELECT e.data_json, f.file_name, f.size, f.created_at FROM documents d
+        JOIN document_files f ON f.document_id = d.id AND f.org_id = d.org_id
+        LEFT JOIN tracked_events e ON e.page_id = d.tracked_page_id AND e.type = 'file_upload' AND json_extract(e.data_json, '$.document_id') = d.id
+        WHERE d.org_id = ? AND d.tracked_page_id = ? AND d.created_by = 'checklista' AND d.archived_at IS NULL ORDER BY f.created_at DESC LIMIT 50`).bind(p.org_id, p.id).all<any>();
+      return json({
+        enabled: !!p.customer_id,
+        files: results.map((r) => { let m: any = {}; try { m = JSON.parse(r.data_json || '{}'); } catch { /* */ }
+          return { name: r.file_name, size: r.size, at: r.created_at, key: m.key || '', by: m.by || '' }; }),
+      }, 200, { 'cache-control': 'no-store' });
+    }
+    if (req.method !== 'POST') throw new HttpError(405, 'method_not_allowed', 'Metoden stöds inte.');
+    const origin = req.headers.get('origin');
+    if (origin && origin !== url.origin) throw new HttpError(403, 'bad_origin', 'Otillåtet ursprung.');
+    if (req.headers.get('x-kela-s') !== '1') throw new HttpError(403, 'csrf', 'Saknar säkerhetsheader.');
+    if (!(await rateLimit(env.DB, `clfile:${ip}`, 30, 3600))) throw new HttpError(429, 'rate_limited', 'För många uppladdningar. Vänta en stund och försök igen.');
+    const p = await findPage(env, slug);
+    if (!p || p.kind !== 'checklista') throw new HttpError(404, 'not_found', 'Hittades inte.');
+    if (!p.customer_id) throw new HttpError(409, 'not_enabled', 'Uppladdning är inte öppnad för den här checklistan än. Mejla filen till KELA så länge.');
+    const n = await env.DB.prepare("SELECT COUNT(*) AS n FROM documents WHERE org_id = ? AND tracked_page_id = ? AND created_by = 'checklista'").bind(p.org_id, p.id).first<{ n: number }>();
+    if ((n?.n || 0) >= 50) throw new HttpError(409, 'too_many', 'Max 50 filer per checklista. Kontakta KELA.');
+
+    let fd: FormData;
+    try { fd = await req.formData(); } catch { throw new HttpError(400, 'bad_request', 'Kunde inte läsa uppladdningen.'); }
+    const file = fd.get('file');
+    if (!file || typeof file === 'string') throw new HttpError(422, 'validation', 'Välj en fil att ladda upp.');
+    const key = String(fd.get('key') || '');
+    if (!KEY_RE.test(key)) throw new HttpError(422, 'validation', 'Okänd punkt.');
+    const label = str(fd.get('label'), 200) || 'Fil från checklistan';
+    const by = str(fd.get('by'), 60).trim();
+    const f = await readUpload(file as File);
+
+    const id = newId('doc'); const t = now();
+    const title = `${label} (uppladdad i checklistan)`.slice(0, 200);
+    const description = `Uppladdad i checklistan av ${by || 'okänd'} – punkt: ${label}`.slice(0, 4000);
+    const data = JSON.stringify({ document_id: id, key, label, by });
+    const { stmts } = fileStmts({ env }, p.org_id, id, null, f);
+    await env.DB.batch([
+      env.DB.prepare(`INSERT INTO documents (id, org_id, customer_id, kind, title, status, tracked_page_id, description, created_by, created_at, updated_at)
+        VALUES (?,?,?,'bilaga',?,'draft',?,?,'checklista',?,?)`).bind(id, p.org_id, p.customer_id, title, p.id, description, t, t),
+      ...stmts,
+      env.DB.prepare("INSERT INTO tracked_events (id, org_id, page_id, visit_id, type, data_json, created_at) VALUES (?,?,?,NULL,'file_upload',?,?)")
+        .bind(newId('tev'), p.org_id, p.id, data, t),
+    ]);
+    await notifyAnswers(env, url, p, by || null);
+    return json({ ok: true, file: { name: f.name, size: f.bytes.length, at: t, key, by } });
+  } catch (e) {
+    return errorResponse(e);
   }
 }

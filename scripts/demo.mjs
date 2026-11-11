@@ -233,6 +233,20 @@ async function seedRozen() {
   ]) await post('/api/os/activities', { customer_id: cus[ci].id, type, title, body });
 }
 
+// Checklistan till Rozen Clean (samma sida och adress som skarpt), kopplad till demoföretaget, med några påhittade exempelsvar.
+// Migreringen lägger in sidan i produktion, men i en tom demodatabas finns inget företag ännu när den körs.
+step('Lägger in checklistan med exempelsvar');
+wr(['d1', 'execute', 'kela-os', '--local', '--config', 'db/wrangler.toml', '--persist-to', STATE, '--command',
+  "INSERT OR IGNORE INTO tracked_pages (id, org_id, slug, title, customer_name, kind, created_at) SELECT 'tpg_rozenchecklista01', id, 'rozen-clean-checklista-vKiT4qIE-sznJg-dwr-mOm82-hTd', 'Checklista – chattbot och bokning', 'Rozen Clean AB', 'checklista', '2026-11-11T00:00:00.000Z' FROM organizations ORDER BY created_at LIMIT 1;"]);
+const CHECKLIST = `${BASE}/s/rozen-clean-checklista-vKiT4qIE-sznJg-dwr-mOm82-hTd/`;
+for (const a of [
+  { key: 'ton', label: 'Vilken ton ni vill ha', section: '1. Hur ni pratar med kunder', pos: 0, text: '(Exempel) Vi säger du. Varmt och personligt, men kort.', done: true, owner: 'Exempel: kundservicechefen', by: 'Exempel Malin' },
+  { key: 'avbokning', label: 'Era regler för avbokning och ombokning', section: '1. Hur ni pratar med kunder', pos: 3, text: '(Exempel) 24 timmar gäller. Vid sjukdom bedömer kundservice.', done: false, owner: 'Exempel: kundservicechefen', by: 'Exempel Malin' },
+  { key: 'b-tid', label: 'Hur lång tid en städning tar', section: '4. Bokningen', pos: 0, text: '(Exempel) Upp till 50 kvm: hem 3 h, stor 5 h\n51–70 kvm: hem 3,5 h, stor 6 h', done: false, owner: 'Exempel: Fredrik', by: 'Exempel Fredrik' },
+]) {
+  await fetch(`${BASE}/api/s/rozen-clean-checklista-vKiT4qIE-sznJg-dwr-mOm82-hTd/answers`, { method: 'POST', headers: { 'content-type': 'application/json', 'x-kela-s': '1' }, body: JSON.stringify(a) });
+}
+
 const url = `${BASE}/os/`;
 console.log(`
 ✓ Demon är igång!
@@ -243,6 +257,9 @@ console.log(`
   (ingen autentiseringsapp behövs i demon)
 
   Allt är påhittad exempeldata i en egen databas på din dator.
+  Checklistan: ${CHECKLIST}
+  (syns med svaren under "Offertsidor – spårning")
+
   ${ROZEN ? 'Tips: visa Dashboard, CRM / Kunder, Leads, Affärsmöjligheter och Offerter – så här ser Rozen Cleans vardag ut samlad.' : 'Tips: "Offertsidor – spårning" i menyn visar hur du ser när kunden läser offerten.'}
 
   Stäng demon med Ctrl+C.
