@@ -930,3 +930,29 @@ test('avtal och dokument: uppladdning, oförändrad nedladdning, falska filer ne
   assert.ok(ok(await A.get(`/api/os/documents?customer=${ctx.customerId}&archived=1`)).documents.some((d) => d.id === doc.id));
   assert.ok(ok(await A.get('/api/os/audit?q=Laddade')).entries.some((e) => e.action === 'document.downloaded'), 'nedladdning loggas');
 });
+
+test('kundkortet visar kundens egna svar i checklistan och besök på offertsidan', async () => {
+  const A = ctx.admin2 || admin;
+  // Migreringarna skapar sidorna innan företaget finns i en tom testdatabas – lägg in dem här.
+  const [cmd, pre] = wranglerCmd;
+  execFileSync(cmd, [...pre, 'd1', 'execute', 'kela-os', '--local', '--config', 'db/wrangler.toml', '--persist-to', STATE, '--command',
+    `INSERT OR IGNORE INTO tracked_pages (id, org_id, slug, title, customer_name, kind, created_at) SELECT 'tpg_rozenchecklista01', o.id, 'rozen-clean-checklista-vKiT4qIE-sznJg-dwr-mOm82-hTd', 'Checklista', 'Rozen Clean AB', 'checklista', '2026-11-11' FROM organizations o WHERE o.name = 'KELA Group AB';
+     INSERT OR IGNORE INTO tracked_pages (id, org_id, slug, title, customer_name, created_at) SELECT 'tpg_rozenclean0000001', o.id, 'rozen-clean-uW6qK8R7nUi9Pw4D69L2tkvt', 'Offert', 'Rozen Clean AB', '2026-11-03' FROM organizations o WHERE o.name = 'KELA Group AB';`], { cwd: ROOT, stdio: 'pipe' });
+  ok(await A.post('/api/os/sparning/tpg_rozenchecklista01/customer', { customer_id: ctx.customerId }));
+  ok(await A.post('/api/os/sparning/tpg_rozenclean0000001/customer', { customer_id: ctx.customerId }));
+  const r = await fetch(`${BASE}/api/s/rozen-clean-checklista-vKiT4qIE-sznJg-dwr-mOm82-hTd/answers`, {
+    method: 'POST', headers: { 'content-type': 'application/json', 'x-kela-s': '1' },
+    body: JSON.stringify({ key: 'ton', label: 'Vilken ton ska chattboten ha?', section: '1. Ton', text: 'Varm och kortfattad.', done: true, by: 'Sara', pos: 1 }) });
+  assert.equal(r.status, 200);
+  const c = ok(await A.get(`/api/os/customers/${ctx.customerId}`));
+  const list = c.pages.find((p) => p.id === 'tpg_rozenchecklista01');
+  assert.equal(list.answers, 1); assert.equal(list.answers_done, 1); assert.ok(list.answers_updated_at);
+  const offer = c.pages.find((p) => p.id === 'tpg_rozenclean0000001');
+  assert.equal(typeof offer.visits, 'number'); assert.equal(typeof offer.choices, 'object');
+  const ev = c.customer_events.find((e) => e.kind === 'answer');
+  assert.equal(ev.label, 'Vilken ton ska chattboten ha?'); assert.equal(ev.updated_by, 'Sara'); assert.equal(ev.text, 'Varm och kortfattad.');
+  // Ett annat företag kan inte koppla sidan till sig
+  const b = new Client(); ok(await b.post('/api/os/auth/login', { email: 'b@annat.test', password: PW }));
+  assert.equal((await b.post('/api/os/sparning/tpg_rozenchecklista01/customer', { customer_id: null })).status, 404, 'annat företag når inte sidan');
+  assert.equal(ok(await A.get(`/api/os/customers/${ctx.customerId}`)).pages.length, 2, 'kopplingen ligger kvar');
+});

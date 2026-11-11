@@ -58,7 +58,7 @@ export const DEAL_STAGES = [
 ];
 export const STAGE_LABEL = Object.fromEntries(DEAL_STAGES);
 export const LOST_REASONS = { price: 'Pris', timing: 'Fel tidpunkt', competitor: 'Valde konkurrent', no_need: 'Inget behov', no_response: 'Slutade svara', scope: 'Fel omfattning', other: 'Annat' };
-export const CUSTOMER_STATUS = { prospect: ['Prospekt', 'blue'], active: ['Aktiv kund', 'green'], paused: ['Vilande', 'amber'], former: ['Tidigare kund', ''] };
+export const CUSTOMER_STATUS = { prospect: ['Potentiell kund', 'blue'], active: ['Aktiv kund', 'green'], paused: ['Vilande', 'amber'], former: ['Tidigare kund', ''] };
 export const LEAD_STATUS = { new: ['Ny', 'accent'], contacted: ['Kontaktad', 'blue'], qualified: ['Kvalificerad', 'violet'], disqualified: ['Diskvalificerad', ''], converted: ['Konverterad', 'green'] };
 export const badge = (map, key) => { const [l, c] = map[key] || [key, '']; return html`<span class="badge ${c}">${l}</span>`; };
 

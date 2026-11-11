@@ -126,10 +126,27 @@ export function crmRoutes(r: Router) {
         FROM document_files f WHERE f.document_id = d.id AND f.org_id = d.org_id) AS files_json
         FROM documents d WHERE d.customer_id = ? AND d.org_id = ? AND d.archived_at IS NULL ORDER BY d.kind, d.sort, d.created_at`).bind(cust.id, s.orgId).all<any>()).results
       .map((x) => ({ ...x, files: JSON.parse(x.files_json || '[]'), files_json: undefined }));
-    const pages = (await env.DB.prepare(`SELECT p.id, p.slug, p.title, p.kind,
+    // Offertsidor och checklistor som hör till kunden – med det kunden faktiskt gjort på dem.
+    const pageRows = (await env.DB.prepare(`SELECT p.id, p.slug, p.title, p.kind, p.choices_json, p.choices_updated_at,
         (SELECT COUNT(*) FROM tracked_visits v WHERE v.page_id = p.id) AS visits,
-        (SELECT MAX(v.last_seen_at) FROM tracked_visits v WHERE v.page_id = p.id) AS last_seen_at
-        FROM tracked_pages p WHERE p.customer_id = ? AND p.org_id = ?`).bind(cust.id, s.orgId).all()).results;
+        (SELECT COALESCE(SUM(v.active_seconds), 0) FROM tracked_visits v WHERE v.page_id = p.id) AS total_seconds,
+        (SELECT MAX(v.last_seen_at) FROM tracked_visits v WHERE v.page_id = p.id) AS last_seen_at,
+        (SELECT COUNT(*) FROM checklist_answers a WHERE a.page_id = p.id AND (a.text != '' OR a.done = 1)) AS answers,
+        (SELECT COUNT(*) FROM checklist_answers a WHERE a.page_id = p.id AND a.done = 1) AS answers_done,
+        (SELECT MAX(a.updated_at) FROM checklist_answers a WHERE a.page_id = p.id) AS answers_updated_at
+        FROM tracked_pages p WHERE p.customer_id = ? AND p.org_id = ?`).bind(cust.id, s.orgId).all<any>()).results;
+    const pages = pageRows.map((p) => ({ ...p, choices: parseJson(p.choices_json, {}), choices_json: undefined }));
+    const pageIds = pages.map((p) => p.id);
+    const inIds = pageIds.map(() => '?').join(',') || "''";
+    // Kundens egna händelser (besök på offertsidan, svar i checklistan) – visas i historiken bredvid KELA:s aktiviteter.
+    const customerEvents = pageIds.length ? [
+      ...(await env.DB.prepare(`SELECT 'visit' AS kind, v.page_id, v.started_at AS at, v.active_seconds, v.max_scroll, v.device FROM tracked_visits v
+          WHERE v.page_id IN (${inIds}) AND v.org_id = ? ORDER BY v.started_at DESC LIMIT 60`).bind(...pageIds, s.orgId).all<any>()).results,
+      ...(await env.DB.prepare(`SELECT 'answer' AS kind, h.page_id, h.updated_at AS at, h.item_key, h.text, h.done, h.updated_by,
+          (SELECT a.label FROM checklist_answers a WHERE a.page_id = h.page_id AND a.item_key = h.item_key) AS label,
+          (SELECT a.section FROM checklist_answers a WHERE a.page_id = h.page_id AND a.item_key = h.item_key) AS section
+          FROM checklist_history h WHERE h.page_id IN (${inIds}) AND h.org_id = ? ORDER BY h.updated_at DESC LIMIT 100`).bind(...pageIds, s.orgId).all<any>()).results,
+    ].sort((a, b) => String(b.at).localeCompare(String(a.at))) : [];
     const [contacts, deals, quotes, activities, tasks, owner] = await Promise.all([
       env.DB.prepare('SELECT * FROM contacts WHERE customer_id = ? AND org_id = ? ORDER BY is_primary DESC, name').bind(cust.id, s.orgId).all(),
       env.DB.prepare('SELECT d.*, u.name AS owner_name FROM deals d LEFT JOIN users u ON u.id = d.owner_user_id WHERE d.customer_id = ? AND d.org_id = ? ORDER BY d.updated_at DESC').bind(cust.id, s.orgId).all(),
@@ -153,6 +170,7 @@ export function crmRoutes(r: Router) {
       projects,
       documents,
       pages,
+      customer_events: customerEvents,
     };
   }, { perm: 'customers:read' });
 

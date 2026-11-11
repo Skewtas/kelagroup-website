@@ -4,7 +4,12 @@ import { get, post, del, patch, api } from '../lib/api.js';
 import { customerForm, contactForm, dealForm, newQuoteDialog } from './forms.js';
 import { docListHtml, bindDocList, docForm } from './documents.js';
 
-const ACT_ICON = { note: 'note', call: 'phone', meeting: 'users', email: 'mail', system: 'activity' };
+const ACT_ICON = { note: 'note', call: 'phone', meeting: 'users', email: 'mail', system: 'activity', visit: 'eye', answer: 'listChecks' };
+const dur = (sec) => { sec = Math.round(sec || 0); if (sec < 60) return `${sec} s`; const m = Math.round(sec / 60); return m < 60 ? `${m} min` : `${Math.floor(m / 60)} h ${m % 60} min`; };
+// Modulnamn på offertsidan (samma nycklar som sidan sparar).
+const MODULE = { adminpanel: 'Adminpanel', bokis: 'Bokis', chattis: 'Chattis', hub: 'Customer hub', kundportal: 'Kundportal', nyhetsbrev: 'Nyhetsbrev och sms', feedback: 'Kundfeedback',
+  headof: 'Headof', personalapp: 'Personalapp', avtal: 'Avtalshantering', rekrytering: 'Rekrytering', content: 'Contentgenerator', seo: 'SEO och GEO', meta: 'Meta-annonser',
+  influencer: 'Influencersamarbeten', paminnelser: 'Automatiska påminnelser', inkasso: 'Inkassohantering' };
 const ACT_LABEL = { note: 'Anteckning', call: 'Samtal', meeting: 'Möte', email: 'Mejl' };
 
 export default async function customer(view, p, app) {
@@ -18,7 +23,7 @@ export default async function customer(view, p, app) {
   const accepted = r.quotes.filter((q) => q.status === 'accepted');
   const mrr = accepted.reduce((s, q) => s + (q.totals?.monthly?.net || 0), 0);
 
-  const TABS = [['oversikt', 'Översikt'], ['affarer', 'Affärer', r.deals.length], ['offerter', 'Offerter', r.quotes.length], ['aktivitet', 'Aktivitet', r.activities.length], ['uppgifter', 'Uppgifter', r.tasks.filter((t) => t.status === 'open').length],
+  const TABS = [['oversikt', 'Översikt'], ['affarer', 'Affärer', r.deals.length], ['offerter', 'Offerter', r.quotes.length], ['aktivitet', 'Aktivitet', r.activities.length + (r.customer_events || []).length], ['uppgifter', 'Uppgifter', r.tasks.filter((t) => t.status === 'open').length],
     ['projekt', 'Projekt', (r.projects || []).length], ['avtal', 'Avtal och dokument', (r.documents || []).length + (r.pages || []).filter((pg) => !(r.documents || []).some((d) => d.tracked_page_id === pg.id)).length], ['fakturor', 'Fakturor'], ['support', 'Support']];
 
   setHTML(view, html`
@@ -43,12 +48,21 @@ export default async function customer(view, p, app) {
     <td class="r num">${q.totals ? money(q.totals.once.net) : '–'}</td><td class="r num">${q.totals?.monthly?.net ? money(q.totals.monthly.net) + '/mån' : '–'}</td><td class="r faint small">${ago(q.updated_at)}</td></tr>`;
   const dealRow = (d) => html`<tr class="click" data-href="#/affarer/${d.id}"><td class="t-main">${d.title}</td><td><span class="badge ${d.stage === 'won' ? 'green' : d.stage === 'lost' ? 'red' : 'accent'}">${STAGE_LABEL[d.stage]}</span></td>
     <td class="r num">${money(d.value_minor)}</td><td class="r num">${d.probability} %</td><td>${d.owner_name || '–'}</td><td class="r faint small">${ago(d.updated_at)}</td></tr>`;
-  const activityList = (list) => list.length ? html`<div class="timeline">${list.map((a) => html`<div class="tl"><span class="tl-dot ${a.type === 'system' ? '' : 'accent'}">${ico(ACT_ICON[a.type] || 'activity')}</span>
-    <div class="tl-b"><div class="tl-t">${a.title}</div><div class="tl-m">${a.actor_name || 'System'} · ${dateTime(a.created_at)}</div>${a.body ? html`<div class="tl-body">${a.body}</div>` : ''}</div></div>`)}</div>`
+  const activityList = (list) => list.length ? html`<div class="timeline">${list.map((a) => html`<div class="tl"><span class="tl-dot ${a.type === 'visit' ? 'blue' : a.type === 'answer' ? 'green' : a.type === 'system' ? '' : 'accent'}">${ico(ACT_ICON[a.type] || 'activity')}</span>
+    <div class="tl-b"><div class="tl-t">${a.title}</div><div class="tl-m">${a.actor_name || 'System'} · ${dateTime(a.created_at)}${a.meta ? ' · ' + a.meta : ''}</div>${a.body ? html`<div class="tl-body">${a.body}</div>` : ''}</div></div>`)}</div>`
     : empty({ icon: 'activity', title: 'Ingen aktivitet ännu', text: 'Anteckningar, samtal, möten och systemhändelser samlas här.' });
 
+  // Kundens egna händelser (offertsidan, checklistan) som historikposter.
+  const pageById = Object.fromEntries((r.pages || []).map((pg) => [pg.id, pg]));
+  const evToAct = (e) => e.kind === 'visit'
+    ? { type: 'visit', created_at: e.at, title: `Öppnade ${pageById[e.page_id]?.kind === 'checklista' ? 'checklistan' : 'offertsidan'}`, actor_name: c.name,
+        meta: [e.active_seconds ? `läste i ${dur(e.active_seconds)}` : null, e.max_scroll ? `${e.max_scroll} % av sidan` : null, e.device].filter(Boolean).join(' · ') }
+    : { type: 'answer', created_at: e.at, title: e.done && !e.text ? `Bockade av: ${e.label || e.item_key}` : `Svarade i checklistan: ${e.label || e.item_key}`, actor_name: e.updated_by || c.name,
+        body: e.text ? (e.text.length > 400 ? e.text.slice(0, 400) + '…' : e.text) : null, meta: e.section || '' };
+  const timeline = [...r.activities, ...(r.customer_events || []).map(evToAct)].sort((a, b) => String(b.created_at).localeCompare(String(a.created_at)));
+
   if (tab === 'oversikt') {
-    setHTML(tabEl, html`<div class="kpis">
+    setHTML(tabEl, html`${fromCustomerCard()}<div class="kpis">
         <div class="kpi"><div class="kpi-l">${ico('target')}Öppna affärer</div><div class="kpi-v">${openDeals.length}</div><div class="kpi-s">${money(openDeals.reduce((s, d) => s + d.value_minor, 0))} i pipeline</div></div>
         <div class="kpi"><div class="kpi-l">${ico('file')}Offerter</div><div class="kpi-v">${r.quotes.length}</div><div class="kpi-s">${accepted.length} accepterade</div></div>
         <div class="kpi"><div class="kpi-l">${ico('repeat')}Avtalad MRR</div><div class="kpi-v">${money(mrr)}</div><div class="kpi-s">från accepterade offerter</div></div>
@@ -64,7 +78,7 @@ export default async function customer(view, p, app) {
               <dt>Ansvarig säljare</dt><dd>${c.owner?.name || '–'}</dd><dt>Kund sedan</dt><dd>${date(c.created_at)}</dd>
               ${c.notes ? html`<dt>Anteckningar</dt><dd>${c.notes}</dd>` : ''}
             </dl></div></section>
-          <section class="card"><div class="card-h"><h3>Senaste aktivitet</h3><div class="act"><a class="btn ghost sm" href="#/kunder/${c.id}/aktivitet">Visa allt</a></div></div><div class="card-b">${activityList(r.activities.slice(0, 6))}</div></section>
+          <section class="card"><div class="card-h"><h3>Senaste aktivitet</h3><div class="act"><a class="btn ghost sm" href="#/kunder/${c.id}/aktivitet">Visa allt</a></div></div><div class="card-b">${activityList(timeline.slice(0, 8))}</div></section>
         </div>
         <div class="stack">
           <section class="card"><div class="card-h"><h3>Kontaktpersoner</h3><div class="act">${w ? html`<button class="btn sm" id="add-contact">${ico('plus')} Lägg till</button>` : ''}</div></div>
@@ -85,7 +99,7 @@ export default async function customer(view, p, app) {
     setHTML(tabEl, html`<div class="card">${r.quotes.length ? html`<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Nr</th><th>Rubrik</th><th>Status</th><th class="r">Engång exkl. moms</th><th class="r">Månad exkl. moms</th><th class="r">Uppdaterad</th></tr></thead><tbody>${r.quotes.map(quoteRow)}</tbody></table></div>`
       : empty({ icon: 'file', title: 'Inga offerter', text: 'Skapa en offert direkt från kundkortet.' })}</div>`);
   } else if (tab === 'aktivitet') {
-    setHTML(tabEl, html`<div class="split"><section class="card"><div class="card-b">${activityList(r.activities)}</div></section>
+    setHTML(tabEl, html`<div class="split"><section class="card"><div class="card-b">${activityList(timeline)}</div></section>
       ${w ? html`<section class="card"><div class="card-h"><h3>Logga aktivitet</h3></div><div class="card-b">${noteFormHtml()}</div></section>` : ''}</div>`);
     bindNoteForm(tabEl, { customer_id: c.id }, reload);
   } else if (tab === 'uppgifter') {
@@ -117,6 +131,41 @@ export default async function customer(view, p, app) {
       support: ['buoy', 'Supportärenden', 'Supportärenden per kund byggs i fas 2.'],
       dokument: ['folder', 'Dokument', 'Säker filuppladdning (Cloudflare R2 i EU, virusskanning, åtkomstkontroll) byggs i fas 2.'] }[tab] || ['info', 'Okänd flik', ''];
     setHTML(tabEl, html`<div class="card">${empty({ icon: L[0], title: `${L[1]} – planerat`, text: L[2] })}</div>`);
+  }
+
+  function fromCustomerCard() {
+    const pages = r.pages || [];
+    if (!pages.length) return '';
+    const offer = pages.filter((pg) => pg.kind !== 'checklista');
+    const lists = pages.filter((pg) => pg.kind === 'checklista');
+    const answers = (r.customer_events || []).filter((e) => e.kind === 'answer');
+    return html`<section class="card mb16 from-cust"><div class="card-h">${ico('eye')}<h3>Från kunden</h3><span class="faint small">uppdateras automatiskt</span></div><div class="card-b"><div class="fc-grid">
+      ${offer.map((pg) => {
+        const ch = Object.entries(pg.choices || {});
+        const by = (v) => ch.filter(([, x]) => x === v).map(([k]) => MODULE[k] || k);
+        return html`<div class="fc"><div class="fc-h">${ico('file')}<strong>${pg.title}</strong><a class="btn sm ghost ml-auto" href="#/sparning/${pg.id}">Detaljer</a></div>
+          <div class="fc-stats"><div><b>${pg.visits}</b><span>besök</span></div><div><b>${dur(pg.total_seconds)}</b><span>lästid</span></div><div><b>${pg.last_seen_at ? ago(pg.last_seen_at) : '–'}</b><span>senast öppnad</span></div></div>
+          ${ch.length ? html`<div class="fc-choices">${by('ja').length ? html`<div><span class="badge green">Ja · ${by('ja').length}</span> ${by('ja').join(', ')}</div>` : ''}
+            ${by('kanske').length ? html`<div><span class="badge amber">Kanske · ${by('kanske').length}</span> ${by('kanske').join(', ')}</div>` : ''}
+            ${by('nej').length ? html`<div><span class="badge">Nej · ${by('nej').length}</span> ${by('nej').join(', ')}</div>` : ''}
+            <div class="faint small">Valen ändrades senast ${dateTime(pg.choices_updated_at)}</div></div>` : html`<p class="small muted">Inga val gjorda än.</p>`}</div>`;
+      })}
+      ${lists.map((pg) => {
+        const mine = answers.filter((e) => e.page_id === pg.id).slice(0, 4);
+        return html`<div class="fc"><div class="fc-h">${ico('listChecks')}<strong>${pg.title}</strong><a class="btn sm ghost ml-auto" href="#/sparning/${pg.id}">Alla svar</a></div>
+          <div class="fc-stats"><div><b>${pg.answers}</b><span>svar</span></div><div><b>${pg.answers_done}</b><span>avbockade</span></div><div><b>${pg.answers_updated_at ? ago(pg.answers_updated_at) : '–'}</b><span>senast ändrad</span></div></div>
+          ${mine.length ? html`<div class="list">${mine.map((e) => html`<div class="fc-ans"><div class="li-t">${e.label || e.item_key}</div><div class="li-s">${e.updated_by || 'Okänd'} · ${ago(e.at)}</div>${e.text ? html`<div class="fc-txt">${e.text.length > 220 ? e.text.slice(0, 220) + '…' : e.text}</div>` : ''}</div>`)}</div>`
+            : html`<p class="small muted">Inga svar än. Här syns det direkt när någon skriver i checklistan.</p>`}</div>`;
+      })}</div></div></section>`;
+  }
+  // Håll kortet aktuellt medan det är öppet (var 30:e sekund, bara när fliken syns).
+  if ((tab === 'oversikt' || tab === 'aktivitet') && (r.pages || []).length) {
+    const here = location.hash;
+    const timer = setInterval(() => {
+      if (location.hash !== here || !document.body.contains(tabEl)) return clearInterval(timer);
+      if (document.visibilityState !== 'visible' || document.querySelector('dialog[open]')) return;
+      clearInterval(timer); reload();
+    }, 30_000);
   }
   $$('tr[data-href]', view).forEach((tr) => tr.addEventListener('click', () => { location.hash = tr.dataset.href; }));
 
