@@ -356,7 +356,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       ['svara-fall','Några svåra fall och hur ni hanterade dem','Ett klagomål, en kund som pressar priset, en avbokning i sista minuten.',''],
       ['mejl','Riktiga mejl som exempel','Ta bort namn, adresser och telefonnummer först.','Klistra in mejlet utan personuppgifter …']
     ]},
-    {n:4,title:'Bokningen',isNew:true,intro:'Det här behöver bokningssystemet för att visa rätt pris och rätt tider.',items:[
+    {n:4,title:'Bokningen',isNew:true,intro:'Det här behöver bokningssystemet för att visa rätt pris och rätt tider. Allt i den här delen kommer ni sedan kunna ändra själva i er adminpanel.',items:[
       ['b-tid','Hur lång tid en städning tar','Timmar per tjänst för olika storlekar. Behövs för att kunden ska se priset direkt.','Upp till 50 kvm: hem 3 h, stor 5 h …\n51–70 kvm: …'],
       ['b-tillval','Tillval och deras priser','Ugn, kyl och frys, balkong, vika tvätt, extra timme …',''],
       ['b-erbjud','Provstädning, rabatter och presentkort','Vad ska gå att använda i bokningen?','','Provstädning 199 kr/tim.'],
@@ -366,7 +366,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       ['b-krock','När det krockar','Får ett engångsjobb flyttas till en kollega för att ge plats åt en återkommande kund? Automatiskt eller med ert ok?','','Samma städare varje gång. Ersättare vid sjukdom och semester, kunden tillfrågas först.'],
       ['b-formular','Vad kunden fyller i','Antal fönster, husdjur, portkod, parkering, personnummer för RUT …','','I dag frågar ni efter tjänst, postnummer och kvm.'],
       ['b-utskick','Mejl och sms till kunden','Avsändare, och vem hos er som får besked om nya bokningar och offerter.','T.ex. kundservice@rozenclean.se …'],
-      ['b-adress','Var bokningen ska ligga','På en egen adress som boka.rozenclean.se, eller direkt på hemsidan?','']
+      ['b-adress','Var bokningen ska ligga','På en egen adress som boka.rozenclean.se, eller direkt på hemsidan?',''],
+      ['b-sparr','Spärrlista (blacklist)','Kunder, adresser, telefonnummer eller e-postadresser som inte ska kunna boka – och städare som inte ska skickas till en viss kund. Skriv bara det som behövs. Ni kommer kunna ändra listan själva i er adminpanel.','En per rad: vem eller vilken adress, och vad som gäller …']
     ]},
     {n:5,title:'API-nycklar från TimeWave',intro:'Be TimeWave om två API-nycklar och skriv kort vad varje nyckel ska användas för.',
      note:'Nycklarna får inte skickas på mejl eller läggas in någonstans, inte heller här.',items:[
@@ -377,7 +378,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     {n:6,title:'Beslut ni behöver fatta',chat:true,items:[
       ['far-gora','Vad boten får göra själv','Bara svara på frågor, eller också boka, boka om, avboka och visa fakturor?',''],
       ['uppfoljning','Uppföljning av intresserade kunder','Ska den samla in dem och följa upp, till exempel via SMS?',''],
-      ['namn','Namn, personlighet och bild','Vad boten ska heta, hur den ska vara och vilken bild den ska ha: ett riktigt foto eller en AI-genererad bild?','Förslag på namn, personlighet och bild …']
+      ['namn','Namn, personlighet och bild','Vad boten ska heta, hur den ska vara och vilken bild den ska ha: ett riktigt foto eller en AI-genererad bild?','Förslag på namn, personlighet och bild …'],
+      ['chatt-sparr','Kunder på spärrlistan','Vad ska Chattis göra när någon på spärrlistan skriver? Till exempel inte boka, och hänvisa vänligt till kundtjänst utan att förklara varför.','']
     ]},
     {n:7,title:'Praktiskt',items:[
       ['kontaktperson','En kontaktperson hos er','Som kan svara på frågor och godkänna texter.','Namn och telefon …'],
@@ -398,7 +400,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
   function grow(ta){if(ta.closest('.pcard'))return;ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight+3,640)+'px'}
   // Punkter där kunden kan ladda upp en fil (sparas hos KELA som bilaga på kunden)
-  var UPLOAD={tjanster:true,priser:true,integritet:true,ovrigt:true};
+  var UPLOAD={tjanster:true,priser:true,integritet:true,ovrigt:true,'b-sparr':true};
   var UPS={}; // id -> [{inp, msg, list}]
   function upRow(id,uid){
     var w=el('div','up');
@@ -472,7 +474,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     ['Idag','t','Kartläggning','Vi går igenom checklistan del för del och skriver in svaren direkt.'],
     ['Efter mötet','r','Ni kompletterar','Fyll i det som saknas i samma länk, skriv vem som ansvarar och ladda upp tjänstelistan.'],
     ['Samtidigt','r','Avtal och API-nycklar','Skriv under sekretessavtalet och personuppgiftsbiträdesavtalet. Be TimeWave om två API-nycklar.'],
-    ['När underlaget är klart','k','Vi bygger','Chattboten och bokningen sätts upp efter era svar och kopplas till TimeWave. Vi hör av oss om något är oklart.'],
+    ['När underlaget är klart','k','Vi bygger','Chattboten och bokningen sätts upp efter era svar och kopplas till TimeWave. Ni får en egen adminpanel där ni själva ändrar spärrlista, priser, tider och annat.'],
     ['Test','r','Ni testar och godkänner','Testpersonerna provar chattboten och gör testbokningar. Ni godkänner priser och svar.'],
     ['Lansering','t','Live','Chattboten och bokningen går live på er hemsida. Testmånaden börjar.']
   ];
@@ -515,9 +517,9 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     var AG={1:['c','Ton, vad boten aldrig får lova, när en människa tar över och era avbokningsregler',10],
       2:['c','Tjänster, priser, områden, material, nycklar, försäkring, betalning och kontakt',20],
       3:['c','Era vanligaste kundfrågor, svåra fall och riktiga mejl som exempel',10],
-      4:['b','Tid per städning, tillval, tider, helger, personal och vad kunden fyller i',20],
+      4:['b','Tid per städning, tillval, tider, helger, personal, vad kunden fyller i och spärrlista',20],
       5:['t','Två nycklar från TimeWave: en för bokningen och en för chattboten',5],
-      6:['c','Vad boten får göra själv, uppföljning av kunder, namn och bild',10],
+      6:['c','Vad boten får göra själv, uppföljning av kunder, namn och bild, spärrade kunder',10],
       7:['t','Kontaktperson, testpersoner, vem som godkänner och integritetspolicy',5],
       8:['t','Allt annat vi behöver veta',5]};
     var ol=el('ol','agenda');
