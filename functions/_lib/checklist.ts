@@ -129,12 +129,12 @@ export async function handleChecklistFiles(env: Env, req: Request, slug: string)
     const origin = req.headers.get('origin');
     if (origin && origin !== url.origin) throw new HttpError(403, 'bad_origin', 'Otillåtet ursprung.');
     if (req.headers.get('x-kela-s') !== '1') throw new HttpError(403, 'csrf', 'Saknar säkerhetsheader.');
-    if (!(await rateLimit(env.DB, `clfile:${ip}`, 30, 3600))) throw new HttpError(429, 'rate_limited', 'För många uppladdningar. Vänta en stund och försök igen.');
+    if (!(await rateLimit(env.DB, `clfile:${ip}`, 60, 3600))) throw new HttpError(429, 'rate_limited', 'För många uppladdningar. Vänta en stund och försök igen.');
     const p = await findPage(env, slug);
     if (!p || p.kind !== 'checklista') throw new HttpError(404, 'not_found', 'Hittades inte.');
     if (!p.customer_id) throw new HttpError(409, 'not_enabled', 'Uppladdning är inte öppnad för den här checklistan än. Mejla filen till KELA så länge.');
     const n = await env.DB.prepare("SELECT COUNT(*) AS n FROM documents WHERE org_id = ? AND tracked_page_id = ? AND created_by = 'checklista'").bind(p.org_id, p.id).first<{ n: number }>();
-    if ((n?.n || 0) >= 50) throw new HttpError(409, 'too_many', 'Max 50 filer per checklista. Kontakta KELA.');
+    if ((n?.n || 0) >= 200) throw new HttpError(409, 'too_many', 'Max 200 filer per checklista. Kontakta KELA.');
 
     let fd: FormData;
     try { fd = await req.formData(); } catch { throw new HttpError(400, 'bad_request', 'Kunde inte läsa uppladdningen.'); }

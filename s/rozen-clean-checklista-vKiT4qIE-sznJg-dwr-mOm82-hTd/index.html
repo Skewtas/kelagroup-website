@@ -106,6 +106,9 @@ textarea:disabled{opacity:.75}
 .up{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
 .up-in{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .up-btn{display:inline-flex;align-items:center;gap:8px;font:700 14px var(--sans);color:var(--on-hot);background:var(--hot);border-radius:999px;padding:8px 16px;cursor:pointer}
+.up-btn.sm{background:transparent;color:var(--text-2);border:1.5px solid var(--rose-pale);font-size:13px;padding:5px 12px}
+.up-btn.sm:hover{color:var(--vin);border-color:var(--rose-soft)}
+.pcard .up-btn.sm{font-size:14px}
 .up-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .up-in:focus-visible+.up-btn{outline:3px solid var(--rose);outline-offset:2px}
 .up-in:disabled+.up-btn{opacity:.5;cursor:default}
@@ -410,11 +413,12 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   // Punkter där kunden kan ladda upp en fil (sparas hos KELA som bilaga på kunden)
   var UPLOAD={tjanster:true,priser:true,integritet:true,ovrigt:true,'b-sparr':true,'kr-utseende':true};
   var UPS={}; // id -> [{inp, msg, list}]
-  function upRow(id,uid){
+  // Alla frågor kan ta emot filer. Punkter i UPLOAD (där en fil förväntas) får den stora knappen, övriga en mindre "Bifoga fil".
+  function upRow(id,uid,small){
     var w=el('div','up');
-    var lab=el('label','up-btn');lab.htmlFor=uid;
+    var lab=el('label','up-btn'+(small?' sm':''));lab.htmlFor=uid;
     lab.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>';
-    lab.appendChild(document.createTextNode('Ladda upp fil'));
+    lab.appendChild(document.createTextNode(small?'Bifoga fil':'Ladda upp fil'));
     var inp=document.createElement('input');inp.type='file';inp.id=uid;inp.className='up-in';inp.disabled=true;
     inp.accept='.xlsx,.xls,.csv,.pdf,.docx,.doc,.pptx,.png,.jpg,.jpeg,.txt';
     var msg=el('span','up-msg');msg.setAttribute('aria-live','polite');
@@ -467,7 +471,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
       var ta=document.createElement('textarea');ta.id='f-'+id;ta.rows=3;ta.placeholder=it[3]||'Skriv här …';ta.maxLength=20000;
       ta.setAttribute('aria-label',it[1]);
       var m=metaRow('o-'+id);
-      body.appendChild(ta);if(UPLOAD[id])body.appendChild(upRow(id,'u-'+id));body.appendChild(m.meta);
+      body.appendChild(ta);body.appendChild(upRow(id,'u-'+id,!UPLOAD[id]));body.appendChild(m.meta);
       li.appendChild(box);li.appendChild(lab);li.appendChild(body);ul.appendChild(li);
       bind(id,box,ta,m.who,m.cb,li,m.own);
     });
@@ -574,7 +578,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
         pt.appendChild(box);pt.appendChild(tt);card.appendChild(pt);
         if(it[4])card.appendChild(knownEl(it[4]));
         var ta=document.createElement('textarea');ta.id='df-'+id;ta.placeholder=it[3]||'Skriv här …';ta.maxLength=20000;ta.setAttribute('aria-label',it[1]);
-        card.appendChild(ta);if(UPLOAD[id])card.appendChild(upRow(id,'du-'+id));
+        card.appendChild(ta);card.appendChild(upRow(id,'du-'+id,!UPLOAD[id]));
         var m=metaRow('do-'+id);card.appendChild(m.meta);
         g.appendChild(card);
         bind(id,box,ta,m.who,m.cb,card,m.own);
