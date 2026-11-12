@@ -704,6 +704,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
   try{meEl.value=localStorage.getItem('kela-checklista-namn')||''}catch(x){}
   meEl.addEventListener('input',function(){try{localStorage.setItem('kela-checklista-namn',meEl.value.trim())}catch(x){}});
   var ready=false;
+  var merged={}; // antal krockar i rad per fråga
 
   async function save(id){
     if(!ready)return;
@@ -714,11 +715,26 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     var by=meEl.value.trim();
     try{
       var r=await fetch(API,{method:'POST',headers:{'content-type':'application/json','x-kela-s':'1'},
-        body:JSON.stringify({key:id,label:LBL[id][0],section:LBL[id][1],pos:LBL[id][2],text:e.text,done:e.done,owner:e.owner,by:by})});
+        body:JSON.stringify({key:id,label:LBL[id][0],section:LBL[id][1],pos:LBL[id][2],text:e.text,done:e.done,owner:e.owner,by:by,base:data[id]?data[id].at:null})});
+      if(r.status===409){
+        // Någon annan sparade samma fråga samtidigt: lägg ihop båda texterna så att inget försvinner, och spara igen.
+        var cj=await r.json();var cur=cj.current||{};
+        var mine=e.text||'', theirs=cur.text||'';
+        if(theirs.trim()&&theirs.trim()!==mine.trim()&&mine.indexOf(theirs.trim())<0){
+          e.text=mine.trim()?theirs.replace(/\s+$/,'')+'\n\n— Skrivet samtidigt av '+(by||'någon')+' —\n'+mine:theirs;
+          e.tas.forEach(function(t){t.value=e.text;grow(t)});
+        }
+        if(!e.owner&&cur.owner){e.owner=cur.owner;e.owns.forEach(function(o){o.value=e.owner})}
+        data[id]=cur;e.busy=false;e.dirty=false;
+        setWho(e,'who saving',(cur.by||'Någon annan')+' ändrade samtidigt – båda texterna är sparade. Rensa gärna.');
+        merged[id]=(merged[id]||0)+1;
+        if(merged[id]<=3)return save(id);
+        throw {status:409,message:'Kunde inte spara – frågan ändras av flera samtidigt. Vänta en stund och skriv igen.'};
+      }
       if(!r.ok){var j=null;try{j=await r.json()}catch(x){}throw {status:r.status,message:j&&j.message}}
       var res=await r.json();
       if(res.at)data[id]={text:e.text,done:e.done,owner:e.owner,by:by,at:res.at};
-      e.busy=false;setWho(e,'who','');dsave.textContent='Sparat';
+      merged[id]=0;e.busy=false;setWho(e,'who','');dsave.textContent='Sparat';
       if(!by)hintName();
     }catch(err){
       e.busy=false;e.dirty=true;dsave.textContent='Inte sparat';
@@ -790,7 +806,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-
     ready=true;each(function(x){x.disabled=false});stateEl.hidden=true;dsave.textContent='Svaren sparas';
     loadFiles().catch(function(){});
     // Hämta andras ändringar med jämna mellanrum
-    setInterval(function(){if(document.visibilityState==='visible')load().catch(function(){})},15000);
+    setInterval(function(){if(document.visibilityState==='visible')load().catch(function(){})},10000);
     document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')load().catch(function(){})});
   })();
   addEventListener('beforeunload',function(ev){

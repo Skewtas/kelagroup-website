@@ -21,7 +21,8 @@ export async function handleChecklistApi(env: Env, req: Request, slug: string): 
     const ip = clientIp(req);
 
     if (req.method === 'GET') {
-      if (!(await rateLimit(env.DB, `clget:${ip}`, 1200, 3600))) throw new HttpError(429, 'rate_limited', 'För många förfrågningar.');
+      // Flera personer på samma kontor delar ofta IP-adress och varje öppen flik hämtar ändringar var 10:e sekund.
+      if (!(await rateLimit(env.DB, `clget:${ip}`, 12000, 3600))) throw new HttpError(429, 'rate_limited', 'För många förfrågningar.');
       const p = await findPage(env, slug);
       if (!p || p.kind !== 'checklista') throw new HttpError(404, 'not_found', 'Hittades inte.');
       const { results } = await env.DB.prepare('SELECT item_key, text, done, owner, updated_by, updated_at FROM checklist_answers WHERE page_id = ? AND org_id = ?')
@@ -52,13 +53,20 @@ export async function handleChecklistApi(env: Env, req: Request, slug: string): 
     const section = str(body.section, 120);
     const t = now();
 
-    const prev = await env.DB.prepare('SELECT text, done, owner FROM checklist_answers WHERE page_id = ? AND item_key = ?').bind(p.id, key).first<any>();
+    const prev = await env.DB.prepare('SELECT text, done, owner, updated_by, updated_at FROM checklist_answers WHERE page_id = ? AND item_key = ?').bind(p.id, key).first<any>();
     if (prev && prev.text === text && prev.done === done && (prev.owner || '') === owner) return json({ ok: true, at: null });
+    // Krock: någon annan har sparat den här frågan efter att sidan senast hämtade den. Spara inte över –
+    // skicka tillbaka det som finns så att sidan kan lägga ihop båda texterna. (Äldre sidor utan "base" hoppar över kontrollen.)
+    if ('base' in body && prev && prev.updated_at !== (body.base || null)) {
+      return json({ error: 'conflict', message: 'Någon annan har ändrat frågan samtidigt.',
+        current: { text: prev.text, done: !!prev.done, owner: prev.owner || '', by: prev.updated_by || '', at: prev.updated_at } }, 409);
+    }
 
     // Historik: samma person som skriver vidare på samma punkt inom 10 minuter uppdaterar sin senaste rad.
     const last = await env.DB.prepare('SELECT id, updated_by, updated_at FROM checklist_history WHERE page_id = ? AND item_key = ? ORDER BY updated_at DESC LIMIT 1')
       .bind(p.id, key).first<any>();
-    const sameRun = last && (last.updated_by || null) === by && Date.now() - Date.parse(last.updated_at) < COALESCE_MS;
+    // Bara samma namngivna person slås ihop – utan namn går det inte att veta att det är samma person, så då blir det alltid en ny rad.
+    const sameRun = !!by && last && last.updated_by === by && Date.now() - Date.parse(last.updated_at) < COALESCE_MS;
     const hist = sameRun
       ? env.DB.prepare('UPDATE checklist_history SET text = ?, done = ?, owner = ?, updated_at = ? WHERE id = ?').bind(text, done, owner, t, last.id)
       : env.DB.prepare('INSERT INTO checklist_history (id, org_id, page_id, item_key, text, done, owner, updated_by, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)')
@@ -112,7 +120,7 @@ export async function handleChecklistFiles(env: Env, req: Request, slug: string)
     const url = new URL(req.url);
     const ip = clientIp(req);
     if (req.method === 'GET') {
-      if (!(await rateLimit(env.DB, `clget:${ip}`, 1200, 3600))) throw new HttpError(429, 'rate_limited', 'För många förfrågningar.');
+      if (!(await rateLimit(env.DB, `clfget:${ip}`, 6000, 3600))) throw new HttpError(429, 'rate_limited', 'För många förfrågningar.');
       const p = await findPage(env, slug);
       if (!p || p.kind !== 'checklista') throw new HttpError(404, 'not_found', 'Hittades inte.');
       const { results } = await env.DB.prepare(`SELECT e.data_json, f.file_name, f.size, f.created_at FROM documents d

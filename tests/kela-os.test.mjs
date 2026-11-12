@@ -829,21 +829,36 @@ test('Checklistor: kunden sparar svar utan konto, historiken bevaras och bara r�
   assert.equal(pr.text, '299 kr/tim'); assert.equal(pr.done, true); assert.equal(pr.by, 'Fredrik');
   assert.equal(got.find((a) => a.key === 'ton').owner, 'Malin (kundservice)');
 
+  // Två personer samtidigt: den som utgår från en gammal version får en krock tillbaka i stället för att skriva över
+  const base = got.find((a) => a.key === 'priser').at;
+  assert.equal((await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: 'Jessicas text', done: true, by: 'Jessica', base })).status, 200);
+  const krock = await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: 'Isabelles text', done: true, by: 'Isabelle', base });
+  assert.equal(krock.status, 409, 'gammal version skriver inte över');
+  assert.equal(krock.json.current.text, 'Jessicas text'); assert.equal(krock.json.current.by, 'Jessica');
+  assert.equal((await save({ key: 'priser', label: 'Priser', section: '2. Fakta om företaget', text: 'Jessicas text\n\nIsabelles text', done: true, by: 'Isabelle', base: krock.json.current.at })).status, 200, 'sammanslaget sparas');
+  // Utan namn slås historiken aldrig ihop – två anonyma ändringar blir två rader
+  for (const t of ['Anonym 1', 'Anonym 2']) {
+    const cur = (await (await fetch(A(slug))).json()).answers.find((a) => a.key === 'material');
+    assert.equal((await save({ key: 'material', label: 'Material', section: '2. Fakta om företaget', text: t, base: cur ? cur.at : null })).status, 200);
+  }
+
   // Notis till KELA högst en gång per timme
   assert.equal(mockCalls.filter((c) => c.url === '/offertnotis' && /checklistan/.test(c.body._subject)).length, 1);
 
   // KELA OS: svar med rubrik, historik och lista
   const list = ok(await admin.get('/api/os/sparning'));
   const row = list.pages.find((p) => p.id === 'tpg_testlista00000001');
-  assert.equal(row.kind, 'checklista'); assert.equal(row.answers, 3, 'en punkt med bara ansvarig räknas också');
+  assert.equal(row.kind, 'checklista'); assert.equal(row.answers, 4, 'en punkt med bara ansvarig räknas också');
   const d = ok(await admin.get('/api/os/sparning/tpg_testlista00000001'));
   assert.equal(d.page.kind, 'checklista');
   assert.equal(d.answers.find((a) => a.item_key === 'priser').label, 'Priser');
   assert.equal(d.answers.find((a) => a.item_key === 'kontakt').owner, 'Fredrik');
   assert.equal(d.answers.find((a) => a.item_key === 'ton').text, '<script>alert(1)</script>Du', 'lagras som text, escapas vid visning');
   const ph = d.history.filter((h) => h.item_key === 'priser');
-  assert.equal(ph.length, 2, 'Malins två sparningar blir en rad, Fredriks en egen');
+  assert.equal(ph.length, 4, 'Malins två sparningar blir en rad; Fredrik, Jessica och Isabelle får egna');
   assert.ok(ph.some((h) => h.updated_by === 'Malin' && h.text === '279 kr/tim mån–tis'), 'det överskrivna svaret finns kvar i historiken');
+  assert.ok(ph.some((h) => h.updated_by === 'Jessica' && h.text === 'Jessicas text'), 'båda samtidiga versionerna finns i historiken');
+  assert.equal(d.history.filter((h) => h.item_key === 'material' && !h.updated_by).length, 2, 'anonyma ändringar slås inte ihop');
 
   // Ett annat företag ser ingenting
   const b = new Client();
