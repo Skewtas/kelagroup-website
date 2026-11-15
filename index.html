@@ -42,6 +42,70 @@
 <link rel="stylesheet" href="/assets/cards-v4.css">
 <style>
 /* Branscher: 7 kort */
+.hero{padding-top:130px}.hero h1{font-size:clamp(38px,5vw,76px)}.hero-sub{margin:18px auto 0;max-width:none;white-space:nowrap;font-family:var(--sans);font-weight:400;letter-spacing:0;font-size:clamp(13px,1.5vw,21px);line-height:1.3;opacity:.8}
+@media (max-width:640px){.hero{padding-top:110px}.hero h1{font-size:clamp(32px,10vw,46px)}.hero-sub{font-size:3.5vw}}
+.hero{padding-top:110px}.hero-stage{margin-top:24px;padding-bottom:56px}.hero-top{padding-bottom:clamp(64px,8vw,110px)}
+@media (max-width:640px){.hero{padding-top:96px}.hero-stage{margin-top:12px;padding-bottom:20px}.hero-top{padding-bottom:64px}}
+/* Hero: lapparna sitter fast på videon och står helt still – bara hover rör dem */
+#vcard{transform:none!important}
+.vpins{position:absolute;top:0;left:var(--gut);right:var(--gut);aspect-ratio:16/9;z-index:4;pointer-events:none}
+.vpins .chipw{position:absolute;transform:none!important;will-change:auto;pointer-events:auto}
+.vpins .chip{animation:none!important}.vpins .chipw.pin{text-decoration:none;color:inherit;cursor:pointer}.vpins .chipw.pin .chip::after{display:none}
+.vpins .p1{left:2.5%;top:6%}.vpins .p3{left:2.5%;top:30%}.vpins .p5{left:2.5%;top:54%}.vpins .p10{left:2.5%;top:78%}
+.vpins .p2{right:2.5%;top:6%;left:auto}.vpins .p4{right:2.5%;top:30%;left:auto}.vpins .p6{right:2.5%;top:54%;left:auto}.vpins .p12{right:2.5%;top:78%;left:auto;bottom:auto}
+.vpins .p7{left:29%;top:6%}.vpins .p9{right:29%;top:6%;left:auto}.vpins .p8{left:31%;top:80%;bottom:auto}.vpins .p11{right:31%;top:80%;left:auto;bottom:auto}
+/* Hover: lappen rätar upp sig, lyfts lite och blir rosa – inget mer */
+.vpins .chipw.pin:hover .chip,.vpins .chipw.pin:focus-visible .chip{transform:rotate(0) translateY(-3px) scale(1.04)}
+.vpins .chipw.pin:hover .chip::before,.vpins .chipw.pin:focus-visible .chip::before{animation:none}
+@media (max-width:640px){
+  .vpins{aspect-ratio:4/5}
+  .vpins .chip{padding:6px 12px 6px 6px;gap:7px;font-size:.78rem}.vpins .chip small{display:none}.vpins .chip .ic{width:24px;height:24px}.vpins .chip .ic svg{width:13px;height:13px}
+  #stage .vpins .chipw{left:3%;right:auto;bottom:auto}
+  #stage .vpins .p2,#stage .vpins .p4,#stage .vpins .p6,#stage .vpins .p8,#stage .vpins .p10,#stage .vpins .p12{left:auto;right:3%}
+  #stage .vpins .p1,#stage .vpins .p2{top:4%}#stage .vpins .p3,#stage .vpins .p4{top:20%}#stage .vpins .p5,#stage .vpins .p6{top:36%}
+  #stage .vpins .p7,#stage .vpins .p8{top:52%}#stage .vpins .p9,#stage .vpins .p10{top:68%}#stage .vpins .p11,#stage .vpins .p12{top:84%}
+}
+/* Vi sänker era kostnader: bild + två klickbara köpalternativ */
+.guar-grid{grid-template-columns:minmax(0,.95fr) minmax(0,1fr);align-items:center}
+.g-img img{height:auto;aspect-ratio:1400/1166;object-position:50% 40%}
+.guar h2{margin-bottom:28px}
+.opts{display:grid;gap:12px;margin-bottom:30px}
+.opt{border-radius:var(--r-m);background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);transition:background .3s}
+.opt[open]{background:var(--white);color:var(--ink);box-shadow:none}
+.opt summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:20px 24px}
+.opt summary::-webkit-details-marker{display:none}
+.opt-t{font-family:var(--display);font-size:clamp(20px,1.8vw,26px);letter-spacing:-.03em}
+.opt-ic{position:relative;width:32px;height:32px;flex:none;border-radius:50%;background:var(--lav);transition:transform .3s var(--ease)}
+.opt-ic::before,.opt-ic::after{content:"";position:absolute;left:50%;top:50%;width:12px;height:2px;margin:-1px 0 0 -6px;background:var(--ink);border-radius:2px}
+.opt-ic::after{transform:rotate(90deg);transition:transform .3s var(--ease)}
+.opt[open] .opt-ic{background:var(--ink)}.opt[open] .opt-ic::before{background:var(--white)}.opt[open] .opt-ic::after{transform:rotate(0);background:var(--white)}
+.opt summary:hover .opt-ic{transform:scale(1.08)}
+.opt summary:focus-visible{outline:2px solid var(--lav);outline-offset:3px;border-radius:var(--r-m)}
+.opt-b{padding:0 24px 22px}
+.guar .opt-b p{color:inherit;opacity:.8;font-size:1rem;max-width:none;margin-bottom:14px}
+.opt-b ul{list-style:none;padding:0;margin:0;display:grid;gap:6px;font-weight:600;font-size:.95rem}
+.opt-b li::before{content:"✓";margin-right:10px}
+@media (max-width:900px){.guar-grid{grid-template-columns:1fr}.g-img img{aspect-ratio:4/3}}
+/* Hero-rubrik på en rad: "Vi bygger" står still, ordet skrivs till höger */
+.hero h1{display:grid;grid-template-columns:1fr 1fr;align-items:center;column-gap:.28em}
+.hero h1 .l1{justify-self:end;white-space:nowrap}
+.hero h1 .type-line{justify-self:start;margin-top:0}
+@media (max-width:640px){.hero h1{font-size:clamp(22px,7vw,30px);column-gap:.22em}}
+#svc-h{font-size:clamp(28px,3.4vw,46px);line-height:1.05;max-width:24ch}/* Kundcitat */
+.kq{text-align:center;max-width:900px}
+.kq blockquote{margin:0}
+.kq blockquote p{font-family:var(--display);font-size:clamp(26px,3.4vw,46px);letter-spacing:-.035em;line-height:1.12}
+.kq figcaption{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:26px;font-size:1rem;color:var(--muted)}
+.kq figcaption img{height:26px;width:auto;opacity:.85}
+.kq figcaption b{color:var(--ink)}
+.cta h2{font-size:clamp(34px,4.8vw,76px);max-width:18ch;line-height:.98}
+.svc-grid{grid-template-columns:repeat(4,1fr)}
+.svc-grid .bcard{cursor:default}.svc-grid .bcard:hover{background:var(--lav-soft);color:inherit;transform:none!important}
+.svc-grid .bcard:nth-child(2):hover{background:var(--butter)}.svc-grid .bcard:nth-child(3):hover{background:var(--pink)}.svc-grid .bcard:nth-child(4):hover{background:var(--peach)}.svc-grid .bcard:nth-child(6):hover{background:var(--butter)}.svc-grid .bcard:nth-child(7):hover{background:var(--peach)}.svc-grid .bcard:nth-child(8):hover{background:var(--ink);color:var(--white)}
+.svc-grid .bcard:last-child{grid-column:auto}.svc-grid .bcard{min-height:150px;padding:22px;gap:6px}.svc-grid .bcard h3{font-size:clamp(19px,1.5vw,23px);margin-top:18px}.svc-grid .bcard p{font-size:.86rem}.svc-grid .bcard .bgo{width:32px;height:32px;top:16px;right:16px}
+.svc-grid .bcard:nth-child(6){background:var(--butter)}.svc-grid .bcard:nth-child(7){background:var(--peach)}.svc-grid .bcard:nth-child(8){background:var(--ink);color:var(--white)}.svc-grid .bcard:nth-child(8) .bgo{background:var(--lav);color:var(--on-lav)}
+@media (max-width:860px){.svc-grid{grid-template-columns:repeat(2,1fr)}.svc-grid .bcard:last-child{grid-column:auto}}
+@media (max-width:640px){.svc-grid{grid-template-columns:1fr 1fr;gap:10px}.svc-grid .bcard{min-height:0;padding:14px 16px}.svc-grid .bcard h3{font-size:17px;margin-top:8px}.svc-grid .bcard p{display:none}.svc-grid .bcard .bgo{display:none}}
 @media (min-width:1101px){#branscher .bgrid{grid-template-columns:repeat(4,1fr)}#branscher .bcard:last-child{grid-column:span 2}}
 #branscher .bcard:nth-child(6){background:var(--butter)}#branscher .bcard:nth-child(7){background:var(--peach)}
 </style>
@@ -106,7 +170,7 @@
         </div>
       </div>
       <div class="has-menu">
-        <a href="#branscher" aria-haspopup="true">Branscher<svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.8 5 6.8 8 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/bransch-stad#branscher" aria-haspopup="true">Branscher<svg class="chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.8 5 6.8 8 3.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         <div class="mega" aria-label="Branscher">
           <div class="mega-head"><span>Byggt för er bransch</span></div>
           <div class="mega-grid">
@@ -137,7 +201,7 @@
     <div class="sub">
       <a href="/bygga-hemsida">Bygga hemsida</a><a href="/bygga-system">Bygga system</a><a href="/bokningssystem">Bokningssystem</a><a href="/bygga-automationer">Bygga automationer</a><a href="/bygga-app">Mobilappar</a><a href="/geo-optimering">GEO – AI-sök</a><a href="/sokmotoroptimering">SEO</a><a href="/marknadsforing">Marknadsföring</a>
     </div>
-    <ul class="big"><li><a href="#branscher">Branscher</a></li></ul>
+    <ul class="big"><li><a href="/bransch-stad#branscher">Branscher</a></li></ul>
     <div class="sub">
       <a href="/bransch-stad">Städ & service</a><a href="/bransch-skonhet">Skönhet & salong</a><a href="/bransch-harstylist">Frisör & hårstylist</a><a href="/bransch-makeup">Makeupartister</a><a href="/bransch-frilans">Frilansare & konsulter</a><a href="/bransch-brollop">Bröllop</a><a href="/bransch-rekrytering">Rekrytering &amp; personal</a>
     </div>
@@ -153,14 +217,6 @@
 <main id="top">
   <!-- HERO -->
   <section class="hero" aria-labelledby="h1">
-    <div class="wrap hero-top">
-      <h1 id="h1"><span class="l1"><span>Vi bygger</span></span>
-        <span class="type-line"><span class="type-box"><span id="typer" data-words='["hemsidor","appar","e-commerce","automationer","chatt-bottar","AI-assistenter","system","vad du önskar"]'>hemsidor</span><span class="type-caret" aria-hidden="true"></span></span></span>
-      </h1>
-      <p class="hero-sub">Vi sänker era kostnader.</p>
-      <div class="hero-cta"><a class="btn btn-dark" href="/kontakt"><span class="dot" aria-hidden="true"></span>Boka ett möte <span class="arr" aria-hidden="true">→</span></a></div>
-    </div>
-
     <div class="hero-stage" id="stage">
       <div class="vcard" id="vcard">
         <video id="hv" autoplay muted loop playsinline preload="auto" poster="/assets/team/hero-poster.jpg" aria-label="Närbild på händer som skriver kod på en laptop">
@@ -168,595 +224,26 @@
         </video>
         <button class="vtoggle" id="vtoggle" aria-label="Pausa video">❚❚</button>
       </div>
-      <a class="chipw p1 pin" href="/bokningssystem" data-speed="-0.18" aria-label="Bokningssystem – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Bokningssystem<small>Automatiska bekräftelser</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p2 dark pin" href="/ai-agenter" data-speed="0.12" aria-label="AI-chatt – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><rect x="7" y="7" width="10" height="10" rx="3"/></svg></span><span>AI-chatt<small>Dygnet runt</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p3 pin" href="/bygga-automationer" data-speed="-0.08" aria-label="Fakturapåminnelser – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span><span>Fakturapåminnelser<small>Helt automatiskt</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p4 pin" href="/affarssystem-crm" data-speed="0.2" aria-label="Fortnox-integration – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></span><span>Fortnox-integration<small>Allt synkat automatiskt</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p5 pin" href="/bygga-hemsida" data-speed="0.1" aria-label="Hemsida – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span><span>Hemsida<small>Snabb & konverterande</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p6 pin" href="/bygga-hemsida" data-speed="-0.14" aria-label="E-handel – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 8H6.2"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg></span><span>E-handel<small>Säljer dygnet runt</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p7 dark pin" href="/bygga-app" data-speed="0.16" aria-label="Appar – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><span>Appar<small>iOS & Android</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p8 pin" href="/tjanster" data-speed="-0.1" aria-label="SEO – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span>SEO<small>Syns på Google</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p9 pin" href="/tjanster" data-speed="0.08" aria-label="Content – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></span><span>Content<small>Texter & inlägg med AI</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p10 pin" href="/bygga-system" data-speed="-0.16" aria-label="Feedbacksystem – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg></span><span>Feedbacksystem<small>Nöjdare kunder</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p11 dark pin" href="/bygga-system" data-speed="0.14" aria-label="Dashboards – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span>Dashboards<small>Er data i realtid</small></span><span class="go" aria-hidden="true">→</span></div></a>
-      <a class="chipw p12 pin" href="/affarssystem-crm" data-speed="-0.12" aria-label="Integrationer & API – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg></span><span>Integrationer & API<small>Allt pratar med allt</small></span><span class="go" aria-hidden="true">→</span></div></a>
-    </div>
-  </section>
-
-  <!-- DET HÄR KAN VI BYGGA – staplade kort -->
-  <section class="sec" aria-labelledby="svc-h">
-    <div class="wrap">
-      <div class="svc-head">
-        <span class="kicker">Det här kan vi bygga</span>
-        <h2 class="h2 rv" id="svc-h">Allt ni behöver&nbsp;—<br>ett team.</h2>
-      </div>
-      <ol class="stack">
-        <li class="scard" style="--i:0"><div class="sl"><span class="num">01 — HEMSIDOR &amp; E-HANDEL</span><h3>Hemsidor &amp; webbshop</h3></div>
-          <div class="sv" aria-hidden="true"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
-            <defs>
-              <filter id="cv-sh1" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000" flood-opacity=".16"/></filter>
-              <filter id="ash-ink" x="0" y="0" width="100%" height="100%"><feFlood flood-color="#5C1A26"/><feComposite in2="SourceAlpha" operator="in"/></filter><clipPath id="ash-h"><rect x="30" y="104" width="404" height="88" rx="14"/></clipPath><clipPath id="ash-p1"><rect x="38" y="214" width="108" height="58" rx="8"/></clipPath><clipPath id="ash-p2"><rect x="176" y="214" width="108" height="58" rx="8"/></clipPath><clipPath id="ash-p3"><rect x="314" y="214" width="108" height="58" rx="8"/></clipPath><linearGradient id="ash-g" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset=".65" stop-color="#000" stop-opacity="0"/></linearGradient>
-              <clipPath id="cv-c1"><rect x="10" y="22" width="444" height="322" rx="18"/></clipPath>
-            </defs>
-            <rect class="f-w" x="10" y="22" width="444" height="322" rx="18" filter="url(#cv-sh1)"/>
-            <g clip-path="url(#cv-c1)">
-              <rect class="f-o" x="10" y="22" width="444" height="36"/>
-              <circle class="f-p" cx="32" cy="40" r="5"/><circle class="f-l" cx="48" cy="40" r="5"/><circle class="f-k" cx="64" cy="40" r="5" opacity=".25"/>
-              <rect class="f-w" x="150" y="31" width="180" height="18" rx="9"/>
-              <path class="s-k" d="M173 37.5v-1.5a3 3 0 0 1 6 0v1.5" fill="none" stroke-width="1.3"/><rect class="f-k" x="171.5" y="37.5" width="9" height="6.5" rx="1.5"/>
-              <text class="tm" x="190" y="44" font-size="10">ashsweden.com</text>
-              <!-- nav -->
-              <image href="/assets/cases/ash/logo.png" x="30" y="72" width="48" height="23" preserveAspectRatio="xMinYMid meet" filter="url(#ash-ink)"/>
-              <rect class="f-ln" x="200" y="80" width="34" height="5" rx="2.5"/><rect class="f-ln" x="246" y="80" width="40" height="5" rx="2.5"/><rect class="f-ln" x="298" y="80" width="30" height="5" rx="2.5"/>
-              <g class="cv-cart">
-                <path class="s-k" d="M402 76h4l3 13h14l3-9h-18" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <circle class="f-k" cx="412" cy="93" r="1.8"/><circle class="f-k" cx="421" cy="93" r="1.8"/>
-                <g class="cv-badge"><circle class="f-k" cx="430" cy="74" r="8"/><text class="tw tb cv-b0" x="430" y="77.5" font-size="10" text-anchor="middle">1</text></g>
-              </g>
-              <!-- hero -->
-              <g clip-path="url(#ash-h)"><image href="/assets/cases/ash/hero.jpg" x="30" y="70" width="404" height="270" preserveAspectRatio="xMidYMid slice"/><rect x="30" y="104" width="404" height="88" fill="url(#ash-g)"/></g>
-              <text class="tw td" x="50" y="141" font-size="19">Drömhåret börjar här</text>
-              <text class="tw" x="50" y="158" font-size="10.5" opacity=".9">Löshår i äkta hår</text>
-              <rect class="f-w" x="50" y="166" width="72" height="16" rx="8"/><text class="tk tb" x="86" y="177.5" font-size="8.5" text-anchor="middle">Handla nu →</text>
-              <!-- products -->
-              <g>
-                <rect class="f-o" x="30" y="206" width="124" height="128" rx="12"/>
-                <g clip-path="url(#ash-p1)"><rect class="f-w" x="38" y="214" width="108" height="58"/><image href="/assets/cases/ash/tape_17B.webp" x="38" y="214" width="108" height="58" preserveAspectRatio="xMidYMid slice"/></g>
-                <text class="tb" x="40" y="288" font-size="11">Tape extensions</text><text class="tm" x="40" y="301" font-size="9.5">från 2 128 kr</text>
-                <rect class="f-k cv-buy" x="38" y="308" width="108" height="19" rx="9.5"/><text class="tw tb" x="92" y="320.5" font-size="8.5" text-anchor="middle">Lägg i varukorg</text>
-              </g>
-              <g>
-                <rect class="f-o" x="168" y="206" width="124" height="128" rx="12"/>
-                <g clip-path="url(#ash-p2)"><rect class="f-w" x="176" y="214" width="108" height="58"/><image href="/assets/cases/ash/clip-on_3B.webp" x="176" y="214" width="108" height="58" preserveAspectRatio="xMidYMid slice"/></g>
-                <text class="tb" x="178" y="288" font-size="11">Clip On</text><text class="tm" x="178" y="301" font-size="9.5">från 3 995 kr</text>
-                <rect class="f-k" x="176" y="308" width="108" height="19" rx="9.5"/><text class="tw tb" x="230" y="320.5" font-size="8.5" text-anchor="middle">Lägg i varukorg</text>
-              </g>
-              <g>
-                <rect class="f-o" x="306" y="206" width="124" height="128" rx="12"/>
-                <g clip-path="url(#ash-p3)"><rect class="f-w" x="314" y="214" width="108" height="58"/><image href="/assets/cases/ash/halo_17B.webp" x="314" y="214" width="108" height="58" preserveAspectRatio="xMidYMid slice"/></g>
-                <text class="tb" x="316" y="288" font-size="11">Halo extensions</text><text class="tm" x="316" y="301" font-size="9.5">från 4 254 kr</text>
-                <rect class="f-k" x="314" y="308" width="108" height="19" rx="9.5"/><text class="tw tb" x="368" y="320.5" font-size="8.5" text-anchor="middle">Lägg i varukorg</text>
-              </g>
-            </g>
-            <!-- cursor -->
-            <g class="cv-cursor"><path class="f-k s-w" d="M0 0v20l5.5-5 4 9 3.4-1.5-4-8.6H16z" stroke-width="1.4" stroke-linejoin="round" transform="translate(96 314)"/></g>
-            <!-- lighthouse -->
-            <g filter="url(#cv-sh1)"><circle class="f-w" cx="454" cy="306" r="54"/></g>
-            <circle class="s-s" cx="454" cy="306" r="38" fill="none" stroke-width="8"/>
-            <circle class="s-k cv-ring" cx="454" cy="306" r="38" fill="none" stroke-width="8" stroke-linecap="round" pathLength="100" stroke-dasharray="100"/>
-            <text class="td" x="454" y="312" font-size="22" text-anchor="middle">100</text>
-            <text class="tm" x="454" y="374" font-size="8.5" text-anchor="middle" letter-spacing=".08em">PRESTANDA</text>
-          </svg></div>
-          <div class="sr"><p>Snabba, konverterande webbplatser och webbshoppar byggda från grunden — gjorda för att synas på Google och sälja.</p><ul><li>One-pager &amp; företagssida</li><li>Webbshop</li><li>SEO från dag ett</li></ul></div></li>
-
-        <li class="scard" style="--i:1"><div class="sl"><span class="num">02 — SYSTEM &amp; PORTALER</span><h3>System &amp; portaler</h3></div>
-          <div class="sv vb-live" aria-hidden="true"><div class="vb-site">
-            <div class="vb-bar"><i></i><i></i><i></i><span>🔒 vbfast.se</span></div>
-            <div class="vb-hero">
-              <video class="vb-vid" muted loop playsinline preload="none" poster="/assets/cases/vbfast/hero-poster.jpg"><source src="/assets/cases/vbfast/hero.mp4" type="video/mp4"></video>
-              <div class="vb-top"><img src="/assets/clients/vb-fast.svg" alt="" width="96" height="24"><span>Bostäder · Felanmälan · Kontakt</span></div>
-              <div class="vb-copy"><b>Hitta <em>hem.</em></b><small>Bostäder och företagslägenheter i Stockholm</small><span class="vb-btns"><span class="vb-b1">Ansök om bostad →</span><span class="vb-b2">Felanmälan</span></span></div>
-            </div>
-          </div><div class="vb-admin"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
-            <defs>
-              <filter id="cv-sh2" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000" flood-opacity=".14"/></filter>
-              <filter id="vb-wh" x="0" y="0" width="100%" height="100%"><feFlood class="vb-flood" flood-color="#fff"/><feComposite in2="SourceAlpha" operator="in"/></filter>
-              <clipPath id="cv-c2"><rect x="6" y="18" width="464" height="332" rx="18"/></clipPath>
-            </defs>
-            <rect class="f-w" x="6" y="18" width="464" height="332" rx="18" filter="url(#cv-sh2)"/>
-            <g clip-path="url(#cv-c2)">
-              <!-- sidomeny -->
-              <rect class="f-k" x="6" y="18" width="128" height="332"/>
-              <image href="/assets/clients/vb-fast.svg" x="20" y="36" width="84" height="20" preserveAspectRatio="xMinYMid meet" filter="url(#vb-wh)"/>
-              <g font-size="9.5">
-                <text class="tw" x="24" y="88" opacity=".6">Översikt</text>
-                <text class="tw" x="24" y="114" opacity=".6">Objekt</text>
-                <text class="tw" x="24" y="140" opacity=".6">Ansökningar</text>
-                <circle class="f-b" cx="116" cy="137" r="6.5"/><text class="tb" x="116" y="140" font-size="8" text-anchor="middle">2</text>
-                <rect class="f-p" x="14" y="152" width="112" height="24" rx="8"/>
-                <text class="tb" x="24" y="167">Felanmälningar</text>
-                <g class="cv-vbn"><circle class="f-k" cx="116" cy="164" r="6.5"/><text class="tw tb" x="116" y="167" font-size="8" text-anchor="middle">3</text></g>
-                <text class="tw" x="24" y="192" opacity=".6">Meddelanden</text>
-                <text class="tw" x="24" y="218" opacity=".6">Omdömen</text>
-              </g>
-              <text class="tw" x="24" y="330" font-size="8.5" opacity=".45">Visa hemsidan ↗</text>
-              <!-- huvudyta -->
-              <text class="td" x="146" y="54" font-size="18">Felanmälningar</text>
-              <g font-size="8.5">
-                <rect class="f-k" x="146" y="68" width="54" height="17" rx="8.5"/><text class="tw tb" x="173" y="79.5" text-anchor="middle">Öppna 4</text>
-                <rect class="f-o" x="206" y="68" width="40" height="17" rx="8.5"/><text class="tb" x="226" y="79.5" text-anchor="middle">Ny 2</text>
-                <rect class="f-o" x="252" y="68" width="66" height="17" rx="8.5"/><text class="tb" x="285" y="79.5" text-anchor="middle">Pågående 1</text>
-                <rect class="f-o" x="324" y="68" width="38" height="17" rx="8.5"/><text class="tb" x="343" y="79.5" text-anchor="middle">Klar</text>
-              </g>
-              <text class="tm tmu" x="146" y="108" font-size="8" letter-spacing=".06em">ÄRENDE</text>
-              <text class="tm tmu" x="196" y="108" font-size="8" letter-spacing=".06em">FEL</text>
-              <text class="tm tmu" x="404" y="108" font-size="8" letter-spacing=".06em">STATUS</text>
-              <rect class="f-ln" x="146" y="115" width="312" height="1"/>
-              <!-- ny rad -->
-              <g class="cv-vbrow">
-                <rect class="f-s cv-vbbg" x="138" y="120" width="328" height="38" rx="10"/>
-                <text class="tm tb" x="146" y="137" font-size="9">#2418</text>
-                <text class="tb" x="196" y="136" font-size="11">Element kallt</text>
-                <text class="tmu" x="196" y="149" font-size="8.5">Värme · Hyresgäst lgh 1102</text>
-                <rect class="s-k" x="320.5" y="130.5" width="72" height="16" rx="8" fill="none" stroke-width="1.2"/>
-                <circle class="f-k" cx="327" cy="138.5" r="2.2"/><text class="tb" x="361.5" y="141.5" font-size="7.2" text-anchor="middle" letter-spacing=".02em">BRÅDSKANDE</text>
-                <g class="cv-vbs1"><rect class="f-l" x="404" y="130" width="50" height="17" rx="8.5"/><text class="tb" x="429" y="141.5" font-size="8.5" text-anchor="middle">Ny</text></g>
-                <g class="cv-vbs2"><rect class="f-k" x="404" y="130" width="50" height="17" rx="8.5"/><text class="tw tb" x="429" y="141.5" font-size="8.5" text-anchor="middle">Pågående</text></g>
-              </g>
-              <rect class="f-ln" x="146" y="162" width="312" height="1"/>
-              <g>
-                <text class="tm tb" x="146" y="182" font-size="9">#2417</text>
-                <text class="tb" x="196" y="181" font-size="11">Trasig tvättmaskin</text>
-                <text class="tmu" x="196" y="194" font-size="8.5">Vitvaror · Tvättstuga hus B</text>
-                <rect class="f-l" x="404" y="175" width="50" height="17" rx="8.5"/><text class="tb" x="429" y="186.5" font-size="8.5" text-anchor="middle">Ny</text>
-              </g>
-              <rect class="f-ln" x="146" y="206" width="312" height="1"/>
-              <g>
-                <text class="tm tb" x="146" y="226" font-size="9">#2415</text>
-                <text class="tb" x="196" y="225" font-size="11">Droppande kran</text>
-                <text class="tmu" x="196" y="238" font-size="8.5">Vatten/VVS · Hyresgäst lgh 1204</text>
-                <rect class="f-p" x="404" y="219" width="50" height="17" rx="8.5"/><text class="tb" x="429" y="230.5" font-size="8.5" text-anchor="middle">Väntar</text>
-              </g>
-              <rect class="f-ln" x="146" y="250" width="312" height="1"/>
-              <g>
-                <text class="tm tb" x="146" y="270" font-size="9">#2412</text>
-                <text class="tb" x="196" y="269" font-size="11">Dörr går inte att låsa</text>
-                <text class="tmu" x="196" y="282" font-size="8.5">Dörr/lås · Hyresgäst lgh 0903</text>
-                <rect class="s-k" x="404.5" y="263.5" width="49" height="16" rx="8" fill="none" opacity=".4"/><text class="tb" x="429" y="274.5" font-size="8.5" text-anchor="middle">Klar</text>
-              </g>
-              <rect class="f-ln" x="146" y="294" width="312" height="1"/>
-              <g opacity=".45"><rect class="f-ln" x="146" y="308" width="30" height="7" rx="3.5"/><rect class="f-ln" x="196" y="308" width="96" height="7" rx="3.5"/><rect class="f-ln" x="196" y="320" width="70" height="5" rx="2.5"/><rect class="f-o" x="404" y="306" width="50" height="17" rx="8.5"/></g>
-            </g>
-            <!-- objekt: fastighetsbild -->
-            <g>
-              <animateTransform attributeName="transform" type="translate" values="0 0;0 -5;0 0" dur="5s" repeatCount="indefinite"/>
-              <g transform="rotate(3 434 62)">
-                <defs>
-                  <clipPath id="vb-img"><rect x="362" y="12" width="144" height="74" rx="9"/></clipPath>
-                  <linearGradient id="vb-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6CFD5"/><stop offset="1" stop-color="#FDF3EF"/></linearGradient>
-                </defs>
-                <g filter="url(#cv-sh2)"><rect class="f-w" x="354" y="4" width="160" height="116" rx="14"/></g>
-                <g clip-path="url(#vb-img)">
-                  <rect x="362" y="12" width="144" height="74" fill="url(#vb-sky)"/>
-                  <circle cx="480" cy="30" r="9" fill="#FFF6E6" opacity=".9"/>
-                  <!-- bakre hus -->
-                  <rect x="362" y="40" width="26" height="46" fill="#D9B7B3"/>
-                  <rect x="486" y="46" width="22" height="40" fill="#DDBDB8"/>
-                  <!-- huvudbyggnad -->
-                  <rect x="384" y="28" width="98" height="58" fill="#E7C2AE"/>
-                  <rect x="382" y="25" width="102" height="5" fill="#6E2331"/>
-                  <g fill="#7F98AC">
-                    <rect x="391" y="35" width="10" height="8" rx="1"/><rect x="408" y="35" width="10" height="8" rx="1"/><rect x="425" y="35" width="10" height="8" rx="1"/><rect x="442" y="35" width="10" height="8" rx="1"/><rect x="459" y="35" width="10" height="8" rx="1"/>
-                    <rect x="391" y="49" width="10" height="8" rx="1"/><rect x="425" y="49" width="10" height="8" rx="1"/><rect x="442" y="49" width="10" height="8" rx="1"/>
-                    <rect x="391" y="63" width="10" height="8" rx="1"/><rect x="408" y="63" width="10" height="8" rx="1"/><rect x="459" y="63" width="10" height="8" rx="1"/>
-                  </g>
-                  <g fill="#F7E3A6">
-                    <rect x="408" y="49" width="10" height="8" rx="1"/><rect x="459" y="49" width="10" height="8" rx="1"/><rect x="425" y="63" width="10" height="8" rx="1"/><rect x="442" y="63" width="10" height="8" rx="1"/>
-                  </g>
-                  <g fill="#fff" opacity=".85">
-                    <rect x="389" y="43" width="14" height="2.5"/><rect x="423" y="43" width="14" height="2.5"/><rect x="457" y="43" width="14" height="2.5"/>
-                    <rect x="389" y="57" width="14" height="2.5"/><rect x="423" y="57" width="14" height="2.5"/><rect x="457" y="57" width="14" height="2.5"/>
-                  </g>
-                  <rect x="428" y="74" width="12" height="12" rx="1.5" fill="#6E2331"/>
-                  <!-- mark och träd -->
-                  <rect x="362" y="82" width="144" height="4" fill="#A9BE98"/>
-                  <rect x="373" y="68" width="2.5" height="16" fill="#7A5A4A"/>
-                  <circle cx="374" cy="66" r="8" fill="#86A57C"/><circle cx="369" cy="70" r="5" fill="#7B9B72"/>
-                  <rect x="494" y="70" width="2.2" height="14" fill="#7A5A4A"/>
-                  <circle cx="495" cy="68" r="6.5" fill="#8BAA80"/>
-                </g>
-                <rect x="368" y="18" width="40" height="13" rx="6.5" fill="#fff" opacity=".92"/>
-                <text class="tb" x="388" y="27" font-size="7" text-anchor="middle" letter-spacing=".04em">OBJEKT</text>
-                <text class="tb" x="364" y="101" font-size="10">Kvarnbacken 4</text>
-                <circle cx="367" cy="111" r="2.2" fill="#3FA06A"/>
-                <text class="tmu" x="373" y="113.5" font-size="7.5">24 lgh · 2 lediga</text>
-              </g>
-            </g>
-            <!-- notis -->
-            <g class="cv-vbt">
-              <g filter="url(#cv-sh2)"><rect class="f-w" x="300" y="300" width="214" height="62" rx="14"/></g>
-              <rect class="f-s" x="312" y="311" width="40" height="40" rx="9"/>
-              <rect class="s-k" x="321" y="321" width="22" height="18" rx="3" fill="none" stroke-width="1.5"/>
-              <circle class="f-k" cx="327" cy="327" r="2"/><path class="f-k" d="M322 338l7-6 4 3 4-4 5 7z"/>
-              <text class="tb" x="362" y="326" font-size="10.5">Ny felanmälan · bild bifogad</text>
-              <text class="tm tmu" x="362" y="341" font-size="8">#2418 · Element kallt · lgh 1102</text>
-              <circle class="f-k cv-live" cx="503" cy="311" r="3"/>
-            </g>
-          </svg></div></div>
-          <div class="sr"><span class="sc-ex">Exempel: VB FAST – bostadsportal &amp; admin</span><p>Affärssystem, CRM, bokning och rekrytering — byggt kring exakt hur ni jobbar, inte tvärtom.</p><ul><li>CRM &amp; affärssystem</li><li>Boknings- &amp; rekryteringssystem</li><li>Kund- &amp; personalportaler</li></ul></div></li>
-
-        <li class="scard" style="--i:2"><div class="sl"><span class="num">03 — AUTOMATIONER &amp; AI</span><h3>Automationer &amp; AI</h3></div>
-          <div class="sv" aria-hidden="true"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
-            <defs>
-              <clipPath id="sto-av"><circle cx="38" cy="44" r="16"/></clipPath>
-            </defs>
-            <!-- Camilla – Stodonas chattbot -->
-            <rect class="f-w s-w" x="8" y="14" width="292" height="372" rx="20" fill-opacity=".05" stroke-opacity=".14"/>
-            <circle class="f-l" cx="38" cy="44" r="17"/>
-            <image href="/assets/cases/stodona/site-camilla.jpg" x="22" y="28" width="32" height="32" clip-path="url(#sto-av)" preserveAspectRatio="xMidYMid slice"/>
-            <text class="tw tb" x="62" y="41" font-size="13">Camilla</text>
-            <circle class="f-l cv-live" cx="65" cy="54" r="3"/><text class="tm tw" x="73" y="57" font-size="8" opacity=".6">Stodonas digitala assistent</text>
-            <rect class="s-w" x="248" y="34" width="40" height="20" rx="10" fill="none" stroke-opacity=".3"/><text class="tm tw" x="268" y="47.5" font-size="8" text-anchor="middle" opacity=".7">24/7</text>
-            <rect class="f-w" x="20" y="72" width="268" height="1" fill-opacity=".12"/>
-            <g class="cv-sm1">
-              <rect class="f-w" x="112" y="86" width="176" height="40" rx="14" fill-opacity=".14"/>
-              <text class="tw" x="126" y="102" font-size="10.5">Hej! Kan jag boka om</text>
-              <text class="tw" x="126" y="117" font-size="10.5">städningen på torsdag?</text>
-            </g>
-            <text class="tm tw cv-smeta" x="288" y="140" font-size="7.5" text-anchor="end" opacity=".5">Kund i Bromma · BankID ✓</text>
-            <g class="cv-st cv-st1">
-              <rect class="f-w" x="20" y="150" width="52" height="26" rx="13" fill-opacity=".14"/>
-              <circle class="f-w cv-d1" cx="34" cy="163" r="3"/><circle class="f-w cv-d2" cx="46" cy="163" r="3"/><circle class="f-w cv-d3" cx="58" cy="163" r="3"/>
-            </g>
-            <g class="cv-sm2">
-              <rect class="f-l" x="20" y="150" width="200" height="40" rx="14"/>
-              <text x="34" y="166" font-size="10.5">Absolut! Lediga tider med</text>
-              <text x="34" y="181" font-size="10.5">din vanliga städare:</text>
-            </g>
-            <g class="cv-sch">
-              <rect class="s-l" x="20.5" y="198.5" width="92" height="23" rx="11.5" fill="none" stroke-opacity=".7"/>
-              <text class="tw tb" x="66.5" y="213.5" font-size="9.5" text-anchor="middle">Mån · 09:00</text>
-              <rect class="s-l" x="120.5" y="198.5" width="92" height="23" rx="11.5" fill="none" stroke-opacity=".7"/>
-              <text class="tw tb" x="166.5" y="213.5" font-size="9.5" text-anchor="middle">Tis · 13:00</text>
-              <g class="cv-ssel"><rect class="f-l" x="120" y="198" width="93" height="24" rx="12"/><text class="tb" x="166.5" y="213.5" font-size="9.5" text-anchor="middle">Tis · 13:00</text></g>
-            </g>
-            <g class="cv-sm3">
-              <rect class="f-w" x="190" y="234" width="98" height="28" rx="14" fill-opacity=".14"/>
-              <text class="tw" x="204" y="252" font-size="10.5">Tisdag passar!</text>
-            </g>
-            <g class="cv-st cv-st2">
-              <rect class="f-w" x="20" y="274" width="52" height="26" rx="13" fill-opacity=".14"/>
-              <circle class="f-w cv-d1" cx="34" cy="287" r="3"/><circle class="f-w cv-d2" cx="46" cy="287" r="3"/><circle class="f-w cv-d3" cx="58" cy="287" r="3"/>
-            </g>
-            <g class="cv-sm4">
-              <rect class="f-l" x="20" y="274" width="222" height="40" rx="14"/>
-              <text x="34" y="290" font-size="10.5">Klart! Flyttad till <tspan class="tb">tis 13:00</tspan>.</text>
-              <text x="34" y="305" font-size="10.5">Bekräftelse skickad via sms ✓</text>
-            </g>
-            <rect class="f-w" x="20" y="344" width="268" height="28" rx="14" fill-opacity=".08"/><text class="tw" x="36" y="362" font-size="10" opacity=".45">Skriv ett meddelande…</text><circle class="f-l" cx="274" cy="358" r="9"/><path class="s-k" d="M270 358h8M275 354.5l3.5 3.5-3.5 3.5" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-
-            <!-- Kundresa – automatiska flöden -->
-            <text class="tm tw" x="318" y="28" font-size="8" letter-spacing=".08em" opacity=".55">KUNDRESA · AUTOMATISK</text>
-            <path class="s-w" d="M330 54V370" fill="none" stroke-width="1.5" stroke-dasharray="3 5" opacity=".3"/>
-            <path class="s-l cv-sline" d="M330 54V370" fill="none" stroke-width="2" stroke-linecap="round" pathLength="100" stroke-dasharray="100"/>
-            <g class="cv-sn cv-sn1"><circle class="f-k s-w" cx="330" cy="54" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="54" r="9.5"/><path class="s-k" d="M326 54l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="53" font-size="10">Bokning via stodona.se</text><text class="tm tw" x="348" y="64" font-size="8" opacity=".6">Bokis · pris direkt</text></g></g>
-            <g class="cv-sn cv-sn2"><circle class="f-k s-w" cx="330" cy="93.5" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="93.5" r="9.5"/><path class="s-k" d="M326 93.5l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="92.5" font-size="10">Bekräftelse + välkomst-sms</text><text class="tm tw" x="348" y="103.5" font-size="8" opacity=".6">Bokis · direkt efter bokning</text></g></g>
-            <g class="cv-sn cv-sn3"><circle class="f-k s-w" cx="330" cy="133" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="133" r="9.5"/><path class="s-k" d="M326 133l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="132" font-size="10">Påminnelse inför städningen</text><text class="tm tw" x="348" y="143" font-size="8" opacity=".6">Bokis · sms</text></g></g>
-            <g class="cv-sn cv-sn4"><circle class="f-k s-w" cx="330" cy="172.5" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="172.5" r="9.5"/><path class="s-k" d="M326 172.5l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="171.5" font-size="10">Städning klar</text><text class="tm tw" x="348" y="182.5" font-size="8" opacity=".6">Personalapp · kvalitetskontroll</text></g></g>
-            <g class="cv-sn cv-sn5"><circle class="f-k s-w" cx="330" cy="212" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="212" r="9.5"/><path class="s-k" d="M326 212l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="211" font-size="10">Feedback-sms</text><text class="tm tw" x="348" y="222" font-size="8" opacity=".6">Feedis · betyget till städaren</text></g></g>
-            <g class="cv-sn cv-sn6"><circle class="f-k s-w" cx="330" cy="251.5" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="251.5" r="9.5"/><path class="s-k" d="M326 251.5l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="250.5" font-size="10">Faktura</text><text class="tm tw" x="348" y="261.5" font-size="8" opacity=".6">Fortnox · skickas automatiskt</text></g></g>
-            <g class="cv-sn cv-sn7"><circle class="f-k s-w" cx="330" cy="291" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="291" r="9.5"/><path class="s-k" d="M326 291l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="290" font-size="10">Påminnelse om obetald</text><text class="tm tw" x="348" y="301" font-size="8" opacity=".6">Påminnis · mail &amp; sms</text></g></g>
-            <g class="cv-sn cv-sn8"><circle class="f-k s-w" cx="330" cy="330.5" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="330.5" r="9.5"/><path class="s-k" d="M326 330.5l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="329.5" font-size="10">Grattis-sms på födelsedagen</text><text class="tm tw" x="348" y="340.5" font-size="8" opacity=".6">Till kunder &amp; personal</text></g></g>
-            <g class="cv-sn cv-sn9"><circle class="f-k s-w" cx="330" cy="370" r="9" stroke-opacity=".35"/><g class="cv-snl"><circle class="f-l" cx="330" cy="370" r="9.5"/><path class="s-k" d="M326 370l2.6 2.6 5-5" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g><g class="cv-snt"><text class="tw tb" x="348" y="369" font-size="10">Återkommande bokning</text><text class="tm tw" x="348" y="380" font-size="8" opacity=".6">Bokis · nästa städning</text></g></g>
-          </svg></div>
-          <div class="sr"><span class="sc-ex">Exempel: Stodona – chattboten Camilla &amp; automatiska kundflöden</span><p>Offerter, uppföljning, fakturor och kundtjänst som sköter sig själva — dygnet runt, utan en enda knapptryckning.</p><ul><li>AI-agenter dygnet runt</li><li>Chatt-bottar</li><li>Automatiska flöden</li></ul></div></li>
-
-        <li class="scard" style="--i:3"><div class="sl"><span class="num">04 — APPAR</span><h3>Appar för iOS &amp; Android</h3></div>
-          <div class="sv" aria-hidden="true"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
-            <defs>
-              <filter id="cv-sh4" x="-30%" y="-20%" width="160%" height="150%"><feDropShadow dx="0" dy="20" stdDeviation="16" flood-color="#000" flood-opacity=".18"/></filter>
-            </defs>
-            <circle class="f-l" cx="270" cy="210" r="150" opacity=".55"/>
-            <!-- Android -->
-            <g transform="rotate(6 360 210)">
-              <rect class="f-k" x="282" y="40" width="168" height="340" rx="24" filter="url(#cv-sh4)"/>
-              <rect class="f-o" x="289" y="47" width="154" height="326" rx="18"/>
-              <circle class="f-k" cx="366" cy="60" r="4"/>
-              <text class="td" x="302" y="96" font-size="14">Mina bokningar</text>
-              <g font-size="8" text-anchor="middle" class="tm">
-                <rect class="f-w" x="300" y="108" width="24" height="34" rx="12"/><text x="312" y="122">M</text><text class="tb" x="312" y="135">20</text>
-                <rect class="f-k" x="328" y="108" width="24" height="34" rx="12"/><text class="tw" x="340" y="122">T</text><text class="tw tb" x="340" y="135">21</text>
-                <rect class="f-w" x="356" y="108" width="24" height="34" rx="12"/><text x="368" y="122">O</text><text class="tb" x="368" y="135">22</text>
-                <rect class="f-w" x="384" y="108" width="24" height="34" rx="12"/><text x="396" y="122">T</text><text class="tb" x="396" y="135">23</text>
-                <rect class="f-w" x="412" y="108" width="24" height="34" rx="12"/><text x="424" y="122">F</text><text class="tb" x="424" y="135">24</text>
-              </g>
-              <rect class="f-w" x="300" y="154" width="132" height="46" rx="12"/><rect class="f-l" x="300" y="154" width="5" height="46" rx="2.5"/>
-              <text class="tm" x="314" y="171" font-size="8">10:00 – 12:00</text><text class="tb" x="314" y="188" font-size="11">Hemstädning</text>
-              <rect class="f-w" x="300" y="208" width="132" height="46" rx="12"/><rect class="f-p" x="300" y="208" width="5" height="46" rx="2.5"/>
-              <text class="tm" x="314" y="225" font-size="8">13:30 – 15:00</text><text class="tb" x="314" y="242" font-size="11">Fönsterputs</text>
-              <rect class="f-w" x="300" y="262" width="132" height="46" rx="12" opacity=".6"/>
-              <rect class="f-ln" x="314" y="276" width="50" height="6" rx="3"/><rect class="f-ln" x="314" y="290" width="80" height="6" rx="3"/>
-              <circle class="f-k" cx="412" cy="340" r="17"/><path class="s-w" d="M412 333v14M405 340h14" stroke-width="2" stroke-linecap="round"/>
-            </g>
-            <!-- iOS -->
-            <g transform="rotate(-6 170 200)">
-              <rect class="f-k" x="86" y="22" width="172" height="350" rx="32" filter="url(#cv-sh4)"/>
-              <rect class="f-w" x="93" y="29" width="158" height="336" rx="26"/>
-              <rect class="f-k" x="148" y="38" width="48" height="13" rx="6.5"/>
-              <text class="tm tb" x="110" y="48" font-size="8">9:41</text>
-              <text class="tm tmu" x="110" y="84" font-size="8">TISDAG 21 OKT</text>
-              <text class="td" x="110" y="104" font-size="17">Hej Anna</text>
-              <rect class="f-l" x="105" y="116" width="134" height="72" rx="16"/>
-              <text class="tm" x="118" y="134" font-size="7.5" letter-spacing=".06em">NÄSTA PASS</text>
-              <text class="td" x="118" y="156" font-size="15">08:00</text>
-              <text class="t" x="118" y="174" font-size="9.5">Kontoret · Kungsgatan</text>
-              <circle class="f-w" cx="222" cy="134" r="9"/><path class="s-k" d="M218.5 134h7M222 130.5l3.5 3.5-3.5 3.5" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-              <g>
-                <circle class="f-s" cx="119" cy="212" r="10"/><rect class="f-k" x="114" y="207" width="10" height="10" rx="2" opacity=".7"/>
-                <text class="tb" x="136" y="210" font-size="10">Schema</text><text class="t tmu" x="136" y="222" font-size="8.5">5 pass denna vecka</text>
-              </g>
-              <rect class="f-ln" x="105" y="234" width="134" height="1"/>
-              <g>
-                <circle class="f-p" cx="119" cy="256" r="10"/><path class="s-k" d="M114 256l3.5 3.5 6.5-7" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <text class="tb" x="136" y="254" font-size="10">Checklista</text><text class="t tmu" x="136" y="266" font-size="8.5">Klar 8 av 10</text>
-              </g>
-              <rect class="f-ln" x="105" y="278" width="134" height="1"/>
-              <g>
-                <circle class="f-b" cx="119" cy="300" r="10"/><path class="s-k" d="M114 296h10v7h-6l-4 3z" fill="none" stroke-width="1.4" stroke-linejoin="round"/>
-                <text class="tb" x="136" y="298" font-size="10">Meddelanden</text><text class="t tmu" x="136" y="310" font-size="8.5">2 nya</text>
-              </g>
-              <rect class="f-o" x="93" y="326" width="158" height="39" rx="0"/>
-              <rect class="f-w" x="93" y="326" width="158" height="1" opacity=".1"/>
-              <circle class="f-k" cx="124" cy="342" r="4"/><circle class="f-ln" cx="156" cy="342" r="4"/><circle class="f-ln" cx="188" cy="342" r="4"/><circle class="f-ln" cx="220" cy="342" r="4"/>
-              <rect class="f-k" x="148" y="354" width="48" height="4" rx="2"/>
-            </g>
-            <!-- push -->
-            <g class="cv-push"><g transform="translate(-24 -46)">
-              <g filter="url(#cv-sh4)"><rect class="f-w" x="150" y="58" width="250" height="56" rx="16"/></g>
-              <rect class="f-l" x="162" y="70" width="32" height="32" rx="9"/><text class="td" x="178" y="91" font-size="14" text-anchor="middle">K</text>
-              <text class="tb" x="204" y="83" font-size="11">Ny bokning</text>
-              <text class="t tmu" x="204" y="99" font-size="10">Städning tis 10:00 är bekräftad</text>
-              <text class="tm tmu" x="388" y="83" font-size="8" text-anchor="end">nu</text>
-            </g></g>
-          </svg></div>
-          <div class="sr"><p>Native appar i App Store och Google Play, kopplade direkt till era system och er data i realtid.</p><ul><li>App Store &amp; Google Play</li><li>Push &amp; realtid</li><li>Kopplad till din data</li></ul></div></li>
-
-        <li class="scard" style="--i:4"><div class="sl"><span class="num">05 — INTEGRATIONER</span><h3>Integrationer</h3></div>
-          <div class="sv" aria-hidden="true"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
-            <defs>
-              <filter id="cv-sh5" x="-30%" y="-40%" width="160%" height="200%"><feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#000" flood-opacity=".12"/></filter>
-            </defs>
-            <circle class="s-k cv-orbit" cx="260" cy="200" r="92" fill="none" stroke-width="1.2" stroke-dasharray="2 7" opacity=".3"/>
-            <circle class="s-k" cx="260" cy="200" r="150" fill="none" stroke-width="1" opacity=".1"/>
-            <g class="s-k cv-wire" fill="none" stroke-width="1.6" stroke-dasharray="5 6" opacity=".45">
-              <path d="M260 200L104 66"/><path d="M260 200L416 66"/><path d="M260 200L90 200"/><path d="M260 200L430 200"/><path d="M260 200L104 334"/><path d="M260 200L416 334"/>
-            </g>
-            <g class="f-k">
-              <circle class="cv-pulse" cx="260" cy="200" r="4.5" style="--dx:-140px;--dy:-120px"/>
-              <circle class="cv-pulse cv-p2" cx="260" cy="200" r="4.5" style="--dx:140px;--dy:-120px"/>
-              <circle class="cv-pulse cv-p3" cx="260" cy="200" r="4.5" style="--dx:-155px;--dy:0px"/>
-              <circle class="cv-pulse cv-p4" cx="260" cy="200" r="4.5" style="--dx:155px;--dy:0px"/>
-              <circle class="cv-pulse cv-p5" cx="260" cy="200" r="4.5" style="--dx:-140px;--dy:120px"/>
-              <circle class="cv-pulse cv-p6" cx="260" cy="200" r="4.5" style="--dx:140px;--dy:120px"/>
-            </g>
-            <!-- hub -->
-            <circle class="f-l cv-ping" cx="260" cy="200" r="58"/>
-            <circle class="f-k" cx="260" cy="200" r="58"/>
-            <circle class="s-l" cx="260" cy="200" r="48" fill="none" stroke-width="1" opacity=".4"/>
-            <path class="s-l" d="M249 190l-9 10 9 10M271 190l9 10-9 10M264 184l-8 32" fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-            <text class="tm tw" x="260" y="234" font-size="7.5" text-anchor="middle" letter-spacing=".08em" opacity=".7">ERT SYSTEM</text>
-            <!-- tiles -->
-            <g filter="url(#cv-sh5)" class="f-w">
-              <rect x="40" y="44" width="128" height="44" rx="22"/><rect x="352" y="44" width="128" height="44" rx="22"/>
-              <rect x="10" y="178" width="160" height="44" rx="22"/><rect x="372" y="178" width="128" height="44" rx="22"/>
-              <rect x="40" y="312" width="128" height="44" rx="22"/><rect x="352" y="312" width="128" height="44" rx="22"/>
-            </g>
-            <g class="tb" font-size="12.5">
-              <circle class="f-l" cx="62" cy="66" r="9"/><text x="78" y="70.5">Fortnox</text>
-              <circle class="f-p" cx="374" cy="66" r="9"/><text x="390" y="70.5">Visma</text>
-              <circle class="f-k" cx="32" cy="200" r="9"/><text x="48" y="204.5">Business Central</text>
-              <circle cx="394" cy="200" r="11" fill="#fff"/><path transform="translate(386.5 192.5) scale(.625)" fill="#7AB55C" d="M15.337 23.979l7.216-1.561s-2.604-17.613-2.625-17.73c-.018-.116-.114-.192-.211-.192s-1.929-.136-1.929-.136-1.275-1.274-1.439-1.411c-.045-.037-.075-.057-.121-.074l-.914 21.104h.023zM11.71 11.305s-.81-.424-1.774-.424c-1.447 0-1.504.906-1.504 1.141 0 1.232 3.24 1.715 3.24 4.629 0 2.295-1.44 3.76-3.406 3.76-2.354 0-3.54-1.465-3.54-1.465l.646-2.086s1.245 1.066 2.28 1.066c.675 0 .975-.545.975-.932 0-1.619-2.654-1.694-2.654-4.359-.034-2.237 1.571-4.416 4.827-4.416 1.257 0 1.875.361 1.875.361l-.945 2.715-.02.01zM11.17.83c.136 0 .271.038.405.135-.984.465-2.064 1.639-2.508 3.992-.656.213-1.293.405-1.889.578C7.697 3.75 8.951.84 11.17.84V.83zm1.235 2.949v.135c-.754.232-1.583.484-2.394.736.466-1.777 1.333-2.645 2.085-2.971.193.501.309 1.176.309 2.1zm.539-2.234c.694.074 1.141.867 1.429 1.755-.349.114-.735.231-1.158.366v-.252c0-.752-.096-1.371-.271-1.871v.002zm2.992 1.289c-.02 0-.06.021-.078.021s-.289.075-.714.21c-.423-1.233-1.176-2.37-2.508-2.37h-.115C12.135.209 11.669 0 11.265 0 8.159 0 6.675 3.877 6.21 5.846c-1.194.365-2.063.636-2.16.674-.675.213-.694.232-.772.87-.075.462-1.83 14.063-1.83 14.063L15.009 24l.927-21.166z"/><text x="410" y="204.5">Shopify</text>
-              <circle class="f-s s-ln" cx="62" cy="334" r="9"/><text x="78" y="338.5">CRM</text>
-              <circle cx="374" cy="334" r="11" fill="#fff"/><path transform="translate(366.5 326.5) scale(.625)" fill="#21759B" d="M21.469 6.825c.84 1.537 1.318 3.3 1.318 5.175 0 3.979-2.156 7.456-5.363 9.325l3.295-9.527c.615-1.54.82-2.771.82-3.864 0-.405-.026-.78-.07-1.11m-7.981.105c.647-.03 1.232-.105 1.232-.105.582-.075.514-.93-.067-.899 0 0-1.755.135-2.88.135-1.064 0-2.85-.15-2.85-.15-.585-.03-.661.855-.075.885 0 0 .54.061 1.125.09l1.68 4.605-2.37 7.08L5.354 6.9c.649-.03 1.234-.1 1.234-.1.585-.075.516-.93-.065-.896 0 0-1.746.138-2.874.138-.2 0-.438-.008-.69-.015C4.911 3.15 8.235 1.215 12 1.215c2.809 0 5.365 1.072 7.286 2.833-.046-.003-.091-.009-.141-.009-1.06 0-1.812.923-1.812 1.914 0 .89.513 1.643 1.06 2.531.411.72.89 1.643.89 2.977 0 .915-.354 1.994-.821 3.479l-1.075 3.585-3.9-11.61.001.014zM12 22.784c-1.059 0-2.081-.153-3.048-.437l3.237-9.406 3.315 9.087c.024.053.05.101.078.149-1.12.393-2.325.609-3.582.609M1.211 12c0-1.564.336-3.05.935-4.39L7.29 21.709C3.694 19.96 1.212 16.271 1.211 12M12 0C5.385 0 0 5.385 0 12s5.385 12 12 12 12-5.385 12-12S18.615 0 12 0"/><text x="390" y="338.5">WordPress</text>
-            </g>
-            <g class="cv-sync">
-              <rect class="f-k" x="206" y="262" width="108" height="24" rx="12"/>
-              <circle class="f-l cv-live" cx="222" cy="274" r="3.5"/>
-              <text class="tm tw" x="232" y="277.5" font-size="8.5">Synkat · nu</text>
-            </g>
-          </svg></div>
-          <div class="sr"><p>Vi kopplar ihop allt som har ett API så systemen pratar med varandra och allt synkas automatiskt.</p><ul><li>Fortnox, Visma, Business Central, Shopify, WordPress</li><li>API-kopplingar</li><li>Allt synkat automatiskt</li></ul></div></li>
-
-        <li class="scard" style="--i:5"><div class="sl"><span class="num">06 — SEO &amp; SYNLIGHET</span><h3>SEO &amp; synlighet</h3></div>
-          <div class="sv" aria-hidden="true"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
-            <defs>
-              <filter id="cv-sh6" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="18" stdDeviation="16" flood-color="#000" flood-opacity=".14"/></filter>
-            </defs>
-            <rect class="f-w" x="6" y="18" width="440" height="320" rx="18" filter="url(#cv-sh6)"/>
-            <rect class="f-o s-ln" x="26" y="38" width="400" height="38" rx="19"/>
-            <circle class="s-k" cx="48" cy="56" r="6" fill="none" stroke-width="1.8"/><path class="s-k" d="M52.5 60.5l4.5 4.5" stroke-width="1.8" stroke-linecap="round"/>
-            <text class="t" x="66" y="61" font-size="12.5">städfirma stockholm</text>
-            <rect class="f-k cv-caret" x="191" y="49" width="1.6" height="15"/>
-            <g class="tm" font-size="9"><text x="30" y="98" class="tb">Alla</text><text class="tmu" x="70" y="98">Bilder</text><text class="tmu" x="118" y="98">Kartor</text><text class="tmu" x="166" y="98">Nyheter</text></g>
-            <rect class="f-k" x="28" y="104" width="24" height="2.5" rx="1.25"/>
-            <rect class="f-ln" x="26" y="107" width="400" height="1"/>
-            <!-- result 1 -->
-            <g class="cv-top">
-              <rect class="f-l" x="18" y="118" width="416" height="80" rx="14"/>
-              <circle class="f-k" cx="40" cy="138" r="9"/><text class="td tw" x="40" y="142" font-size="10" text-anchor="middle">D</text>
-              <text class="tb" x="56" y="135" font-size="10">Ditt Företag</text><text class="tm" x="56" y="147" font-size="8.5" opacity=".7">ditt-foretag.se › stadning</text>
-              <text class="tb" x="32" y="170" font-size="14">Städfirma i Stockholm – boka online</text>
-              <rect class="f-k" x="32" y="180" width="300" height="5" rx="2.5" opacity=".18"/><rect class="f-k" x="32" y="189" width="220" height="5" rx="2.5" opacity=".18"/>
-              <rect class="f-k" x="356" y="128" width="66" height="22" rx="11"/><text class="tw tb" x="389" y="142.5" font-size="9" text-anchor="middle">#1 Er sida</text>
-            </g>
-            <!-- other results -->
-            <g opacity=".55">
-              <circle class="f-o s-ln" cx="40" cy="226" r="9"/><rect class="f-ln" x="56" y="220" width="90" height="6" rx="3"/><rect class="f-ln" x="56" y="231" width="60" height="5" rx="2.5"/>
-              <rect class="f-ln" x="32" y="246" width="240" height="8" rx="4"/><rect class="f-ln" x="32" y="260" width="300" height="5" rx="2.5"/>
-              <circle class="f-o s-ln" cx="40" cy="290" r="9"/><rect class="f-ln" x="56" y="284" width="80" height="6" rx="3"/><rect class="f-ln" x="56" y="295" width="70" height="5" rx="2.5"/>
-              <rect class="f-ln" x="32" y="310" width="210" height="8" rx="4"/>
-            </g>
-            <!-- graph -->
-            <g filter="url(#cv-sh6)"><rect class="f-w" x="290" y="200" width="224" height="186" rx="18"/></g>
-            <text class="tm tmu" x="308" y="226" font-size="8" letter-spacing=".06em">BESÖK FRÅN GOOGLE</text>
-            <text class="td" x="308" y="250" font-size="17">Organisk trafik</text>
-            <path class="s-ln" d="M308 290h188M308 320h188M308 350h188" stroke-dasharray="2 4" fill="none"/>
-            <path class="f-l cv-area" d="M308 360 L308 352 C330 350 340 344 360 340 S392 330 410 318 S448 300 462 286 S486 268 496 262 L496 360Z" opacity=".55"/>
-            <path class="s-k cv-line" d="M308 352 C330 350 340 344 360 340 S392 330 410 318 S448 300 462 286 S486 268 496 262" fill="none" stroke-width="2.6" stroke-linecap="round" pathLength="100" stroke-dasharray="100"/>
-            <circle class="f-l cv-ping" cx="496" cy="262" r="6"/>
-            <circle class="f-k" cx="496" cy="262" r="4.5"/>
-            <g class="tm tmu" font-size="7"><text x="308" y="376">MAJ</text><text x="356" y="376">JUN</text><text x="404" y="376">JUL</text><text x="452" y="376">AUG</text></g>
-            <g><rect class="f-k" x="436" y="216" width="60" height="22" rx="11"/><path class="s-l" d="M450 231l5-6 4 3 5-6" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><text class="tw tb" x="470" y="230.5" font-size="8.5">Upp</text></g>
-            <!-- sociala medier: Instagram, TikTok, Snapchat -->
-            <defs>
-              <radialGradient id="ig-g" cx=".28" cy="1.05" r="1.25"><stop offset="0" stop-color="#FED373"/><stop offset=".25" stop-color="#F58529"/><stop offset=".5" stop-color="#DD2A7B"/><stop offset=".75" stop-color="#8134AF"/><stop offset="1" stop-color="#515BD4"/></radialGradient>
-            </defs>
-            <g>
-              <animateTransform attributeName="transform" type="translate" values="0 0;0 -6;0 0" dur="3.6s" repeatCount="indefinite"/>
-              <g transform="translate(486 34) rotate(-8)" filter="url(#cv-sh6)">
-                <rect x="-24" y="-24" width="48" height="48" rx="13" fill="url(#ig-g)"/>
-                <rect x="-12.5" y="-12.5" width="25" height="25" rx="7.5" fill="none" stroke="#fff" stroke-width="2.6"/>
-                <circle r="6" fill="none" stroke="#fff" stroke-width="2.6"/>
-                <circle cx="7.2" cy="-7.2" r="1.7" fill="#fff"/>
-              </g>
-              <g transform="translate(446 52)">
-                <rect width="50" height="18" rx="9" fill="#FF3B5C"/>
-                <path d="M12 6.2c-1.3-1.6-4-.7-4 1.4 0 1.9 4 4.4 4 4.4s4-2.5 4-4.4c0-2.1-2.7-3-4-1.4z" fill="#fff"/>
-                <text class="tb" x="19" y="12.6" font-size="8.5" fill="#fff" style="fill:#fff">+248</text>
-              </g>
-            </g>
-            <g>
-              <animateTransform attributeName="transform" type="translate" values="0 0;0 -7;0 0" dur="4.2s" begin="-1.4s" repeatCount="indefinite"/>
-              <g transform="translate(492 100) rotate(7)" filter="url(#cv-sh6)">
-                <rect x="-24" y="-24" width="48" height="48" rx="13" fill="#111"/>
-                <g transform="translate(-1.5 1)">
-                  <path transform="translate(-1.3 -1.3)" fill="#25F4EE" d="M1.5-13h4.6c.3 3.6 2.7 6.2 6.4 6.5v4.5c-2.3 0-4.5-.7-6.4-2v9.3a7.6 7.6 0 1 1-7.6-7.6c.4 0 .8 0 1.2.1v4.7a3.1 3.1 0 1 0 1.8 2.8z"/>
-                  <path transform="translate(1.3 1.3)" fill="#FE2C55" d="M1.5-13h4.6c.3 3.6 2.7 6.2 6.4 6.5v4.5c-2.3 0-4.5-.7-6.4-2v9.3a7.6 7.6 0 1 1-7.6-7.6c.4 0 .8 0 1.2.1v4.7a3.1 3.1 0 1 0 1.8 2.8z"/>
-                  <path fill="#fff" d="M1.5-13h4.6c.3 3.6 2.7 6.2 6.4 6.5v4.5c-2.3 0-4.5-.7-6.4-2v9.3a7.6 7.6 0 1 1-7.6-7.6c.4 0 .8 0 1.2.1v4.7a3.1 3.1 0 1 0 1.8 2.8z"/>
-                </g>
-              </g>
-              <g transform="translate(450 118)">
-                <rect width="52" height="18" rx="9" fill="#111"/>
-                <path d="M9 5.5v7l5.5-3.5z" fill="#fff"/>
-                <text class="tb" x="18" y="12.6" font-size="8.5" fill="#fff" style="fill:#fff">12,4k</text>
-              </g>
-            </g>
-            <g>
-              <animateTransform attributeName="transform" type="translate" values="0 0;0 -5;0 0" dur="3.9s" begin="-2.6s" repeatCount="indefinite"/>
-              <g transform="translate(488 160) rotate(-5)" filter="url(#cv-sh6)">
-                <rect x="-22" y="-22" width="44" height="44" rx="12" fill="#FFFC00"/>
-                <path fill="#fff" stroke="#111" stroke-width="1.5" stroke-linejoin="round" d="M0-12.5c5.6 0 8.6 4 8.6 8.6v3.4l2.9-.9c.9-.3 1.6.8.8 1.4l-3 1.9c1.2 3 3.4 4.9 6.3 5.7-.6 1.3-2.6 1.6-4.3 1.9-.3.7-.4 1.9-1.2 1.9-1.4 0-2.7-.5-4.2 0-1.6.5-2.6 2.2-5.9 2.2s-4.3-1.7-5.9-2.2c-1.5-.5-2.8 0-4.2 0-.8 0-.9-1.2-1.2-1.9-1.7-.3-3.7-.6-4.3-1.9 2.9-.8 5.1-2.7 6.3-5.7l-3-1.9c-.8-.6-.1-1.7.8-1.4l2.9.9v-3.4c0-4.6 3-8.6 8.6-8.6z"/>
-              </g>
-              <g transform="translate(436 174)">
-                <rect width="60" height="18" rx="9" class="f-k"/>
-                <text class="tw tb" x="30" y="12.6" font-size="8.5" text-anchor="middle">+86 vänner</text>
-              </g>
-            </g>
-          </svg></div>
-          <div class="sr"><p>Vi får er att synas högst upp på Google — teknisk SEO, innehåll som rankar och löpande optimering som drar in kunder.</p><ul><li>Teknisk SEO</li><li>Innehåll som rankar</li><li>Löpande optimering</li></ul></div></li>
-
-        <li class="scard" style="--i:6"><div class="sl"><span class="num">07 — ANNONSER &amp; CONTENT</span><h3>Annonser &amp; sociala medier</h3></div>
-          <div class="sv" aria-hidden="true"><svg viewBox="0 0 520 400" role="presentation" focusable="false">
-            <defs>
-              <clipPath id="cv-c7"><rect x="44" y="72" width="184" height="176"/></clipPath>
-            </defs>
-            <!-- phone -->
-            <rect class="f-k s-w" x="36" y="10" width="200" height="380" rx="32" stroke-opacity=".2" stroke-width="1.5"/>
-            <rect class="f-w" x="44" y="18" width="184" height="364" rx="25"/>
-            <rect class="f-k" x="112" y="26" width="48" height="12" rx="6"/>
-            <circle class="s-l" cx="62" cy="56" r="10" fill="none" stroke-width="2"/><circle class="f-p" cx="62" cy="56" r="7"/>
-            <text class="tb" x="78" y="54" font-size="9.5">dittforetag</text><text class="t tmu" x="78" y="65" font-size="7.5">Sponsrad</text>
-            <g class="f-k"><circle cx="206" cy="56" r="1.6"/><circle cx="212" cy="56" r="1.6"/><circle cx="200" cy="56" r="1.6"/></g>
-            <image href="/assets/cases/camilla/camilla-sminkar.jpg" x="44" y="72" width="184" height="176" preserveAspectRatio="xMidYMid slice" clip-path="url(#cv-c7)"/>
-            <rect class="f-l" x="44" y="248" width="184" height="26"/>
-            <text class="tb" x="56" y="265" font-size="10">Boka nu</text><path class="s-k" d="M210 257l5 4-5 4" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            <path class="f-l s-k cv-heart" d="M66 296c-3-3.6-9-1.5-9 3.2 0 4.2 9 9.8 9 9.8s9-5.6 9-9.8c0-4.7-6-6.8-9-3.2z" stroke-width="1.5" stroke-linejoin="round"/>
-            <path class="s-k" d="M88 293.5a7.5 7.5 0 1 1-3 11.8l-4 1.2 1.2-3.8a7.5 7.5 0 0 1 5.8-9.2z" fill="none" stroke-width="1.5" stroke-linejoin="round"/>
-            <path class="s-k" d="M108 294l16 0-9 14-1.5-7z M113.5 301l10.5-7" fill="none" stroke-width="1.5" stroke-linejoin="round"/>
-            <path class="s-k" d="M206 292h12v17l-6-4-6 4z" fill="none" stroke-width="1.5" stroke-linejoin="round"/>
-            <text class="tb" x="56" y="328" font-size="9">Gillas av 1 248 personer</text>
-            <rect class="f-ln" x="56" y="336" width="150" height="5" rx="2.5"/><rect class="f-ln" x="56" y="346" width="110" height="5" rx="2.5"/>
-            <rect class="f-k" x="108" y="368" width="56" height="4" rx="2"/>
-            <!-- floating hearts -->
-            <g class="f-l">
-              <path class="cv-fh cv-fh1" d="M196 230c-3-3.6-9-1.5-9 3.2 0 4.2 9 9.8 9 9.8s9-5.6 9-9.8c0-4.7-6-6.8-9-3.2z"/>
-              <path class="cv-fh cv-fh2" d="M174 214c-2.3-2.8-7-1.2-7 2.5 0 3.3 7 7.6 7 7.6s7-4.3 7-7.6c0-3.7-4.7-5.3-7-2.5z"/>
-              <path class="cv-fh cv-fh3" d="M210 196c-2-2.4-6-1-6 2.1 0 2.8 6 6.5 6 6.5s6-3.7 6-6.5c0-3.1-4-4.5-6-2.1z"/>
-            </g>
-            <!-- stats -->
-            <rect class="f-w s-w" x="258" y="30" width="250" height="168" rx="20" fill-opacity=".06" stroke-opacity=".14"/>
-            <text class="tm tw" x="276" y="56" font-size="8" letter-spacing=".08em" opacity=".6">KAMPANJ · META</text>
-            <rect class="f-l" x="440" y="44" width="52" height="20" rx="10"/><circle class="f-k cv-live" cx="453" cy="54" r="3"/><text class="tb" x="460" y="57.5" font-size="8">Live</text>
-            <text class="tw" x="276" y="80" font-size="11" opacity=".8">Räckvidd</text>
-            <text class="td tw" x="276" y="110" font-size="28">48,2k</text>
-            <g class="f-l cv-bars">
-              <rect x="276" y="160" width="20" height="22" rx="5" opacity=".35"/>
-              <rect x="304" y="150" width="20" height="32" rx="5" opacity=".45"/>
-              <rect x="332" y="154" width="20" height="28" rx="5" opacity=".55"/>
-              <rect x="360" y="138" width="20" height="44" rx="5" opacity=".65"/>
-              <rect x="388" y="128" width="20" height="54" rx="5" opacity=".8"/>
-              <rect x="416" y="116" width="20" height="66" rx="5" opacity=".9"/>
-              <rect x="444" y="100" width="20" height="82" rx="5"/>
-              <rect x="472" y="108" width="20" height="74" rx="5"/>
-            </g>
-            <!-- search ad -->
-            <rect class="f-w" x="258" y="214" width="250" height="112" rx="20"/>
-            <text class="tm" x="276" y="238" font-size="8"><tspan class="tb">Annons</tspan> · ditt-foretag.se</text>
-            <text class="tb" x="276" y="258" font-size="13">Boka städning redan idag</text>
-            <rect class="f-ln" x="276" y="268" width="200" height="5" rx="2.5"/><rect class="f-ln" x="276" y="278" width="150" height="5" rx="2.5"/>
-            <rect class="f-l" x="276" y="294" width="64" height="20" rx="10"/><text class="tb" x="308" y="307.5" font-size="8.5" text-anchor="middle">Klick 1,9k</text>
-            <rect class="f-o" x="346" y="294" width="74" height="20" rx="10"/><text class="tb" x="383" y="307.5" font-size="8.5" text-anchor="middle">Bokningar 312</text>
-            <!-- channels -->
-            <g class="tm tw" font-size="8.5" text-anchor="middle">
-              <rect class="f-w" x="258" y="344" width="78" height="26" rx="13" fill-opacity=".1"/><text x="297" y="360.5">Instagram</text>
-              <rect class="f-w" x="344" y="344" width="76" height="26" rx="13" fill-opacity=".1"/><text x="382" y="360.5">Facebook</text>
-              <rect class="f-w" x="428" y="344" width="80" height="26" rx="13" fill-opacity=".1"/><text x="468" y="360.5">TikTok</text>
-            </g>
-          </svg></div>
-          <div class="sr"><p>Meta-annonser på Facebook &amp; Instagram, Google Ads och content till era kanaler — vi skapar, publicerar och optimerar.</p><ul><li>Meta-annonser (FB &amp; IG)</li><li>Google Ads</li><li>Content till Instagram &amp; TikTok</li></ul></div></li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- PRISKALKYLATOR -->
-  <section class="founder sec" aria-labelledby="fo-h">
-    <div class="wrap fo-grid">
-      <figure class="fo-photo rv">
-        <img src="/assets/team/mikaela.jpg" alt="Mikaela Wigert, Kela group, vid laptopen med en kaffe" width="1374" height="1145" loading="lazy">
-        <figcaption class="fo-tag"><b>Mikaela</b><span>Kela group</span></figcaption>
-        <span class="fo-sticker" aria-hidden="true">Hej! 👋</span>
-      </figure>
-      <div class="fo-copy">
-        <span class="kicker">Från grundaren</span>
-        <h2 class="fo-q rv" id="fo-h"><span class="fo-mark" aria-hidden="true">“</span>Allt vi säljer kör vi själva varje dag i våra verksamheter. Därför vet vi att det fungerar – och att det sparar tid och pengar, på riktigt.</h2>
-        <p class="lead rv">Nu vill vi hjälpa er att göra samma digitala resa! Hör av dig – jag svarar själv.</p>
-        <div class="fo-sign rv"><img src="/assets/team/mikaela-face.jpg" alt="" width="56" height="56" loading="lazy"><div><b>Mikaela Wigert</b><span>Affär, produkt &amp; automation · Kela group</span></div></div>
-        <div class="fo-cta rv"><a class="btn btn-dark" href="/kontakt" data-book>Boka ett möte med mig <span class="arr" aria-hidden="true">→</span></a></div>
+      <div class="vpins">
+        <a class="chipw p1 pin" href="/bokningssystem" aria-label="Bokningssystem – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span><span>Bokningssystem<small>Automatiska bekräftelser</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p2 dark pin" href="/ai-agenter" aria-label="AI-chatt – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><rect x="7" y="7" width="10" height="10" rx="3"/></svg></span><span>AI-chatt<small>Dygnet runt</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p3 pin" href="/bygga-automationer" aria-label="Fakturapåminnelser – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span><span>Fakturapåminnelser<small>Helt automatiskt</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p4 pin" href="/affarssystem-crm" aria-label="Fortnox-integration – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></span><span>Fortnox-integration<small>Allt synkat automatiskt</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p5 pin" href="/bygga-hemsida" aria-label="Hemsida – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg></span><span>Hemsida<small>Snabb & konverterande</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p6 pin" href="/bygga-hemsida" aria-label="E-handel – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 8H6.2"/><circle cx="9" cy="19.5" r="1.3"/><circle cx="17" cy="19.5" r="1.3"/></svg></span><span>E-handel<small>Säljer dygnet runt</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p7 dark pin" href="/bygga-app" aria-label="Appar – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></span><span>Appar<small>iOS & Android</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p8 pin" href="/tjanster" aria-label="SEO – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg></span><span>SEO<small>Syns på Google</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p9 pin" href="/tjanster" aria-label="Content – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg></span><span>Content<small>Texter & inlägg med AI</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p10 pin" href="/bygga-system" aria-label="Feedbacksystem – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z"/></svg></span><span>Feedbacksystem<small>Nöjdare kunder</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p11 dark pin" href="/bygga-system" aria-label="Dashboards – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></span><span>Dashboards<small>Er data i realtid</small></span><span class="go" aria-hidden="true">→</span></div></a>
+        <a class="chipw p12 pin" href="/affarssystem-crm" aria-label="Integrationer & API – läs mer"><div class="chip"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg></span><span>Integrationer & API<small>Allt pratar med allt</small></span><span class="go" aria-hidden="true">→</span></div></a>
       </div>
     </div>
-  </section>
-
-  <section aria-labelledby="calc-h">
-    <div class="wrap">
-      <div class="calc rv">
-        <div>
-          <span class="kicker">Offertförfrågan</span>
-          <h2 id="calc-h">Vad vill ni bygga?</h2>
-          <p class="lead">Hemsida, webbshop, CRM, rekryteringssystem eller en helt egen lösning. Välj det ni behöver och få en offert efter era behov.</p>
-          <div class="row">
-            <a class="btn btn-dark" href="/priskalkylator">Få en offert <span class="arr" aria-hidden="true">→</span></a>
-            <span class="time"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Tar ca 2 minuter</span>
-          </div>
-        </div>
-        <div class="sol" id="sol" aria-hidden="true">
-          <div class="lbl">Din lösning</div>
-          <div class="sol-item"><i>✓</i>Business-hemsida</div>
-          <div class="sol-item"><i>✓</i>Bokningssystem</div>
-          <div class="sol-item"><i>✓</i>Fortnox-integration</div>
-          <div class="sol-item"><i>✓</i>AI-chatt</div>
-          <div class="foot">Skicka förfrågan – svar inom 24 h →</div>
-        </div>
-      </div>
+    <div class="wrap hero-top">
+      <h1 id="h1"><span class="l1"><span>Vi bygger</span></span>
+        <span class="type-line"><span class="type-box"><span id="typer" data-words='["hemsidor","appar","e-commerce","automationer","chatt-bottar","AI-assistenter","system","vad du önskar"]'>hemsidor</span><span class="type-caret" aria-hidden="true"></span></span></span>
+      </h1>
+      <h2 class="hero-sub">Vi digitaliserar, automatiserar och sänker era kostnader.</h2>
     </div>
   </section>
 
@@ -783,210 +270,52 @@
     </div>
   </section>
 
-  <!-- GARANTI -->
+  <!-- VI SÄNKER ERA KOSTNADER – två sätt att köpa -->
   <section class="guar sec round" aria-labelledby="g-h">
     <div class="wrap guar-grid">
       <div class="g-img rv">
-        <img src="/assets/team/team.webp" alt="Kela group-teamet går igenom en kunds system och arbetsflöden">
-        <span class="seal" aria-hidden="true">
-          <svg viewBox="0 0 120 120"><defs><path id="circ" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0"/></defs><text font-family="ui-monospace,Menlo,monospace" font-size="10.5" letter-spacing="2.4" fill="#0E0E0C"><textPath href="#circ">VÅR GARANTI · VÅR GARANTI · VÅR GARANTI ·</textPath></text></svg>
-          <b>✦</b>
-        </span>
+        <img src="/assets/team/mikaela-garanti.webp" alt="Mikaela Wigert, grundare av Kela group, vid laptopen med en kaffe" width="1400" height="1166">
       </div>
       <div class="rv">
-        <span class="kicker">Vår garanti</span>
-        <h2 id="g-h">Vi sänker era kostnader — <span>annars bjuder vi på genomgången.</span></h2>
-        <p>Vi går igenom era system och arbetsflöden och visar svart på vitt var pengar och tid läcker. Hittar vi inget att spara kostar det ingenting.</p>
-        <a class="btn btn-lav" href="/kontakt">Boka en kostnadsfri genomgång <span class="arr" aria-hidden="true">→</span></a>
+        <h2 id="g-h">Vi sänker era kostnader.</h2>
+        <div class="opts">
+          <details class="opt" name="kop" open>
+            <summary><span class="opt-t">Månadskostnad</span><span class="opt-ic" aria-hidden="true"></span></summary>
+            <div class="opt-b">
+              <p>Använd våra färdiga funktioner för en fast kostnad i månaden. Kom igång snabbt utan stor engångskostnad.</p>
+              <ul><li>Snabbt igång</li><li>Fast månadskostnad</li><li>Vi sköter drift och uppdateringar</li></ul>
+            </div>
+          </details>
+          <details class="opt" name="kop">
+            <summary><span class="opt-t">Ni äger koden</span><span class="opt-ic" aria-hidden="true"></span></summary>
+            <div class="opt-b">
+              <p>Vi bygger lösningen åt er och koden blir er egen. Vi sköter uppdateringar och det som behövs framåt.</p>
+              <ul><li>Byggt helt för er</li><li>Ni äger koden</li><li>Vi sköter uppdateringar och support</li></ul>
+            </div>
+          </details>
+        </div>
+        <a class="btn btn-lav" href="/kontakt">Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
 
-  <!-- KUNDCASE STODONA -->
-  <section class="sec" aria-labelledby="case-h">
+  <!-- DET HÄR KAN VI BYGGA -->
+  <section class="sec" id="tjanster" aria-labelledby="svc-h">
     <div class="wrap">
       <div class="head">
         <div>
-          <span class="kicker">Kundcase · Stodona AB</span>
-          <h2 class="h2 rv" id="case-h">Samma verksamhet — en bråkdel av kostnaden.</h2>
+          <h2 class="h2 rv" id="svc-h">Allt ni behöver för att digitalisera och automatisera er verksamhet.</h2>
         </div>
       </div>
-      <p class="case-intro rv">Vi bytte ut dyra externa abonnemang mot egna system — byggda för hur Stodona faktiskt jobbar och kopplade till varandra. Så här förändrades det, system för system:</p>
-      <div class="rows" role="list">
-        <div class="crow" role="listitem"><div class="sys">Hemsida</div><div class="old">Externt abonnemang</div><div class="arr" aria-hidden="true">→</div><div class="new">Egen hemsida<small>ingen abonnemangsavgift</small></div></div>
-        <div class="crow" role="listitem"><div class="sys">Bokningssystem</div><div class="old">Dyrt månadsabonnemang</div><div class="arr" aria-hidden="true">→</div><div class="new">Eget, anpassat system</div></div>
-        <div class="crow" role="listitem"><div class="sys">Feedbackshantering</div><div class="old">Extern tjänst</div><div class="arr" aria-hidden="true">→</div><div class="new">Egen lösning</div></div>
-        <div class="crow" role="listitem"><div class="sys">Fakturapåminnelser</div><div class="old">Manuellt &amp; eftersläpande</div><div class="arr" aria-hidden="true">→</div><div class="new">Helt automatiskt</div></div>
-        <div class="crow" role="listitem"><div class="sys">AI-chatt – webb &amp; mail<small>Realtidskopplad: bokningar, ändringar, fakturafrågor</small></div><div class="old">En heltidstjänst</div><div class="arr" aria-hidden="true">→</div><div class="new">AI dygnet runt</div></div>
-        <div class="crow" role="listitem"><div class="sys">Rekryteringssystem</div><div class="old">Extern tjänst</div><div class="arr" aria-hidden="true">→</div><div class="new">Eget system</div></div>
-        <div class="crow" role="listitem"><div class="sys">Personalapp</div><div class="old">Extern app</div><div class="arr" aria-hidden="true">→</div><div class="new">Egen, kopplad till affärssystemet</div></div>
-        <div class="crow" role="listitem"><div class="sys">Kundapp</div><div class="old">Extern app</div><div class="arr" aria-hidden="true">→</div><div class="new">Egen, kopplad till affärssystemet</div></div>
-      </div>
-      <div class="sum">
-        <div class="rv"><div class="k">Löpande kostnader</div><div class="v">Kraftigt lägre</div><div class="s">än de tidigare abonnemangen</div></div>
-        <div class="rv"><div class="k">Systemen</div><div class="v">Egna</div><div class="s">byggda för hur de jobbar</div></div>
-        <div class="rv"><div class="k">Allt på ett ställe</div><div class="v">Kopplat</div><div class="s">ingen dubbelregistrering</div></div>
-      </div>
-      <div class="case-foot rv">
-        <a class="btn btn-dark" href="/kontakt">Boka en kostnadsfri genomgång <span class="arr" aria-hidden="true">→</span></a>
-        <span>Ett verkligt kundcase.</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- FÄRDIGA MODULER -->
-  <section class="sec" style="padding-top:0" aria-labelledby="mod-h">
-    <div class="wrap">
-      <div class="head">
-        <div>
-          <span class="kicker">Färdiga system</span>
-          <h2 class="h2 rv" id="mod-h">Moduler vi<br>redan byggt.</h2>
-        </div>
-        <p class="lead rv">Det här är inte idéer — det är färdiga system som används i skarp drift varje dag. Koppla på det ni behöver och anpassa efter er verksamhet.</p>
-      </div>
-
-      <div class="bento">
-        <article class="card m-pers rv">
-          <div class="card-row">
-            <div>
-              <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M9 6h6M12 18h.01"/></svg></span>
-              <h3>Personalapp</h3>
-              <p>In- och utcheckning, kvalitetskontroller och allt ni behöver — för medarbetarna i fickan.</p>
-            </div>
-            <div class="phones ui" aria-hidden="true">
-              <div class="phone"><div class="scr"><span class="mono">Personalapp</span><div class="checkin">Checka in</div><div class="qc"><span>Kvalitetskontroll</span><span>Utcheckning</span></div></div></div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card m-kund rv">
-          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M12 17a2.5 2.5 0 0 0 2.5-2.5c0-1.5-2.5-3.5-2.5-3.5s-2.5 2-2.5 3.5A2.5 2.5 0 0 0 12 17z"/></svg></span>
-          <h3>Kundapp</h3>
-          <p>Era kunder i fickan — bokningar, ärenden och kommunikation, kopplat till systemet.</p>
-        </article>
-
-        <article class="card m-feed rv">
-          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
-          <h3>Feedback&shy;hantering</h3>
-          <p>Samla in, mät och agera på kundernas feedback — automatiskt.</p>
-          <div class="ui stars" aria-hidden="true"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-        </article>
-
-        <article class="card m-fakt rv">
-          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span>
-          <h3>Faktura&shy;påminnelser</h3>
-          <p>Automatiska påminnelser 1–2 gånger i veckan på obetalda fakturor. Få betalt i tid.</p>
-          <div class="ui" aria-hidden="true"><span class="stamp">BETALD</span></div>
-        </article>
-
-        <article class="card m-seo rv">
-          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11l2 2 3.5-3.5"/></svg></span>
-          <h3>SEO &amp; analys</h3>
-          <p>Synlighet i sök och tydlig mätning — så ni vet vad som faktiskt ger resultat.</p>
-        </article>
-
-        <article class="card m-dash rv">
-          <div class="card-row">
-            <div>
-              <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span>
-              <h3>Dashboard &amp; översikt</h3>
-              <p>All er data samlad i realtid — en tydlig överblick över hela verksamheten.</p>
-            </div>
-            <div class="ui" aria-hidden="true">
-              <span class="live">Realtid</span>
-              <div class="bars"><i style="--h:38%"></i><i style="--h:52%"></i><i style="--h:44%"></i><i style="--h:66%"></i><i style="--h:58%"></i><i style="--h:78%"></i><i style="--h:92%"></i></div>
-            </div>
-          </div>
-        </article>
-
-        <article class="card m-news rv">
-          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2.5"/><path d="M2 7l10 6 10-6"/></svg></span>
-          <h3>Nyhetsbrev &amp; SMS</h3>
-          <p>Nå kunderna automatiskt med nyhetsbrev och SMS — i rätt tid, till rätt person.</p>
-        </article>
-
-        <article class="card m-ads rv">
-          <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-7-7 18-2.5-7.5L3 11z"/></svg></span>
-          <h3>Automatisk annons&shy;hantering</h3>
-          <p>Annonser som sätts upp och optimeras löpande — mer effekt för varje krona.</p>
-        </article>
-
-        <article class="card m-content rv">
-          <div class="card-row">
-            <div>
-              <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.6L18 9l-3.6 2.6L15.5 16 12 13.5 8.5 16l1.1-4.4L6 9l4.2-1.4z"/></svg></span>
-              <h3>Content generator</h3>
-              <p>AI som skapar texter och innehåll åt er — snabbare marknadsföring, mindre jobb.</p>
-            </div>
-            <div class="ui gen" aria-hidden="true"><span id="gen"></span><span class="cur"></span></div>
-          </div>
-        </article>
-
-        <article class="card m-gift rv">
-          <div class="card-row">
-            <div>
-              <span class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="1.5"/><path d="M3 12h18M12 8v13M12 8S10 3 7.5 4.5 10 8 12 8zM12 8s2-5 4.5-3.5S14 8 12 8z"/></svg></span>
-              <h3>Presentkort</h3>
-              <p>Sälj, lös in och håll koll på presentkort — kopplat till kassan och systemet.</p>
-            </div>
-            <div class="ui gift" aria-hidden="true"><span class="g-l">Presentkort</span><span class="logo"><b>KELA</b></span></div>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- STATEMENT -->
-  <section class="sec" id="branscher" style="padding-top:0" aria-labelledby="br-h">
-    <div class="wrap">
-      <div class="head">
-        <div>
-          <span class="kicker">Branscher</span>
-          <h2 class="h2 rv" id="br-h">Byggt för<br>er bransch.</h2>
-        </div>
-        <p class="lead rv">Samma system – anpassade efter hur just er bransch bokar, jobbar och får betalt.</p>
-      </div>
-      <div class="bgrid">
-        <a class="bcard rv" href="/bransch-stad"><span class="bn">01</span><h3>Städ & service</h3><p>Bokning, schema, personalapp och påminnelser för städbolag.</p><span class="bgo" aria-hidden="true">→</span></a>
-        <a class="bcard rv" href="/bransch-skonhet"><span class="bn">02</span><h3>Skönhet & salong</h3><p>Hudvård, naglar, fransar och spa – bokat dygnet runt.</p><span class="bgo" aria-hidden="true">→</span></a>
-        <a class="bcard rv" href="/bransch-harstylist"><span class="bn">03</span><h3>Frisör & hårstylist</h3><p>Onlinebokning, påminnelser och återkommande kunder.</p><span class="bgo" aria-hidden="true">→</span></a>
-        <a class="bcard rv" href="/bransch-makeup"><span class="bn">04</span><h3>Makeupartister</h3><p>Portfolio, förfrågningar och bröllopsbokningar.</p><span class="bgo" aria-hidden="true">→</span></a>
-        <a class="bcard rv" href="/bransch-frilans"><span class="bn">05</span><h3>Frilansare & konsulter</h3><p>Hemsida, offert, fakturor och kundflöde på autopilot.</p><span class="bgo" aria-hidden="true">→</span></a>
-        <a class="bcard rv" href="/bransch-brollop"><span class="bn">06</span><h3>Bröllop</h3><p>Bröllopssajter med OSA, bordsplacering, körschema och sms.</p><span class="bgo" aria-hidden="true">→</span></a>
-        <a class="bcard rv" href="/bransch-rekrytering"><span class="bn">07</span><h3>Rekrytering &amp; personal</h3><p>Rekrytering, onboarding, personalapp, utbildningar och HR.</p><span class="bgo" aria-hidden="true">→</span></a>
-      </div>
-    </div>
-  </section>
-
-  <section class="statement sec round" aria-labelledby="st-h">
-    <div class="wrap">
-      <span class="kicker">Hela grejen</span>
-      <h2 class="huge" id="st-h"><span class="r">Bygg</span> <span class="r">bort</span><br><span class="r">det</span> <span class="r">manuella.</span></h2>
-      <p class="rv">Mindre admin. Mer affär.</p>
-      <a class="btn btn-lav rv" href="/kontakt">Boka ett möte <span class="arr" aria-hidden="true">→</span></a>
-    </div>
-  </section>
-
-  <!-- ORD-MARQUEE -->
-  <div class="wm-wrap" aria-hidden="true"><div class="wmarq">
-    <div class="wmarq-t">
-      <span>Webbutveckling</span><span>Systemutveckling</span><span>E-handel</span><span>Fortnox-integration</span><span>API-kopplingar</span><span>Systemintegrationer</span><span>CRM</span><span>Automation</span><span>AI</span><span>Appar</span><span>Portaler</span><span>Dashboards</span>
-      <span class="dup">Webbutveckling</span><span class="dup">Systemutveckling</span><span class="dup">E-handel</span><span class="dup">Fortnox-integration</span><span class="dup">API-kopplingar</span><span class="dup">Systemintegrationer</span><span class="dup">CRM</span><span class="dup">Automation</span><span class="dup">AI</span><span class="dup">Appar</span><span class="dup">Portaler</span><span class="dup">Dashboards</span>
-    </div>
-  </div></div>
-
-  <!-- TEAM -->
-  <section class="sec" aria-labelledby="team-h">
-    <div class="wrap team-grid">
-      <div class="team-img rv"><img id="teamImg" src="/assets/team/team.webp" alt="Kela group-teamet arbetar tillsammans vid laptop"></div>
-      <div class="rv">
-        <span class="kicker">Människorna bakom systemen</span>
-        <h2 id="team-h">Vi gillar företag, människor och problem som går att lösa.</h2>
-        <p class="lead">Ett litet, drivet team som förstår både teknik och affärer.</p>
-        <div class="people">
-          <div class="person"><span class="av av-img" aria-hidden="true"><img src="/assets/team/mikaela-face.jpg" alt="" width="46" height="46" loading="lazy"></span><div><h3>Mikaela</h3><p>Affär, produkt &amp; automation</p></div></div>
-          <div class="person"><span class="av" aria-hidden="true">?</span><div><h3>[Namn]</h3><p>Design &amp; utveckling</p></div></div>
-        </div>
+      <div class="bgrid svc-grid">
+        <div class="bcard rv"><span class="bn">01</span><h3>Hemsidor &amp; webbshop</h3><p>Snabba sidor som syns på Google och säljer.</p></div>
+        <div class="bcard rv"><span class="bn">02</span><h3>System &amp; portaler</h3><p>CRM, bokning, kundportaler – byggt för er.</p></div>
+        <div class="bcard rv"><span class="bn">03</span><h3>Automation &amp; AI</h3><p>AI-chatt, påminnelser och flöden som sköter sig själva.</p></div>
+        <div class="bcard rv"><span class="bn">04</span><h3>Appar</h3><p>Egna appar för iOS och Android.</p></div>
+        <div class="bcard rv"><span class="bn">05</span><h3>Integrationer</h3><p>Fortnox, Visma m.fl. – allt synkat.</p></div>
+        <div class="bcard rv"><span class="bn">06</span><h3>SEO &amp; synlighet</h3><p>Syns på Google och i AI-sök.</p></div>
+        <div class="bcard rv"><span class="bn">07</span><h3>Annonser &amp; content</h3><p>Meta, Google Ads och innehåll.</p></div>
+        <div class="bcard rv"><span class="bn">08</span><h3>Dashboards</h3><p>Er data i realtid, samlad på ett ställe.</p></div>
       </div>
     </div>
   </section>
@@ -995,33 +324,24 @@
   <section class="proc sec round" aria-labelledby="proc-h">
     <div class="wrap">
       <div class="head">
-        <span class="kicker">Så jobbar vi</span>
         <h2 class="h2 rv" id="proc-h">Fyra steg.<br>Inget krångel.</h2>
       </div>
       <div class="proc-grid" id="procGrid">
         <span class="proc-line" aria-hidden="true"><i id="procLine"></i></span>
-        <div class="pstep rv"><span class="n">01</span><h3>Vi hittar problemet.</h3><p>Var läcker tiden och pengarna?</p></div>
-        <div class="pstep rv"><span class="n">02</span><h3>Vi bygger lösningen.</h3><p>Snyggt, snabbt och byggt för er.</p></div>
-        <div class="pstep rv"><span class="n">03</span><h3>Vi mäter resultatet.</h3><p>I kronor och sparad tid.</p></div>
-        <div class="pstep rv"><span class="n">04</span><h3>Vi förbättrar.</h3><p>Och bygger vidare.</p></div>
+        <div class="pstep rv"><span class="n">01</span><h3>Vi går igenom vad ni vill digitalisera och automatisera.</h3></div>
+        <div class="pstep rv"><span class="n">02</span><h3>Vi bygger lösningen och testkör den.</h3></div>
+        <div class="pstep rv"><span class="n">03</span><h3>Vi går live och mäter resultatet.</h3></div>
+        <div class="pstep rv"><span class="n">04</span><h3>Ni börjar betala när allt är live!</h3></div>
       </div>
     </div>
   </section>
 
-  <!-- KOSTNADEN -->
-  <section class="cost sec" aria-labelledby="cost-h">
-    <div class="wrap">
-      <h2 class="rv" id="cost-h">Vad kostar det egentligen att fortsätta som idag?</h2>
-      <div class="cost-grid rv">
-        <button class="cost-chip" type="button" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Manuellt arbete</button>
-        <button class="cost-chip" type="button" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2.5"/><path d="M2 10h20"/></svg>Dyra system</button>
-        <button class="cost-chip" type="button" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Dubbelarbete</button>
-        <button class="cost-chip" type="button" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>Missade leads</button>
-        <button class="cost-chip" type="button" aria-pressed="false"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-9.3-5M6 8c0 7-3 9-3 9h15M13.7 21a2 2 0 0 1-3.4 0M3 3l18 18"/></svg>Dålig uppföljning</button>
-      </div>
-      <p class="rv" id="costP">Det är ofta betydligt dyrare än att bygga rätt.</p>
-      <a class="btn btn-dark rv" href="/kontakt">Ta reda på vad ni kan automatisera <span class="arr" aria-hidden="true">→</span></a>
-    </div>
+  <!-- KUNDCITAT -->
+  <section class="kquote sec" aria-label="Kundcitat">
+    <figure class="wrap kq rv">
+      <blockquote><p>”Vi automatiserade hela verksamheten och har gjort besparingar på över en miljon per år.”</p></blockquote>
+      <figcaption><img src="/assets/clients/stodona.png" alt="" width="120" height="32" loading="lazy"><span><b>Rani Shakir</b> · Stodona AB</span></figcaption>
+    </figure>
   </section>
 
   <!-- PERSONLIG CTA -->
@@ -1029,9 +349,8 @@
     <span class="blob" style="width:38vw;height:38vw;left:-12vw;top:-14vw" data-blob="0.08" aria-hidden="true"></span>
     <span class="blob" style="width:30vw;height:30vw;right:-8vw;bottom:-12vw" data-blob="-0.06" aria-hidden="true"></span>
     <div class="wrap">
-      <span class="kicker">Säg hej</span>
-      <h2 id="cta-h"><span class="r">Har</span> <span class="r">ni</span> <span class="r">ett</span> <span class="r">system</span> <span class="r">ni</span> <span class="r">hatar?</span> <span class="r">Vi</span> <span class="r">vill</span> <span class="r">höra</span> <span class="r">om</span> <span class="r">det.</span></h2>
-      <p>Berätta vad som tar för mycket tid — så hittar vi vad ni kan bygga bort.</p>
+      <h2 id="cta-h"><span class="r">Har</span> <span class="r">ni</span> <span class="r">ett</span> <span class="r">eller</span> <span class="r">flera</span> <span class="r">system</span> <span class="r">ni</span> <span class="r">vill</span> <span class="r">förbättra?</span></h2>
+      <p>Vi löser det – och sänker dessutom era kostnader.</p>
       <div class="cta-btns">
         <a class="btn btn-dark bigbtn" id="magnet" href="/kontakt">Boka 30 minuter med oss <span class="arr" aria-hidden="true">→</span></a>
         <a class="btn btn-line bigbtn" href="/case">Se vad vi byggt</a>
@@ -1118,7 +437,7 @@
   $$('.rv').forEach(el => io.observe(el));
 
   /* Content generator – skrivande text */
-  const genEl = $('#gen');
+  const genEl = $('#gen') || {};
   const genText = 'AI som skapar texter och innehåll åt er — snabbare marknadsföring, mindre jobb.';
   function gen(){
     if (reduce) { genEl.textContent = genText; return; }
@@ -1137,6 +456,7 @@
 
   /* Kostnads-chips */
   const chips = $$('.cost-chip'), costP = $('#costP');
+  if (costP)
   chips.forEach(c => c.addEventListener('click', () => {
     c.setAttribute('aria-pressed', c.getAttribute('aria-pressed') !== 'true');
     costP.classList.toggle('lit', chips.some(x => x.getAttribute('aria-pressed') === 'true'));
@@ -1145,7 +465,6 @@
 
   /* Scroll-drivna effekter */
   const vcard = $('#vcard'), stage = $('#stage');
-  const floaters = $$('.hero-stage > .chipw');
   const scards = $$('.scard');
   const rSets = [$$('.statement .r'), $$('.cta h2 .r')];
   const blobs = $$('[data-blob]');
@@ -1163,23 +482,11 @@
   const req = () => { if (!ticking) { ticking = true; requestAnimationFrame(frame); } };
   addEventListener('scroll', req, { passive:true });
   addEventListener('resize', req);
-  if (matchMedia('(hover:hover)').matches) addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; req(); }, { passive:true });
 
   function frame(){
     ticking = false;
     const vh = innerHeight;
     nav.classList.toggle('scrolled', scrollY > 30);
-
-    // Hero: lutat kort rätar upp sig + zoomar, chips svävar i parallax
-    const sr = stage.getBoundingClientRect();
-    if (sr.bottom > 0) {
-      const p = clamp(1 - (sr.top - vh * .15) / (vh * .7));
-      vcard.style.transform = `rotate(${-2 * (1 - p)}deg) scale(${.86 + .14 * p}) translate3d(${mx * -8}px, ${my * -6}px, 0)`;
-      floaters.forEach(c => {
-        const s = parseFloat(c.dataset.speed) * (innerWidth < 640 ? .35 : 1);
-        c.style.transform = `translate3d(${mx * s * 120}px, ${(sr.top - vh * .5) * s + my * s * 80}px, 0)`;
-      });
-    }
 
     // Staplade kort krymper när nästa glider över
     scards.forEach((c, i) => {
@@ -1203,8 +510,8 @@
     });
 
     // Team-bild parallax
-    const tr = teamImg.parentElement.getBoundingClientRect();
-    if (tr.bottom > 0 && tr.top < vh) {
+    const tr = teamImg && teamImg.parentElement.getBoundingClientRect();
+    if (tr && tr.bottom > 0 && tr.top < vh) {
       const t = (tr.top + tr.height / 2 - vh / 2) / vh;
       teamImg.style.transform = `scale(1.12) translate3d(0, ${t * -40}px, 0)`;
     }
