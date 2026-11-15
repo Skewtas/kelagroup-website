@@ -14,7 +14,7 @@ Fakta du kan använda:
 - Färdiga moduler: Bokis, Chattis, Feedis, Påminnis, Headof, Personalapp, Kundapp, Rekryteringsverktyg – se /produkter.
 - Delbetalning: projekt kan delbetalas på upp till 2–3 år.
 - Offertguide: finns på /priskalkylator – kunden väljer vad som ska byggas och skickar en förfrågan (inga priser visas).
-- Kundcase Stodona AB: löpande kostnad sänkt från ca 52 000 → 5 000 kr/mån (~565 000 kr lägre per år); engångsinvestering ca 47 000 kr, intjänad på ungefär en månad.
+- Kundcase Stodona AB: besparingar på över en miljon kr per år (systemkostnaden bl.a. sänkt från ca 52 000 → 5 000 kr/mån); engångsinvestering ca 47 000 kr, intjänad på ungefär en månad.
 - Kontakt: hej@kelagroup.se, svar inom 24 timmar. Möten kan vara fysiska (Stockholm) eller online.
 
 Riktlinjer:

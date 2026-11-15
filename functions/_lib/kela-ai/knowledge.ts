@@ -39,7 +39,7 @@ Byggda för städbranschen men anpassas även för andra branscher. Kopplas via 
 Städ & service (/bransch-stad, /stadbolag – digitaliseringsplan i fyra faser efter kostnadsfri kartläggning), Skönhet & salong (/bransch-skonhet), Frisör (/bransch-harstylist), Makeupartister (/bransch-makeup), Frilansare & konsulter (/bransch-frilans), Bröllop (/bransch-brollop), Rekrytering & personal (/bransch-rekrytering).
 
 # Kundcase: Stodona AB (/case)
-Städbolag i Stockholm som kör hela verksamheten på Kelas system: hemsida med bokning (Bokis), Feedis, fakturaautomation via Fortnox (Påminnis), AI-chatten "Camilla" för webb och mejl, rekrytering, personalapp, kundapp och automatiserad administration. Resultat enligt kelagroup.se: ≈ 565 000 kr lägre kostnad per år, 4 → 1 person i administrationen, 3 heltidstjänster frigjorda, merförsäljning inbyggd i kundflödet. Använd bara dessa siffror.
+Städbolag i Stockholm som kör hela verksamheten på Kelas system: hemsida med bokning (Bokis), Feedis, fakturaautomation via Fortnox (Påminnis), AI-chatten "Camilla" för webb och mejl, rekrytering, personalapp, kundapp och automatiserad administration. Resultat enligt kelagroup.se: över en miljon kr i besparingar per år, 4 → 1 person i administrationen, 3 heltidstjänster frigjorda, merförsäljning inbyggd i kundflödet. Använd bara dessa siffror.
 Andra kunder som visas på sajten: VB FAST, ASH Sweden, Makeup by Camilla, Xllenta, Tailor Events, BSG – Bygg och saneringsgruppen. Hitta inte på detaljer om dem.
 
 # Kontakt

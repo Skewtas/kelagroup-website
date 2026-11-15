@@ -91,7 +91,7 @@ export function cards(p, ctx) {
   return h('div', { class: 'kai-cards' }, items.map((k) => {
     if (k === 'case_stodona') return h('a', { class: 'kai-svc case', href: '/case', onclick: () => ctx.event('demo_start', 'case') },
       h('span', { class: 'kai-ic', html: svg('star', 17) }), h('b', null, 'Kundcase: Stodona'), h('span', null, 'Städbolaget som kör hela verksamheten på Kelas system.'),
-      h('div', { class: 'kai-stats' }, h('div', null, h('b', null, '≈ 565 000 kr'), 'lägre kostnad/år'), h('div', null, h('b', null, '4 → 1'), 'i administrationen'), h('div', null, h('b', null, '3'), 'heltidstjänster frigjorda')),
+      h('div', { class: 'kai-stats' }, h('div', null, h('b', null, '> 1 miljon kr'), 'besparingar/år'), h('div', null, h('b', null, '4 → 1'), 'i administrationen'), h('div', null, h('b', null, '3'), 'heltidstjänster frigjorda')),
       h('em', null, 'Läs caset →'));
     const [ic, t, d, href] = CARDS[k];
     return h('a', { class: 'kai-svc', href }, h('span', { class: 'kai-ic', html: svg(ic, 17) }), h('b', null, t), h('span', null, d), h('em', null, 'Läs mer →'));

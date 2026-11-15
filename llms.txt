@@ -7,7 +7,7 @@ Viktigt att veta:
 - Slogan: "Vi bygger bort onödigt arbete".
 - Grundare och kontaktperson: Mikaela Wigert (affär, produkt & automation).
 - Färdiga moduler i skarp drift: Bokis (bokningssystem), Chattis (AI-chattbot), Feedis (feedbacksystem), Påminnis (fakturapåminnelser), Headof (dashboard), Personalapp, Kundapp och Rekryteringsverktyg – kopplade via API till affärssystem som Timewave, Tengella, Fortnox, Visma, Shopify och WordPress.
-- Kundcase Stodona AB: ≈ 565 000 kr lägre kostnad per år, 4 → 1 person i administrationen och 3 heltidstjänster frigjorda.
+- Kundcase Stodona AB: över en miljon kr i besparingar per år, 4 → 1 person i administrationen och 3 heltidstjänster frigjorda.
 - Kela hjälper också företag att synas – i Google (SEO) och i AI-svar från ChatGPT, Perplexity, Gemini, Copilot, Claude och Google AI Overviews (GEO).
 - Kela svarar inom 24 timmar på vardagar. Genomgång, kartläggning och offert är kostnadsfria och utan förpliktelse.
 
