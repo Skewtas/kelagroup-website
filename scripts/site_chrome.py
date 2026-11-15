@@ -13,12 +13,16 @@ PAGES = sorted(p for p in glob.glob("**/*.html", recursive=True) if not p.starts
 ICON = '<span class="ico" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">{}</svg></span>'
 MEGA_EXTRA = (
     '\n            <a class="mega-card" href="/geo-optimering">' + ICON.format('<path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/><path d="M19 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z"/>')
-    + '<span><b><i>06</i>GEO – synas i AI-sök</b><span>Bli källan som ChatGPT och Google AI citerar.</span></span></a>'
+    + '<span><b><i>07</i>GEO – synas i AI-sök</b><span>Bli källan som ChatGPT och Google AI citerar.</span></span></a>'
     '\n            <a class="mega-card" href="/sokmotoroptimering">' + ICON.format('<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>')
-    + '<span><b><i>07</i>Sökmotoroptimering</b><span>Fler besökare från Google – lokalt och nationellt.</span></span></a>'
+    + '<span><b><i>08</i>Sökmotoroptimering</b><span>Fler besökare från Google – lokalt och nationellt.</span></span></a>'
+)
+MEGA_CHAT = (
+    '\n            <a class="mega-card" href="/produkter/chattis">' + ICON.format('<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/>')
+    + '<span><b><i>05</i>Chattbot</b><span>AI-chatt som svarar era kunder dygnet runt.</span></span></a>'
 )
 FOOT_BUILD = ('<div class="f-col"><h3>Vad vi bygger</h3><a href="/bygga-hemsida">Hemsidor</a><a href="/bygga-system">System</a>'
-              '<a href="/bygga-automationer">Automation</a><a href="/ai-agenter">AI</a><a href="/bygga-app">Appar</a>'
+              '<a href="/bygga-automationer">Automation</a><a href="/ai-agenter">AI</a><a href="/produkter/chattis">Chattbot</a><a href="/bygga-app">Appar</a>'
               '<a href="/sokmotoroptimering">SEO</a><a href="/geo-optimering">GEO &amp; AI-sök</a><a href="/marknadsforing">Marknadsföring</a></div>')
 FOOT_CO = ('<div class="f-col"><h3>Företaget</h3><a href="/produkter">Produkter</a><a href="/integrationer">Integrationer</a>'
            '<a href="/case">Case</a><a href="/priskalkylator">Få en offert</a><a href="/om-oss">Om oss</a><a href="/blogg">Blogg</a>'
@@ -32,6 +36,11 @@ def update(s):
     # Mega-meny: lägg till GEO + SEO efter Mobilappar-kortet
     if 'href="/geo-optimering"><span class="ico"' not in s:
         s = re.sub(r'(<a class="mega-card" href="/bygga-app">.*?</a>)', lambda m: m.group(1) + MEGA_EXTRA, s, count=1, flags=re.S)
+    # Mega-meny: Chattbot efter Bygga automationer, och tjänstekorten numreras om i ordning
+    if 'class="mega-card" href="/produkter/chattis"' not in s:
+        s = re.sub(r'(<a class="mega-card" href="/bygga-automationer">.*?</a>)', lambda m: m.group(1) + MEGA_CHAT, s, count=1, flags=re.S)
+    n = iter(range(1, 100))
+    s = re.sub(r'(<a class="mega-card" href="[^"]*">.*?<b><i>)\d+(</i>)', lambda m: m.group(1) + '%02d' % next(n) + m.group(2), s, flags=re.S)
     # Toppmeny: Produkter före Case
     if '<a href="/produkter">Produkter</a>\n      <a href="/case">Case</a>' not in s:
         s = s.replace('      <a href="/case">Case</a>\n      <a href="/kontakt">Kontakt</a>',
@@ -39,6 +48,8 @@ def update(s):
     # Mobilmeny
     s = s.replace('<a href="/bygga-app">Mobilappar</a>\n    </div>',
                   '<a href="/bygga-app">Mobilappar</a><a href="/geo-optimering">GEO – AI-sök</a><a href="/sokmotoroptimering">SEO</a><a href="/marknadsforing">Marknadsföring</a>\n    </div>', 1)
+    if '<a href="/produkter/chattis">Chattbot</a>' not in s:
+        s = s.replace('<a href="/bygga-automationer">Bygga automationer</a><a href="/bygga-app">', '<a href="/bygga-automationer">Bygga automationer</a><a href="/produkter/chattis">Chattbot</a><a href="/bygga-app">', 1)
     if '<li><a href="/produkter">Produkter</a></li>' not in s:
         s = s.replace('      <li><a href="/case">Case</a></li>', '      <li><a href="/produkter">Produkter</a></li>\n      <li><a href="/case">Case</a></li>', 1)
     # Sidfot
