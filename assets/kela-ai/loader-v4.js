@@ -1,6 +1,6 @@
 /* KELA AI – laddare (≈ 8 kB). Visar den levande AI-orben direkt och laddar själva assistenten först när
    besökaren visar intresse (hovrar, fokuserar, klickar eller efter en stund i viloläge) – sajten förblir snabb.
-   Inbäddning:  <script src="/assets/kela-ai/loader-v3.js" data-tenant="kela" defer></script>
+   Inbäddning:  <script src="/assets/kela-ai/loader-v4.js" data-tenant="kela" defer></script>
    Tangentbord: orben är en knapp (Enter/Mellanslag). Ctrl/Cmd + K öppnar assistenten. Esc stänger. */
 (function () {
   if (window.KelaAI) return;
@@ -12,20 +12,22 @@
   var ss = { get: function (k) { try { return sessionStorage.getItem('kelaai:' + k); } catch (e) { return null; } }, set: function (k, v) { try { sessionStorage.setItem('kelaai:' + k, v); } catch (e) {} } };
 
   var CSS = '' +
-    '.kai-launch{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));z-index:2147483000;width:56px;height:56px;border:0;padding:0;border-radius:50%;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .5s cubic-bezier(.22,1,.36,1),opacity .35s,visibility 0s}' +
+    '.kai-launch{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:max(20px,env(safe-area-inset-bottom));z-index:2147483000;display:inline-flex;align-items:center;gap:10px;height:56px;border:0;padding:0 20px 0 8px;border-radius:999px;background:#2E0C12;color:#fff;font:700 15px/1.1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;text-align:left;box-shadow:0 16px 36px -14px rgba(46,12,18,.6);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .5s cubic-bezier(.22,1,.36,1),opacity .35s,visibility 0s}' +
     '.kai-launch:focus-visible{outline:2px solid #5C1A26;outline-offset:5px}' +
     '.kai-launch.kai-hidden{opacity:0;visibility:hidden;transform:scale(.4);transition:transform .45s cubic-bezier(.22,1,.36,1),opacity .3s,visibility 0s .45s}' +
-    '.kai-orb{--mx:30%;--my:28%;position:relative;display:block;width:100%;height:100%;border-radius:50%;isolation:isolate;' +
+    '.kai-orb{--mx:30%;--my:28%;position:relative;display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;isolation:isolate;' +
       'background:radial-gradient(circle at var(--mx) var(--my),#fff 0,#FBE3E7 14%,#EBA9B5 38%,#A8445A 66%,#5C1A26 88%,#3A0E17 100%);' +
       'box-shadow:0 18px 40px -12px rgba(92,26,38,.65),0 0 0 1.5px rgba(255,255,255,.55),inset 0 -6px 16px rgba(46,12,18,.45),inset 0 4px 10px rgba(255,255,255,.4)}' +
     '.kai-orb::before{content:"";position:absolute;inset:8%;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 20%,rgba(255,220,228,.85) 32%,transparent 46%,rgba(255,255,255,.55) 64%,transparent 80%);filter:blur(5px);mix-blend-mode:screen;opacity:.45;z-index:1}' +
     '.kai-orb::after{content:"";position:absolute;left:22%;top:14%;width:36%;height:24%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(255,255,255,0));filter:blur(1px);z-index:2}' +
     '.kai-orb i{position:absolute;inset:-6px;border-radius:50%;border:1.5px solid rgba(232,160,174,.55);opacity:0;z-index:0}' +
-        '.kai-launch:hover{transform:scale(1.04)}' +
+        '.kai-launch:hover{transform:translateY(-2px)}' +
+    '.kai-cta-ico{position:relative;z-index:3;width:20px;height:20px;color:#fff;filter:drop-shadow(0 1px 2px rgba(46,12,18,.5))}' +
+    '.kai-cta-txt{display:flex;flex-direction:column;gap:3px}.kai-cta-txt small{font-weight:500;font-size:11.5px;opacity:.7}.kai-cta-txt small::before{content:"";display:inline-block;width:7px;height:7px;margin-right:6px;border-radius:50%;background:#7BD88F;vertical-align:1px}' +
         '.kai-launch[data-busy] .kai-orb::before{opacity:1;animation:kai-spin 1.4s linear infinite}' +
     '.kai-dot{position:absolute;right:2px;top:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#fff;color:#5C1A26;font:800 11px/18px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 2px 8px rgba(46,12,18,.35);z-index:3;display:none}' +
     '.kai-launch[data-unread] .kai-dot{display:block}' +
-    '.kai-tip{position:fixed;right:calc(max(20px,env(safe-area-inset-right)) + 68px);bottom:calc(max(20px,env(safe-area-inset-bottom)) + 8px);z-index:2147483000;max-width:min(300px,calc(100vw - 120px));padding:12px 16px;border-radius:18px 18px 6px 18px;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#2E0C12;font:600 14px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 18px 50px -18px rgba(92,26,38,.5),0 0 0 1px rgba(92,26,38,.08);opacity:0;transform:translateX(10px) scale(.96);transform-origin:right bottom;transition:opacity .35s,transform .5s cubic-bezier(.22,1,.36,1);pointer-events:none}' +
+    '.kai-tip{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:calc(max(20px,env(safe-area-inset-bottom)) + 68px);z-index:2147483000;max-width:min(300px,calc(100vw - 120px));padding:12px 16px;border-radius:18px 18px 6px 18px;background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6);color:#2E0C12;font:600 14px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 18px 50px -18px rgba(92,26,38,.5),0 0 0 1px rgba(92,26,38,.08);opacity:0;transform:translateX(10px) scale(.96);transform-origin:right bottom;transition:opacity .35s,transform .5s cubic-bezier(.22,1,.36,1);pointer-events:none}' +
     '.kai-tip.kai-on{opacity:1;transform:none}' +
     '.kai-tip.ctx{pointer-events:auto;cursor:pointer;padding-right:34px}' +
     '.kai-tip small{display:block;font-weight:700;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#A8445A;margin-bottom:3px}' +
@@ -33,19 +35,19 @@
     '.kai-ask{position:absolute;z-index:2147482999;display:inline-flex;align-items:center;gap:6px;padding:7px 12px 7px 9px;border:0;border-radius:999px;background:#2E0C12;color:#fff;font:700 12.5px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 10px 30px -10px rgba(46,12,18,.7);cursor:pointer;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .3s cubic-bezier(.22,1,.36,1)}' +
     '.kai-ask.kai-on{opacity:1;transform:none}' +
     '.kai-ask b{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#EBA9B5 40%,#5C1A26)}' +
-    'body.kai-on .snd-toggle{bottom:calc(max(20px,env(safe-area-inset-bottom)) + 70px)!important}' +
+    'body.kai-on .snd-toggle{bottom:calc(max(20px,env(safe-area-inset-bottom)) + 70px)!important;right:max(20px,env(safe-area-inset-right))!important}' +
     'body.kai-on .kchat-btn,body.kai-on .kchat{display:none!important}' +
     '@keyframes kai-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}' +
     '@keyframes kai-spin{to{transform:rotate(360deg)}}' +
     '@keyframes kai-ring{0%{opacity:.9;transform:scale(.92)}100%{opacity:0;transform:scale(1.5)}}' +
-    '@media (max-width:640px){.kai-launch{width:52px;height:52px}.kai-tip{right:calc(max(16px,env(safe-area-inset-right)) + 70px)}}' +
+    '@media (max-width:640px){.kai-launch{height:50px;padding:0 16px 0 6px;font-size:14px}.kai-orb{width:38px;height:38px}.kai-cta-txt small{display:none}.kai-tip{right:max(16px,env(safe-area-inset-right));bottom:calc(max(16px,env(safe-area-inset-bottom)) + 60px)}}' +
     '@media (prefers-reduced-motion:reduce){.kai-orb,.kai-orb::before,.kai-launch:hover .kai-orb i{animation:none!important}.kai-launch,.kai-tip{transition:opacity .2s!important}}' +
     '@media print{.kai-launch,.kai-tip,.kai-ask{display:none!important}}';
 
   function el(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; return e; }
 
   var style = el('style'); style.textContent = CSS; document.head.appendChild(style);
-  var btn = el('button', 'kai-launch', '<span class="kai-orb" aria-hidden="true"><i></i><i></i></span><span class="kai-dot" aria-hidden="true"></span>');
+  var btn = el('button', 'kai-launch', '<span class="kai-orb" aria-hidden="true"><svg class="kai-cta-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01" stroke-width="2.6"/></svg><i></i><i></i></span><span class="kai-cta-txt">Chatta med vår AI<small>Svarar direkt</small></span><span class="kai-dot" aria-hidden="true"></span>');
   btn.type = 'button';
   btn.setAttribute('aria-label', 'Öppna Kela AI – AI-assistent');
   btn.setAttribute('aria-haspopup', 'dialog');

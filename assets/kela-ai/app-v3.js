@@ -1,4 +1,4 @@
-// KELA AI – själva assistenten. Laddas av loader-v3.js först när besökaren visar intresse.
+// KELA AI – själva assistenten. Laddas av loader-v4.js först när besökaren visar intresse.
 // Presentation här; AI-logik, verktyg, affärsregler och data ligger på servern (/api/ai).
 import { h, svg, orbEl, RENDERERS, UI_LABEL } from './ui-v3.js';
 

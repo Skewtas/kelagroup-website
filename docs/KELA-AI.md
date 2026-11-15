@@ -5,7 +5,7 @@ Kela AI är vår egen AI-chatt och samtidigt vår bästa produktdemo. Den visar 
 ## Översikt
 
 ```
-Besökare ──► loader-v3.js (orben, ≈ 8 kB, på alla sidor)
+Besökare ──► loader-v4.js (orben, ≈ 8 kB, på alla sidor)
                │ laddar först vid intresse (hover/fokus/klick/viloläge)
                ▼
             app-v3.js + ui-v3.js + kela-ai-v3.css   (panel, streaming, komponenter, röst, bild)
@@ -27,14 +27,14 @@ KELA OS → Kela AI (#/kela-ai): statistik, samtal, ta över som människa, inst
 
 | Fil | Vad |
 |---|---|
-| `assets/kela-ai/loader-v3.js` | Orben (launcher), hovertexter, ett kontextuellt tips per session, "Fråga Kela AI" vid markerad text, Ctrl/Cmd+K. Laddar resten i förväg när webbläsaren är ledig. |
+| `assets/kela-ai/loader-v4.js` | Orben (launcher), hovertexter, ett kontextuellt tips per session, "Fråga Kela AI" vid markerad text, Ctrl/Cmd+K. Laddar resten i förväg när webbläsaren är ledig. |
 | `assets/kela-ai/app-v3.js` | Panelen: välkomst med startkort och "Utmana vår AI", streaming, säker markdown, minne, meny (ny konversation, språk, ladda ner, radera, om AI & integritet), röstläge, bilduppladdning, personalövertagande (polling), demoläge utan AI. |
 | `assets/kela-ai/ui-v3.js` | Rich-komponenter: tjänstekort, bokningsdemo (7 branscher), besparingskalkylator, integrationsdemo (AI + affärssystem), lösningsflöde, projektbrief, mötesbokning, prata med människa. |
 | `assets/kela-ai/kela-ai-v3.css` | Allt scopat under `.kai-panel`. Tokens för färger (sätts per tenant). |
 
 Inbäddning (finns på alla 56 publika sidor, efter `boka-v3.js`):
 ```html
-<script src="/assets/kela-ai/loader-v3.js" data-tenant="kela" defer></script>
+<script src="/assets/kela-ai/loader-v4.js" data-tenant="kela" defer></script>
 ```
 Nya sidor måste få samma rad. Den gamla chatten i `sub-v3.js` är ersatt av `sub-v4.js` (samma kod utan chatten). `functions/api/chat.js` finns kvar för cachade gamla sidor och kan tas bort efter en vecka.
 
