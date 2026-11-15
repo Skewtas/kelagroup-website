@@ -2,7 +2,7 @@
    1) Alla Boka-länkar (text som börjar med "Boka" och pekar på kontakt.html, eller data-book)
       öppnar bokningsrutan: Videomöte / Fysiskt möte / Ring mig → kort formulär (eller kalender).
    2) En Boka-knapp som alltid syns när man scrollar (stor bottenknapp i mobil).
-   Kräver pop-v6.css (färger, .btn) + boka-v1.css. */
+   Kräver pop-v7.css (färger, .btn) + boka-v1.css. */
 (function(){
   if(window.__kelaBoka) return; window.__kelaBoka = true;
 

@@ -17,7 +17,7 @@ Den publika webbplatsen är orörd, med två undantag: `robots.txt` stänger ute
 
 | Fråga | Svar |
 |---|---|
-| Ramverk | Statisk HTML/CSS/JS utan byggsteg (26 sidor, "Pop Stilren"-designen i `assets/pop-v6.css`). |
+| Ramverk | Statisk HTML/CSS/JS utan byggsteg (26 sidor, "Pop Stilren"-designen i `assets/pop-v7.css`). |
 | Routing | Filbaserad. Inga omskrivningar. Ingen `404.html` (Pages serverar då `index.html` för okända sökvägar). |
 | Databas | Ingen tidigare. |
 | Autentisering | Ingen tidigare. |

@@ -5,7 +5,7 @@
       och "klistermärken" för hur man vill ses. Skickas till Formspree och visar tack-läge.
    3) En Boka-knapp som alltid syns när man scrollar (stor bottenknapp i mobil).
    Utan JS går alla länkar till kontakt.html som har samma formulär.
-   Kräver pop-v6.css (färger, .btn) + boka-v2.css. */
+   Kräver pop-v7.css (färger, .btn) + boka-v2.css. */
 (function(){
   if(window.__kelaBoka) return; window.__kelaBoka = true;
 

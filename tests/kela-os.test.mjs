@@ -601,7 +601,7 @@ test('revisionsloggen fångar inloggningar och viktiga händelser; GDPR-export f
 
 // ---------------------------------------------------------------- Befintlig hemsida
 test('befintliga publika sidor och chatten fungerar som förut', async () => {
-  for (const p of ['/', '/kontakt.html', '/tjanster.html', '/priskalkylator.html', '/stadbolag.html', '/assets/pop-v6.css', '/sitemap.xml']) {
+  for (const p of ['/', '/kontakt.html', '/tjanster.html', '/priskalkylator.html', '/stadbolag.html', '/assets/pop-v7.css', '/sitemap.xml']) {
     const r = await fetch(BASE + p); assert.equal(r.status, 200, p);
     assert.equal(r.headers.get('content-security-policy'), null, `${p} ska inte få adminpanelens CSP`);
   }
