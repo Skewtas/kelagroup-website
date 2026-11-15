@@ -32,7 +32,7 @@ KELA OS → Kela AI (#/kela-ai): statistik, samtal, ta över som människa, inst
 | `assets/kela-ai/ui-v3.js` | Rich-komponenter: tjänstekort, bokningsdemo (7 branscher), besparingskalkylator, integrationsdemo (AI + affärssystem), lösningsflöde, projektbrief, mötesbokning, prata med människa. |
 | `assets/kela-ai/kela-ai-v3.css` | Allt scopat under `.kai-panel`. Tokens för färger (sätts per tenant). |
 
-Inbäddning (finns på alla 56 publika sidor, efter `boka-v3.js`):
+Inbäddning (finns på alla 56 publika sidor, efter `boka-v4.js`):
 ```html
 <script src="/assets/kela-ai/loader-v4.js" data-tenant="kela" defer></script>
 ```

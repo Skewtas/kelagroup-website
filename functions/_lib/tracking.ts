@@ -114,7 +114,7 @@ export async function handleTrackingApi(env: Env, req: Request, parts: string[])
  *  Högst en notis per 30 minuter och sida, så att omladdningar inte ger en mejlstorm. Fel stoppar aldrig besöket. */
 async function notifyOpen(env: Env, url: URL, p: any, visitId: string, device: string | null) {
   try {
-    const target = env.OFFER_NOTIFY_URL || (env.OS_ENV === 'development' ? '' : 'https://formspree.io/f/xojkdewo');
+    const target = env.OFFER_NOTIFY_URL || (env.OS_ENV === 'development' ? '' : 'https://formspree.io/f/xljbjjyv');
     if (!target) return;
     const since = new Date(Date.now() - 30 * 60_000).toISOString();
     const recent = await env.DB.prepare("SELECT 1 FROM tracked_events WHERE page_id = ? AND type = 'notified' AND created_at > ? LIMIT 1").bind(p.id, since).first();

@@ -89,7 +89,7 @@ export async function handleChecklistApi(env: Env, req: Request, slug: string): 
 /** Mejlnotis till KELA när kunden skriver i checklistan – högst en per timme och sida. Fel stoppar aldrig sparandet. */
 async function notifyAnswers(env: Env, url: URL, p: any, by: string | null) {
   try {
-    const target = env.OFFER_NOTIFY_URL || (env.OS_ENV === 'development' ? '' : 'https://formspree.io/f/xojkdewo');
+    const target = env.OFFER_NOTIFY_URL || (env.OS_ENV === 'development' ? '' : 'https://formspree.io/f/xljbjjyv');
     if (!target) return;
     const since = new Date(Date.now() - 60 * 60_000).toISOString();
     const recent = await env.DB.prepare("SELECT 1 FROM tracked_events WHERE page_id = ? AND type = 'notified_answers' AND created_at > ? LIMIT 1").bind(p.id, since).first();

@@ -165,7 +165,7 @@ export function create({ api, tenant, base, config, launcher, onState }) {
       try { res = await call('/lead', { method: 'POST', body }); } catch (e) { if (e.status === 422 || e.status === 429) throw e; serverErr = e; }
     }
     // Avisering via e-post (samma Formspree-flöde som sajtens övriga formulär).
-    const fs = cfg.formspree_id || 'xojkdewo';
+    const fs = (cfg.formspree_id && cfg.formspree_id !== 'xojkdewo') ? cfg.formspree_id : 'xljbjjyv';
     const lines = [`Källa: Kela AI (${payload.kind})`, `Sida: ${location.pathname}`];
     const b = payload.brief || {};
     for (const [k, l] of Object.entries(MEM_LABEL)) if (b[k]) lines.push(`${l}: ${Array.isArray(b[k]) ? b[k].join(', ') : b[k]}`);

@@ -263,7 +263,7 @@
           '<span class="kicker mono">Boka möte · <span class="bm-chosen" id="bmChosen"></span></span>'+
           '<h3>Berätta lite kort om er.</h3>'+
           '<p class="bm-sub">Så återkommer vi med förslag på tid.</p>'+
-          '<form class="form" id="bmForm" action="https://formspree.io/f/xojkdewo" method="POST" novalidate>'+
+          '<form class="form" id="bmForm" action="https://formspree.io/f/xeagaaby" method="POST" novalidate>'+
             '<input type="hidden" name="_subject" value="Ny mötesförfrågan från kelagroup.se">'+
             '<input type="hidden" name="typ_av_mote" id="bmTypeField" value="">'+
             '<div class="field"><label for="bm-name">Namn</label><input id="bm-name" name="name" type="text" autocomplete="name" placeholder="För- och efternamn" required></div>'+

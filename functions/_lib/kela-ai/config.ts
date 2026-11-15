@@ -61,7 +61,7 @@ export const DEFAULT_CONFIG: TenantConfig = {
   knowledge_base: KELA_KNOWLEDGE,
   knowledge: [],
   cal_link: '',
-  formspree_id: 'xojkdewo',
+  formspree_id: 'xljbjjyv',
   contact_email: 'hej@kelagroup.se',
   privacy_url: '/integritetspolicy#kela-ai',
   retention_days: 90,
@@ -91,7 +91,8 @@ export function normalizeConfig(raw: any): TenantConfig {
     knowledge_base: str(r.knowledge_base, 40000, d.knowledge_base),
     knowledge: list<KnowledgeItem>(r.knowledge, 30, (x) => (x && x.title ? { title: str(x.title, 120, ''), body: str(x.body, 6000, '') } : null)) ?? d.knowledge,
     cal_link: typeof r.cal_link === 'string' && /^[a-z0-9_-]+(\/[a-z0-9_-]+)?$/i.test(r.cal_link) ? r.cal_link : '',
-    formspree_id: typeof r.formspree_id === 'string' && /^[a-z0-9]{0,20}$/i.test(r.formspree_id) ? r.formspree_id : d.formspree_id,
+    // xojkdewo var Stodonas Formspree-formulär och får inte användas längre, även om det ligger sparat i inställningarna.
+    formspree_id: typeof r.formspree_id === 'string' && /^[a-z0-9]{0,20}$/i.test(r.formspree_id) && r.formspree_id !== 'xojkdewo' ? r.formspree_id : d.formspree_id,
     contact_email: typeof r.contact_email === 'string' && /^[^\s@<>()]+@[^\s@<>()]+\.[a-z]{2,}$/i.test(r.contact_email) ? r.contact_email : d.contact_email,
     privacy_url: typeof r.privacy_url === 'string' && /^\/[a-z0-9/#_-]*$/i.test(r.privacy_url) ? r.privacy_url : d.privacy_url,
     retention_days: Number.isInteger(r.retention_days) && r.retention_days >= 7 && r.retention_days <= 730 ? r.retention_days : d.retention_days,
